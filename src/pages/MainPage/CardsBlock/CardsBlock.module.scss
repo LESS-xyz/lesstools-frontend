@@ -1,0 +1,55 @@
+@import '../../../styles/mixins/container.scss';
+@import '../../../styles/mixins/grid.scss';
+@import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/gradient-text.scss';
+
+.container {
+  @include container(1060px);
+}
+
+.inner {
+  padding: 90px 0;
+}
+
+.cards {
+  @include grid(repeat(2, 1fr), 1fr, 30px);
+}
+
+.card_text {
+  @include flex(row, center, flex-start);
+  height: 350px;
+  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+
+  &__inner {
+    padding: 0 40px;
+  }
+
+  &__title {
+    @include gradient-text;
+    font-size: 40px;
+    margin-bottom: 30px;
+  }
+
+  &__subtitle {
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--grey);
+  }
+}
+
+.card_img {
+  @include flex(row, flex-end, center);
+  height: 350px;
+  background: radial-gradient(
+      47.2% 137.33% at 51.49% 51.91%,
+      rgba(111, 69, 255, 0) 45.43%,
+      rgba(255, 99, 101, 0.2) 100%
+    ),
+    linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+
+  &__img {
+    img {
+      display: block;
+    }
+  }
+}
