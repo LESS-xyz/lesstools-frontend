@@ -1,6 +1,8 @@
 import React from 'react';
 import s from './TeamBlock.module.scss';
 import man from '../../../assets/img/sections/team-photos/man.png';
+import twitterIcon from '../../../assets/img/icons/twitter-team-link.svg';
+import telegramIcon from '../../../assets/img/icons/telegram-team-link.svg';
 
 interface ICardProps {
   img: string;
@@ -36,8 +38,12 @@ const Card: React.FC<ICardProps> = ({
         </div>
         <div className={s.card_description}>{description}</div>
         <div className={s.card_links}>
-          <div className={s.card_link}>{twitter}</div>
-          <div className={s.card_link}>{telegram}</div>
+          <a href={twitter} className={s.card_link}>
+            <img src={twitterIcon} alt="twitterIcon" />
+          </a>
+          <a href={telegram} className={s.card_link}>
+            <img src={telegramIcon} alt="telegramIcon" />
+          </a>
         </div>
       </div>
     </div>
