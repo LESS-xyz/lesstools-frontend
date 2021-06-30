@@ -5,6 +5,7 @@ import CardsBlock from './CardsBlock/index';
 import Partners from './Partners/index';
 import TeamBlock from './TeamBlock/index';
 import UsersPlans from './UsersPlans/index';
+import RoadMap from './RoadMap/index';
 import partnerLogo1 from '../../assets/img/sections/partners-logos/logo-1.svg';
 
 const partnersLogos = [
@@ -26,6 +27,7 @@ const MainPage: React.FC = () => {
         <SecondBlock />
         <CardsBlock />
         <UsersPlans />
+        <RoadMap />
         <TeamBlock />
         <Partners title="PARTNERED PROJECTS" logos={partnersLogos} />
         <div className={s.info}>
