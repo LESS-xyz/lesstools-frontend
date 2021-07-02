@@ -1,0 +1,20 @@
+@import '.././../../styles/mixins/flex.scss';
+@import '../../../styles/theme';
+.tools {
+  @include flex(row, center);
+
+  &_title {
+    width: 100%;
+    background: var(--gradient-tools-h-background);
+    &_bg {
+      background: rgba(0, 0, 0, 0.4);
+    }
+    &__cl {
+      @include flex(row, center, center);
+      width: 70px;
+      height: 70px;
+      border-radius: 50px;
+      background: #ffffff;
+    }
+  }
+}
