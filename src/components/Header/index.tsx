@@ -62,14 +62,45 @@ const Header: React.FC = () => {
               </div>
             </NavLink>
             <nav className={s.navigation}>
-              <NavLink to="/tab1" activeClassName={s.active} className={s.nav_link} data-text="Tab">
-                Tab
+              <NavLink
+                to="/board"
+                activeClassName={s.active}
+                className={s.nav_link}
+                data-text="Board"
+              >
+                Board
               </NavLink>
-              <NavLink to="/tab2" activeClassName={s.active} className={s.nav_link} data-text="Tab">
-                Tab
+              <NavLink
+                to="/live-new-pairs"
+                activeClassName={s.active}
+                className={s.nav_link}
+                data-text="Live New Pairs"
+              >
+                Live New Pairs
               </NavLink>
-              <NavLink to="/tab3" activeClassName={s.active} className={s.nav_link} data-text="Tab">
-                Tab
+              <NavLink
+                to="/pair-explorer"
+                activeClassName={s.active}
+                className={s.nav_link}
+                data-text="Pair Explorer"
+              >
+                Pair Explorer
+              </NavLink>
+              <NavLink
+                to="/big-swap-explorer"
+                activeClassName={s.active}
+                className={s.nav_link}
+                data-text="Big Swap Explorer"
+              >
+                Big Swap Explorer
+              </NavLink>
+              <NavLink
+                to="/others"
+                activeClassName={s.active}
+                className={s.nav_link}
+                data-text="Others"
+              >
+                Others
               </NavLink>
             </nav>
           </div>

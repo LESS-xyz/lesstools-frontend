@@ -1,0 +1,44 @@
+.info,
+.left,
+.cell,
+.table {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info {
+  background-color: rgba(103, 77, 246, 0.4);
+  margin-bottom: 40px;
+}
+
+.cell {
+  height: 52px;
+  padding: 0 28px;
+  font-weight: bold;
+  font-size: 15px;
+  color: var(--grey);
+  transition: 0.4s ease;
+
+  &_img {
+    margin-right: 5px;
+    img {
+      height: 24px;
+    }
+  }
+
+  &:hover,
+  &.fill {
+    background-color: rgba(103, 77, 246, 0.4);
+  }
+}
+
+.table_cell {
+  font-size: 14px;
+  letter-spacing: -0.531474px;
+  color: var(--grey);
+  span {
+    color: var(--orange);
+  }
+  margin-right: 20px;
+}
