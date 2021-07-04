@@ -43,6 +43,6 @@
   }
   &_board {
     padding: 10px 20px;
-    @include grid(repeat(3, 1fr));
+    @include grid(repeat(3, 1fr), 1fr, 25px);
   }
 }

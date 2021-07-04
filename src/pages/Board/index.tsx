@@ -2,10 +2,27 @@ import React from 'react';
 
 import Banner from '../../assets/img/sections/board/banner.svg';
 import Fier from '../../assets/img/sections/board/fire.svg';
+import Sushi from '../../assets/img/sections/board/sushi.svg';
+import Uniswap from '../../assets/img/sections/board/uniswap.svg';
 
 import Tools from './Tools';
 
 import s from './Board.module.scss';
+
+const toolsItems = [
+  {
+    logo: Uniswap,
+    title: 'UNISWAP V2',
+  },
+  {
+    logo: Sushi,
+    title: 'SUSHI',
+  },
+  {
+    logo: '',
+    title: 'COMMON',
+  },
+];
 
 const Board: React.FC = () => {
   return (
@@ -33,27 +50,25 @@ const Board: React.FC = () => {
             </div>
             <div className={s.block_board}>
               <div className={s.block_board_item}>
-                <Tools />
+                {toolsItems.map((tool) => (
+                  <Tools title={tool.title} logo={tool.logo} />
+                ))}
               </div>
               <div className={s.block_board_item}>
-                <h1>Board</h1>
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum odio
-                  consequuntur optio alias animi, magni iste facere! Quae quis officia explicabo
-                  minima reiciendis cumque nostrum dolore nihil tenetur tempore. Fuga sit facilis
-                  debitis commodi obcaecati minima officiis rerum quibusdam et velit reiciendis
-                  magni accusantium maiores, voluptates mollitia! Quibusdam, hic cumque!
-                </p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem harum dolor
+                voluptatibus laudantium, aliquam id placeat mollitia nesciunt vero minima fuga
+                repudiandae impedit alias sint maxime nisi laboriosam magnam blanditiis beatae
+                explicabo? Rem odio odit doloremque voluptates quis, vitae, asperiores laudantium
+                ipsam facilis molestias inventore repellendus exercitationem veritatis corrupti
+                totam.
               </div>
               <div className={s.block_board_item}>
-                <h1>Board</h1>
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum odio
-                  consequuntur optio alias animi, magni iste facere! Quae quis officia explicabo
-                  minima reiciendis cumque nostrum dolore nihil tenetur tempore. Fuga sit facilis
-                  debitis commodi obcaecati minima officiis rerum quibusdam et velit reiciendis
-                  magni accusantium maiores, voluptates mollitia! Quibusdam, hic cumque!
-                </p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem harum dolor
+                voluptatibus laudantium, aliquam id placeat mollitia nesciunt vero minima fuga
+                repudiandae impedit alias sint maxime nisi laboriosam magnam blanditiis beatae
+                explicabo? Rem odio odit doloremque voluptates quis, vitae, asperiores laudantium
+                ipsam facilis molestias inventore repellendus exercitationem veritatis corrupti
+                totam.
               </div>
             </div>
           </div>
