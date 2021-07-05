@@ -1,35 +1,17 @@
 import { useState } from 'react';
 import s from './Table.module.scss';
 
-interface IRowBigSwap {
-  pair: string;
-  time: string | Date;
-  type: string;
-  quantity: number;
-  totalEth: number;
-  totalUsd: number;
-  change: number;
-  others: Array<string>;
-}
-
-interface IRowLiveNewPairs {
-  token: string;
-  listedSince: string | Date;
-  actions: Array<string>;
-  contractDetails: Array<string>;
-  tokenPrice: number;
-  totalLiquidity: number;
-  poolAmount: number;
-  poolVariation: number;
-  poolRemaining: number;
-}
+import { dataConverter } from './dataConverter';
+import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
+import ReactTooltip from 'react-tooltip';
 
 // TODO: доделать сортировку
 // сортировка массива
 const dataSorter = {
+
   valueSort(
-    tableData: Array<IRowBigSwap | IRowLiveNewPairs>,
-    defaultData: Array<IRowBigSwap | IRowLiveNewPairs>,
+    tableData: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>,
+    defaultData: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>,
     key: string,
     sortCount: number,
   ) {
@@ -50,83 +32,85 @@ const dataSorter = {
   },
 };
 
-// преобразовывает входной JSON в объект с JSX полями
-const dataConverter = {
-  bigSwap(data: Array<IRowBigSwap>) {
-    return data.map((row) => ({
-      pair: <span className={s.pair}>{row.pair}</span>,
-      time: row.time,
-      type: <span className={s.type}>{row.type}</span>,
-      quantity: row.quantity,
-      totalEth: row.totalEth,
-      totalUsd: <span>${row.totalUsd}</span>,
-      change: <span className={s.change}>{row.change}%</span>,
-      others: (
-        <div className={s.others}>
-          {row.others.map((img) => (
-            <img src={img} alt="icon" />
-          ))}
-        </div>
-      ),
-    }));
-  },
-
-  liveNewPairs(data: Array<IRowLiveNewPairs>) {
-    return data.map((row) => ({
-      token: <span className={s.token}>{row.token}</span>,
-      listedSince: row.listedSince,
-      actions: row.actions[0],
-      contractDetails: row.contractDetails[0],
-      tokenPrice: String(row.tokenPrice),
-      totalLiquidity: row.totalLiquidity,
-      poolAmount: row.poolAmount,
-      poolVariation: row.poolVariation,
-      poolRemaining: row.poolRemaining,
-    }));
-  },
-};
-
 interface ITableProps {
   header: Array<{ key: string; title: string }>;
-  data: Array<IRowBigSwap | IRowLiveNewPairs>;
-  tableType: 'bigSwap' | 'liveNewPairs';
+  data: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>;
+  tableType: 'bigSwap' | 'liveNewPairs' | 'pairExplorer';
 }
+
+// TODO: вынести header в компонент отдельный
+interface ITokenPriceHeader {
+  isUsd: boolean;
+  el: { title: string; key: string };
+  handleToogleIsUsd: () => void;
+}
+
+const TokenPriceHeader: React.FC<ITokenPriceHeader> = ({ isUsd, el, handleToogleIsUsd }) => {
+  return (
+    <span>
+      {`${el.title} ${isUsd ? 'USD' : 'ETH'}`}
+      <span
+        style={{ color: '#fff', cursor: 'pointer' }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={() => {}}
+        onClick={handleToogleIsUsd}
+      >
+        {' '}
+        ({isUsd ? 'ETH' : 'USD'})
+      </span>
+    </span>
+  );
+};
 
 const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
   const [tableData, setTableData] = useState([...data]);
   const [sortCount, setSortCount] = useState(0);
 
-  return (
-    <table className={s.table}>
-      <thead className={s.table_head}>
-        <tr>
-          {header.map((el) => (
-            <th
-              key={el.key}
-              onClick={() => {
-                console.log(sortCount >= 2 ? 0 : sortCount + 1);
-                setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
-                setTableData(dataSorter.valueSort(tableData, data, el.key, sortCount));
-              }}
-            >
-              {el.title}
-            </th>
-          ))}
-        </tr>
-      </thead>
+  // для переключения usd/eth в таблице live new pairs
+  const [isUsd, setIsUsd] = useState(false);
+  const handleToogleIsUsd = () => {
+    setIsUsd(!isUsd);
+  };
 
-      <tbody className={s.table_body}>
-        {/* eslint-disable-next-line */}
-        {/* @ts-ignore */}
-        {dataConverter[tableType](tableData).map((row, i) => (
-          <tr className={i % 2 === 0 ? s.even : s.odd}>
-            {Object.values(row).map((cell: any) => (
-              <th>{cell}</th>
+  return (
+    <div className={s.table_wrap}>
+      <ReactTooltip />
+      <table className={s.table}>
+        <thead className={s.table_head}>
+          <tr>
+            {header.map((el) => (
+              <th
+                key={el.key}
+                onClick={() => {
+                  console.log(sortCount >= 2 ? 0 : sortCount + 1);
+                  setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
+                  setTableData(dataSorter.valueSort([...tableData], data, el.key, sortCount));
+                }}
+              >
+                {el.key === 'tokenPrice' ? (
+                  <TokenPriceHeader el={el} isUsd={isUsd} handleToogleIsUsd={handleToogleIsUsd} />
+                ) : (
+                  el.title
+                )}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody className={s.table_body}>
+          {/* eslint-disable-next-line */}
+          {/* @ts-ignore */}
+          {dataConverter[tableType](tableData, isUsd).map((row, i) => (
+            <tr className={i % 2 === 0 ? s.even : s.odd}>
+              {Object.values(row).map((cell: any) => (
+                <th>{cell}</th>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

@@ -12,3 +12,12 @@ body {
 .swiper-slide {
   max-width: 600px;
 }
+
+.tooltip-copy {
+  font-size: 14px !important;
+  pointer-events: auto !important;
+  &:hover {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}

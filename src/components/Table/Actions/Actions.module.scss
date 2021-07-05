@@ -1,0 +1,10 @@
+.block {
+  display: flex;
+  align-items: center;
+  a {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

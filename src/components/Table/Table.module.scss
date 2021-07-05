@@ -1,3 +1,8 @@
+.table_wrap {
+  // height: 100vh;
+  // overflow: auto;
+}
+
 table {
   width: 100%;
   thead {
@@ -6,6 +11,9 @@ table {
       font-size: 14px;
       color: #ff7143;
       background: rgba(103, 77, 246, 0.3);
+      // position: -webkit-sticky; /* for Safari */
+      // position: sticky;
+      // top: 0;
     }
   }
 
@@ -26,7 +34,9 @@ table {
 
   th {
     text-align: left;
-    padding: 20px;
+    padding-left: 20px;
+    height: 62px;
+    vertical-align: middle;
     font-weight: 400;
     font-size: 16px;
 
@@ -37,29 +47,10 @@ table {
 }
 
 // extra styles for cells content
-
 span {
-  &.pair, &.token {
+  &.pair,
+  &.token {
     color: #09bfb4;
     text-transform: uppercase;
-  }
-
-  &.type {
-    color: #bb3e3e;
-    padding-right: 30px;
-  }
-
-  &.change {
-    background: #595182;
-    border-radius: 4px;
-    padding: 4px 7px;
-  }
-}
-
-div {
-  &.others {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 }

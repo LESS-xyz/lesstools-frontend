@@ -1,0 +1,35 @@
+@import '../../styles/mixins/container.scss';
+@import '../../styles/mixins/flex.scss';
+
+.page {
+  min-height: 100vh;
+  padding-top: 100px;
+}
+
+.container {
+  @include container(1390px);
+}
+
+.info {
+  margin-bottom: 25px;
+}
+
+// buttons
+.buttons {
+  display: inline-flex;
+  border: 2px solid #5454d4;
+  margin-bottom: 30px;
+  border-radius: 2px;
+
+  &_item {
+    padding: 8px 10px;
+    font-size: 18px;
+    color: var(--grey);
+    transition: 0.4s ease;
+    cursor: pointer;
+
+    &.active {
+      background-color: #5454d4;
+    }
+  }
+}

@@ -1,10 +1,11 @@
 import Table from '../../components/Table/index';
 import s from './BigSwapExplorer.module.scss';
-import otherIcon1 from '../../assets/img/icons/table/other-1.svg';
-import otherIcon2 from '../../assets/img/icons/table/other-2.svg';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
 import { useState } from 'react';
+import AdBlock from '../../components/AdBlock/index';
+import ad from '../../assets/img/sections/ad/ad1.png';
+import { IRowBigSwap } from '../../types/table';
 
 // headers for table
 const headerData = [
@@ -18,146 +19,84 @@ const headerData = [
   { key: 'others', title: 'Others' },
 ];
 
-const tableData = [
+const tableData: Array<IRowBigSwap> = [
   {
     pair: '1',
     time: '2021-06-11 13:29:10',
-    type: 'Sell',
+    type: 'sell',
     quantity: 38.43584,
     totalEth: 5.76,
     totalUsd: 18.224,
     change: 22.31,
-    others: [otherIcon1, otherIcon2],
+    others: {
+      liveData: '0xdfsdf',
+      etherscan: '0xdfsdf',
+    },
   },
   {
     pair: '2',
     time: '2021-06-11 13:29:10',
-    type: 'Sell',
+    type: 'sell',
     quantity: 36.6045435,
     totalEth: 7.76,
     totalUsd: 205.224,
     change: 32.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '3',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 12.6045435,
-    totalEth: 7.76,
-    totalUsd: 144.224,
-    change: 2.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '4',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 102.6045435,
-    totalEth: 7.76,
-    totalUsd: 4.224,
-    change: 205.31,
-    others: [otherIcon2, otherIcon1],
+    others: {
+      liveData: '0xdfsdf',
+      etherscan: '0xdfsdf',
+    },
   },
   {
     pair: '1',
     time: '2021-06-11 13:29:10',
-    type: 'Sell',
+    type: 'sell',
     quantity: 38.43584,
     totalEth: 5.76,
     totalUsd: 18.224,
     change: 22.31,
-    others: [otherIcon1, otherIcon2],
+    others: {
+      liveData: '0xdfsdf',
+      etherscan: '0xdfsdf',
+    },
   },
   {
     pair: '2',
     time: '2021-06-11 13:29:10',
-    type: 'Sell',
+    type: 'buy',
     quantity: 36.6045435,
     totalEth: 7.76,
     totalUsd: 205.224,
     change: 32.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '3',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 12.6045435,
-    totalEth: 7.76,
-    totalUsd: 144.224,
-    change: 2.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '4',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 102.5045435,
-    totalEth: 7.76,
-    totalUsd: 4.224,
-    change: 205.31,
-    others: [otherIcon2, otherIcon1],
-  },
-  {
-    pair: '3',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 12.6045435,
-    totalEth: 7.76,
-    totalUsd: 144.224,
-    change: 2.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '4',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 102.6045435,
-    totalEth: 7.76,
-    totalUsd: 4.224,
-    change: 205.31,
-    others: [otherIcon2, otherIcon1],
+    others: {
+      liveData: '0xdfsdf',
+      etherscan: '0xdfsdf',
+    },
   },
   {
     pair: '1',
     time: '2021-06-11 13:29:10',
-    type: 'Sell',
+    type: 'sell',
     quantity: 38.43584,
     totalEth: 5.76,
     totalUsd: 18.224,
     change: 22.31,
-    others: [otherIcon1, otherIcon2],
+    others: {
+      liveData: '0xdfsdf',
+      etherscan: '0xdfsdf',
+    },
   },
   {
     pair: '2',
     time: '2021-06-11 13:29:10',
-    type: 'Sell',
+    type: 'buy',
     quantity: 36.6045435,
     totalEth: 7.76,
     totalUsd: 205.224,
     change: 32.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '3',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 12.6045435,
-    totalEth: 7.76,
-    totalUsd: 144.224,
-    change: 2.31,
-    others: [otherIcon1, otherIcon2],
-  },
-  {
-    pair: '4',
-    time: '2021-06-11 13:29:10',
-    type: 'Sell',
-    quantity: 102.5045435,
-    totalEth: 7.76,
-    totalUsd: 4.224,
-    change: 205.31,
-    others: [otherIcon2, otherIcon1],
+    others: {
+      liveData: '0xdfsdf',
+      etherscan: '0xdfsdf',
+    },
   },
 ];
 
@@ -166,8 +105,8 @@ const BigSwapExplorer: React.FC = () => {
 
   return (
     <main className={s.section}>
-      <div className={s.ad}>advertiesment block</div>
       <div className={s.container}>
+        <AdBlock adImg={ad} />
         <InfoBlock
           topTokens={[
             'KISHU',
