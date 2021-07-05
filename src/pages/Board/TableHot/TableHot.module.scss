@@ -1,0 +1,84 @@
+@import '../../../styles//mixins/flex.scss';
+@import '../../../styles/theme';
+
+.tbl {
+  background: var(--gradient-card-background);
+
+  &_head {
+    background-color: rgba(103, 77, 246, 0.021);
+    th {
+      padding: 5px 0 5px 10px;
+      margin: 0;
+    }
+
+    &_title {
+      @include flex(row, center);
+      color: #fff;
+      font-size: 20px;
+      span {
+        font-weight: bold;
+        padding-left: 10px;
+        color: #674df6;
+      }
+    }
+  }
+
+  &_info {
+    font-size: 16px;
+    &_title {
+      &_body {
+        @include flex(row, center, flex-start);
+        span {
+          opacity: 0.5;
+          padding: 10px 0;
+        }
+        strong {
+          font-weight: normal;
+          font-size: 20px;
+        }
+
+        &_logo {
+          @include flex(row, center, flex-start);
+          font-size: 24px;
+          img {
+            padding-right: 5px;
+          }
+        }
+      }
+
+      th {
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  &_body {
+    font-size: 15px;
+    &_row {
+      th {
+        display: table-cell;
+        vertical-align: middle;
+        padding: 10px 0 10px 20px;
+      }
+      &_title {
+        @include flex(row, center);
+        img {
+          max-width: 30px;
+          max-height: 30px;
+        }
+      }
+    }
+
+    tr:nth-child(odd) {
+      background: rgba(111, 69, 255, 0.1);
+    }
+  }
+}
+
+.red {
+  color: #d53737;
+}
+.green {
+  color: #09bfb4;
+}

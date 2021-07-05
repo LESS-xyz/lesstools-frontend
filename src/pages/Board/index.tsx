@@ -5,6 +5,7 @@ import Fier from '../../assets/img/sections/board/fire.svg';
 import Sushi from '../../assets/img/sections/board/sushi.svg';
 import Uniswap from '../../assets/img/sections/board/uniswap.svg';
 
+import TableHot from './TableHot';
 import Tools from './Tools';
 
 import s from './Board.module.scss';
@@ -55,12 +56,7 @@ const Board: React.FC = () => {
                 ))}
               </div>
               <div className={s.block_board_item}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem harum dolor
-                voluptatibus laudantium, aliquam id placeat mollitia nesciunt vero minima fuga
-                repudiandae impedit alias sint maxime nisi laboriosam magnam blanditiis beatae
-                explicabo? Rem odio odit doloremque voluptates quis, vitae, asperiores laudantium
-                ipsam facilis molestias inventore repellendus exercitationem veritatis corrupti
-                totam.
+                <TableHot />
               </div>
               <div className={s.block_board_item}>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem harum dolor
