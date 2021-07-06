@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import ArrowDw from '../../../assets/img/sections/board/arrow-dw.svg';
 import ArrowUp from '../../../assets/img/sections/board/arrow-up.svg';
@@ -88,48 +89,56 @@ const TableHot: React.FC = () => {
           <th colSpan={2}>
             <div className={s.tbl_head_title}>
               <img src={Fire} alt="Fire" />
-              HOT <span>UNI</span>
+              <h1>
+                HOT<span>UNI</span>
+              </h1>
             </div>
           </th>
           <th colSpan={2}>
             <div className={s.tbl_head_title}>
               <img src={Fire} alt="Fire" />
-              HOT <span>SUSHI</span>
+              <h1>
+                HOT<span>SUSHI</span>
+              </h1>
             </div>
           </th>
         </tr>
       </thead>
 
-      <tr className={s.tbl_info_title}>
-        <th>
-          <div className={s.tbl_info_title_body}>
-            <div className={s.tbl_info_title_body_logo}>
-              <img src={Emax} alt="emax" />
-              eMax
-            </div>
-            <span>EthereumMax</span>
-            <strong className={s.red}>$0.0..00114</strong>
-          </div>
-        </th>
-        <th>
-          <img src={Compass} alt="compass" />
-        </th>
-        <th>
-          <div className={s.tbl_info_title_body}>
-            <div className={s.tbl_info_title_body_logo}>
-              <img src={Spell} alt="spell" />
-              SPELL
-            </div>
-            <span>EthereumMax</span>
-            <strong className={s.green}>$0.0..00114</strong>
-          </div>
-        </th>
-        <th>
-          <img src={Compass} alt="compass" />
-        </th>
-      </tr>
-
       <tbody className={s.tbl_body}>
+        <tr className={s.tbl_body_header}>
+          <th>
+            <div className={s.tbl_body_header_main}>
+              <div className={s.tbl_body_header_main_logo}>
+                <img src={Emax} alt="emax" />
+                <h2>eMax</h2>
+              </div>
+              <span>EthereumMax</span>
+              <strong className={s.red}>$0.0..00114</strong>
+            </div>
+          </th>
+          <th>
+            <Link to="/">
+              <img src={Compass} alt="compass" />
+            </Link>
+          </th>
+          <th>
+            <div className={s.tbl_body_header_main}>
+              <div className={s.tbl_body_header_main_logo}>
+                <img src={Spell} alt="spell" />
+                <h2>SPELL</h2>
+              </div>
+              <span>EthereumMax</span>
+              <strong className={s.green}>$0.0..00114</strong>
+            </div>
+          </th>
+          <th>
+            <Link to="/">
+              <img src={Compass} alt="compass" />
+            </Link>
+          </th>
+        </tr>
+
         {tableData.eMax.map((item, index) => {
           return (
             <tr key={item.value + Math.random()} className={s.tbl_body_row}>
@@ -140,12 +149,14 @@ const TableHot: React.FC = () => {
                     <img src={ArrowUp} alt="arrow" />
                   </div>
                 </div>
-                <div className={s.tbl_body_row_value}>
+                <div className={s.tbl_body_row}>
                   <span className={s.red}>${item.value}</span>
                 </div>
               </th>
               <th>
-                <img src={Compass} alt="compass" />
+                <Link to="/">
+                  <img src={Compass} alt="compass" />
+                </Link>
               </th>
 
               <th>
@@ -155,12 +166,14 @@ const TableHot: React.FC = () => {
                     <img src={ArrowDw} alt="arrow" />
                   </div>
                 </div>
-                <div className={s.tbl_body_row_value}>
+                <div className={s.tbl_body_row}>
                   <span className={s.green}>${tableData.spell[index].value}</span>
                 </div>
               </th>
               <th>
-                <img src={Compass} alt="compass" />
+                <Link to="/">
+                  <img src={Compass} alt="compass" />
+                </Link>
               </th>
             </tr>
           );

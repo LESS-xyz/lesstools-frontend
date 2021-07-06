@@ -1,0 +1,53 @@
+@import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/grid.scss';
+@import '../../../styles//theme';
+
+.cards {
+  background: var(--gradient-card-background);
+  padding-bottom: 15px;
+
+  &_header {
+    background: rgba(103, 77, 246, 0.21);
+    h1 {
+      font-size: 20px;
+      font-weight: normal;
+      padding: 15px 0;
+      text-align: center;
+    }
+  }
+  &_card {
+    padding: 25px 10px 15px 10px;
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    background: rgba(111, 69, 255, 0.102);
+    &_left {
+      margin: 0 auto;
+    }
+    &_right {
+      @include flex(column);
+      &_title {
+        @include flex(row, center, flex-start);
+        h2 {
+          font-size: 22px;
+          font-weight: normal;
+        }
+      }
+      &_main {
+        @include flex(row, center, flex-start);
+        font-size: 18px;
+      }
+      &_secondary {
+        font-size: 15px;
+        opacity: 0.5;
+      }
+      a {
+        margin: 0 8px;
+        padding: 0;
+      }
+    }
+    &_right > * {
+      margin-bottom: 20px;
+    }
+  }
+}

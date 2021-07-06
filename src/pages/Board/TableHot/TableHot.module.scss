@@ -14,7 +14,10 @@
     &_title {
       @include flex(row, center);
       color: #fff;
-      font-size: 20px;
+      h1 {
+        font-size: 20px;
+        font-weight: normal;
+      }
       span {
         font-weight: bold;
         padding-left: 10px;
@@ -23,10 +26,10 @@
     }
   }
 
-  &_info {
-    font-size: 16px;
-    &_title {
-      &_body {
+  &_body {
+    &_header {
+      font-size: 16px;
+      &_main {
         @include flex(row, center, flex-start);
         span {
           opacity: 0.5;
@@ -39,7 +42,10 @@
 
         &_logo {
           @include flex(row, center, flex-start);
-          font-size: 24px;
+          h2 {
+            font-size: 24px;
+            font-weight: normal;
+          }
           img {
             padding-right: 5px;
           }
@@ -51,11 +57,9 @@
         vertical-align: middle;
       }
     }
-  }
 
-  &_body {
-    font-size: 15px;
     &_row {
+      font-size: 15px;
       th {
         display: table-cell;
         vertical-align: middle;
@@ -63,6 +67,7 @@
       }
       &_title {
         @include flex(row, center);
+        padding: 0 0 5px 0;
         img {
           max-width: 30px;
           max-height: 30px;
