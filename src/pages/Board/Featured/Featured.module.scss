@@ -33,6 +33,7 @@
           font-weight: normal;
         }
       }
+
       &_main {
         @include flex(row, center, flex-start);
         font-size: 18px;
@@ -50,4 +51,15 @@
       margin-bottom: 20px;
     }
   }
+}
+
+.blue {
+  color: #2d70b4;
+}
+
+.green {
+  color: #8ebc52;
+}
+.red {
+  color: #e53223;
 }

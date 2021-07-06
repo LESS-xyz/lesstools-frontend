@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Banner from '../../assets/img/sections/board/banner.svg';
+import BetYou from '../../assets/img/sections/board/bet-you.svg';
 import Fier from '../../assets/img/sections/board/fire.svg';
 import Sushi from '../../assets/img/sections/board/sushi.svg';
 import Uniswap from '../../assets/img/sections/board/uniswap.svg';
@@ -55,6 +56,7 @@ const Board: React.FC = () => {
                 {toolsItems.map((tool) => (
                   <Tools key={Math.random()} title={tool.title} logo={tool.logo} />
                 ))}
+                <img src={BetYou} alt="product" />
               </div>
               <div className={s.block_board_item}>
                 <TableHot />

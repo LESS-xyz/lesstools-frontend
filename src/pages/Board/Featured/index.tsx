@@ -18,7 +18,7 @@ const Featured: React.FC = () => {
       id: 1,
       logo: Kwik,
       title: 'KWIK',
-      color: '#2D70B4',
+      color: 'blue',
       mainText: 'KwikSwap',
       secText: 'Multi-Chain Decentralised Swap Exchange Protocol',
     },
@@ -26,7 +26,7 @@ const Featured: React.FC = () => {
       id: 2,
       logo: Ene,
       title: 'ENE',
-      color: '#8EBC52',
+      color: 'green',
       mainText: 'Enedex',
       secText:
         'The first Polkadot Moonbeam crosschain DEX for Energy Derivatives Trading and Launchpad for Renewable Energy Projects',
@@ -35,7 +35,7 @@ const Featured: React.FC = () => {
       id: 3,
       logo: Araid,
       title: 'ARAID',
-      color: '#E53223',
+      color: 'red',
       mainText: 'AirRaid',
       secText: 'The worlds first safe and transparent decentralized lottery just launched.',
     },
@@ -53,8 +53,8 @@ const Featured: React.FC = () => {
               <img src={item.logo} alt="logo" />
             </div>
             <div className={s.cards_card_right}>
-              <div className={s.cards_card_right_title}>
-                <h2 style={{ color: `${item.color}` }}>{item.title}</h2>
+              <div className={`${s.cards_card_right_title} ${s[item.color]}`}>
+                <h2>{item.title}</h2>
                 <Link to="/">
                   <img src={Hors} alt="hors" />
                 </Link>
