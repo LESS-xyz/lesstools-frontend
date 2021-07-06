@@ -1,19 +1,16 @@
 .table_wrap {
-  // height: 100vh;
-  // overflow: auto;
+  overflow: auto;
 }
 
 table {
   width: 100%;
+  min-width: 1200px;
   thead {
     th {
       font-weight: 500;
       font-size: 14px;
       color: #ff7143;
       background: rgba(103, 77, 246, 0.3);
-      // position: -webkit-sticky; /* for Safari */
-      // position: sticky;
-      // top: 0;
     }
   }
 

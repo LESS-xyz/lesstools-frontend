@@ -2,7 +2,7 @@ import Table from '../../components/Table/index';
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdBlock from '../../components/AdBlock/index';
 import ad from '../../assets/img/sections/ad/ad1.png';
 
@@ -19,7 +19,7 @@ const headerData = [
   { key: 'poolRemaining', title: 'Pool Remaining' },
 ];
 
-const tableData = [
+const tableDataExample = [
   {
     token: 'BabyPig',
     listedSince: '2021-07-05 11:37:12',
@@ -35,7 +35,7 @@ const tableData = [
     poolRemaining: 6.70472,
   },
   {
-    token: 'BEZOS',
+    token: 'bezos',
     listedSince: '2021-07-02 13:48:43',
     actions: {
       uniswap: '0x543534gfdgdf',
@@ -51,7 +51,7 @@ const tableData = [
     poolRemaining: 6.70472,
   },
   {
-    token: 'ELONMUSK',
+    token: 'elonmusk',
     listedSince: '2021-06-02 13:48:45',
     actions: {
       uniswap: '0x543534gfdgdf',
@@ -67,7 +67,7 @@ const tableData = [
     poolRemaining: 6.70472,
   },
   {
-    token: 'JEJODOGO',
+    token: 'jejdogo',
     listedSince: '2021-07-02 13:48:13',
     actions: {
       uniswap: '0x543534gfdgdf',
@@ -83,6 +83,13 @@ const tableData = [
 
 const BigSwapExplorer: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [tableData, setTableData] = useState([...tableDataExample]);
+
+  useEffect(() => {
+    console.log(searchValue);
+    setTableData([...tableDataExample.filter((row) => row.token.includes(searchValue))]);
+    console.log(tableDataExample.filter((row) => row.token.includes(searchValue)));
+  }, [searchValue]);
 
   return (
     <main className={s.section}>

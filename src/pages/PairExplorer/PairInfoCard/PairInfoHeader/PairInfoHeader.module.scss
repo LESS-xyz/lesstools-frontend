@@ -1,0 +1,69 @@
+@import '../../../../styles/mixins/flex.scss';
+
+.pairInfoHeader {
+  @include flex(row, center);
+}
+
+.logo {
+  margin-right: 23px;
+  img {
+    height: 64px;
+  }
+}
+
+.right {
+  &_top {
+    @include flex(row, center);
+    margin-bottom: 10px;
+
+    &__pair {
+      font-size: 31px;
+    }
+
+    &__socials {
+      margin-left: 13px;
+      @include flex(row, center);
+
+      &_link {
+        margin-right: 10px;
+        img {
+          height: 18px;
+        }
+      }
+    }
+  }
+
+  &_bottom {
+    font-size: 15px;
+    @include flex(row, center);
+
+    &__name {
+      color: var(--grey);
+      margin-right: 8px;
+    }
+
+    &__pair {
+      @include flex(row, center);
+    }
+
+    &__contract {
+      color: rgba(255, 255, 255, 0.5);
+      margin-right: 20px;
+      @include flex(row, center);
+
+      &_body {
+        color: #fff;
+        margin-left: 5px;
+        
+        &__copy {
+          @include flex(row, center);
+
+          & .copy {
+            cursor: pointer;
+            height: 24px;
+          }
+        }
+      }
+    }
+  }
+}

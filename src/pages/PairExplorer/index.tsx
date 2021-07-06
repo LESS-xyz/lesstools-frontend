@@ -4,6 +4,11 @@ import ad from '../../assets/img/sections/ad/ad1.png';
 import Table from '../../components/Table/index';
 import { IRowPairExplorer } from '../../types/table';
 import { useState } from 'react';
+import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
+import PairInfoBody from './PairInfoCard/PairInfoBody/index';
+import PairInfoBottom from './PairInfoCard/PairInfoBottom/index';
+import Search from '../../components/Search/index';
+import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 
 const headerData = [
   { key: 'data', title: 'Data' },
@@ -63,11 +68,29 @@ const PairExplorer: React.FC = () => {
   const [bottomType, setBottomType] = useState<'tradeHistory' | 'myPositions' | 'priceAlerts'>(
     'tradeHistory',
   );
+  const [searchValue, setSearchValue] = useState('');
   return (
     <main className={s.page}>
       <div className={s.container}>
         <AdBlock adImg={ad} />
-        <div className={s.info}>info block</div>
+
+        <div className={s.info}>
+          <PairInfoHeader />
+          <Search value={searchValue} onChange={setSearchValue} />
+        </div>
+
+        <div className={s.main}>
+          <div className={s.card}>
+            <PairInfoBody />
+          </div>
+          <div className={s.chart}>
+            <TradingViewWidget theme={Themes.DARK} autosize symbol="ETH/POLONIEX:DEXTUSDT" />
+          </div>
+        </div>
+
+        <div className={s.footer}>
+          <PairInfoBottom likes={96.5} dislikes={3.5} votesAmount={845} />
+        </div>
         <div className={s.buttons}>
           <div
             tabIndex={0}

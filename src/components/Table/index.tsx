@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import s from './Table.module.scss';
 
 import { dataConverter } from './dataConverter';
 import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
 import ReactTooltip from 'react-tooltip';
+import TokenPriceHeader from './TokenPriceHeader';
 
 // TODO: доделать сортировку
 // сортировка массива
 const dataSorter = {
-
   valueSort(
     tableData: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>,
     defaultData: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>,
@@ -38,34 +38,13 @@ interface ITableProps {
   tableType: 'bigSwap' | 'liveNewPairs' | 'pairExplorer';
 }
 
-// TODO: вынести header в компонент отдельный
-interface ITokenPriceHeader {
-  isUsd: boolean;
-  el: { title: string; key: string };
-  handleToogleIsUsd: () => void;
-}
-
-const TokenPriceHeader: React.FC<ITokenPriceHeader> = ({ isUsd, el, handleToogleIsUsd }) => {
-  return (
-    <span>
-      {`${el.title} ${isUsd ? 'USD' : 'ETH'}`}
-      <span
-        style={{ color: '#fff', cursor: 'pointer' }}
-        role="button"
-        tabIndex={0}
-        onKeyDown={() => {}}
-        onClick={handleToogleIsUsd}
-      >
-        {' '}
-        ({isUsd ? 'ETH' : 'USD'})
-      </span>
-    </span>
-  );
-};
-
 const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
   const [tableData, setTableData] = useState([...data]);
   const [sortCount, setSortCount] = useState(0);
+
+  useEffect(() => {
+    setTableData([...data]);
+  }, [data]);
 
   // для переключения usd/eth в таблице live new pairs
   const [isUsd, setIsUsd] = useState(false);
@@ -83,7 +62,6 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
               <th
                 key={el.key}
                 onClick={() => {
-                  console.log(sortCount >= 2 ? 0 : sortCount + 1);
                   setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
                   setTableData(dataSorter.valueSort([...tableData], data, el.key, sortCount));
                 }}
