@@ -3,6 +3,19 @@ import ContractDetails from '../../../../components/Table/ContractDetails/index'
 import shareImg from '../../../../assets/img/icons/share.svg';
 import favImg from '../../../../assets/img/icons/favorite.svg';
 
+const LessScore = () => (
+  <div className={s.score}>
+    <div className={s.score_bars}>
+      <div data-tip="Information: 99" className={s.score_bars__item} />
+      <div data-tip="Transactions: 99" className={s.score_bars__item} />
+      <div data-tip="Holders: 99" className={s.score_bars__item} />
+      <div data-tip="Creation: 99" className={s.score_bars__item} />
+      <div data-tip="Pool: 99" className={s.score_bars__item} />
+    </div>
+    <div className={s.score_number}>99</div>
+  </div>
+);
+
 const PairInfoBody: React.FC = () => {
   return (
     <section className={s.card}>
@@ -52,6 +65,9 @@ const PairInfoBody: React.FC = () => {
           <div className={s.card_footer}>
             <div className={s.card_block}>
               <div className={s.card_block__title}>LESS Score</div>
+              <div className={s.card_block__body}>
+                <LessScore />
+              </div>
             </div>
             <div className={s.card_block}>
               <div className={s.card_block__title}>Contract Details</div>

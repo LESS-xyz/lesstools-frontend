@@ -1,6 +1,7 @@
 import s from './PairExplorer.module.scss';
 import AdBlock from '../../components/AdBlock/index';
 import ad from '../../assets/img/sections/ad/ad1.png';
+import filterIcon from '../../assets/img/icons/filter.svg';
 import Table from '../../components/Table/index';
 import { IRowPairExplorer } from '../../types/table';
 import { useState } from 'react';
@@ -76,7 +77,7 @@ const PairExplorer: React.FC = () => {
 
         <div className={s.info}>
           <PairInfoHeader />
-          <Search value={searchValue} onChange={setSearchValue} />
+          <Search placeholder="Search" value={searchValue} onChange={setSearchValue} />
         </div>
 
         <div className={s.main}>
@@ -91,35 +92,44 @@ const PairExplorer: React.FC = () => {
         <div className={s.footer}>
           <PairInfoBottom likes={96.5} dislikes={3.5} votesAmount={845} />
         </div>
-        <div className={s.buttons}>
-          <div
-            tabIndex={0}
-            onKeyDown={() => {}}
-            role="button"
-            onClick={() => setBottomType('tradeHistory')}
-            className={`${s.buttons_item} ${bottomType === 'tradeHistory' && s.active}`}
-          >
-            Trade History
+        <div className={s.table_info}>
+          <div className={s.buttons}>
+            <div
+              tabIndex={0}
+              onKeyDown={() => {}}
+              role="button"
+              onClick={() => setBottomType('tradeHistory')}
+              className={`${s.buttons_item} ${bottomType === 'tradeHistory' && s.active}`}
+            >
+              Trade History
+            </div>
+            <div
+              tabIndex={0}
+              onKeyDown={() => {}}
+              role="button"
+              onClick={() => setBottomType('myPositions')}
+              className={`${s.buttons_item} ${bottomType === 'myPositions' && s.active}`}
+            >
+              My Positions
+            </div>
+            <div
+              tabIndex={0}
+              onKeyDown={() => {}}
+              role="button"
+              onClick={() => setBottomType('priceAlerts')}
+              className={`${s.buttons_item} ${bottomType === 'priceAlerts' && s.active}`}
+            >
+              Price Alerts
+            </div>
           </div>
-          <div
-            tabIndex={0}
-            onKeyDown={() => {}}
-            role="button"
-            onClick={() => setBottomType('myPositions')}
-            className={`${s.buttons_item} ${bottomType === 'myPositions' && s.active}`}
-          >
-            My Positions
-          </div>
-          <div
-            tabIndex={0}
-            onKeyDown={() => {}}
-            role="button"
-            onClick={() => setBottomType('priceAlerts')}
-            className={`${s.buttons_item} ${bottomType === 'priceAlerts' && s.active}`}
-          >
-            Price Alerts
+          <div className={s.last_trades}>
+            <div className={s.last_trades__icon}>
+              <img src={filterIcon} alt="filterIcon" />
+            </div>
+            <div className={s.last_trades__text}>LESS (last 530 trades)</div>
           </div>
         </div>
+
         {bottomType === 'tradeHistory' && (
           <Table data={tableData} header={headerData} tableType="pairExplorer" />
         )}

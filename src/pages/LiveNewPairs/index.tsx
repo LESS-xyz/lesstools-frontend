@@ -86,9 +86,8 @@ const BigSwapExplorer: React.FC = () => {
   const [tableData, setTableData] = useState([...tableDataExample]);
 
   useEffect(() => {
-    console.log(searchValue);
-    setTableData([...tableDataExample.filter((row) => row.token.includes(searchValue))]);
-    console.log(tableDataExample.filter((row) => row.token.includes(searchValue)));
+    const filtredTable = [...tableDataExample.filter((row) => row.token.includes(searchValue))];
+    setTableData(filtredTable);
   }, [searchValue]);
 
   return (

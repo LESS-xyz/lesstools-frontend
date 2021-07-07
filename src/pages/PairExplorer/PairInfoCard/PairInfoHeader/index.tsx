@@ -5,22 +5,15 @@ import marketcap from '../../../../assets/img/icons/marketcap.svg';
 import telegram from '../../../../assets/img/icons/telegram-gradient.svg';
 import twitter from '../../../../assets/img/icons/twitter-gradient.svg';
 import desktop from '../../../../assets/img/icons/desktop-gradient.svg';
+import logoExample from '../../../../assets/img/icons/logo.svg';
+import { copyText } from '../../../../utils/copyText';
 
 const PairInfoHeader: React.FC = () => {
-  const handleCopy = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        return true;
-      })
-      .catch((err) => {
-        throw new Error(err);
-      });
-  };
-
   return (
     <section className={s.pairInfoHeader}>
-      <div className={s.logo}>logo</div>
+      <div className={s.logo}>
+        <img src={logoExample} alt="logoExample" />
+      </div>
       <div className={s.right}>
         <div className={s.right_top}>
           <div className={s.right_top__pair}>Less/DEXT</div>
@@ -76,7 +69,7 @@ const PairInfoHeader: React.FC = () => {
                   role="button"
                   tabIndex={0}
                   onKeyDown={() => {}}
-                  onClick={() => handleCopy('0xa3b0e...a339553')}
+                  onClick={() => copyText('0xa3b0e...a339553')}
                 >
                   <img src={copy} alt="copy" />
                 </div>
@@ -93,7 +86,9 @@ const PairInfoHeader: React.FC = () => {
                 role="button"
                 tabIndex={0}
                 onKeyDown={() => {}}
-                onClick={() => handleCopy('contact adress')}
+                onClick={() => {
+                  copyText('contact adress');
+                }}
               >
                 <img src={copy} alt="copy" />
               </div>

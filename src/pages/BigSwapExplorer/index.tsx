@@ -2,7 +2,7 @@ import Table from '../../components/Table/index';
 import s from './BigSwapExplorer.module.scss';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AdBlock from '../../components/AdBlock/index';
 import ad from '../../assets/img/sections/ad/ad1.png';
 import { IRowBigSwap } from '../../types/table';
@@ -19,7 +19,7 @@ const headerData = [
   { key: 'others', title: 'Others' },
 ];
 
-const tableData: Array<IRowBigSwap> = [
+const exampleTableData: Array<IRowBigSwap> = [
   {
     pair: '1',
     time: '2021-06-11 13:29:10',
@@ -102,6 +102,13 @@ const tableData: Array<IRowBigSwap> = [
 
 const BigSwapExplorer: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
+
+  const [tableData, setTableData] = useState([...exampleTableData]);
+
+  useEffect(() => {
+    const filtredTable = [...exampleTableData.filter((row) => row.pair.includes(searchValue))];
+    setTableData(filtredTable);
+  }, [searchValue]);
 
   return (
     <main className={s.section}>

@@ -37,11 +37,27 @@
   grid-column-gap: 20px;
 }
 
+// info above the table
+.table_info {
+  @include flex(row, center, space-between);
+  margin-bottom: 30px;
+}
+.last_trades {
+  @include flex(row, center);
+
+  &__icon {
+    margin-right: 10px;
+  }
+  &__text {
+    font-size: 18px;
+    color: var(--grey);
+  }
+}
+
 // buttons
 .buttons {
   display: inline-flex;
   border: 2px solid #5454d4;
-  margin-bottom: 30px;
   border-radius: 2px;
 
   &_item {

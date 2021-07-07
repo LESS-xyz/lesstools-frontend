@@ -1,4 +1,3 @@
-// форматирует время в формат 108 h 25 m 12 s
 /**
  * Function description
  *
