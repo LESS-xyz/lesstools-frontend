@@ -1,4 +1,6 @@
 @import '../../styles/mixins/container.scss';
+@import '../../styles/mixins/flex.scss';
+
 .container {
   @include container;
 }
@@ -10,8 +12,7 @@
   padding-bottom: 25px;
 }
 .logo {
-  display: inline-flex;
-  align-items: center;
+  @include flex(row, center, center, inline-flex);
   margin: 0 auto;
   margin-bottom: 32px;
 }

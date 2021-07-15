@@ -1,5 +1,5 @@
-@mixin flex($direction: row, $alignment: normal, $justification: normal, $wrap: wrap) {
-  display: flex;
+@mixin flex($direction: row, $alignment: normal, $justification: normal, $wrap: wrap, $flex: flex) {
+  display: $flex;
   flex-direction: $direction;
   justify-content: $justification;
   align-items: $alignment;

@@ -1,9 +1,8 @@
 @import '../../styles/mixins/gradient-text.scss';
+@import '../../styles/mixins/flex.scss';
 
 .button {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  @include flex(row, center, center, wrap, inline-flex);
   background-color: #000;
   border: 1px solid var(--blue);
   border-radius: 2px;

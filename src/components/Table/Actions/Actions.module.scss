@@ -1,6 +1,7 @@
+@import '../../../styles/mixins/flex.scss';
+
 .block {
-  display: flex;
-  align-items: center;
+  @include flex(row, center);
   a {
     margin-right: 5px;
     &:last-child {

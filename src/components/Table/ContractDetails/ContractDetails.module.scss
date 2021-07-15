@@ -1,6 +1,7 @@
+@import '../../../styles/mixins/flex.scss';
+
 .contract_details {
-  display: flex;
-  align-items: center;
+  @include flex(row, center);
 }
 
 .contract_detail {
