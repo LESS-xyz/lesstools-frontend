@@ -1,0 +1,9 @@
+@import '../../styles/mixins/flex.scss';
+
+.advertiesment {
+  @include flex(row, center, center);
+  margin-bottom: 60px;
+  img {
+    max-width: 100%;
+  }
+}

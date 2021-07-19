@@ -1,0 +1,135 @@
+.card {
+  height: 100%;
+  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+
+  &_inner {
+    padding: 20px;
+  }
+
+  &_header {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    &__link {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    &__button {
+      cursor: pointer;
+      background: var(--blue);
+      height: 40px;
+      display: flex;
+      align-items: center;
+      border-radius: 2px;
+      padding: 0 10px;
+
+      &:last-child {
+        background: var(--gradient);
+        margin-left: 10px;
+      }
+    }
+  }
+
+  &_body {
+    text-align: right;
+
+    &__price {
+      color: var(--green);
+      font-weight: 700;
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    &__info {
+      color: var(--green);
+      font-size: 18px;
+      margin-bottom: 30px;
+      span {
+        color: var(--red);
+      }
+    }
+
+    &__properties {
+      margin-bottom: 30px;
+    }
+
+    &__property {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      font-size: 14px;
+      margin-bottom: 15px;
+      &_title {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+
+  &_footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+  }
+
+  &_block {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__title {
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    &__body {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+// buttons
+.market_cap_button {
+  display: inline-block;
+  padding: 8px 10px;
+  border: 1px solid #ffffff;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+// less score
+.score {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+
+  &_bars {
+    margin-right: 15px;
+    &__item {
+      width: 100%;
+      height: 5px;
+      background-color: var(--green);
+      margin-bottom: 6px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:hover {
+        background-color: rgb(46, 109, 30);
+      }
+    }
+  }
+
+  &_number {
+    font-weight: bold;
+    font-size: 35px;
+    color: var(--green);
+  }
+}

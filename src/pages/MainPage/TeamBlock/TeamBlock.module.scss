@@ -1,0 +1,78 @@
+@import '../../../styles/mixins/container.scss';
+@import '../../../styles/mixins/grid.scss';
+@import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/gradient-text.scss';
+
+.block {
+  padding-top: 100px;
+}
+
+.title {
+  font-size: 40px;
+  text-align: center;
+  color: var(--grey);
+  margin-bottom: 40px;
+}
+
+.container {
+  @include container(1015px);
+}
+
+.cards {
+  @include grid(repeat(3, 1fr), 1fr, 50px);
+}
+
+.card {
+  border: 3px solid #1c0e40;
+  // height: 245px;
+  padding: 30px;
+
+  &_description {
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  &_links {
+    @include flex(row, center);
+  }
+
+  &_link {
+    margin-right: 15px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &_mainInfo {
+    @include flex(row, center);
+    margin-bottom: 21px;
+
+    &__img {
+      margin-right: 12px;
+
+      img {
+        height: 88px;
+        width: 88px;
+        mix-blend-mode: luminosity;
+      }
+    }
+
+    &__name {
+      font-size: 17px;
+      @include gradient-text;
+      margin-bottom: 11px;
+    }
+
+    &__country,
+    &__lang {
+      font-size: 14px;
+      color: var(--blue);
+      margin-bottom: 6px;
+    }
+
+    &__lang {
+      margin-bottom: 0;
+    }
+  }
+}

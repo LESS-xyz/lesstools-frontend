@@ -1,0 +1,53 @@
+.table_wrap {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 1200px;
+  thead {
+    th {
+      font-weight: 500;
+      font-size: 14px;
+      color: #ff7143;
+      background: rgba(103, 77, 246, 0.3);
+    }
+  }
+
+  tr {
+    transition: background-color 0.4s ease;
+    &.odd {
+      background: #000;
+    }
+
+    &.even {
+      background: rgba(111, 69, 255, 0.2);
+    }
+
+    &:hover {
+      background-color: rgba(204, 203, 203, 0.293);
+    }
+  }
+
+  th {
+    text-align: left;
+    padding-left: 20px;
+    height: 62px;
+    vertical-align: middle;
+    font-weight: 400;
+    font-size: 16px;
+
+    &:hover {
+      background-color: rgba(161, 149, 149, 0.453);
+    }
+  }
+}
+
+// extra styles for cells content
+span {
+  &.pair,
+  &.token {
+    color: #09bfb4;
+    text-transform: uppercase;
+  }
+}

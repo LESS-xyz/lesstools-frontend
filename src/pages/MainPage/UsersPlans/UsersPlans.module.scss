@@ -1,0 +1,99 @@
+@import '../../../styles/mixins/container.scss';
+@import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/grid.scss';
+@import '../../../styles/mixins/gradient-text.scss';
+
+.block {
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+
+  &_bg {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background: url('../../../assets/img/sections/users-plans/bg.png') no-repeat;
+    background-size: contain;
+    opacity: 0.4;
+  }
+}
+
+.info {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--grey);
+  max-width: 635px;
+  padding-top: 20px;
+}
+
+.container {
+  @include container;
+}
+
+.title {
+  font-size: 40px;
+  color: var(--grey);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.subtitle {
+  font-size: 25px;
+  color: var(--grey);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cards {
+  //   @include flex(row, center);
+  @include grid(repeat(3, 1fr), auto, 25px);
+}
+
+// card
+.card {
+  width: 100%;
+
+  &_inner {
+    background: #160e33;
+    padding: 10px;
+  }
+
+  &_header {
+    background-color: rgba(111, 69, 255, 0.2);
+    border-radius: 2px;
+    padding: 20px;
+    min-height: 124px;
+    margin-bottom: 20px;
+
+    &__title {
+      @include gradient-text;
+      font-size: 24px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    &__subtitle {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 1.4;
+      color: var(--grey);
+    }
+  }
+
+  &_body {
+    padding: 0 10px;
+
+    &__feature {
+      @include flex(row, center, normal, nowrap);
+      margin-bottom: 22px;
+
+      &__img {
+        margin-right: 10px;
+      }
+    }
+  }
+}
