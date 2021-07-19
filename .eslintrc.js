@@ -29,15 +29,7 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: [
-    'react',
-    'import',
-    'jsx-a11y',
-    'react-hooks',
-    '@typescript-eslint',
-    'simple-import-sort',
-    'prettier',
-  ],
+  plugins: ['react', 'import', 'jsx-a11y', 'react-hooks', '@typescript-eslint', 'prettier'],
   overrides: [
     {
       files: '*.js',

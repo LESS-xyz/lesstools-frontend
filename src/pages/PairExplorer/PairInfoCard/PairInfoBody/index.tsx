@@ -1,7 +1,12 @@
-import s from './PairInfoBody.module.scss';
+import { observer } from 'mobx-react-lite';
+
 import ContractDetails from '../../../../components/Table/ContractDetails/index';
-import shareImg from '../../../../assets/img/icons/share.svg';
+import { useMst } from '../../../../store/store';
+
+import s from './PairInfoBody.module.scss';
+
 import favImg from '../../../../assets/img/icons/favorite.svg';
+import shareImg from '../../../../assets/img/icons/share.svg';
 
 const LessScore = () => (
   <div className={s.score}>
@@ -16,7 +21,9 @@ const LessScore = () => (
   </div>
 );
 
-const PairInfoBody: React.FC = () => {
+const PairInfoBody: React.FC = observer(() => {
+  const { pairExplorer } = useMst();
+
   return (
     <section className={s.card}>
       <div className={s.card_inner}>
@@ -31,7 +38,16 @@ const PairInfoBody: React.FC = () => {
           <div className={s.card_header__button}>Trade</div>
         </div>
         <div className={s.card_body}>
-          <div className={s.card_body__price}>$0.28118163</div>
+          {/* test mst store :) */}
+          <div
+            className={s.card_body__price}
+            tabIndex={0}
+            role="button"
+            onKeyDown={() => {}}
+            onClick={() => pairExplorer.setliquidityProviderCount('150')}
+          >
+            ${pairExplorer.base_info.liquidityProviderCount}
+          </div>
           <div className={s.card_body__info}>
             <span>(24h: -8.34%) </span>0.00011453 ETH
           </div>
@@ -80,6 +96,6 @@ const PairInfoBody: React.FC = () => {
       </div>
     </section>
   );
-};
+});
 
 export default PairInfoBody;
