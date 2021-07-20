@@ -1,4 +1,5 @@
 import s from './Footer.module.scss';
+
 import logo from '../../assets/img/icons/logo-small.svg';
 import twitter from '../../assets/img/icons/twitter.svg';
 import telegram from '../../assets/img/icons/telegram.svg';

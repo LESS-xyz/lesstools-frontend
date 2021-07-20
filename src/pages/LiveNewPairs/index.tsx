@@ -1,9 +1,13 @@
+import { Helmet } from 'react-helmet';
+import { useEffect, useState } from 'react';
+
 import Table from '../../components/Table/index';
-import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
-import { useEffect, useState } from 'react';
 import AdBlock from '../../components/AdBlock/index';
+
+import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
+
 import ad from '../../assets/img/sections/ad/ad1.png';
 
 // headers for table
@@ -25,7 +29,7 @@ const tableDataExample = [
     listedSince: '2021-07-05 11:37:12',
     actions: {
       unicrypt: '0xer39293',
-      liveData: '0xer2334',
+      liveData: '0x94b0a3d511b6ecdb17ebf877278ab030acb0a878',
     },
     contractDetails: ['cash', 'plus'],
     tokenPrice: { usd: 0.32423, eth: 0.00000003 },
@@ -41,7 +45,7 @@ const tableDataExample = [
       uniswap: '0x543534gfdgdf',
       etherscan: '0x3423423dfs',
       unicrypt: '0xer39293',
-      liveData: '0xer2334',
+      liveData: '0x284101622f5367fa9cf236da836726b8adc264fe',
     },
     contractDetails: ['plus'],
     tokenPrice: { usd: 0.32423, eth: 0.0000000376 },
@@ -57,7 +61,7 @@ const tableDataExample = [
       uniswap: '0x543534gfdgdf',
       etherscan: '0x3423423dfs',
       unicrypt: '0xer39293',
-      liveData: '0xer2334',
+      liveData: '0x284101622f5367fa9cf236da836726b8adc264fe',
     },
     contractDetails: ['plus', 'lock'],
     tokenPrice: { usd: 1.32423, eth: 0.00000003 },
@@ -92,6 +96,15 @@ const BigSwapExplorer: React.FC = () => {
 
   return (
     <main className={s.section}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>LiveNewPairs - LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
+        />
+      </Helmet>
       <div className={s.container}>
         <AdBlock adImg={ad} />
         <InfoBlock

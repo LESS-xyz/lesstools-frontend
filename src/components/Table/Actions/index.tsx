@@ -1,5 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import s from './Actions.module.scss';
+
 import etherscan from '../../../assets/img/icons/table/actions-etherscan.svg';
 import uniswap from '../../../assets/img/icons/table/actions-uniswap.svg';
 import unicrypt from '../../../assets/img/icons/table/actions-unicrypt.svg';
@@ -54,14 +57,14 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
         </a>
       )}
       {actions.liveData && (
-        <a
-          data-tip={`Live data: ${actions.liveData}`}
+        <Link
+          to={`/pair-explorer/${actions.liveData}`}
+          data-tip={`Pair Explorer: ${actions.liveData}`}
           data-place="left"
           data-effect="solid"
-          href={`/livedata/${actions.liveData}`}
         >
           <img src={compass} alt="compass" />
-        </a>
+        </Link>
       )}
     </div>
   );

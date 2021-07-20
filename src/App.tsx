@@ -1,7 +1,8 @@
+import { Switch, Route, Redirect } from 'react-router-dom';
+
 import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer } from './pages';
 import Header from './components/Header/index';
 import Footer from './components/Footer/index';
-import { Switch, Route } from 'react-router-dom';
 
 export const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ export const App: React.FC = () => {
         <Route path="/pair-explorer/:id">
           <PairExplorer />
         </Route>
+        <Redirect to="/" />
       </Switch>
       <Footer />
     </div>

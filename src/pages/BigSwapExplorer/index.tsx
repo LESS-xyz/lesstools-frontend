@@ -1,11 +1,15 @@
+import { Helmet } from 'react-helmet';
+import { useState, useEffect } from 'react';
+
 import Table from '../../components/Table/index';
-import s from './BigSwapExplorer.module.scss';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
-import { useState, useEffect } from 'react';
 import AdBlock from '../../components/AdBlock/index';
-import ad from '../../assets/img/sections/ad/ad1.png';
 import { IRowBigSwap } from '../../types/table';
+
+import s from './BigSwapExplorer.module.scss';
+
+import ad from '../../assets/img/sections/ad/ad1.png';
 
 // headers for table
 const headerData = [
@@ -112,6 +116,15 @@ const BigSwapExplorer: React.FC = () => {
 
   return (
     <main className={s.section}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>BigSwapExplorer - LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
+        />
+      </Helmet>
       <div className={s.container}>
         <AdBlock adImg={ad} />
         <InfoBlock

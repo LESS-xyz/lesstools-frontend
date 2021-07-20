@@ -1,4 +1,5 @@
 import s from './InfoBlock.module.scss';
+
 import gasIcon from '../../assets/img/icons/gas.svg';
 import hotIcon from '../../assets/img/icons/hot.svg';
 

@@ -1,13 +1,16 @@
-import s from './Header.module.scss';
-import logo from '../../assets/img/icons/logo.svg';
-// import arrow from '../../assets/img/icons/arrow-down-gradient.svg';
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+
 // import Button from '../Button/index';
 import PopUp from './PopUp';
-import { useState } from 'react';
+
+import s from './Header.module.scss';
+
+import logo from '../../assets/img/icons/logo.svg';
 import ethLogo from '../../assets/img/icons/eth-logo-colorful.svg';
 import bnbLogo from '../../assets/img/icons/bnb-logo-colorful.svg';
 import maticLogo from '../../assets/img/icons/matic-logo.svg';
-import { NavLink } from 'react-router-dom';
+// import arrow from '../../assets/img/icons/arrow-down-gradient.svg';
 
 const cryptoLogos = new Map();
 cryptoLogos.set('Ethereum', ethLogo);
@@ -50,6 +53,7 @@ const Header: React.FC = () => {
                 Live New Pairs
               </NavLink>
               <NavLink
+                isActive={(_, location) => location.pathname.includes('/pair-explorer/')}
                 to="/pair-explorer/0xa29fe6ef9592b5d408cca961d0fb9b1faf497d6d"
                 activeClassName={s.active}
                 className={s.nav_link}

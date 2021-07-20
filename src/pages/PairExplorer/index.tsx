@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import { Helmet } from 'react-helmet';
 
 import { GET_PAIR_INFO } from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
@@ -95,6 +96,16 @@ const PairExplorer: React.FC = () => {
 
   return (
     <main className={s.page}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>PairExplorer - LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
+        />
+      </Helmet>
+
       <div className={s.container}>
         <AdBlock adImg={ad} />
 
