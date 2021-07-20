@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react-lite';
+import { gql, useQuery } from '@apollo/client';
 
 import ContractDetails from '../../../../components/Table/ContractDetails/index';
 import { useMst } from '../../../../store/store';
@@ -21,8 +22,42 @@ const LessScore = () => (
   </div>
 );
 
+// first gql query
+
+const GET_PAIR_INFO = gql`
+  query Pair($id: ID!) {
+    pair(id: $id) {
+      reserveUSD
+      reserve0
+      reserve1
+      token0 {
+        symbol
+        derivedETH
+        totalSupply
+      }
+      token1 {
+        symbol
+        derivedETH
+        totalSupply
+      }
+      txCount
+      liquidityProviderCount
+      volumeUSD
+      createdAtTimestamp
+    }
+  }
+`;
+
 const PairInfoBody: React.FC = observer(() => {
   const { pairExplorer } = useMst();
+
+  const { loading, error, data } = useQuery(GET_PAIR_INFO, {
+    variables: {
+      id: '0x00048cf1acdb5fa81a0facf869ef60c3f49bfe36',
+    },
+  });
+
+  console.log({ loading, error, data });
 
   return (
     <section className={s.card}>
