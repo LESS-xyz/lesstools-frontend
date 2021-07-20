@@ -8,7 +8,7 @@ import { App } from './App';
 import './styles/index.scss';
 
 const client = new ApolloClient({
-  uri: 'https://thegraph.com/legacy-explorer/subgraph/uniswap/uniswap-v2?selected=playground',
+  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
   cache: new InMemoryCache(),
 });
 

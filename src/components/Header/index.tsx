@@ -1,16 +1,13 @@
 import s from './Header.module.scss';
 import logo from '../../assets/img/icons/logo.svg';
-import arrow from '../../assets/img/icons/arrow-down-gradient.svg';
-import Button from '../Button/index';
+// import arrow from '../../assets/img/icons/arrow-down-gradient.svg';
+// import Button from '../Button/index';
 import PopUp from './PopUp';
 import { useState } from 'react';
 import ethLogo from '../../assets/img/icons/eth-logo-colorful.svg';
 import bnbLogo from '../../assets/img/icons/bnb-logo-colorful.svg';
 import maticLogo from '../../assets/img/icons/matic-logo.svg';
 import { NavLink } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { walletActions, userActions } from '../../redux/actions';
-// import { setToStorage } from '../../utils/localStorage';
 
 const cryptoLogos = new Map();
 cryptoLogos.set('Ethereum', ethLogo);
@@ -19,32 +16,6 @@ cryptoLogos.set('Matic', maticLogo);
 
 const Header: React.FC = () => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-
-  // const { address: userAddress } = useSelector(({ user }: any) => user);
-  // const { chainType } = useSelector(({ wallet }: any) => wallet);
-
-  // const dispatch = useDispatch();
-  // const setWalletType = (props: string) => dispatch(walletActions.setWalletType(props));
-  // const setChainType = (props: string) => dispatch(walletActions.setChainType(props));
-  // const setUserData = (props: any) => dispatch(userActions.setUserData(props));
-
-  // const handleConnectWallet = () => {
-  //   try {
-  //     setToStorage('walletType', 'metamask');
-  //     setWalletType('metamask');
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  // const handleDisconnect = () => {
-  //   try {
-  //     setToStorage('walletType', '');
-  //     setUserData({ address: undefined, balance: 0 });
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
 
   return (
     <header className={s.header}>
@@ -79,7 +50,7 @@ const Header: React.FC = () => {
                 Live New Pairs
               </NavLink>
               <NavLink
-                to="/pair-explorer"
+                to="/pair-explorer/0xa29fe6ef9592b5d408cca961d0fb9b1faf497d6d"
                 activeClassName={s.active}
                 className={s.nav_link}
                 data-text="Pair Explorer"
@@ -104,17 +75,8 @@ const Header: React.FC = () => {
               </NavLink>
             </nav>
           </div>
-          <div className={s.right}>
+          {/* <div className={s.right}>
             <div className={s.buttons}>
-              {/* {!userAddress ? (
-                <Button filled marginRight={20} onClick={handleConnectWallet}>
-                  Connect Wallet
-                </Button>
-              ) : (
-                <Button filled marginRight={20} onClick={handleDisconnect}>
-                  {`${userAddress.slice(0, 10)}...`}
-                </Button>
-              )} */}
               <Button filled marginRight={20} onClick={() => {}}>
                 Connect Wallet
               </Button>
@@ -131,7 +93,7 @@ const Header: React.FC = () => {
                 </div>
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </header>

@@ -1,4 +1,7 @@
+import { copyText } from '../../../../utils/copyText';
+
 import s from './PairInfoHeader.module.scss';
+
 import copy from '../../../../assets/img/icons/copy.svg';
 import etherscan from '../../../../assets/img/icons/table/actions-etherscan.svg';
 import marketcap from '../../../../assets/img/icons/marketcap.svg';
@@ -6,9 +9,28 @@ import telegram from '../../../../assets/img/icons/telegram-gradient.svg';
 import twitter from '../../../../assets/img/icons/twitter-gradient.svg';
 import desktop from '../../../../assets/img/icons/desktop-gradient.svg';
 import logoExample from '../../../../assets/img/icons/logo.svg';
-import { copyText } from '../../../../utils/copyText';
 
-const PairInfoHeader: React.FC = () => {
+export interface ITokenData {
+  derivedETH: string;
+  symbol: string;
+  id: string;
+}
+
+interface IPairInfoHeaderProps {
+  token0: ITokenData | null | undefined;
+  token1: ITokenData | null | undefined;
+  pairId: string;
+}
+
+const PairInfoHeader: React.FC<IPairInfoHeaderProps> = (props) => {
+  let { token0, token1 } = props;
+  const { pairId } = props;
+  
+  // чтобы weth был первый
+  if (token1?.symbol === 'WETH') {
+    [token0, token1] = [token1, token0];
+  }
+
   return (
     <section className={s.pairInfoHeader}>
       <div className={s.logo}>
@@ -16,12 +38,17 @@ const PairInfoHeader: React.FC = () => {
       </div>
       <div className={s.right}>
         <div className={s.right_top}>
-          <div className={s.right_top__pair}>Less/DEXT</div>
+          <div className={s.right_top__pair}>
+            <span>{token0?.symbol} /</span>
+            <span>{token1?.symbol}</span>
+          </div>
           <div className={s.right_top__socials}>
             <a
               data-tip="View Contract"
               data-effect="solid"
-              href="/"
+              rel="noreferrer"
+              target="_blank"
+              href={`https://etherscan.io/token/${token1?.id}`}
               className={s.right_top__socials_link}
             >
               <img src={etherscan} alt="etherscan" />
@@ -56,12 +83,12 @@ const PairInfoHeader: React.FC = () => {
           </div>
         </div>
         <div className={s.right_bottom}>
-          <div className={s.right_bottom__name}>(LESSTools)</div>
+          <div className={s.right_bottom__name}>({token1?.symbol})</div>
           <div className={s.right_bottom__contract}>
             <div>Token contract: </div>
             <div className={s.right_bottom__contract_body}>
               <div className={s.right_bottom__contract_body__copy}>
-                0xa3b0e...a339553
+                {token1?.id.slice(0, 7)}...{token1?.id.slice(-4)}
                 <div
                   className={s.copy}
                   data-tip="Copy to clipboard"
@@ -69,7 +96,7 @@ const PairInfoHeader: React.FC = () => {
                   role="button"
                   tabIndex={0}
                   onKeyDown={() => {}}
-                  onClick={() => copyText('0xa3b0e...a339553')}
+                  onClick={() => copyText(token1 ? token1.id : '')}
                 >
                   <img src={copy} alt="copy" />
                 </div>
@@ -87,7 +114,7 @@ const PairInfoHeader: React.FC = () => {
                 tabIndex={0}
                 onKeyDown={() => {}}
                 onClick={() => {
-                  copyText('contact adress');
+                  copyText(pairId);
                 }}
               >
                 <img src={copy} alt="copy" />

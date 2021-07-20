@@ -1,15 +1,21 @@
-import s from './PairExplorer.module.scss';
-import AdBlock from '../../components/AdBlock/index';
-import ad from '../../assets/img/sections/ad/ad1.png';
-import filterIcon from '../../assets/img/icons/filter.svg';
-import Table from '../../components/Table/index';
+import { useEffect, useState } from 'react';
+import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+
+import { GET_PAIR_INFO } from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
-import { useState } from 'react';
+import AdBlock from '../../components/AdBlock/index';
+import Table from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
-import PairInfoBody from './PairInfoCard/PairInfoBody/index';
+import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairInfoBottom from './PairInfoCard/PairInfoBottom/index';
 import Search from '../../components/Search/index';
-import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+
+import s from './PairExplorer.module.scss';
+
+import ad from '../../assets/img/sections/ad/ad1.png';
+import filterIcon from '../../assets/img/icons/filter.svg';
 
 const headerData = [
   { key: 'data', title: 'Data' },
@@ -70,19 +76,44 @@ const PairExplorer: React.FC = () => {
     'tradeHistory',
   );
   const [searchValue, setSearchValue] = useState('');
+  const { id: pairId } = useParams<{ id: string }>();
+
+  const [pairInfoData, setPairInfoData] = useState<IPairInfo | undefined>(undefined);
+
+  // запрос на бэкенд
+  const { loading, error, data: pairInfo } = useQuery(GET_PAIR_INFO, {
+    variables: {
+      id: pairId,
+    },
+  });
+
+  console.log({ loading, error, pairInfo });
+
+  useEffect(() => {
+    setPairInfoData(pairInfo);
+  }, [pairInfo]);
+
   return (
     <main className={s.page}>
       <div className={s.container}>
         <AdBlock adImg={ad} />
 
         <div className={s.info}>
-          <PairInfoHeader />
+          {loading && !pairInfo ? (
+            'loading'
+          ) : (
+            <PairInfoHeader
+              token0={pairInfo?.base_info.token0}
+              token1={pairInfo?.base_info.token1}
+              pairId={pairId}
+            />
+          )}
           <Search placeholder="Search" value={searchValue} onChange={setSearchValue} />
         </div>
 
         <div className={s.main}>
           <div className={s.card}>
-            <PairInfoBody />
+            {pairInfoData && <PairInfoBody loading={loading} pairInfo={pairInfoData} />}
           </div>
           <div className={s.chart}>
             <TradingViewWidget theme={Themes.DARK} autosize symbol="ETH/POLONIEX:DEXTUSDT" />

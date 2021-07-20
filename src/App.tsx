@@ -14,10 +14,10 @@ export const App: React.FC = () => {
         <Route path="/big-swap-explorer">
           <BigSwapExplorer />
         </Route>
-        <Route path="/live-new-pairs">
+        <Route path="/live-new-pairs/">
           <LiveNewPairs />
         </Route>
-        <Route path="/pair-explorer">
+        <Route path="/pair-explorer/:id">
           <PairExplorer />
         </Route>
       </Switch>

@@ -17,6 +17,11 @@
     margin-bottom: 10px;
 
     &__pair {
+      span {
+        &:last-child {
+          font-weight: 700;
+        }
+      }
       font-size: 31px;
     }
 
@@ -54,7 +59,7 @@
       &_body {
         color: #fff;
         margin-left: 5px;
-        
+
         &__copy {
           @include flex(row, center);
 
