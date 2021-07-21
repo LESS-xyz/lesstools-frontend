@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js/bignumber';
 
 import ContractDetails from '../../../../components/Table/ContractDetails/index';
 import { ITokenData } from '../PairInfoHeader';
+import Loader from '../../../../components/Loader/index';
 
 import s from './PairInfoBody.module.scss';
 
@@ -42,20 +43,30 @@ interface IPairInfoBodyProps {
 }
 
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer((props) => {
-  const { pairInfo, loading } = props;
+  const { pairInfo } = props;
+  let token0;
+  let token1;
+  let reserve0;
+  let reserve1;
 
-  let { token0, token1 } = pairInfo?.base_info;
-  let { reserve0, reserve1 } = pairInfo.base_info;
+  if (pairInfo.base_info) {
+    token0 = pairInfo.base_info.token0;
+    token1 = pairInfo.base_info.token1;
+    reserve0 = pairInfo.base_info.reserve0;
+    reserve1 = pairInfo.base_info.reserve1;
 
-  if (token1?.symbol === 'WETH') {
-    [token0, token1] = [token1, token0];
-    [reserve0, reserve1] = [reserve1, reserve0];
+    if (token1?.symbol === 'WETH') {
+      [token0, token1] = [token1, token0];
+      [reserve0, reserve1] = [reserve1, reserve0];
+    }
   }
 
   return (
     <section className={s.card}>
-      {loading ? (
-        'Loading'
+      {!pairInfo.base_info ? (
+        <div className={s.card_no_data}>
+          <Loader />
+        </div>
       ) : (
         <div className={s.card_inner}>
           <div className={s.card_header}>
@@ -66,13 +77,22 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer((props) => {
               <img src={favImg} alt="favImg" />
             </div>
             <div className={s.card_header__button}>Limit/Bot</div>
-            <div className={s.card_header__button}>Trade</div>
+            <a
+              rel="noreferrer"
+              target="_blank"
+              href={`https://app.uniswap.org/#/swap?outputCurrency=${token1?.id}&use=V2`}
+              className={s.card_header__button}
+            >
+              Trade
+            </a>
           </div>
           <div className={s.card_body}>
             <div className={s.card_body__price}>$ No Data</div>
             <div className={s.card_body__info}>
-              <span>(24h: -8.34%) </span>
-              {Number(token1.derivedETH).toFixed(8)} ETH
+              <span className={s.card_body__info_percent}>(24h: -8.34%) </span>
+              <span data-tip={`${token1?.derivedETH} ETH`}>
+                {new BigNumber(token1?.derivedETH || 0).toFormat(6)} ETH
+              </span>
             </div>
             <div className={s.card_body__properties}>
               <div className={s.card_body__property}>
@@ -93,15 +113,15 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer((props) => {
                 </div>
               </div>
               <div className={s.card_body__property}>
-                <div className={s.card_body__property_title}>Pooled {token0.symbol}:</div>
+                <div className={s.card_body__property_title}>Pooled {token0?.symbol}:</div>
                 <div className={s.card_body__property_value}>
-                  {new BigNumber(reserve0).toFormat(2)}
+                  {new BigNumber(reserve0 || 0).toFormat(2)}
                 </div>
               </div>
               <div className={s.card_body__property}>
-                <div className={s.card_body__property_title}>Pooled {token1.symbol}:</div>
+                <div className={s.card_body__property_title}>Pooled {token1?.symbol}:</div>
                 <div className={s.card_body__property_value}>
-                  {new BigNumber(reserve1).toFormat(2)}
+                  {new BigNumber(reserve1 || 0).toFormat(2)}
                 </div>
               </div>
               <div className={s.card_body__property}>

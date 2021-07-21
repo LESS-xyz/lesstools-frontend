@@ -1,4 +1,4 @@
-import s from './Table.module.scss';
+import BigNumber from 'bignumber.js/bignumber';
 
 import ListedSince from './ListedSince/index';
 import Actions from './Actions/index';
@@ -8,7 +8,8 @@ import PercentBlock from './PercentBlock/index';
 import Type from './Type/index';
 
 import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
-import BigNumber from 'bignumber.js/bignumber';
+
+import s from './Table.module.scss';
 
 // преобразовывает входной JSON в объект с JSX полями для вставку в таблицу
 export const dataConverter = {
@@ -51,7 +52,12 @@ export const dataConverter = {
       amountEth: row.amountEth,
       totalEth: row.totalEth,
       maker: (
-        <span data-effect="solid" data-class="tooltip-copy" data-delay-hide={1000} data-tip={row.maker}>
+        <span
+          data-effect="solid"
+          data-class="tooltip-copy"
+          data-delay-hide={1000}
+          data-tip={row.maker}
+        >
           {row.maker.slice(0, 7)}...{row.maker.slice(-2)}
         </span>
       ),

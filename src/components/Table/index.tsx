@@ -1,52 +1,38 @@
 import { useState, useEffect } from 'react';
-import s from './Table.module.scss';
+import ReactTooltip from 'react-tooltip';
 
 import { dataConverter } from './dataConverter';
 import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
-import ReactTooltip from 'react-tooltip';
 import TokenPriceHeader from './TokenPriceHeader';
+import { dataSorter } from './dataSorter';
 
-// TODO: доделать сортировку
-// сортировка массива
-const dataSorter = {
-  valueSort(
-    tableData: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>,
-    defaultData: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>,
-    key: string,
-    sortCount: number,
-  ) {
-    let newData;
-    if (sortCount === 0) {
-      console.log('возрастание');
-      // eslint-disable-next-line
-      // @ts-ignore
-      newData = tableData.sort((a, b) => a[key] - b[key]);
-    } else if (sortCount === 1) {
-      console.log('убывание');
-      // eslint-disable-next-line
-      // @ts-ignore
-      newData = tableData.sort((a, b) => b[key] - a[key]);
-    } else return defaultData;
+import s from './Table.module.scss';
 
-    return [...newData];
-  },
-};
+import sorterDown from '../../assets/img/icons/table/sort-down.svg';
+import sorterUp from '../../assets/img/icons/table/sort-up.svg';
+
+export type ITableHeader = Array<{
+  key: string;
+  title: string;
+  sortType?: 'string' | 'number' | 'date';
+}>;
 
 interface ITableProps {
-  header: Array<{ key: string; title: string }>;
+  header: ITableHeader;
   data: Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer>;
   tableType: 'bigSwap' | 'liveNewPairs' | 'pairExplorer';
 }
 
+// TODO: live new pairs listed since bug in sort
 const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
-  const [tableData, setTableData] = useState([...data]);
+  const [tableData, setTableData] = useState(data);
   const [sortCount, setSortCount] = useState(0);
 
   useEffect(() => {
     setTableData([...data]);
   }, [data]);
 
-  // для переключения usd/eth в таблице live new pairs
+  // для переключения usd/eth в таблице live-new-pairs
   const [isUsd, setIsUsd] = useState(false);
   const handleToogleIsUsd = () => {
     setIsUsd(!isUsd);
@@ -59,18 +45,41 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
         <thead className={s.table_head}>
           <tr>
             {header.map((el) => (
-              <th
-                key={el.key}
-                onClick={() => {
-                  setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
-                  setTableData(dataSorter.valueSort([...tableData], data, el.key, sortCount));
-                }}
-              >
-                {el.key === 'tokenPrice' ? (
-                  <TokenPriceHeader el={el} isUsd={isUsd} handleToogleIsUsd={handleToogleIsUsd} />
-                ) : (
-                  el.title
-                )}
+              <th key={el.key}>
+                <div className={s.th_inner}>
+                  {el.key === 'tokenPrice' ? (
+                    <TokenPriceHeader el={el} isUsd={isUsd} handleToogleIsUsd={handleToogleIsUsd} />
+                  ) : (
+                    el.title
+                  )}
+                  {el.sortType && (
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      onKeyDown={() => {}}
+                      className={s.th_sorter}
+                      onClick={() => {
+                        setTableData(
+                          dataSorter(
+                            [...tableData],
+                            data,
+                            el.key,
+                            sortCount,
+                            el.sortType || 'string',
+                          ),
+                        );
+                        setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
+                      }}
+                    >
+                      <div className={s.th_sorter__up}>
+                        <img src={sorterUp} alt="up" />
+                      </div>
+                      <div className={s.th_sorter__down}>
+                        <img src={sorterDown} alt="down" />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </th>
             ))}
           </tr>

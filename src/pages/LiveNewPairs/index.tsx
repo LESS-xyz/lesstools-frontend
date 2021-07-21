@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet';
 import { useEffect, useState } from 'react';
 
-import Table from '../../components/Table/index';
+import Table, { ITableHeader } from '../../components/Table/index';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
 import AdBlock from '../../components/AdBlock/index';
@@ -11,16 +11,16 @@ import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
 import ad from '../../assets/img/sections/ad/ad1.png';
 
 // headers for table
-const headerData = [
-  { key: 'token', title: 'Token' },
-  { key: 'listedSince', title: 'Listed Since' },
+const headerData: ITableHeader = [
+  { key: 'token', title: 'Token', sortType: 'string' },
+  { key: 'listedSince', title: 'Listed Since', sortType: 'date' },
   { key: 'actions', title: 'Actions' },
   { key: 'contractDetails', title: 'Contract Details' },
-  { key: 'tokenPrice', title: 'Token Price' },
-  { key: 'totalLiquidity', title: 'Total Liquidity' },
-  { key: 'poolAmount', title: 'Pool Amount' },
-  { key: 'poolVariation', title: 'Pool Variation' },
-  { key: 'poolRemaining', title: 'Pool Remaining' },
+  { key: 'tokenPrice', title: 'Token Price', sortType: 'number' },
+  { key: 'totalLiquidity', title: 'Total Liquidity', sortType: 'number' },
+  { key: 'poolAmount', title: 'Pool Amount', sortType: 'number' },
+  { key: 'poolVariation', title: 'Pool Variation', sortType: 'number' },
+  { key: 'poolRemaining', title: 'Pool Remaining', sortType: 'number' },
 ];
 
 const tableDataExample = [
@@ -40,7 +40,7 @@ const tableDataExample = [
   },
   {
     token: 'bezos',
-    listedSince: '2021-07-02 13:48:43',
+    listedSince: '2021-07-20 13:48:43',
     actions: {
       uniswap: '0x543534gfdgdf',
       etherscan: '0x3423423dfs',
@@ -56,7 +56,7 @@ const tableDataExample = [
   },
   {
     token: 'elonmusk',
-    listedSince: '2021-06-02 13:48:45',
+    listedSince: '2021-07-21 13:48:45',
     actions: {
       uniswap: '0x543534gfdgdf',
       etherscan: '0x3423423dfs',
@@ -72,7 +72,7 @@ const tableDataExample = [
   },
   {
     token: 'jejdogo',
-    listedSince: '2021-07-02 13:48:13',
+    listedSince: '2020-07-02 13:48:13',
     actions: {
       uniswap: '0x543534gfdgdf',
     },

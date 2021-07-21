@@ -1,3 +1,5 @@
+@import '../../styles/mixins/flex.scss';
+
 .table_wrap {
   overflow: auto;
 }
@@ -11,6 +13,18 @@ table {
       font-size: 14px;
       color: #ff7143;
       background: rgba(103, 77, 246, 0.3);
+      .th_inner {
+        @include flex(row, center, flex-start, no-wrap);
+      }
+
+      .th_sorter {
+        cursor: pointer;
+        margin-left: 7px;
+
+        &__up {
+          margin-bottom: 3px;
+        }
+      }
     }
   }
 

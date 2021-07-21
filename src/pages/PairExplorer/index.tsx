@@ -7,41 +7,43 @@ import { Helmet } from 'react-helmet';
 import { GET_PAIR_INFO } from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
 import AdBlock from '../../components/AdBlock/index';
-import Table from '../../components/Table/index';
+import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairInfoBottom from './PairInfoCard/PairInfoBottom/index';
 import Search from '../../components/Search/index';
+import { getTokenInfoFromCoingecko, IToken } from '../../utils/getTokensInfoFromCoingecko';
+import Loader from '../../components/Loader/index';
 
 import s from './PairExplorer.module.scss';
 
 import ad from '../../assets/img/sections/ad/ad1.png';
 import filterIcon from '../../assets/img/icons/filter.svg';
 
-const headerData = [
-  { key: 'data', title: 'Data' },
-  { key: 'type', title: 'Type' },
-  { key: 'priceUsd', title: 'Price USD' },
-  { key: 'priceEth', title: 'Price ETH' },
-  { key: 'amountEth', title: 'Amount ETH' },
-  { key: 'totalEth', title: 'Total ETH' },
+const headerData: ITableHeader = [
+  { key: 'data', title: 'Data', sortType: 'date' },
+  { key: 'type', title: 'Type', sortType: 'string' },
+  { key: 'priceUsd', title: 'Price USD', sortType: 'number' },
+  { key: 'priceEth', title: 'Price ETH', sortType: 'number' },
+  { key: 'amountEth', title: 'Amount ETH', sortType: 'number' },
+  { key: 'totalEth', title: 'Total ETH', sortType: 'number' },
   { key: 'maker', title: 'Maker' },
   { key: 'Others', title: 'Others' },
 ];
 
 const tableData: Array<IRowPairExplorer> = [
   {
-    data: '2021-06-11 13:31:08',
+    data: '2021-01-11 13:31:08',
     type: 'sell',
     priceUsd: 12.1212121,
     priceEth: 0.000045364,
     amountEth: 605.22250303,
     totalEth: 0.0294544,
-    maker: '0xa3b0e79935815730d942a444a84d4bd14a339553',
+    maker: '0xa3b0e7993581a84d4bd14a339553',
     others: { liveData: '0xrwerwerw435', etherscan: '0xdgkdsfksad' },
   },
   {
-    data: '2021-06-11 13:31:08',
+    data: '2021-02-11 13:31:08',
     type: 'buy',
     priceUsd: 0.12555,
     priceEth: 0.000045364,
@@ -61,7 +63,7 @@ const tableData: Array<IRowPairExplorer> = [
     others: { liveData: '0xrwerwerw435', etherscan: '0xdgkdsfksad' },
   },
   {
-    data: '2021-06-11 13:31:08',
+    data: '2021-04-11 13:31:08',
     type: 'sell',
     priceUsd: 1.1212121,
     priceEth: 0.000045364,
@@ -76,23 +78,28 @@ const PairExplorer: React.FC = () => {
   const [bottomType, setBottomType] = useState<'tradeHistory' | 'myPositions' | 'priceAlerts'>(
     'tradeHistory',
   );
+  const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
+    {} as IToken,
+  );
   const [searchValue, setSearchValue] = useState('');
   const { id: pairId } = useParams<{ id: string }>();
 
-  const [pairInfoData, setPairInfoData] = useState<IPairInfo | undefined>(undefined);
-
-  // запрос на бэкенд
-  const { loading, error, data: pairInfo } = useQuery(GET_PAIR_INFO, {
+  // запрос на бэкенд для pair-card info
+  const { loading, data: pairInfo } = useQuery<IPairInfo>(GET_PAIR_INFO, {
     variables: {
       id: pairId,
     },
   });
 
-  console.log({ loading, error, pairInfo });
-
+  // запрос на coingecko для получения иконки токена и полного названия
   useEffect(() => {
-    setPairInfoData(pairInfo);
-  }, [pairInfo]);
+    if (!loading && pairInfo?.base_info) {
+      getTokenInfoFromCoingecko(pairInfo?.base_info.token0.id || '').then((res) =>
+        setTokenInfoFromCoingecko(res),
+      );
+    }
+    // eslint-disable-next-line
+  }, [loading, pairInfo]);
 
   return (
     <main className={s.page}>
@@ -110,13 +117,14 @@ Fundraising Capital"
         <AdBlock adImg={ad} />
 
         <div className={s.info}>
-          {loading && !pairInfo ? (
-            'loading'
+          {!pairInfo ? (
+            <Loader />
           ) : (
             <PairInfoHeader
-              token0={pairInfo?.base_info.token0}
-              token1={pairInfo?.base_info.token1}
+              token0={pairInfo?.base_info?.token0}
+              token1={pairInfo?.base_info?.token1}
               pairId={pairId}
+              tokenInfoFromCoingecko={tokenInfoFromCoingecko}
             />
           )}
           <Search placeholder="Search" value={searchValue} onChange={setSearchValue} />
@@ -124,10 +132,14 @@ Fundraising Capital"
 
         <div className={s.main}>
           <div className={s.card}>
-            {pairInfoData && <PairInfoBody loading={loading} pairInfo={pairInfoData} />}
+            {pairInfo ? <PairInfoBody loading={loading} pairInfo={pairInfo} /> : <Loader />}
           </div>
           <div className={s.chart}>
-            <TradingViewWidget theme={Themes.DARK} autosize symbol="ETH/POLONIEX:DEXTUSDT" />
+            <TradingViewWidget
+              theme={Themes.DARK}
+              autosize
+              symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
+            />
           </div>
         </div>
 
