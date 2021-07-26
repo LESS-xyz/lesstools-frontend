@@ -3,9 +3,11 @@ import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
+import moment from 'moment';
 
-import { GET_PAIR_INFO } from '../../queries/index';
+import { GET_PAIR_INFO, GET_PAIR_SWAPS } from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
+import { IPairSwapsInfo } from '../../types/pairExplorer';
 import AdBlock from '../../components/AdBlock/index';
 import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
@@ -19,60 +21,6 @@ import s from './PairExplorer.module.scss';
 
 import ad from '../../assets/img/sections/ad/ad1.png';
 import filterIcon from '../../assets/img/icons/filter.svg';
-
-const headerData: ITableHeader = [
-  { key: 'data', title: 'Data', sortType: 'date' },
-  { key: 'type', title: 'Type', sortType: 'string' },
-  { key: 'priceUsd', title: 'Price USD', sortType: 'number' },
-  { key: 'priceEth', title: 'Price ETH', sortType: 'number' },
-  { key: 'amountEth', title: 'Amount ETH', sortType: 'number' },
-  { key: 'totalEth', title: 'Total ETH', sortType: 'number' },
-  { key: 'maker', title: 'Maker' },
-  { key: 'Others', title: 'Others' },
-];
-
-const tableData: Array<IRowPairExplorer> = [
-  {
-    data: '2021-01-11 13:31:08',
-    type: 'sell',
-    priceUsd: 12.1212121,
-    priceEth: 0.000045364,
-    amountEth: 605.22250303,
-    totalEth: 0.0294544,
-    maker: '0xa3b0e7993581a84d4bd14a339553',
-    others: { liveData: '0xrwerwerw435', etherscan: '0xdgkdsfksad' },
-  },
-  {
-    data: '2021-02-11 13:31:08',
-    type: 'buy',
-    priceUsd: 0.12555,
-    priceEth: 0.000045364,
-    amountEth: 5.22250303,
-    totalEth: 0.0294544,
-    maker: '0xa3b0e79935815730d942a444a84d4bd14a339553',
-    others: { liveData: '0xrwerwerw435', etherscan: '0xdgkdsfksad' },
-  },
-  {
-    data: '2021-06-11 13:31:08',
-    type: 'sell',
-    priceUsd: 12.1212131,
-    priceEth: 0.000045364,
-    amountEth: 6.22250303,
-    totalEth: 0.0294544,
-    maker: '0xa3b0e79935815730d942a444a84d4bd14a339553',
-    others: { liveData: '0xrwerwerw435', etherscan: '0xdgkdsfksad' },
-  },
-  {
-    data: '2021-04-11 13:31:08',
-    type: 'sell',
-    priceUsd: 1.1212121,
-    priceEth: 0.000045364,
-    amountEth: 635.22250303,
-    totalEth: 0.0294544,
-    maker: '0xa3b0e79935815730d942a444a84d4bd14a339553',
-    others: { liveData: '0xrwerwerw435', etherscan: '0xdgkdsfksad' },
-  },
-];
 
 const PairExplorer: React.FC = () => {
   const [bottomType, setBottomType] = useState<'tradeHistory' | 'myPositions' | 'priceAlerts'>(
@@ -91,15 +39,61 @@ const PairExplorer: React.FC = () => {
     },
   });
 
+  // запрос на получения всех свапов данной пары
+  type response = { swaps: Array<IPairSwapsInfo> };
+  const { loading: loadingSwaps, data: swaps } = useQuery<response>(GET_PAIR_SWAPS, {
+    variables: {
+      id: pairId,
+    },
+  });
+
   // запрос на coingecko для получения иконки токена и полного названия
   useEffect(() => {
     if (!loading && pairInfo?.base_info) {
-      getTokenInfoFromCoingecko(pairInfo?.base_info.token0.id || '').then((res) =>
-        setTokenInfoFromCoingecko(res),
-      );
+      const tokenToRequest =
+        pairInfo.base_info.token1.symbol === 'WETH'
+          ? pairInfo.base_info.token0.id
+          : pairInfo.base_info.token1.id;
+      getTokenInfoFromCoingecko(tokenToRequest || '').then((res) => setTokenInfoFromCoingecko(res));
     }
     // eslint-disable-next-line
   }, [loading, pairInfo]);
+
+  const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
+  const [swapsHeader, setSwapsHeader] = useState<ITableHeader>([]);
+  // формирования данных для таблицы
+  useEffect(() => {
+    if (!loadingSwaps && swaps !== undefined) {
+      const data: Array<IRowPairExplorer> = swaps?.swaps.map((swap) => ({
+        data: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
+        type: +swap.amount1Out === 0 ? 'sell' : 'buy',
+        priceUsd: +swap.token1PriceUSD,
+        priceEth: +swap.token1PriceETH,
+        amountEth: +swap.amount1Out === 0 ? +swap.amount1In : +swap.amount1Out,
+        totalEth: +swap.amount0Out || +swap.amount0In,
+        maker: swap.from,
+        others: { etherscan: swap.transaction.id },
+      }));
+      setSwapsData(data);
+
+      const header: ITableHeader = [
+        { key: 'data', title: 'Date', sortType: 'date' },
+        { key: 'type', title: 'Type', sortType: 'string' },
+        { key: 'priceUsd', title: 'Price USD', sortType: 'number' },
+        { key: 'priceEth', title: 'Price ETH', sortType: 'number' },
+        {
+          key: 'amountEth',
+          title: `Amount ${pairInfo?.base_info?.token1.symbol}`,
+          sortType: 'number',
+        },
+        { key: 'totalEth', title: 'Total ETH', sortType: 'number' },
+        { key: 'maker', title: 'Maker' },
+        { key: 'Others', title: 'Others' },
+      ];
+      setSwapsHeader(header);
+    }
+    // eslint-disable-next-line
+  }, [loadingSwaps, swaps, pairInfo?.base_info.token1.symbol]);
 
   return (
     <main className={s.page}>
@@ -180,12 +174,14 @@ Fundraising Capital"
             <div className={s.last_trades__icon}>
               <img src={filterIcon} alt="filterIcon" />
             </div>
-            <div className={s.last_trades__text}>LESS (last 530 trades)</div>
+            <div className={s.last_trades__text}>
+              {swaps?.swaps[0]?.pair.token1.symbol} (last {swaps?.swaps.length} trades)
+            </div>
           </div>
         </div>
 
         {bottomType === 'tradeHistory' && (
-          <Table data={tableData} header={headerData} tableType="pairExplorer" />
+          <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
         )}
       </div>
     </main>

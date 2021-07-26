@@ -14,7 +14,9 @@ const Card: React.FC<ICardProps> = ({ title, features, index }) => {
       </div>
       <div className={s.card_body}>
         {features.map((feature) => (
-          <div className={s.card_row}>{feature}</div>
+          <div key={JSON.stringify(feature)} className={s.card_row}>
+            {feature}
+          </div>
         ))}
       </div>
     </div>
@@ -65,7 +67,7 @@ const RoadMap: React.FC = () => {
             <div className={s.cards_line__dot} />
           </div>
           {cardsData.map((data, i) => (
-            <Card {...data} index={i} />
+            <Card key={JSON.stringify({ data, i })} {...data} index={i} />
           ))}
         </div>
         <div className={s.info_bottom}>

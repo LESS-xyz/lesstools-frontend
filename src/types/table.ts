@@ -6,7 +6,7 @@ export interface IRowBigSwap {
   totalEth: number;
   totalUsd: number;
   change: number;
-  others: { liveData: string; etherscan: string };
+  others: { liveData?: string; etherscan: string };
 }
 
 export interface IRowLiveNewPairs {
@@ -29,5 +29,5 @@ export interface IRowPairExplorer {
   amountEth: number;
   totalEth: number;
   maker: string;
-  others: { liveData: string; etherscan: string };
+  others: { liveData?: string; etherscan: string };
 }

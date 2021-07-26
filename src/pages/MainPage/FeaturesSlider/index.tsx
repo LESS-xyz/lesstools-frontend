@@ -101,8 +101,8 @@ const FeaturesSlider: React.FC = () => {
             setIsSliderMove(true);
           }}
         >
-          {slidesData.map((slide) => (
-            <SwiperSlide>
+          {slidesData.map((slide, index) => (
+            <SwiperSlide key={`${JSON.stringify(slide)}${index * index}`}>
               <Slide {...slide} />
             </SwiperSlide>
           ))}

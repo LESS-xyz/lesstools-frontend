@@ -19,9 +19,9 @@ export const dataConverter = {
       pair: <span className={s.pair}>{row.pair}</span>,
       time: row.time,
       type: <Type type={row.type} />,
-      quantity: row.quantity,
-      totalEth: row.totalEth,
-      totalUsd: <span>${row.totalUsd}</span>,
+      quantity: new BigNumber(row.quantity).toFormat(2),
+      totalEth: new BigNumber(row.totalEth).toFormat(2),
+      totalUsd: <span>${new BigNumber(row.totalUsd).toFormat(2)}</span>,
       change: <PercentBlock percent={row.change} />,
       others: <Actions actions={row.others} />,
     }));
@@ -31,7 +31,7 @@ export const dataConverter = {
   liveNewPairs(data: Array<IRowLiveNewPairs>, isUsd: boolean) {
     return data.map((row) => ({
       token: <span className={s.token}>{row.token}</span>,
-      listedSince: <ListedSince date={row.listedSince} />,
+      listedSince: <ListedSince key={JSON.stringify(row.listedSince)} date={row.listedSince} />,
       actions: <Actions actions={row.actions} />,
       contractDetails: <ContractDetails data={row.contractDetails} />,
       tokenPrice: <TokenPrice {...row.tokenPrice} isUsd={isUsd} />,
@@ -48,18 +48,13 @@ export const dataConverter = {
       data: row.data,
       type: <Type type={row.type} />,
       priceUsd: <span>${row.priceUsd}</span>,
-      priceEth: row.priceEth,
-      amountEth: row.amountEth,
-      totalEth: row.totalEth,
+      priceEth: new BigNumber(row.priceEth).toFormat(15),
+      amountEth: new BigNumber(row.amountEth).toFormat(2),
+      totalEth: new BigNumber(row.totalEth).toFormat(row.totalEth.toString().length > 5 ? 5 : 2),
       maker: (
-        <span
-          data-effect="solid"
-          data-class="tooltip-copy"
-          data-delay-hide={1000}
-          data-tip={row.maker}
-        >
+        <a href={`https://etherscan.io/tx/${row.maker}`} target="_blank" rel="noreferrer">
           {row.maker.slice(0, 7)}...{row.maker.slice(-2)}
-        </span>
+        </a>
       ),
       others: <Actions actions={row.others} />,
     }));

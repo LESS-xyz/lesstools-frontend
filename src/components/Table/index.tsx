@@ -14,7 +14,7 @@ import sorterUp from '../../assets/img/icons/table/sort-up.svg';
 export type ITableHeader = Array<{
   key: string;
   title: string;
-  sortType?: 'string' | 'number' | 'date';
+  sortType?: 'string' | 'number' | 'date' | 'tokenPrice';
 }>;
 
 interface ITableProps {
@@ -23,12 +23,18 @@ interface ITableProps {
   tableType: 'bigSwap' | 'liveNewPairs' | 'pairExplorer';
 }
 
-// TODO: live new pairs listed since bug in sort
+const sortTypes = {
+  0: 'decreasing',
+  1: 'ascending',
+  2: 'default',
+};
+
 const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
   const [tableData, setTableData] = useState(data);
   const [sortCount, setSortCount] = useState(0);
 
   useEffect(() => {
+    // TODO: при обновлении данных (каждые 15 сек) - сортировать новые данные
     setTableData([...data]);
   }, [data]);
 
@@ -36,6 +42,11 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
   const [isUsd, setIsUsd] = useState(false);
   const handleToogleIsUsd = () => {
     setIsUsd(!isUsd);
+  };
+
+  const handleSortTableData = (el: any) => {
+    setTableData(dataSorter([...tableData], data, el.key, sortCount, el.sortType, isUsd));
+    setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
   };
 
   return (
@@ -53,31 +64,26 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
                     el.title
                   )}
                   {el.sortType && (
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      onKeyDown={() => {}}
-                      className={s.th_sorter}
-                      onClick={() => {
-                        setTableData(
-                          dataSorter(
-                            [...tableData],
-                            data,
-                            el.key,
-                            sortCount,
-                            el.sortType || 'string',
-                          ),
-                        );
-                        setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
-                      }}
-                    >
-                      <div className={s.th_sorter__up}>
-                        <img src={sorterUp} alt="up" />
+                    <>
+                      <ReactTooltip id="sort" key={sortCount} />
+                      <div
+                        data-for="sort"
+                        data-effect="solid"
+                        data-tip={`Click to sort ${sortTypes[sortCount as 0 | 1 | 2]}`}
+                        tabIndex={0}
+                        role="button"
+                        onKeyDown={() => {}}
+                        className={s.th_sorter}
+                        onClick={() => handleSortTableData(el)}
+                      >
+                        <div className={s.th_sorter__up}>
+                          <img src={sorterUp} alt="up" />
+                        </div>
+                        <div className={s.th_sorter__down}>
+                          <img src={sorterDown} alt="down" />
+                        </div>
                       </div>
-                      <div className={s.th_sorter__down}>
-                        <img src={sorterDown} alt="down" />
-                      </div>
-                    </div>
+                    </>
                   )}
                 </div>
               </th>
@@ -86,12 +92,16 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
         </thead>
 
         <tbody className={s.table_body}>
+          <ReactTooltip />
           {/* eslint-disable-next-line */}
           {/* @ts-ignore */}
           {dataConverter[tableType](tableData, isUsd).map((row, i) => (
-            <tr className={i % 2 === 0 ? s.even : s.odd}>
-              {Object.values(row).map((cell: any) => (
-                <th>{cell}</th>
+            <tr
+              key={`${JSON.stringify(tableData[i])}${i * i}`}
+              className={i % 2 === 0 ? s.even : s.odd}
+            >
+              {Object.values(row).map((cell: any, index) => (
+                <th key={`${JSON.stringify(tableData[i])}${index * index}`}>{cell}</th>
               ))}
             </tr>
           ))}

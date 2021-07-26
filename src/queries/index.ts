@@ -34,3 +34,60 @@ export const GET_PAIR_INFO = gql`
     }
   }
 `;
+
+export const GET_PAIR_SWAPS = gql`
+  query getPairSwaps($id: ID!) {
+    swaps(orderBy: timestamp, orderDirection: desc, where: { pair: $id }) {
+      pair {
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+      timestamp
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
+      token0PriceETH
+      token0PriceUSD
+      token1PriceETH
+      token1PriceUSD
+      from
+      transaction {
+        id
+      }
+    }
+  }
+`;
+
+export const GET_BIG_SWAPS = gql`
+  query getBigSwaps($lowerThreshold: BigDecimal) {
+    swaps(orderBy: timestamp, orderDirection: desc, where: { amountUSD_gt: $lowerThreshold }) {
+      timestamp
+
+      pair {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+      }
+
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
+
+      transaction {
+        id
+      }
+
+      amountUSD
+    }
+  }
+`;

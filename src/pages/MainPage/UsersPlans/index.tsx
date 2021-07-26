@@ -65,8 +65,8 @@ const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle }) => {
           <div className={s.card_header__subtitle}>{subtitle}</div>
         </div>
         <div className={s.card_body}>
-          {features.map((feature) => (
-            <div className={s.card_body__feature}>
+          {features.map((feature, index) => (
+            <div key={JSON.stringify({ feature, index })} className={s.card_body__feature}>
               <div className={s.card_body__feature__img}>
                 <img src={featureIcon} alt="featureIcon" />
               </div>

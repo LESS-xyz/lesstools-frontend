@@ -28,7 +28,7 @@ const InfoBlock: React.FC<IInfoBlockProps> = ({ topTokens }) => {
       <div className={s.right}>
         <div className={s.table}>
           {topTokens.map((token, index) => (
-            <div className={s.table_cell}>
+            <div key={`${token}${index * index}`} className={s.table_cell}>
               <span>#{index + 1}</span> {token}
             </div>
           ))}
