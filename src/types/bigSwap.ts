@@ -5,6 +5,8 @@ export interface IBigSwapInfo {
   amount1Out: string;
   amountUSD: string;
   pair: {
+    reserve0: string;
+    reserve1: string;
     id: string;
     token0: { symbol: string };
     token1: { symbol: string };

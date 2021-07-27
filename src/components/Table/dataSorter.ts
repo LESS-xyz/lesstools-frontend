@@ -10,7 +10,7 @@ export const dataSorter = (
   sortType: 'string' | 'date' | 'number' | 'tokenPrice' = 'string',
   isUsd: boolean,
 ): Array<IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer> => {
-  if (sortCount === 2) return defaultData;
+  if (sortCount === 3) return defaultData;
   const newData = tableData.sort((a, b) => sorter(a, b, key, sortCount, sortType, isUsd));
-  return [...newData];
+  return newData;
 };

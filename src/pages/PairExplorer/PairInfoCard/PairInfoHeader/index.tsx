@@ -9,7 +9,8 @@ import marketcap from '../../../../assets/img/icons/marketcap.svg';
 import telegram from '../../../../assets/img/icons/telegram-gradient.svg';
 import twitter from '../../../../assets/img/icons/twitter-gradient.svg';
 import desktop from '../../../../assets/img/icons/desktop-gradient.svg';
-import logoExample from '../../../../assets/img/icons/logo.svg';
+// import logoExample from '../../../../assets/img/icons/logo.svg';
+import loader from '../../../../assets/loader.svg';
 
 export interface ITokenData {
   derivedETH: string;
@@ -41,7 +42,7 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = (props) => {
     <section className={s.pairInfoHeader}>
       <div className={s.logo}>
         <img
-          src={tokenInfoFromCoingecko?.logoURI?.replace('thumb', 'large') || logoExample}
+          src={tokenInfoFromCoingecko?.logoURI?.replace('thumb', 'large') || loader}
           alt="logoExample"
         />
       </div>

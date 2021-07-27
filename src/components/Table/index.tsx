@@ -31,12 +31,6 @@ const sortTypes = {
 
 const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
   const [tableData, setTableData] = useState(data);
-  const [sortCount, setSortCount] = useState(0);
-
-  useEffect(() => {
-    // TODO: при обновлении данных (каждые 15 сек) - сортировать новые данные
-    setTableData([...data]);
-  }, [data]);
 
   // для переключения usd/eth в таблице live-new-pairs
   const [isUsd, setIsUsd] = useState(false);
@@ -44,10 +38,26 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
     setIsUsd(!isUsd);
   };
 
-  const handleSortTableData = (el: any) => {
-    setTableData(dataSorter([...tableData], data, el.key, sortCount, el.sortType, isUsd));
+  // params to sort table
+  const [sortCount, setSortCount] = useState(0);
+  const [currentEl, setCurrentEl] = useState<any>(null);
+
+  function handleSortTableData(el: any) {
     setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
-  };
+    setCurrentEl(sortCount >= 2 ? null : el);
+    setTableData(dataSorter(tableData, [...data], el.key, sortCount + 1, el.sortType, isUsd));
+  }
+
+  useEffect(() => {
+    // при обновлении данных (каждые 15 сек) - сортируются данные
+    if (currentEl) {
+      setTableData(
+        dataSorter([...tableData], [...data], currentEl.key, sortCount, currentEl.sortType, isUsd),
+      );
+    } else setTableData([...data]);
+
+    // eslint-disable-next-line
+  }, [data]);
 
   return (
     <div className={s.table_wrap}>
@@ -77,10 +87,14 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
                         onClick={() => handleSortTableData(el)}
                       >
                         <div className={s.th_sorter__up}>
-                          <img src={sorterUp} alt="up" />
+                          {(currentEl?.key === el.key && sortCount === 1) || (
+                            <img src={sorterUp} alt="up" />
+                          )}
                         </div>
                         <div className={s.th_sorter__down}>
-                          <img src={sorterDown} alt="down" />
+                          {(currentEl?.key === el.key && sortCount === 2) || (
+                            <img src={sorterDown} alt="up" />
+                          )}
                         </div>
                       </div>
                     </>

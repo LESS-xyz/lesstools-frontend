@@ -1,3 +1,7 @@
+import { useQuery } from '@apollo/client';
+import { ETH_PRICE_QUERY } from '../../queries/index';
+import BigNumber from 'bignumber.js/bignumber';
+
 import s from './InfoBlock.module.scss';
 
 import gasIcon from '../../assets/img/icons/gas.svg';
@@ -8,10 +12,17 @@ interface IInfoBlockProps {
 }
 
 const InfoBlock: React.FC<IInfoBlockProps> = ({ topTokens }) => {
+  type response = { bundle: { ethPrice: string } };
+  const { loading, data: ethPrice } = useQuery<response>(ETH_PRICE_QUERY, { pollInterval: 30000 });
+
+  console.log(loading, ethPrice);
+
   return (
     <section className={s.info}>
       <div className={s.left}>
-        <div className={`${s.cell} ${s.fill}`}>ETH: $2469.35</div>
+        <div className={`${s.cell} ${s.fill}`}>
+          ETH: ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}
+        </div>
         <div className={s.cell}>
           <div className={s.cell_img}>
             <img src={gasIcon} alt="gasIcon" />

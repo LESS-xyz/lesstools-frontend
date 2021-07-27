@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import TradingViewWidget, { Themes } from 'react-tradingview-widget';
+import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
@@ -93,7 +93,7 @@ const PairExplorer: React.FC = () => {
       setSwapsHeader(header);
     }
     // eslint-disable-next-line
-  }, [loadingSwaps, swaps, pairInfo?.base_info.token1.symbol]);
+  }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
 
   return (
     <main className={s.page}>
@@ -132,6 +132,7 @@ Fundraising Capital"
             <TradingViewWidget
               theme={Themes.DARK}
               autosize
+              style={BarStyles.AREA}
               symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
             />
           </div>

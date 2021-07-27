@@ -1,14 +1,16 @@
 // TODO: to describe an util func
-// ascending = 0 or 1
+// ascending = 1 or 2
 
 function sorter(
   a: any,
   b: any,
   key: string,
-  ascending = 0,
+  sortCount: number,
   sortType: 'string' | 'date' | 'number' | 'tokenPrice',
   isUsd: boolean,
 ): number {
+  const ascending = sortCount === 2;
+
   switch (sortType) {
     case 'string': {
       if (a[key] < b[key]) return ascending ? -1 : 1;

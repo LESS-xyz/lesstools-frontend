@@ -14,6 +14,7 @@ import { IBigSwapInfo } from '../../types/bigSwap';
 import s from './BigSwapExplorer.module.scss';
 
 import ad from '../../assets/img/sections/ad/ad1.png';
+import loader from '../../assets/loader.svg';
 
 // headers for table
 const headerData: ITableHeader = [
@@ -44,24 +45,47 @@ const BigSwapExplorer: React.FC = () => {
     pollInterval: 15000,
   });
 
+  // TODO: Fill whitelist with tokens adresses
+  const whitelist = ['WETH'];
+
   useEffect(() => {
     if (!loading && swapsData !== undefined) {
-      // TODO: правильно прокинуть данные!
-      const newData: Array<IRowBigSwap> = swapsData?.swaps.map((swap: IBigSwapInfo) => ({
-        pair: swap.pair.token1.symbol,
-        time: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
-        type: +swap.amount1Out === 0 ? 'sell' : 'buy',
-        quantity: +swap.amount1Out === 0 ? +swap.amount1In : +swap.amount1Out,
-        totalEth: +swap.amount1Out === 0 ? +swap.amount0Out : +swap.amount0In,
-        totalUsd: +swap.amountUSD,
-        change: 22.31,
-        others: {
-          liveData: swap.pair.id,
-          etherscan: swap.transaction.id,
-        },
-      }));
+      const newData: Array<IRowBigSwap> = swapsData?.swaps.map((swap: IBigSwapInfo) => {
+        // TBR = Token Being Reviewd
+        const TBRSymbol = whitelist.includes(swap.pair.token0.symbol)
+          ? swap.pair.token1.symbol
+          : swap.pair.token0.symbol;
+        const TBRindex = whitelist.includes(swap.pair.token0.symbol) ? '1' : '0';
+
+        const TBRamountOut = swap[`amount${TBRindex}Out` as const];
+        const TBRamountIn = swap[`amount${TBRindex}In` as const];
+        const TBRreserve = `reserve${TBRindex}` as const;
+
+        const TBRtype = +TBRamountOut === 0 ? 'sell' : 'buy';
+        const TBRquantity = TBRtype === 'sell' ? +TBRamountIn : +TBRamountOut;
+
+        const otherTokenIndex = TBRindex === '1' ? '0' : '1';
+
+        return {
+          pair: TBRSymbol,
+          time: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
+          type: TBRtype,
+          quantity: TBRquantity,
+          totalEth:
+            TBRtype === 'buy'
+              ? +swap[`amount${otherTokenIndex}In` as const]
+              : +swap[`amount${otherTokenIndex}Out` as const],
+          totalUsd: +swap.amountUSD,
+          change: (TBRquantity / +swap.pair[TBRreserve]) * 100,
+          others: {
+            liveData: swap.pair.id,
+            etherscan: swap.transaction.id,
+          },
+        };
+      });
       setTableData(newData);
     }
+    // eslint-disable-next-line
   }, [loading, swapsData]);
 
   console.log(loading, swapsData);
@@ -104,8 +128,11 @@ Fundraising Capital"
             <Search value={searchValue} onChange={setSearchValue} placeholder="Search" />
           </div>
         </div>
-
-        <Table data={tableData} header={headerData} tableType="bigSwap" />
+        {loading && !swapsData ? (
+          <img src={loader} alt="loader" />
+        ) : (
+          <Table data={tableData} header={headerData} tableType="bigSwap" />
+        )}
       </div>
     </main>
   );

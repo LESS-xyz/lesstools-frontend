@@ -69,6 +69,8 @@ export const GET_BIG_SWAPS = gql`
       timestamp
 
       pair {
+        reserve0
+        reserve1
         id
         token0 {
           symbol
@@ -88,6 +90,14 @@ export const GET_BIG_SWAPS = gql`
       }
 
       amountUSD
+    }
+  }
+`;
+
+export const ETH_PRICE_QUERY = gql`
+  query ethPrice {
+    bundle(id: "1") {
+      ethPrice
     }
   }
 `;

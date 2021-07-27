@@ -22,7 +22,7 @@ export const dataConverter = {
       quantity: new BigNumber(row.quantity).toFormat(2),
       totalEth: new BigNumber(row.totalEth).toFormat(2),
       totalUsd: <span>${new BigNumber(row.totalUsd).toFormat(2)}</span>,
-      change: <PercentBlock percent={row.change} />,
+      change: <PercentBlock percent={+new BigNumber(row.change).toFormat(3)} />,
       others: <Actions actions={row.others} />,
     }));
   },
