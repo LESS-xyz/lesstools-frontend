@@ -74,9 +74,11 @@ export const GET_BIG_SWAPS = gql`
         id
         token0 {
           symbol
+          id
         }
         token1 {
           symbol
+          id
         }
       }
 
@@ -90,6 +92,33 @@ export const GET_BIG_SWAPS = gql`
       }
 
       amountUSD
+    }
+  }
+`;
+
+export const GET_LIVE_SWAPS = gql`
+  query getLiveSwaps {
+    pairs(orderBy: createdAtTimestamp, orderDirection: desc) {
+      id
+      createdAtTimestamp
+      creationTxnHash
+      reserve0
+      reserve1
+      initialReserve0
+      initialReserve1
+      reserveUSD
+      token0 {
+        id
+        symbol
+        derivedETH
+        derivedUSD
+      }
+      token1 {
+        id
+        symbol
+        derivedETH
+        derivedUSD
+      }
     }
   }
 `;

@@ -14,7 +14,7 @@ import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairInfoBottom from './PairInfoCard/PairInfoBottom/index';
 import Search from '../../components/Search/index';
-import { getTokenInfoFromCoingecko, IToken } from '../../utils/getTokensInfoFromCoingecko';
+import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 
 import s from './PairExplorer.module.scss';
@@ -132,6 +132,7 @@ Fundraising Capital"
             <TradingViewWidget
               theme={Themes.DARK}
               autosize
+              hide_side_toolbar={false}
               style={BarStyles.AREA}
               symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
             />

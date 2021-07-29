@@ -9,9 +9,9 @@ import { App } from './App';
 import './styles/index.scss';
 
 const client = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  // uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
   // uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-uniswap-v2',
-  // uri: 'https://api.thegraph.com/subgraphs/id/QmarMPRjo4FhCebUz4YUMbtUNohwGpo1Xct2zChPSsbwAY',
+  uri: 'https://api.thegraph.com/subgraphs/id/Qmbzfedqpp6eJTPLU5ZMXAB53YuxZnj12BvwigBCBCS5nV',
   cache: new InMemoryCache(),
 });
 

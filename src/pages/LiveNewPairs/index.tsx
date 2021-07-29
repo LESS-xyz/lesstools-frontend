@@ -1,19 +1,25 @@
 import { Helmet } from 'react-helmet';
 import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
 
 import Table, { ITableHeader } from '../../components/Table/index';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
 import AdBlock from '../../components/AdBlock/index';
+import { GET_LIVE_SWAPS } from '../../queries/index';
+import { INewPair } from '../../types/newPairs';
+import { IRowLiveNewPairs } from '../../types/table';
+import { WHITELIST } from '../../data/whitelist';
 
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
 
 import ad from '../../assets/img/sections/ad/ad1.png';
+import loader from '../../assets/loader.svg';
 
 // headers for table
 const headerData: ITableHeader = [
   { key: 'token', title: 'Token', sortType: 'string' },
-  { key: 'listedSince', title: 'Listed Since', sortType: 'date' },
+  { key: 'listedSince', title: 'Listed Since', sortType: 'number' },
   { key: 'actions', title: 'Actions' },
   { key: 'contractDetails', title: 'Contract Details' },
   { key: 'tokenPrice', title: 'Token Price', sortType: 'tokenPrice' },
@@ -23,76 +29,64 @@ const headerData: ITableHeader = [
   { key: 'poolRemaining', title: 'Pool Remaining', sortType: 'number' },
 ];
 
-const tableDataExample = [
-  {
-    token: 'BabyPig',
-    listedSince: '2021-07-05 11:37:12',
-    actions: {
-      unicrypt: '0xer39293',
-      liveData: '0x94b0a3d511b6ecdb17ebf877278ab030acb0a878',
-    },
-    contractDetails: ['cash', 'plus'],
-    tokenPrice: { usd: 1.32423, eth: 0.00000003 },
-    totalLiquidity: 0.69,
-    poolAmount: 6.33404,
-    poolVariation: -22.31,
-    poolRemaining: 6.70472,
-  },
-  {
-    token: 'bezos',
-    listedSince: '2021-07-20 13:48:43',
-    actions: {
-      uniswap: '0x543534gfdgdf',
-      etherscan: '0x3423423dfs',
-      unicrypt: '0xer39293',
-      liveData: '0x284101622f5367fa9cf236da836726b8adc264fe',
-    },
-    contractDetails: ['plus'],
-    tokenPrice: { usd: 2.32423, eth: 1.23 },
-    totalLiquidity: 3341154,
-    poolAmount: 6.33404,
-    poolVariation: 202.31,
-    poolRemaining: 6.70472,
-  },
-  {
-    token: 'elonmusk',
-    listedSince: '2021-07-21 13:48:45',
-    actions: {
-      uniswap: '0x543534gfdgdf',
-      etherscan: '0x3423423dfs',
-      unicrypt: '0xer39293',
-      liveData: '0x284101622f5367fa9cf236da836726b8adc264fe',
-    },
-    contractDetails: ['plus', 'lock'],
-    tokenPrice: { usd: 30.32423, eth: 0.004 },
-    totalLiquidity: 33330.769,
-    poolAmount: 6.33404,
-    poolVariation: 552.31,
-    poolRemaining: 6.70472,
-  },
-  {
-    token: 'jejdogo',
-    listedSince: '2020-07-02 13:48:13',
-    actions: {
-      uniswap: '0x543534gfdgdf',
-    },
-    contractDetails: ['plus', 'lock', 'proxy', 'cash'],
-    tokenPrice: { usd: 12.32423, eth: 0.00003 },
-    totalLiquidity: 31213.769,
-    poolAmount: 6.33404,
-    poolVariation: -2.31,
-    poolRemaining: 6.70472,
-  },
-];
-
 const BigSwapExplorer: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [tableData, setTableData] = useState([...tableDataExample]);
+
+  // final data for table
+  const [tableData, setTableData] = useState<Array<IRowLiveNewPairs>>([]);
+
+  // useEffect(() => {
+  //   const filtredTable = [...tableDataExample.filter((row) => row.token.includes(searchValue))];
+  //   setTableData(filtredTable);
+  // }, [searchValue]);
+
+  // query new pairs
+  type response = { pairs: Array<INewPair> };
+  const { loading, data: liveSwaps } = useQuery<response>(GET_LIVE_SWAPS, {
+    pollInterval: 15000,
+  });
 
   useEffect(() => {
-    const filtredTable = [...tableDataExample.filter((row) => row.token.includes(searchValue))];
-    setTableData(filtredTable);
-  }, [searchValue]);
+    if (!loading && liveSwaps !== undefined) {
+      const newData: Array<IRowLiveNewPairs> = liveSwaps?.pairs.map((swap: INewPair) => {
+        // TBR = Token Being Reviewd
+        const TBRSymbol = WHITELIST.includes(swap.token0.id)
+          ? swap.token1.symbol
+          : swap.token0.symbol;
+        const TBRindex = WHITELIST.includes(swap.token0.id) ? '1' : '0';
+        const TBRaddress = swap[`token${TBRindex}` as const].id;
+
+        const otherTokenIndex = TBRindex === '1' ? '0' : '1';
+
+        return {
+          token: TBRSymbol,
+          listedSince: swap.createdAtTimestamp,
+          actions: {
+            uniswap: TBRaddress,
+            etherscan: swap.creationTxnHash,
+            unicrypt: swap.id,
+            liveData: swap.id,
+          },
+          contractDetails: [],
+          tokenPrice: {
+            usd: +swap[`token${TBRindex}` as const].derivedUSD,
+            eth: +swap[`token${TBRindex}` as const].derivedETH,
+          },
+          totalLiquidity: +swap.reserveUSD,
+          // TODO: pool amount freeze?
+          poolAmount: +swap[`reserve${otherTokenIndex}` as const],
+          poolVariation:
+            (+swap[`reserve${otherTokenIndex}` as const] * 100) /
+              +swap[`initialReserve${otherTokenIndex}` as const] -
+            100,
+          poolRemaining: +swap[`reserve${otherTokenIndex}` as const],
+          otherTokenSymbol: swap[`token${otherTokenIndex}` as const].symbol,
+        };
+      });
+      setTableData(newData);
+    }
+    // eslint-disable-next-line
+  }, [loading, liveSwaps]);
 
   return (
     <main className={s.section}>
@@ -130,9 +124,11 @@ Fundraising Capital"
             <Search value={searchValue} onChange={setSearchValue} placeholder="Search" />
           </div>
         </div>
-        {/*  eslint-disable-next-line */}
-        {/* @ts-ignore */}
-        <Table data={tableData} header={headerData} tableType="liveNewPairs" />
+        {loading && liveSwaps === undefined ? (
+          <img src={loader} alt="loader" />
+        ) : (
+          <Table data={tableData} header={headerData} tableType="liveNewPairs" />
+        )}
       </div>
     </main>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
 
 import { dataConverter } from './dataConverter';
@@ -52,7 +52,7 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
     // при обновлении данных (каждые 15 сек) - сортируются данные
     if (currentEl) {
       setTableData(
-        dataSorter([...tableData], [...data], currentEl.key, sortCount, currentEl.sortType, isUsd),
+        dataSorter([...data], [...data], currentEl.key, sortCount, currentEl.sortType, isUsd),
       );
     } else setTableData([...data]);
 
@@ -115,7 +115,9 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
               className={i % 2 === 0 ? s.even : s.odd}
             >
               {Object.values(row).map((cell: any, index) => (
-                <th key={`${JSON.stringify(tableData[i])}${index * index}`}>{cell}</th>
+                <>
+                  <th key={`${JSON.stringify(tableData[i])}${index * index}`}>{cell}</th>
+                </>
               ))}
             </tr>
           ))}

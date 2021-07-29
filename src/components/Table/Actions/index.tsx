@@ -25,7 +25,7 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
           data-tip={`Buy at uniswap: ${actions.uniswap}`}
           data-place="left"
           data-effect="solid"
-          href={`https://uniswap.org/swap/${actions.uniswap}`}
+          href={`https://app.uniswap.org/#/swap?outputCurrency=${actions.uniswap}`}
           target="_blank"
           rel="noreferrer"
         >
@@ -49,7 +49,7 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
           data-tip="See at unicrypt"
           data-place="left"
           data-effect="solid"
-          href={`https://unicrypt.io/${actions.unicrypt}`}
+          href={`https://app.unicrypt.network/amm/uni-v2/pair/${actions.unicrypt}`}
           target="_blank"
           rel="noreferrer"
         >

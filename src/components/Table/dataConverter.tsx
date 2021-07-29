@@ -1,15 +1,18 @@
 import BigNumber from 'bignumber.js/bignumber';
+import moment from 'moment';
 
 import ListedSince from './ListedSince/index';
 import Actions from './Actions/index';
 import TokenPrice from './TokenPrice/index';
-import ContractDetails from './ContractDetails/index';
+// import ContractDetails from './ContractDetails/index';
 import PercentBlock from './PercentBlock/index';
 import Type from './Type/index';
 
 import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
 
 import s from './Table.module.scss';
+
+// TODO: pool amount in live pairs make component to prevent new render
 
 // преобразовывает входной JSON в объект с JSX полями для вставку в таблицу
 export const dataConverter = {
@@ -22,7 +25,7 @@ export const dataConverter = {
       quantity: new BigNumber(row.quantity).toFormat(2),
       totalEth: new BigNumber(row.totalEth).toFormat(2),
       totalUsd: <span>${new BigNumber(row.totalUsd).toFormat(2)}</span>,
-      change: <PercentBlock percent={+new BigNumber(row.change).toFormat(3)} />,
+      change: <PercentBlock percent={+row.change.toFixed(2)} />,
       others: <Actions actions={row.others} />,
     }));
   },
@@ -31,14 +34,28 @@ export const dataConverter = {
   liveNewPairs(data: Array<IRowLiveNewPairs>, isUsd: boolean) {
     return data.map((row) => ({
       token: <span className={s.token}>{row.token}</span>,
-      listedSince: <ListedSince key={JSON.stringify(row.listedSince)} date={row.listedSince} />,
+      listedSince: (
+        <ListedSince
+          key={JSON.stringify(row.listedSince)}
+          date={moment(+row.listedSince * 1000).format('YYYY-MM-DD HH:mm:ss')}
+        />
+      ),
       actions: <Actions actions={row.actions} />,
-      contractDetails: <ContractDetails data={row.contractDetails} />,
+      // contractDetails: <ContractDetails data={row.contractDetails} />,
+      contractDetails: 'details',
       tokenPrice: <TokenPrice {...row.tokenPrice} isUsd={isUsd} />,
       totalLiquidity: <span>${new BigNumber(row.totalLiquidity).toFormat(2)}</span>,
-      poolAmount: <span>{row.poolAmount} ETH</span>,
-      poolVariation: <PercentBlock percent={row.poolVariation} />,
-      poolRemaining: <span>{row.poolRemaining} ETH</span>,
+      poolAmount: (
+        <span>
+          {new BigNumber(row.poolAmount).toFormat(2)} {row.otherTokenSymbol}
+        </span>
+      ),
+      poolVariation: <PercentBlock percent={+row.poolVariation.toFixed(2)} />,
+      poolRemaining: (
+        <span>
+          {new BigNumber(row.poolRemaining).toFormat(2)} {row.otherTokenSymbol}
+        </span>
+      ),
     }));
   },
 

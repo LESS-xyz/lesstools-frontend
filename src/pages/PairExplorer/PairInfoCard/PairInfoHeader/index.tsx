@@ -1,5 +1,5 @@
 import { copyText } from '../../../../utils/copyText';
-import { IToken } from '../../../../utils/getTokensInfoFromCoingecko';
+import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 
 import s from './PairInfoHeader.module.scss';
 

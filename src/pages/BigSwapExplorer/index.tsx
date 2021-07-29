@@ -10,6 +10,7 @@ import AdBlock from '../../components/AdBlock/index';
 import { IRowBigSwap } from '../../types/table';
 import { GET_BIG_SWAPS } from '../../queries/index';
 import { IBigSwapInfo } from '../../types/bigSwap';
+import { WHITELIST } from '../../data/whitelist';
 
 import s from './BigSwapExplorer.module.scss';
 
@@ -31,12 +32,8 @@ const headerData: ITableHeader = [
 const BigSwapExplorer: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
+  // table Data
   const [tableData, setTableData] = useState<Array<IRowBigSwap>>([]);
-
-  // useEffect(() => {
-  //   const filtredTable = [...exampleTableData.filter((row) => row.pair.includes(searchValue))];
-  //   setTableData(filtredTable);
-  // }, [searchValue]);
 
   // query big swaps
   type response = { swaps: Array<IBigSwapInfo> };
@@ -45,17 +42,38 @@ const BigSwapExplorer: React.FC = () => {
     pollInterval: 15000,
   });
 
-  // TODO: Fill whitelist with tokens adresses
-  const whitelist = ['WETH'];
+  // для фильтрации
+  // сначала приходит ответ с бэка, это сетается в setSwapsToTable,
+  // после обработка и сетается в setTableData
+  const [swapsFromBackend, setSwapsFromBackend] = useState<response>({ swaps: [] });
+  useEffect(() => {
+    if (swapsData) setSwapsFromBackend(swapsData);
+  }, [swapsData]);
+
+  // фильтрация
+  useEffect(() => {
+    if (searchValue) {
+      const newSwaps = swapsData?.swaps.filter((data) => {
+        if (
+          data.pair.token0.symbol.includes(searchValue.toUpperCase()) ||
+          data.pair.token1.symbol.includes(searchValue.toUpperCase())
+        )
+          return true;
+        return false;
+      });
+      setSwapsFromBackend({ swaps: newSwaps || [] });
+    } else setSwapsFromBackend(swapsData || { swaps: [] });
+    // eslint-disable-next-line
+  }, [searchValue, swapsData]);
 
   useEffect(() => {
     if (!loading && swapsData !== undefined) {
-      const newData: Array<IRowBigSwap> = swapsData?.swaps.map((swap: IBigSwapInfo) => {
+      const newData: Array<IRowBigSwap> = swapsFromBackend?.swaps.map((swap: IBigSwapInfo) => {
         // TBR = Token Being Reviewd
-        const TBRSymbol = whitelist.includes(swap.pair.token0.symbol)
-          ? swap.pair.token1.symbol
-          : swap.pair.token0.symbol;
-        const TBRindex = whitelist.includes(swap.pair.token0.symbol) ? '1' : '0';
+        const TBRSymbol = WHITELIST.includes(swap.pair.token1.id)
+          ? swap.pair.token0.symbol
+          : swap.pair.token1.symbol;
+        const TBRindex = WHITELIST.includes(swap.pair.token1.symbol) ? '0' : '1';
 
         const TBRamountOut = swap[`amount${TBRindex}Out` as const];
         const TBRamountIn = swap[`amount${TBRindex}In` as const];
@@ -86,9 +104,7 @@ const BigSwapExplorer: React.FC = () => {
       setTableData(newData);
     }
     // eslint-disable-next-line
-  }, [loading, swapsData]);
-
-  console.log(loading, swapsData);
+  }, [loading, swapsFromBackend]);
 
   return (
     <main className={s.section}>

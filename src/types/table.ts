@@ -19,6 +19,7 @@ export interface IRowLiveNewPairs {
   poolAmount: number;
   poolVariation: number;
   poolRemaining: number;
+  otherTokenSymbol: string;
 }
 
 export interface IRowPairExplorer {

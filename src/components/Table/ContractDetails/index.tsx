@@ -1,9 +1,9 @@
 import s from './ContractDetails.module.scss';
+
 import cotractDetailPlusIcon from '../../../assets/img/icons/table/contract-detail-plus.svg';
 import cotractDetailLockIcon from '../../../assets/img/icons/table/contract-detail-lock.svg';
 import cotractDetailProxyIcon from '../../../assets/img/icons/table/contract-detail-proxy.svg';
 import cotractDetailCashIcon from '../../../assets/img/icons/table/contract-detail-cash.svg';
-import ReactTooltip from 'react-tooltip';
 
 interface IContractDetailsProps {
   data: ('plus' | 'lock' | 'proxy' | 'cash')[];
@@ -12,7 +12,6 @@ interface IContractDetailsProps {
 const ContractDetails: React.FC<IContractDetailsProps> = ({ data }) => {
   return (
     <div className={s.contract_details}>
-      <ReactTooltip />
       <div
         data-multiline
         data-effect="solid"
