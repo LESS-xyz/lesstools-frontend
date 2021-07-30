@@ -4,7 +4,8 @@ import moment from 'moment';
 import ListedSince from './ListedSince/index';
 import Actions from './Actions/index';
 import TokenPrice from './TokenPrice/index';
-// import ContractDetails from './ContractDetails/index';
+import TokenName from './TokenName/index';
+import ContractDetails from './ContractDetails/index';
 import PercentBlock from './PercentBlock/index';
 import Type from './Type/index';
 
@@ -27,13 +28,14 @@ export const dataConverter = {
       totalUsd: <span>${new BigNumber(row.totalUsd).toFormat(2)}</span>,
       change: <PercentBlock percent={+row.change.toFixed(2)} />,
       others: <Actions actions={row.others} />,
+      key: `${row.time} ${row.pair} ${row.change}`,
     }));
   },
 
   // для таблицы на странице live new pairs
   liveNewPairs(data: Array<IRowLiveNewPairs>, isUsd: boolean) {
     return data.map((row) => ({
-      token: <span className={s.token}>{row.token}</span>,
+      token: <TokenName token={row.token} />,
       listedSince: (
         <ListedSince
           key={JSON.stringify(row.listedSince)}
@@ -41,8 +43,7 @@ export const dataConverter = {
         />
       ),
       actions: <Actions actions={row.actions} />,
-      // contractDetails: <ContractDetails data={row.contractDetails} />,
-      contractDetails: 'details',
+      contractDetails: <ContractDetails data={row.contractDetails} />,
       tokenPrice: <TokenPrice {...row.tokenPrice} isUsd={isUsd} />,
       totalLiquidity: <span>${new BigNumber(row.totalLiquidity).toFormat(2)}</span>,
       poolAmount: (
@@ -56,6 +57,7 @@ export const dataConverter = {
           {new BigNumber(row.poolRemaining).toFormat(2)} {row.otherTokenSymbol}
         </span>
       ),
+      key: `${row.token} ${row.listedSince} ${row.totalLiquidity}`,
     }));
   },
 
@@ -74,6 +76,7 @@ export const dataConverter = {
         </a>
       ),
       others: <Actions actions={row.others} />,
+      key: `${row.data} ${row.type} ${row.priceEth}`,
     }));
   },
 };

@@ -17,7 +17,7 @@ interface IActionsProps {
   };
 }
 
-const Actions: React.FC<IActionsProps> = ({ actions }) => {
+const Actions: React.FC<IActionsProps> = React.memo(({ actions }) => {
   return (
     <div className={s.block}>
       {actions.uniswap && (
@@ -68,6 +68,6 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
       )}
     </div>
   );
-};
+});
 
 export default Actions;

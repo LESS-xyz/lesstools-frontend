@@ -98,7 +98,7 @@ export const GET_BIG_SWAPS = gql`
 
 export const GET_LIVE_SWAPS = gql`
   query getLiveSwaps {
-    pairs(orderBy: createdAtTimestamp, orderDirection: desc) {
+    pairs(first: 900, orderBy: createdAtTimestamp, orderDirection: desc) {
       id
       createdAtTimestamp
       creationTxnHash

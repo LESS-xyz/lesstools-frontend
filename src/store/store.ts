@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
 import { Instance, onSnapshot, types } from 'mobx-state-tree';
 
-import { PairExplorerModel } from './Models';
+import { PairExplorerModel, LiveNewPairs } from './Models';
 
 const RootModel = types.model({
   pairExplorer: PairExplorerModel,
+  liveNewPairs: LiveNewPairs,
 });
 
 export const Store = RootModel.create({
@@ -29,6 +30,9 @@ export const Store = RootModel.create({
       volumeUSD: '',
     },
     h24_ago_by_sum: [],
+  },
+  liveNewPairs: {
+    timer: 0,
   },
 });
 

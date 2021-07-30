@@ -10,6 +10,7 @@ import s from './Table.module.scss';
 
 import sorterDown from '../../assets/img/icons/table/sort-down.svg';
 import sorterUp from '../../assets/img/icons/table/sort-up.svg';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 export type ITableHeader = Array<{
   key: string;
@@ -29,7 +30,34 @@ const sortTypes = {
   2: 'default',
 };
 
-const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
+// table row
+const Cell: React.FC<{ cell: any }> = ({ cell }) => {
+  return <span>{cell}</span>;
+};
+
+interface ITrow {
+  tableData: (IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer)[];
+  i: number;
+  row: any;
+}
+
+const TRow: React.FC<ITrow> = ({ tableData, i, row }) => {
+  return (
+    <tr key={`${JSON.stringify(tableData[i])}${i * i}`} className={i % 2 === 0 ? s.even : s.odd}>
+      {Object.values(row)
+        .slice(0, -1)
+        .map((cell: any, index) => (
+          <>
+            <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
+              <Cell cell={cell} />
+            </th>
+          </>
+        ))}
+    </tr>
+  );
+};
+
+const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) => {
   const [tableData, setTableData] = useState(data);
 
   // для переключения usd/eth в таблице live-new-pairs
@@ -38,11 +66,25 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
     setIsUsd(!isUsd);
   };
 
+  // dynamic pagination
+  const [scrollKoef, setScrollKoef] = useState(1);
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const tableFullHeight = e.currentTarget.scrollHeight;
+    const scrolledHeight = e.currentTarget.clientHeight + e.currentTarget.scrollTop;
+    if (scrolledHeight >= tableFullHeight / 1.2) {
+      if (scrollKoef <= tableData.length / 100) setScrollKoef((prev) => prev + 1);
+    }
+  };
+
   // params to sort table
   const [sortCount, setSortCount] = useState(0);
   const [currentEl, setCurrentEl] = useState<any>(null);
 
   function handleSortTableData(el: any) {
+    // TODO: скроль в ноль, когда нажал на сорт
+    const table = document.querySelector('.table_wrap');
+    console.log(table);
+    setScrollKoef(1);
     setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
     setCurrentEl(sortCount >= 2 ? null : el);
     setTableData(dataSorter(tableData, [...data], el.key, sortCount + 1, el.sortType, isUsd));
@@ -60,7 +102,7 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
   }, [data]);
 
   return (
-    <div className={s.table_wrap}>
+    <div className={`${s.table_wrap} table_wrap`} onScroll={(e) => handleScroll(e)}>
       <ReactTooltip />
       <table className={s.table}>
         <thead className={s.table_head}>
@@ -109,22 +151,15 @@ const Table: React.FC<ITableProps> = ({ header, data, tableType }) => {
           <ReactTooltip />
           {/* eslint-disable-next-line */}
           {/* @ts-ignore */}
-          {dataConverter[tableType](tableData, isUsd).map((row, i) => (
-            <tr
-              key={`${JSON.stringify(tableData[i])}${i * i}`}
-              className={i % 2 === 0 ? s.even : s.odd}
-            >
-              {Object.values(row).map((cell: any, index) => (
-                <>
-                  <th key={`${JSON.stringify(tableData[i])}${index * index}`}>{cell}</th>
-                </>
-              ))}
-            </tr>
-          ))}
+          {dataConverter[tableType](tableData, isUsd)
+            .slice(0, scrollKoef * 100)
+            .map((row: any, i: number) => (
+              <TRow key={row.key} tableData={tableData} i={i} row={row} />
+            ))}
         </tbody>
       </table>
     </div>
   );
-};
+});
 
 export default Table;
