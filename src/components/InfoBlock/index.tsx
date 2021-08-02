@@ -63,12 +63,14 @@ const InfoBlock: React.FC<IInfoBlockProps> = ({ topTokens }) => {
         </div>
       </div>
       <div className={s.right}>
-        <div className={s.table}>
-          {topTokens.map((token, index) => (
-            <div key={`${token}`} className={s.table_cell}>
-              <span>#{index + 1}</span> {token}
-            </div>
-          ))}
+        <div className={s.marquee}>
+          <div className={s.table}>
+            {topTokens.map((token, index) => (
+              <div key={`${token}`} className={s.table_cell}>
+                <span>#{index + 1}</span> {token}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

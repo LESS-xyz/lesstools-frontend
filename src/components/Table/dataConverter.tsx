@@ -48,13 +48,13 @@ export const dataConverter = {
       totalLiquidity: <span>${new BigNumber(row.totalLiquidity).toFormat(2)}</span>,
       poolAmount: (
         <span>
-          {new BigNumber(row.poolAmount).toFormat(2)} {row.otherTokenSymbol}
+          {new BigNumber(row.poolAmount).toFormat(2)} <span> {row.otherTokenSymbol}</span>
         </span>
       ),
       poolVariation: <PercentBlock percent={+row.poolVariation.toFixed(2)} />,
       poolRemaining: (
         <span>
-          {new BigNumber(row.poolRemaining).toFormat(2)} {row.otherTokenSymbol}
+          {new BigNumber(row.poolRemaining).toFormat(2)} <span>{row.otherTokenSymbol}</span>
         </span>
       ),
       key: `${row.token} ${row.listedSince} ${row.totalLiquidity}`,

@@ -1,10 +1,11 @@
 @import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/media.scss';
 
 .info,
 .left,
 .cell,
 .table {
-  @include flex(row, center, space-between);
+  @include flex(row, center, space-between, nowrap);
 }
 
 .info {
@@ -37,8 +38,35 @@
   font-size: 14px;
   letter-spacing: -0.531474px;
   color: var(--grey);
+  cursor: pointer;
   span {
     color: var(--orange);
   }
   margin-right: 20px;
+}
+
+.right {
+  overflow: hidden;
+  flex-grow: 1;
+}
+// бегущая строка
+@keyframes scroll {
+  0% {
+    transform: translate(100%, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+.marquee {
+  width: 100%;
+  white-space: nowrap;
+  animation: scroll 15s infinite linear forwards;
+  @include b(tablet) {
+    width: 750px;
+  }
+  &:hover {
+    animation-play-state: paused;
+  }
 }

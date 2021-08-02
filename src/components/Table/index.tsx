@@ -30,33 +30,6 @@ const sortTypes = {
   2: 'default',
 };
 
-// table row
-const Cell: React.FC<{ cell: any }> = ({ cell }) => {
-  return <span>{cell}</span>;
-};
-
-interface ITrow {
-  tableData: (IRowBigSwap | IRowLiveNewPairs | IRowPairExplorer)[];
-  i: number;
-  row: any;
-}
-
-const TRow: React.FC<ITrow> = ({ tableData, i, row }) => {
-  return (
-    <tr key={`${JSON.stringify(tableData[i])}${i * i}`} className={i % 2 === 0 ? s.even : s.odd}>
-      {Object.values(row)
-        .slice(0, -1)
-        .map((cell: any, index) => (
-          <>
-            <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
-              <Cell cell={cell} />
-            </th>
-          </>
-        ))}
-    </tr>
-  );
-};
-
 const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) => {
   const [tableData, setTableData] = useState(data);
 
@@ -71,7 +44,7 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
   const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const tableFullHeight = e.currentTarget.scrollHeight;
     const scrolledHeight = e.currentTarget.clientHeight + e.currentTarget.scrollTop;
-    if (scrolledHeight >= tableFullHeight / 1.2) {
+    if (scrolledHeight >= tableFullHeight / 1.001) {
       if (scrollKoef <= tableData.length / 100) setScrollKoef((prev) => prev + 1);
     }
   };
@@ -81,9 +54,10 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
   const [currentEl, setCurrentEl] = useState<any>(null);
 
   function handleSortTableData(el: any) {
-    // TODO: скроль в ноль, когда нажал на сорт
-    const table = document.querySelector('.table_wrap');
-    console.log(table);
+    const table = document.querySelector<HTMLElement>('.table_wrap');
+    if (table) {
+      table.scrollTo(0, 0);
+    }
     setScrollKoef(1);
     setSortCount(sortCount >= 2 ? 0 : sortCount + 1);
     setCurrentEl(sortCount >= 2 ? null : el);
@@ -154,7 +128,20 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
           {dataConverter[tableType](tableData, isUsd)
             .slice(0, scrollKoef * 100)
             .map((row: any, i: number) => (
-              <TRow key={row.key} tableData={tableData} i={i} row={row} />
+              <tr
+                key={`${JSON.stringify(tableData[i])}${i * i}`}
+                className={i % 2 === 0 ? s.even : s.odd}
+              >
+                {Object.values(row)
+                  .slice(0, -1)
+                  .map((cell: any, index) => (
+                    <>
+                      <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
+                        <span>{cell}</span>
+                      </th>
+                    </>
+                  ))}
+              </tr>
             ))}
         </tbody>
       </table>

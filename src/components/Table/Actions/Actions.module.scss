@@ -1,7 +1,7 @@
 @import '../../../styles/mixins/flex.scss';
 
 .block {
-  @include flex(row, center);
+  @include flex(row, center, normal, nowrap);
   a {
     margin-right: 5px;
     &:last-child {

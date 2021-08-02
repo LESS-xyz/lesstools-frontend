@@ -35,20 +35,41 @@ const BigSwapExplorer: React.FC = () => {
   // final data for table
   const [tableData, setTableData] = useState<Array<IRowLiveNewPairs>>([]);
 
-  // useEffect(() => {
-  //   const filtredTable = [...tableDataExample.filter((row) => row.token.includes(searchValue))];
-  //   setTableData(filtredTable);
-  // }, [searchValue]);
-
   // query new pairs
   type response = { pairs: Array<INewPair> };
   const { loading, data: liveSwaps } = useQuery<response>(GET_LIVE_SWAPS, {
     pollInterval: 15000,
   });
 
+  // для фильтрации
+  // сначала приходит ответ с бэка, это сетается в setSwapsFromBackend,
+  // после обработка и сетается в setTableData
+  const [swapsFromBackend, setSwapsFromBackend] = useState<response>({ pairs: [] });
+  useEffect(() => {
+    if (liveSwaps) setSwapsFromBackend(liveSwaps);
+  }, [liveSwaps]);
+
+  // фильтрация
+  useEffect(() => {
+    if (searchValue) {
+      const newSwaps = liveSwaps?.pairs.filter((data) => {
+        if (
+          data.token0.symbol.includes(searchValue.toUpperCase()) ||
+          data.token1.symbol.includes(searchValue.toUpperCase())
+        )
+          return true;
+        return false;
+      });
+      setSwapsFromBackend({ pairs: newSwaps || [] });
+    } else setSwapsFromBackend(liveSwaps || { pairs: [] });
+    // eslint-disable-next-line
+  }, [searchValue, liveSwaps]);
+
+  console.log(searchValue);
+
   useEffect(() => {
     if (!loading && liveSwaps !== undefined) {
-      const newData: Array<IRowLiveNewPairs> = liveSwaps?.pairs.map((swap: INewPair) => {
+      const newData: Array<IRowLiveNewPairs> = swapsFromBackend?.pairs.map((swap: INewPair) => {
         // TBR = Token Being Reviewd
         const TBRSymbol = WHITELIST.includes(swap.token0.id)
           ? swap.token1.symbol
@@ -86,7 +107,7 @@ const BigSwapExplorer: React.FC = () => {
       setTableData(newData);
     }
     // eslint-disable-next-line
-  }, [loading, liveSwaps]);
+  }, [loading, swapsFromBackend]);
 
   return (
     <main className={s.section}>
