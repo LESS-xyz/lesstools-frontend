@@ -2,7 +2,7 @@ import React from 'react';
 
 import AdBlock from '../../components/AdBlock/index';
 import Featured from './Featured';
-// import TableHot from './TableHot';
+import TableHot from './TableHot';
 import Tools from './Tools';
 
 import s from './Board.module.scss';
@@ -58,9 +58,9 @@ const Board: React.FC = () => {
                 <img src={BetYou} alt="product" />
               </div>
 
-              {/* <div className={s.block_board_item}>
+              <div className={s.block_board_item}>
                 <TableHot />
-              </div> */}
+              </div>
               <div className={s.block_board_item}>
                 <Featured />
               </div>
