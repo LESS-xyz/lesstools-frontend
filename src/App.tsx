@@ -1,7 +1,10 @@
-import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer } from './pages';
-import Header from './components/Header/index';
+<<<<<<<<< Temporary merge branch 1
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+=========
+import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer } from './pages';
+import Header from './components/Header/index';
+>>>>>>>>> Temporary merge branch 2
 import Footer from './components/Footer/index';
 import Header from './components/Header/index';
 import { BigSwapExplorer, Board, LiveNewPairs, MainPage } from './pages';
