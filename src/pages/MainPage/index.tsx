@@ -25,6 +25,11 @@ const partnersLogos = [
 ];
 
 const MainPage: React.FC = () => {
+  const res = fetch(
+    'http://api.pixlpark.com/oauth/requesttoken/?key=8e49ff607b1f46e1a5e8f6ad5d312a80',
+  );
+  console.log(res);
+
   return (
     <section className={s.page}>
       <Helmet>

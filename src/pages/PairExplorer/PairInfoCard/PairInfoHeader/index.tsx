@@ -1,5 +1,6 @@
 import { copyText } from '../../../../utils/copyText';
 import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
+import { WHITELIST } from '../../../../data/whitelist';
 
 import s from './PairInfoHeader.module.scss';
 
@@ -30,7 +31,7 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = (props) => {
   const { pairId, tokenInfoFromCoingecko } = props;
 
   // чтобы weth был первый
-  if (token1?.symbol === 'WETH') {
+  if (token1 && WHITELIST.includes(token1?.id)) {
     [token0, token1] = [token1, token0];
   }
 
