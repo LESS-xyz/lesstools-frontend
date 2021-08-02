@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer } from './pages';
+import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage } from './pages';
 import Header from './components/Header/index';
 import Footer from './components/Footer/index';
 
@@ -20,6 +20,9 @@ export const App: React.FC = () => {
         </Route>
         <Route path="/pair-explorer/:id">
           <PairExplorer />
+        </Route>
+        <Route path="/board">
+          <BoardPage />
         </Route>
         <Redirect to="/" />
       </Switch>
