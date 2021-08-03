@@ -1,0 +1,58 @@
+@import '../../styles/mixins/container.scss';
+@import '../../styles/mixins/grid.scss';
+@import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/gradient-text.scss';
+
+.board {
+}
+
+.bg {
+  background: var(--gradient-background);
+  padding-top: 100px;
+}
+
+.container {
+  @include container;
+}
+
+.tables {
+  @include grid(repeat(2, 1fr), 1fr, 20px);
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.tools {
+  @include grid(repeat(3, 1fr), 1fr, 25px);
+  margin-bottom: 50px;
+}
+
+.sponsors {
+  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+  padding: 25px 0 20px;
+  margin-bottom: 60px;
+
+  &_title {
+    span {
+      @include gradient-text;
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+    margin-bottom: 14px;
+    padding-left: 10px;
+  }
+
+  &_body {
+    @include grid(repeat(3, 1fr), 1fr, 25px);
+  }
+}
+
+.other {
+  @include grid(repeat(3, 1fr), 1fr, 20px);
+  margin-bottom: 90px;
+
+  &_block {
+    img {
+      max-width: 100%;
+    }
+  }
+}

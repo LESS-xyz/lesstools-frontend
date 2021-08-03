@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, Board } from './pages';
+import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage } from './pages';
 
 import Header from './components/Header/index';
 import Footer from './components/Footer/index';
@@ -15,7 +15,7 @@ export const App: React.FC = () => {
             <MainPage />
           </Route>
           <Route path="/board">
-            <Board />
+            <BoardPage />
           </Route>
           <Route path="/big-swap-explorer">
             <BigSwapExplorer />

@@ -1,0 +1,40 @@
+@import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/gradient-text.scss';
+.tool {
+}
+
+.tool_header {
+  height: 145px;
+  background-color: #1d1540;
+  @include flex(row, center, center);
+
+  &__img {
+    position: relative;
+    img {
+      width: 90px;
+      height: 90px;
+    }
+  }
+}
+
+.tool_body {
+  padding: 30px 20px 20px;
+  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+
+  &__title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    span {
+      @include gradient-text;
+    }
+  }
+
+  &__buttons div {
+    width: 100%;
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -125,9 +125,6 @@ Fundraising Capital"
         </div>
 
         <div className={s.main}>
-          <div className={s.card}>
-            {pairInfo ? <PairInfoBody loading={loading} pairInfo={pairInfo} /> : <Loader />}
-          </div>
           <div className={s.chart}>
             <TradingViewWidget
               theme={Themes.DARK}
@@ -136,6 +133,9 @@ Fundraising Capital"
               style={BarStyles.AREA}
               symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
             />
+          </div>
+          <div className={s.card}>
+            {pairInfo ? <PairInfoBody loading={loading} pairInfo={pairInfo} /> : <Loader />}
           </div>
         </div>
 
