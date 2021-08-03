@@ -13,7 +13,6 @@ export interface IRowLiveNewPairs {
   token: string;
   listedSince: string | Date;
   actions: { uniswap?: string; unicrypt?: string; etherscan?: string; liveData?: string };
-  contractDetails: Array<'plus' | 'lock' | 'proxy' | 'cash'>;
   tokenPrice: { usd: number; eth: number };
   totalLiquidity: number;
   poolAmount: number;

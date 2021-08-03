@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import BigNumber from 'bignumber.js/bignumber';
 
-import ContractDetails from '../../../../components/Table/ContractDetails/index';
 import { ITokenData } from '../PairInfoHeader';
 import Loader from '../../../../components/Loader/index';
 
@@ -143,12 +142,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer((props) => {
                   <LessScore />
                 </div>
               </div>
-              <div className={s.card_block}>
+              {/* <div className={s.card_block}>
                 <div className={s.card_block__title}>Contract Details</div>
                 <div className={s.card_block__body}>
                   <ContractDetails data={['plus', 'proxy']} />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

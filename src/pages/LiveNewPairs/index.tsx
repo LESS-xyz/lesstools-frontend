@@ -21,7 +21,6 @@ const headerData: ITableHeader = [
   { key: 'token', title: 'Token', sortType: 'string' },
   { key: 'listedSince', title: 'Listed Since', sortType: 'number' },
   { key: 'actions', title: 'Actions' },
-  { key: 'contractDetails', title: 'Contract Details' },
   { key: 'tokenPrice', title: 'Token Price', sortType: 'tokenPrice' },
   { key: 'totalLiquidity', title: 'Total Liquidity', sortType: 'number' },
   { key: 'poolAmount', title: 'Pool Amount', sortType: 'number' },
@@ -88,7 +87,6 @@ const BigSwapExplorer: React.FC = () => {
             unicrypt: swap.id,
             liveData: swap.id,
           },
-          contractDetails: [],
           tokenPrice: {
             usd: +swap[`token${TBRindex}` as const].derivedUSD,
             eth: +swap[`token${TBRindex}` as const].derivedETH,

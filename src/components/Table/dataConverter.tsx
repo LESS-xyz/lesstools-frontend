@@ -5,7 +5,6 @@ import ListedSince from './ListedSince/index';
 import Actions from './Actions/index';
 import TokenPrice from './TokenPrice/index';
 import TokenName from './TokenName/index';
-import ContractDetails from './ContractDetails/index';
 import PercentBlock from './PercentBlock/index';
 import Type from './Type/index';
 
@@ -43,7 +42,6 @@ export const dataConverter = {
         />
       ),
       actions: <Actions actions={row.actions} />,
-      contractDetails: <ContractDetails data={row.contractDetails} />,
       tokenPrice: <TokenPrice {...row.tokenPrice} isUsd={isUsd} />,
       totalLiquidity: <span>${new BigNumber(row.totalLiquidity).toFormat(2)}</span>,
       poolAmount: (
