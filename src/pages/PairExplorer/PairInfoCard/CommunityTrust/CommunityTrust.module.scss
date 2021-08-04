@@ -1,13 +1,17 @@
+@import '../../../../styles/mixins/gradient-text.scss';
+
 .block {
-  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
 
   &_inner {
-    padding: 20px 14px;
-    display: grid;
-    grid-template-columns: 1fr 4fr 1fr;
-    grid-column-gap: 20px;
-    align-items: center;
     text-align: center;
+  }
+
+  &_bottom {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
   }
 
   &_amount {
@@ -17,7 +21,10 @@
     &__img {
       display: flex;
       justify-content: center;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      img{
+        height: 36px;
+      }
     }
   }
 
@@ -26,12 +33,20 @@
 
     &__title {
       margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 20px;
+      p {
+        margin-bottom: 7px;
+      }
+      span {
+        @include gradient-text;
+      }
     }
 
     &__bar {
       background-color: rgba(196, 196, 196, 0.2);
       width: 100%;
-      height: 9px;
+      height: 17px;
       position: relative;
 
       &_gradient {

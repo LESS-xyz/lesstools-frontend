@@ -5,9 +5,9 @@
 }
 
 .logo {
-  margin-right: 23px;
+  margin-right: 13px;
   img {
-    height: 64px;
+    height: 42px;
     // border-radius: 50%;
   }
 }
@@ -15,7 +15,6 @@
 .right {
   &_top {
     @include flex(row, center);
-    margin-bottom: 10px;
 
     &__pair {
       span {

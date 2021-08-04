@@ -23,7 +23,7 @@ const headerData: ITableHeader = [
   { key: 'actions', title: 'Actions' },
   { key: 'tokenPrice', title: 'Token Price', sortType: 'tokenPrice' },
   { key: 'totalLiquidity', title: 'Total Liquidity', sortType: 'number' },
-  { key: 'poolAmount', title: 'Pool Amount', sortType: 'number' },
+  { key: 'poolAmount', title: 'Initial Pool Amount', sortType: 'number' },
   { key: 'poolVariation', title: 'Pool Variation', sortType: 'number' },
   { key: 'poolRemaining', title: 'Pool Remaining', sortType: 'number' },
 ];
@@ -92,8 +92,7 @@ const BigSwapExplorer: React.FC = () => {
             eth: +swap[`token${TBRindex}` as const].derivedETH,
           },
           totalLiquidity: +swap.reserveUSD,
-          // TODO: pool amount freeze?
-          poolAmount: +swap[`reserve${otherTokenIndex}` as const],
+          poolAmount: +swap[`initialReserve${otherTokenIndex}` as const],
           poolVariation:
             (+swap[`reserve${otherTokenIndex}` as const] * 100) /
               +swap[`initialReserve${otherTokenIndex}` as const] -

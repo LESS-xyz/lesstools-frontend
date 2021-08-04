@@ -12,7 +12,6 @@ import AdBlock from '../../components/AdBlock/index';
 import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
-import PairInfoBottom from './PairInfoCard/PairInfoBottom/index';
 import Search from '../../components/Search/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
@@ -64,6 +63,7 @@ const PairExplorer: React.FC = () => {
   // формирования данных для таблицы
   useEffect(() => {
     if (!loadingSwaps && swaps !== undefined) {
+      // TODO: FIX TBR TOKEN VIEW
       const data: Array<IRowPairExplorer> = swaps?.swaps.map((swap) => ({
         data: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
         type: +swap.amount1Out === 0 ? 'sell' : 'buy',
@@ -117,7 +117,6 @@ Fundraising Capital"
             <PairInfoHeader
               token0={pairInfo?.base_info?.token0}
               token1={pairInfo?.base_info?.token1}
-              pairId={pairId}
               tokenInfoFromCoingecko={tokenInfoFromCoingecko}
             />
           )}
@@ -135,12 +134,17 @@ Fundraising Capital"
             />
           </div>
           <div className={s.card}>
-            {pairInfo ? <PairInfoBody loading={loading} pairInfo={pairInfo} /> : <Loader />}
+            {pairInfo ? (
+              <PairInfoBody
+                loading={loading}
+                pairId={pairId}
+                tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                pairInfo={pairInfo}
+              />
+            ) : (
+              <Loader />
+            )}
           </div>
-        </div>
-
-        <div className={s.footer}>
-          <PairInfoBottom likes={96.5} dislikes={3.5} votesAmount={845} />
         </div>
         <div className={s.table_info}>
           <div className={s.buttons}>

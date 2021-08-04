@@ -10,12 +10,14 @@ export const GET_PAIR_INFO = gql`
       token0 {
         symbol
         derivedETH
+        derivedUSD
         totalSupply
         id
       }
       token1 {
         symbol
         derivedETH
+        derivedUSD
         totalSupply
         id
       }
