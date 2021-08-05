@@ -1,0 +1,25 @@
+@import '../../../styles//mixins/flex.scss';
+
+.infos {
+  margin-bottom: 40px;
+}
+
+.info {
+  @include flex(row, center, space-between);
+  font-size: 15px;
+
+  & + & {
+    margin-top: 6px;
+  }
+}
+
+.close {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 20px;
+  color: #fff;
+  background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
+  border-radius: 2px;
+  padding: 6px 20px;
+}

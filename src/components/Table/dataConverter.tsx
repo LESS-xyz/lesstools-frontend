@@ -38,7 +38,7 @@ export const dataConverter = {
       listedSince: (
         <ListedSince
           key={JSON.stringify(row.listedSince)}
-          date={moment(+row.listedSince * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          date={moment(+row.listedSince * 1000).format('YYYY-MM-DDTHH:mm:ss')}
         />
       ),
       actions: <Actions actions={row.actions} />,

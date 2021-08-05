@@ -12,6 +12,7 @@ export interface ITokenData {
   derivedUSD: string;
   symbol: string;
   id: string;
+  totalSupply: string;
 }
 
 interface IPairInfoHeaderProps {

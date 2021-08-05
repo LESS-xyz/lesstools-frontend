@@ -1,21 +1,65 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
+import BigNumber from 'bignumber.js/bignumber';
+import moment from 'moment';
 
 import Modal from '../Modal/index';
 import { useMst } from '../../../store/store';
 
-const MoreInfoModal: React.FC = observer(() => {
-  const { modals } = useMst();
+import s from './MoreInfoModal.module.scss';
 
-  const handleCancel = () => {
-    modals.moreInfo.close();
-  };
+interface IMoreInfoModalProps {
+  TBRprice: string;
+  TBRsymbol: string;
+  otherTokenPrice: string;
+  otherTokenSymbol: string;
+  poolCreated: string;
+}
 
-  return (
-    <Modal handleCancel={handleCancel} isVisible={modals.moreInfo.isOpen}>
-      <div>Больше информации!</div>
-    </Modal>
-  );
-});
+const MoreInfoModal: React.FC<IMoreInfoModalProps> = observer(
+  ({ TBRprice, TBRsymbol, otherTokenSymbol, otherTokenPrice, poolCreated }) => {
+    const { modals } = useMst();
+
+    const handleCancel = () => {
+      modals.moreInfo.close();
+    };
+
+    return (
+      <Modal handleCancel={handleCancel} isVisible={modals.moreInfo.isOpen}>
+        <div className={s.infos}>
+          <div className={s.info}>
+            <div className={s.info_left}>1 {otherTokenSymbol}:</div>
+            <div className={s.info_right}>
+              {new BigNumber(+otherTokenPrice / +TBRprice).toFormat(3)} {TBRsymbol}
+            </div>
+          </div>
+          <div className={s.info}>
+            <div className={s.info_left}>Pool Created:</div>
+            <div className={s.info_right}>
+              {moment(+poolCreated * 1000).format('DD/MM/YYYY hh:mm')}
+            </div>
+          </div>
+          <div className={s.info}>
+            <div className={s.info_left}>Total Supply</div>
+            <div className={s.info_right}>soon</div>
+          </div>
+          <div className={s.info}>
+            <div className={s.info_left}>Pooled TBR</div>
+            <div className={s.info_right}>soon</div>
+          </div>
+        </div>
+        <div
+          role="button"
+          tabIndex={0}
+          onKeyDown={handleCancel}
+          onClick={handleCancel}
+          className={s.close}
+        >
+          Close
+        </div>
+      </Modal>
+    );
+  },
+);
 
 export default MoreInfoModal;

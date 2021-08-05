@@ -11,6 +11,7 @@ import { WHITELIST } from '../../../../data/whitelist';
 import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 import { copyText } from '../../../../utils/copyText';
 import { useMst } from '../../../../store/store';
+import MoreInfoModal from '../../../../components/Modals/MoreInfoModal/index';
 
 import s from './PairInfoBody.module.scss';
 
@@ -45,6 +46,7 @@ export interface IPairInfo {
     token1: ITokenData;
     txCount: string;
     volumeUSD: string;
+    createdAtTimestamp: string;
   };
   h24_ago_by_sum: Array<{ hourlyVolumeUSD: string }>;
 }
@@ -62,10 +64,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
 
     // tbr = token being reviewd
     const [tbr, setTbr] = useState(pairInfo.base_info.token1);
+    const [otherToken, setOtherToken] = useState(pairInfo.base_info.token0);
 
     useEffect(() => {
       if (WHITELIST.includes(pairInfo.base_info.token1.id)) {
         setTbr(pairInfo.base_info.token0);
+        setOtherToken(pairInfo.base_info.token1);
       }
     }, [pairInfo]);
 
@@ -76,6 +80,13 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
 
     return (
       <section className={s.card}>
+        <MoreInfoModal
+          TBRprice={tbr.derivedUSD}
+          TBRsymbol={tbr.symbol}
+          otherTokenPrice={otherToken.derivedUSD}
+          otherTokenSymbol={otherToken.symbol}
+          poolCreated={pairInfo.base_info.createdAtTimestamp}
+        />
         {!pairInfo.base_info ? (
           <div className={s.card_no_data}>
             <Loader />
