@@ -10,6 +10,7 @@ import Loader from '../../../../components/Loader/index';
 import { WHITELIST } from '../../../../data/whitelist';
 import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 import { copyText } from '../../../../utils/copyText';
+import { useMst } from '../../../../store/store';
 
 import s from './PairInfoBody.module.scss';
 
@@ -59,7 +60,6 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
   ({ pairInfo, pairId, tokenInfoFromCoingecko }) => {
     if (!pairInfo.base_info) return <div>No data</div>;
 
-    console.log(pairId);
     // tbr = token being reviewd
     const [tbr, setTbr] = useState(pairInfo.base_info.token1);
 
@@ -68,6 +68,11 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
         setTbr(pairInfo.base_info.token0);
       }
     }, [pairInfo]);
+
+    const { modals } = useMst();
+    const handleOpenModal = () => {
+      modals.moreInfo.open();
+    };
 
     return (
       <section className={s.card}>
@@ -112,7 +117,15 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                   <div className={s.card_body__info}>
                     (24h: -8.34%) {new BigNumber(tbr.derivedETH).toFormat(2)} ETH
                   </div>
-                  <div className={s.market_cap_button}>View market cap</div>
+                  <button
+                    tabIndex={0}
+                    type="button"
+                    onKeyDown={handleOpenModal}
+                    onClick={handleOpenModal}
+                    className={s.market_cap_button}
+                  >
+                    View market cap
+                  </button>
                 </div>
                 <div className={s.card_section__right}>
                   <div className={s.card_buttons}>
@@ -139,6 +152,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               <div className={s.card_section__inner}>
                 <div className={s.card_section__left}>
                   <div className={s.card_section__info}>
+                    <div className={s.card_info}>
+                      <div className={s.card_info__title}>Total liquidity:</div>
+                      <div className={s.card_info__value}>
+                        ${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}
+                      </div>
+                    </div>
                     <div className={s.card_info}>
                       <div className={s.card_info__title}>Daily volume:</div>
                       <div className={s.card_info__value}>

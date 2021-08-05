@@ -1,2 +1,1 @@
-export { default as PairExplorerModel } from './pairExplorer';
-export { default as LiveNewPairs } from './LiveNewPairs';
+export { default as ModalsModel } from './Modals';

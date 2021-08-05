@@ -4,7 +4,7 @@
 
 body {
   background-color: var(--body-background-color);
-  font-family: Celias, sans-serif;
+  font-family: Celias, sans-serif !important;
   font-weight: normal;
   color: var(--body-color);
   overflow-x: hidden;

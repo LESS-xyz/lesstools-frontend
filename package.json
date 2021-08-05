@@ -29,6 +29,7 @@
     "@types/redux-thunk": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^4.2.0",
     "@typescript-eslint/parser": "^4.2.0",
+    "antd": "^4.16.10",
     "bignumber": "^1.1.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "^18.1.0",

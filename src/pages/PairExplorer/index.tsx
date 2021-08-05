@@ -16,6 +16,7 @@ import Search from '../../components/Search/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
+import MoreInfoModal from '../../components/Modals/MoreInfoModal/index';
 
 import s from './PairExplorer.module.scss';
 
@@ -107,6 +108,7 @@ const PairExplorer: React.FC = () => {
 
   return (
     <main className={s.page}>
+      <MoreInfoModal />
       <Helmet>
         <meta charSet="utf-8" />
         <title>PairExplorer - LessTools</title>

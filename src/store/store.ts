@@ -1,38 +1,17 @@
 import { createContext, useContext } from 'react';
 import { Instance, onSnapshot, types } from 'mobx-state-tree';
 
-import { PairExplorerModel, LiveNewPairs } from './Models';
+import { ModalsModel } from './Models/index';
 
 const RootModel = types.model({
-  pairExplorer: PairExplorerModel,
-  liveNewPairs: LiveNewPairs,
+  modals: ModalsModel,
 });
 
 export const Store = RootModel.create({
-  pairExplorer: {
-    base_info: {
-      createdAtTimestamp: '',
-      liquidityProviderCount: '3140920',
-      reserve0: '',
-      reserve1: '',
-      reserveUSD: '',
-      token0: {
-        derivedETH: '',
-        symbol: '',
-        totalSupply: '',
-      },
-      token1: {
-        derivedETH: '',
-        symbol: '',
-        totalSupply: '',
-      },
-      txCount: '',
-      volumeUSD: '',
+  modals: {
+    moreInfo: {
+      isOpen: false,
     },
-    h24_ago_by_sum: [],
-  },
-  liveNewPairs: {
-    timer: 0,
   },
 });
 
