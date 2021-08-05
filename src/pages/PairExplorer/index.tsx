@@ -15,6 +15,7 @@ import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import Search from '../../components/Search/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
+import { WHITELIST } from '../../data/whitelist';
 
 import s from './PairExplorer.module.scss';
 
@@ -64,16 +65,25 @@ const PairExplorer: React.FC = () => {
   useEffect(() => {
     if (!loadingSwaps && swaps !== undefined) {
       // TODO: FIX TBR TOKEN VIEW
-      const data: Array<IRowPairExplorer> = swaps?.swaps.map((swap) => ({
-        data: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
-        type: +swap.amount1Out === 0 ? 'sell' : 'buy',
-        priceUsd: +swap.token1PriceUSD,
-        priceEth: +swap.token1PriceETH,
-        amountEth: +swap.amount1Out === 0 ? +swap.amount1In : +swap.amount1Out,
-        totalEth: +swap.amount0Out || +swap.amount0In,
-        maker: swap.from,
-        others: { etherscan: swap.transaction.id },
-      }));
+      const data: Array<IRowPairExplorer> = swaps?.swaps.map((swap) => {
+        const TBRindex = WHITELIST.includes(swap.pair.token1.id) ? '0' : '1';
+        const OtherIndex = TBRindex === '1' ? '0' : '1';
+
+        return {
+          data: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
+          type: +swap[`amount${TBRindex}Out` as const] === 0 ? 'sell' : 'buy',
+          priceUsd: +swap[`token${TBRindex}PriceUSD` as const],
+          priceEth: +swap[`token${TBRindex}PriceETH` as const],
+          amountEth:
+            +swap[`amount${TBRindex}Out` as const] === 0
+              ? +swap[`amount${TBRindex}In` as const]
+              : +swap[`amount${TBRindex}Out` as const],
+          totalEth:
+            +swap[`amount${OtherIndex}Out` as const] || +swap[`amount${OtherIndex}In` as const],
+          maker: swap.from,
+          others: { etherscan: swap.transaction.id },
+        };
+      });
       setSwapsData(data);
 
       const header: ITableHeader = [
@@ -126,6 +136,7 @@ Fundraising Capital"
         <div className={s.main}>
           <div className={s.chart}>
             <TradingViewWidget
+              allowfullscreen
               theme={Themes.DARK}
               autosize
               hide_side_toolbar={false}

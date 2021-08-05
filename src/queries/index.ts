@@ -43,9 +43,11 @@ export const GET_PAIR_SWAPS = gql`
       pair {
         token0 {
           symbol
+          id
         }
         token1 {
           symbol
+          id
         }
       }
       timestamp
