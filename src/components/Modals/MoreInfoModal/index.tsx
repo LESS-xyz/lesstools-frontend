@@ -21,11 +21,11 @@ const MoreInfoModal: React.FC<IMoreInfoModalProps> = observer(
     const { modals } = useMst();
 
     const handleCancel = () => {
-      modals.moreInfo.close();
+      modals.close('MoreInfo');
     };
 
     return (
-      <Modal handleCancel={handleCancel} isVisible={modals.moreInfo.isOpen}>
+      <Modal handleCancel={handleCancel} isVisible={modals.openedModals.includes('MoreInfo')}>
         <div className={s.infos}>
           <div className={s.info}>
             <div className={s.info_left}>1 {otherTokenSymbol}:</div>
@@ -53,7 +53,7 @@ const MoreInfoModal: React.FC<IMoreInfoModalProps> = observer(
           tabIndex={0}
           onKeyDown={handleCancel}
           onClick={handleCancel}
-          className={s.close}
+          className="modal-close"
         >
           Close
         </div>

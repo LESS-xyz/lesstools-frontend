@@ -12,6 +12,7 @@ import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 import { copyText } from '../../../../utils/copyText';
 import { useMst } from '../../../../store/store';
 import MoreInfoModal from '../../../../components/Modals/MoreInfoModal/index';
+import ShareModal from '../../../../components/Modals/ShareModal/index';
 
 import s from './PairInfoBody.module.scss';
 
@@ -74,8 +75,11 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
     }, [pairInfo]);
 
     const { modals } = useMst();
-    const handleOpenModal = () => {
-      modals.moreInfo.open();
+    const handleOpenMoreInfoModal = () => {
+      modals.open('MoreInfo');
+    };
+    const handleOpenShareModal = () => {
+      modals.open('Share');
     };
 
     return (
@@ -86,6 +90,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           otherTokenPrice={otherToken.derivedUSD}
           otherTokenSymbol={otherToken.symbol}
           poolCreated={pairInfo.base_info.createdAtTimestamp}
+        />
+        <ShareModal
+          url={window.location.href}
+          text={`Check ${tbr.symbol} at LESSTools! Price: $${(+tbr.derivedUSD).toFixed(
+            2,
+          )} - Shared from LESSTools.io`}
         />
         {!pairInfo.base_info ? (
           <div className={s.card_no_data}>
@@ -131,8 +141,8 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                   <button
                     tabIndex={0}
                     type="button"
-                    onKeyDown={handleOpenModal}
-                    onClick={handleOpenModal}
+                    onKeyDown={handleOpenMoreInfoModal}
+                    onClick={handleOpenMoreInfoModal}
                     className={s.market_cap_button}
                   >
                     View market cap
@@ -140,7 +150,13 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 </div>
                 <div className={s.card_section__right}>
                   <div className={s.card_buttons}>
-                    <div className={s.card_button}>
+                    <div
+                      onClick={handleOpenShareModal}
+                      tabIndex={0}
+                      onKeyDown={handleOpenShareModal}
+                      role="button"
+                      className={s.card_button}
+                    >
                       <img src={shareImg} alt="img" />
                     </div>
                     <div className={s.card_button}>

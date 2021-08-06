@@ -6,6 +6,7 @@ import s from './PairInfoHeader.module.scss';
 
 // import copy from '../../../../assets/img/icons/copy.svg';
 import loader from '../../../../assets/loader.svg';
+import { useEffect, useState } from 'react';
 
 export interface ITokenData {
   derivedETH: string;
@@ -21,16 +22,23 @@ interface IPairInfoHeaderProps {
   tokenInfoFromCoingecko: IToken | undefined;
 }
 
-const PairInfoHeader: React.FC<IPairInfoHeaderProps> = (props) => {
-  let { token0, token1 } = props;
-  const { tokenInfoFromCoingecko } = props;
+const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({
+  token0,
+  token1,
+  tokenInfoFromCoingecko,
+}) => {
+  const [tbr, setTbr] = useState(token1);
+  const [otherToken, setOtherToken] = useState(token0);
 
-  // чтобы weth был первый
-  if (token1 && WHITELIST.includes(token1?.id)) {
-    [token0, token1] = [token1, token0];
-  }
+  useEffect(() => {
+    if (tbr && WHITELIST.includes(tbr?.id)) {
+      setTbr(token0);
+      setOtherToken(token1);
+    }
+    // eslint-disable-next-line
+  }, [token1, token0]);
 
-  if (!token0?.id) {
+  if (!token0?.id || !token1?.id) {
     return <div>No data</div>;
   }
 
@@ -45,8 +53,8 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = (props) => {
       <div className={s.right}>
         <div className={s.right_top}>
           <div className={s.right_top__pair}>
-            <span>{token0?.symbol} /</span>
-            <span>{token1?.symbol}</span>
+            <span>{otherToken?.symbol} /</span>
+            <span>{tbr?.symbol}</span>
           </div>
         </div>
       </div>

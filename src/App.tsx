@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage } from './pages';
 
@@ -26,6 +26,7 @@ export const App: React.FC = () => {
           <Route path="/pair-explorer/:id">
             <PairExplorer />
           </Route>
+          <Redirect to="/" />
         </Switch>
         <Footer />
       </div>

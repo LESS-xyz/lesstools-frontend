@@ -54,7 +54,7 @@ const Header: React.FC = () => {
               </NavLink>
               <NavLink
                 isActive={(_, location) => location.pathname.includes('/pair-explorer/')}
-                to="/pair-explorer/0xa29fe6ef9592b5d408cca961d0fb9b1faf497d6d"
+                to="/pair-explorer/0xcc3d1ecef1f9fd25599dbea2755019dc09db3c54"
                 activeClassName={s.active}
                 className={s.nav_link}
                 data-text="Pair Explorer"

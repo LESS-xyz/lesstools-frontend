@@ -9,9 +9,7 @@ const RootModel = types.model({
 
 export const Store = RootModel.create({
   modals: {
-    moreInfo: {
-      isOpen: false,
-    },
+    openedModals: [],
   },
 });
 

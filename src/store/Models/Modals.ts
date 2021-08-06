@@ -1,20 +1,21 @@
 import { types } from 'mobx-state-tree';
 
-const MoreInfoModal = types
+type ModalsTypes = 'MoreInfo' | 'Share';
+
+const Modals = types
   .model({
-    isOpen: types.boolean,
+    openedModals: types.array(types.union(types.literal('MoreInfo'), types.literal('Share'))),
   })
   .actions((self) => ({
-    open() {
-      self.isOpen = true;
+    open(modalName: ModalsTypes) {
+      self.openedModals.push(modalName);
     },
-    close() {
-      self.isOpen = false;
+    close(modalName: ModalsTypes) {
+      // TODO: как обозначить нормально типы в MST?
+      // eslint-disable-next-line
+      // @ts-ignore
+      self.openedModals = self.openedModals.filter((modal) => modal !== modalName);
     },
   }));
 
-const ModalsModel = types.model({
-  moreInfo: MoreInfoModal,
-});
-
-export default ModalsModel;
+export default Modals;
