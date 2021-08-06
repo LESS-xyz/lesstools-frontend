@@ -7,11 +7,12 @@ import searcgImg from '../../assets/img/icons/search.svg';
 interface IInputProps {
   onChange: (str: string) => void;
   value: string;
+  onFocus?: (foo: boolean) => void;
   placeholder?: string;
   big?: boolean;
 }
 
-const Search: React.FC<IInputProps> = ({ onChange, value, placeholder, big }) => {
+const Search: React.FC<IInputProps> = ({ onChange, value, placeholder, big, onFocus }) => {
   const [inputValue, setInputValue] = useState(value);
   const handleOnChange = (str: string) => {
     setInputValue(str);
@@ -23,6 +24,16 @@ const Search: React.FC<IInputProps> = ({ onChange, value, placeholder, big }) =>
         <img src={searcgImg} alt="searcgImg" />
       </div>
       <input
+        onFocus={() => {
+          if (onFocus) {
+            onFocus(true);
+          }
+        }}
+        onBlur={() => {
+          if (onFocus) {
+            onFocus(false);
+          }
+        }}
         value={inputValue}
         onChange={(e) => handleOnChange(e.target.value)}
         type="text"

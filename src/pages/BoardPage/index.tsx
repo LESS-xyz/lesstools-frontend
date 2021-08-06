@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Search from '../../components/Search/index';
+import PairsSearch from '../../components/PairsSearch/index';
 import AdBlock from '../../components/AdBlock/index';
 import HotTable from './HotTable/index';
 import Tool from './Tool/index';
@@ -19,10 +19,10 @@ const BoardPage: React.FC = () => {
       <div className={s.bg}>
         <div className={s.container}>
           <AdBlock adImg={AdImg} />
-          <Search
+          <PairsSearch
             placeholder="Search pair by symbol / name / pair contract."
             value={searchValue}
-            onChange={setSearchValue}
+            setValue={setSearchValue}
           />
           <div className={s.tables}>
             <HotTable />

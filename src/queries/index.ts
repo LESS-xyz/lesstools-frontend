@@ -37,6 +37,7 @@ export const GET_PAIR_INFO = gql`
   }
 `;
 
+// GET all pair swaps for table at pair exporer page
 export const GET_PAIR_SWAPS = gql`
   query getPairSwaps($id: ID!) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { pair: $id }) {
@@ -67,6 +68,7 @@ export const GET_PAIR_SWAPS = gql`
   }
 `;
 
+// big swaps table
 export const GET_BIG_SWAPS = gql`
   query getBigSwaps($lowerThreshold: BigDecimal) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { amountUSD_gt: $lowerThreshold }) {
@@ -100,6 +102,7 @@ export const GET_BIG_SWAPS = gql`
   }
 `;
 
+// live new pairs table
 export const GET_LIVE_SWAPS = gql`
   query getLiveSwaps {
     pairs(first: 1000, orderBy: createdAtTimestamp, orderDirection: desc) {
@@ -127,10 +130,30 @@ export const GET_LIVE_SWAPS = gql`
   }
 `;
 
+// ETH price now
 export const ETH_PRICE_QUERY = gql`
   query ethPrice {
     bundle(id: "1") {
       ethPrice
+    }
+  }
+`;
+
+// SEARCHING QUERIES
+
+export const SEARCH_BY_PAIR_ID = gql`
+  query getPairByPairId($id: ID) {
+    pairs(where: { id_gte: $id }) {
+      id
+      txCount
+      token0 {
+        symbol
+        id
+      }
+      token1 {
+        symbol
+        id
+      }
     }
   }
 `;

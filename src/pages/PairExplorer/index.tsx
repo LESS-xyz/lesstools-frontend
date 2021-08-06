@@ -12,7 +12,7 @@ import AdBlock from '../../components/AdBlock/index';
 import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
-import Search from '../../components/Search/index';
+import PairsSearch from '../../components/PairsSearch/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
@@ -130,7 +130,11 @@ Fundraising Capital"
               tokenInfoFromCoingecko={tokenInfoFromCoingecko}
             />
           )}
-          <Search placeholder="Search" value={searchValue} onChange={setSearchValue} />
+          <PairsSearch
+            value={searchValue}
+            setValue={setSearchValue}
+            placeholder="Search pair by symbol/pair contract"
+          />
         </div>
 
         <div className={s.main}>
