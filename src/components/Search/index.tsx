@@ -3,6 +3,7 @@ import { useState } from 'react';
 import s from './Search.module.scss';
 
 import searcgImg from '../../assets/img/icons/search.svg';
+import loaderImg from '../../assets/loader.svg';
 
 interface IInputProps {
   onChange: (str: string) => void;
@@ -10,9 +11,17 @@ interface IInputProps {
   onFocus?: (foo: boolean) => void;
   placeholder?: string;
   big?: boolean;
+  loading?: boolean;
 }
 
-const Search: React.FC<IInputProps> = ({ onChange, value, placeholder, big, onFocus }) => {
+const Search: React.FC<IInputProps> = ({
+  onChange,
+  value,
+  placeholder,
+  big,
+  onFocus,
+  loading = false,
+}) => {
   const [inputValue, setInputValue] = useState(value);
   const handleOnChange = (str: string) => {
     setInputValue(str);
@@ -21,7 +30,11 @@ const Search: React.FC<IInputProps> = ({ onChange, value, placeholder, big, onFo
   return (
     <div className={`${s.input} ${big && s.big}`}>
       <div className={s.input_img}>
-        <img src={searcgImg} alt="searcgImg" />
+        {loading ? (
+          <img src={loaderImg} alt="loaderImg" />
+        ) : (
+          <img src={searcgImg} alt="searcgImg" />
+        )}
       </div>
       <input
         onFocus={() => {
@@ -31,7 +44,9 @@ const Search: React.FC<IInputProps> = ({ onChange, value, placeholder, big, onFo
         }}
         onBlur={() => {
           if (onFocus) {
-            onFocus(false);
+            setTimeout(() => {
+              onFocus(false);
+            }, 100);
           }
         }}
         value={inputValue}

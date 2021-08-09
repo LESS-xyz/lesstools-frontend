@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js/bignumber';
 
 import Search from '../Search/index';
-import { SEARCH_BY_PAIR_ID } from '../../queries/index';
+import { SEARCH_BY_ID } from '../../queries/index';
 
 import s from './PairsSearch.module.scss';
 
 interface ISuggestionProps {
   tbrSymbol: string;
+  tbrName: string;
   otherSymbol: string;
   tokenId: string;
   pairId: string;
@@ -20,6 +21,7 @@ interface ISuggestionProps {
 const Suggestion: React.FC<ISuggestionProps> = ({
   otherSymbol,
   tbrSymbol,
+  tbrName,
   tokenId,
   pairId,
   holders,
@@ -28,7 +30,7 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   return (
     <Link to={`/pair-explorer/${pairId}`} className={s.suggestion}>
       <div className={s.suggestion_title}>
-        {otherSymbol}/{tbrSymbol} - chiliz
+        {otherSymbol}/{tbrSymbol} - {tbrName}
       </div>
       <div className={s.suggestion_body}>
         <div className={s.suggestion_body__item}>
@@ -64,18 +66,18 @@ interface IPairSearchProps {
 
 const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }) => {
   const [isInputOnFocus, setIsInputOnFocus] = useState(false);
-  const [searchByPairId, { called, loading, data }] = useLazyQuery(SEARCH_BY_PAIR_ID, {
+  const [searchById, { called, loading, data }] = useLazyQuery(SEARCH_BY_ID, {
     variables: { id: value },
   });
 
+  // TODO: сделать debounce
   useEffect(() => {
-    if (value.length > 3) {
-      searchByPairId();
+    if (value.length > 2) {
+      searchById();
     }
-  }, [value, searchByPairId, data]);
+  }, [value, searchById, data]);
 
   console.log(called, loading, data);
-  console.log(isInputOnFocus);
   return (
     <div className={s.search}>
       <Search
@@ -83,20 +85,38 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
         onChange={setValue}
         placeholder={placeholder}
         onFocus={setIsInputOnFocus}
+        loading={loading}
       />
-      {data?.pairs.length > 1 && (
+      {data?.match_by_pair[0] && value.length > 0 && isInputOnFocus && (
         <div className={s.suggestions}>
           <div className={s.suggestions_title}>Search results in UNISWAP</div>
           <div className={s.suggestions_body}>
             <div className={s.suggestions_body__inner}>
+              {/* FIRST PAIR  */}
               <Suggestion
-                otherSymbol={data.pairs[0].token0.symbol}
-                tbrSymbol={data.pairs[0].token1.symbol}
-                tokenId={data.pairs[0].token1.id}
-                pairId={data.pairs[0].id}
+                otherSymbol={data?.match_by_pair[0].token1.symbol}
+                tbrSymbol={data?.match_by_pair[0].token0.symbol}
+                tbrName={data?.match_by_pair[0].token0.name}
+                tokenId={data?.match_by_pair[0].token0.id}
+                pairId={data?.match_by_pair[0].id}
                 holders="soon"
-                txCount={data.pairs[0].txCount}
+                txCount={data?.match_by_pair[0].txCount}
               />
+              {/* TODO: ADD TYPES FOR TOKENS */}
+              {/* PAIRS SEARCHED BY TOKEN ID */}
+              {data.match_by_token[0].pairBase?.map((pair: any) => {
+                return (
+                  <Suggestion
+                    otherSymbol={pair.token1.symbol}
+                    tbrSymbol={pair.token0.symbol}
+                    tbrName={pair.token0.name}
+                    tokenId={pair.token0.id}
+                    pairId={pair.id}
+                    holders="soon"
+                    txCount={pair.txCount}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

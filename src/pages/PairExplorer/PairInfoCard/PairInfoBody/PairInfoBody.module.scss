@@ -117,7 +117,7 @@
     background: var(--gradient);
     cursor: pointer;
     padding: 10px;
-    @include flex(row, center);
+    @include flex(row, center, normal, nowrap);
     font-size: 16px;
     position: relative;
     border-radius: 2px;

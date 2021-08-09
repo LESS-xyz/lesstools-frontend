@@ -70,9 +70,9 @@ const BigSwapExplorer: React.FC = () => {
     if (!loading && liveSwaps !== undefined) {
       const newData: Array<IRowLiveNewPairs> = swapsFromBackend?.pairs.map((swap: INewPair) => {
         // TBR = Token Being Reviewd
-        const TBRSymbol = WHITELIST.includes(swap.token0.id)
-          ? swap.token1.symbol
-          : swap.token0.symbol;
+        const TBRSymbol = WHITELIST.includes(swap.token1.id)
+          ? swap.token0.symbol
+          : swap.token1.symbol;
         const TBRindex = WHITELIST.includes(swap.token0.id) ? '1' : '0';
         const TBRaddress = swap[`token${TBRindex}` as const].id;
 

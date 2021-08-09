@@ -11,7 +11,7 @@ import './styles/index.scss';
 const client = new ApolloClient({
   // uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
   // uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-uniswap-v2',
-  uri: 'https://api.thegraph.com/subgraphs/id/QmUsrEkfZvtsRR5bBfknYd7fJZKMVVEbMV7oZrFzae4m3o',
+  uri: 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
   cache: new InMemoryCache(),
 });
 

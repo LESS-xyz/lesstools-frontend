@@ -31,11 +31,10 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({
   const [otherToken, setOtherToken] = useState(token0);
 
   useEffect(() => {
-    if (tbr && WHITELIST.includes(tbr?.id)) {
+    if (token1 && WHITELIST.includes(token1.id)) {
       setTbr(token0);
       setOtherToken(token1);
     }
-    // eslint-disable-next-line
   }, [token1, token0]);
 
   if (!token0?.id || !token1?.id) {

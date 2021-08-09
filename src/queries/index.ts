@@ -140,19 +140,38 @@ export const ETH_PRICE_QUERY = gql`
 `;
 
 // SEARCHING QUERIES
-
-export const SEARCH_BY_PAIR_ID = gql`
+// SEARCH BY PAIR ID OR TOKEN ID
+export const SEARCH_BY_ID = gql`
   query getPairByPairId($id: ID) {
-    pairs(where: { id_gte: $id }) {
+    match_by_pair: pairs(where: { id_gte: $id }, first: 3) {
       id
       txCount
       token0 {
-        symbol
         id
+        symbol
+        name
       }
       token1 {
-        symbol
         id
+        symbol
+        name
+      }
+    }
+    match_by_token: tokens(where: { id_gte: $id }, first: 3) {
+      id
+      pairBase {
+        id
+        txCount
+        token0 {
+          id
+          symbol
+          name
+        }
+        token1 {
+          id
+          symbol
+          name
+        }
       }
     }
   }

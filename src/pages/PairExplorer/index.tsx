@@ -50,11 +50,10 @@ const PairExplorer: React.FC = () => {
   // запрос на coingecko для получения иконки токена и полного названия
   useEffect(() => {
     if (!loading && pairInfo?.base_info) {
-      const tokenToRequest =
-        pairInfo.base_info.token1.symbol === 'WETH'
-          ? pairInfo.base_info.token0.id
-          : pairInfo.base_info.token1.id;
-      getTokenInfoFromCoingecko(tokenToRequest || '').then((res) => setTokenInfoFromCoingecko(res));
+      const tokenToRequest = WHITELIST.includes(pairInfo.base_info.token1.id)
+        ? pairInfo.base_info.token0.id
+        : pairInfo.base_info.token1.id;
+      getTokenInfoFromCoingecko(tokenToRequest).then((res) => setTokenInfoFromCoingecko(res));
     }
     // eslint-disable-next-line
   }, [loading, pairInfo]);
