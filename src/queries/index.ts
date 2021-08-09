@@ -37,7 +37,7 @@ export const GET_PAIR_INFO = gql`
   }
 `;
 
-// GET all pair swaps for table at pair exporer page
+// GET all pair swaps for table at pair explorer page
 export const GET_PAIR_SWAPS = gql`
   query getPairSwaps($id: ID!) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { pair: $id }) {
@@ -171,6 +171,43 @@ export const SEARCH_BY_ID = gql`
           id
           symbol
           name
+        }
+      }
+    }
+  }
+`;
+
+// SEARCH BY TOKEN NAME
+export const SEARCH_BY_NAME = gql`
+  query searchByName($name: String) {
+    match_by_symbol: tokens(where: { symbol_contains: $name }) {
+      id
+      pairBase {
+        id
+        txCount
+        token0 {
+          symbol
+          name
+          id
+        }
+        token1 {
+          symbol
+          name
+          id
+        }
+      }
+      pairQuote {
+        id
+        txCount
+        token0 {
+          symbol
+          name
+          id
+        }
+        token1 {
+          symbol
+          name
+          id
         }
       }
     }
