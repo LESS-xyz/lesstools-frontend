@@ -179,9 +179,10 @@ export const SEARCH_BY_ID = gql`
 
 // SEARCH BY TOKEN NAME
 export const SEARCH_BY_NAME = gql`
-  query searchByName($name: String) {
+  query searchByName($name: String, $name2: String) {
     match_by_symbol: tokens(where: { symbol_contains: $name }) {
       id
+      symbol
       pairBase {
         id
         txCount
@@ -210,6 +211,9 @@ export const SEARCH_BY_NAME = gql`
           id
         }
       }
+    }
+    match_by_symbol1: tokens(where: { symbol_contains: $name2 }, first: 1) {
+      id
     }
   }
 `;

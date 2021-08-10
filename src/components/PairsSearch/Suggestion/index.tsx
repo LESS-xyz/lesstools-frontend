@@ -11,6 +11,7 @@ interface ISuggestionProps {
   pairId: string;
   holders: string;
   txCount: string;
+  onClick: () => void;
 }
 
 const Suggestion: React.FC<ISuggestionProps> = ({
@@ -21,9 +22,10 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   pairId,
   holders,
   txCount,
+  onClick,
 }) => {
   return (
-    <Link to={`/pair-explorer/${pairId}`} className={s.suggestion}>
+    <Link to={`/pair-explorer/${pairId}`} className={s.suggestion} onClick={() => onClick()}>
       <div className={s.suggestion_title}>
         {otherSymbol}/{tbrSymbol} - {tbrName}
       </div>

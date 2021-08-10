@@ -20,7 +20,7 @@ const BoardPage: React.FC = () => {
         <div className={s.container}>
           <AdBlock adImg={AdImg} />
           <PairsSearch
-            placeholder="Search pair by symbol / name / pair contract."
+            placeholder="Search pair by token symbol / token id / pair contract id."
             value={searchValue}
             setValue={setSearchValue}
           />

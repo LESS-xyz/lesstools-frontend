@@ -8,7 +8,7 @@ import loaderImg from '../../assets/loader.svg';
 interface IInputProps {
   onChange: (str: string) => void;
   value: string;
-  onFocus?: (foo: boolean) => void;
+  onFocus?: () => void;
   placeholder?: string;
   big?: boolean;
   loading?: boolean;
@@ -39,14 +39,7 @@ const Search: React.FC<IInputProps> = ({
       <input
         onFocus={() => {
           if (onFocus) {
-            onFocus(true);
-          }
-        }}
-        onBlur={() => {
-          if (onFocus) {
-            setTimeout(() => {
-              onFocus(false);
-            }, 100);
+            onFocus();
           }
         }}
         value={inputValue}
