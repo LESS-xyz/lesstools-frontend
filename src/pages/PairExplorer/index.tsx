@@ -114,6 +114,10 @@ const PairExplorer: React.FC = () => {
           content="Multi-Chain Decentralized
 Fundraising Capital"
         />
+        <meta
+          property="og:image"
+          content="https://og-image.vercel.app/Check%20**WETH%20400%24**%20at%20lesstools.io.png?theme=dark&md=1&fontSize=100px&images=https%3A%2F%2Fs2.coinmarketcap.com%2Fstatic%2Fimg%2Fcoins%2F200x200%2F10279.png&images=https%3A%2F%2Fs2.coinmarketcap.com%2Fstatic%2Fimg%2Fcoins%2F200x200%2F10279.png"
+        />
       </Helmet>
 
       <div className={s.container}>
@@ -203,6 +207,21 @@ Fundraising Capital"
         {bottomType === 'tradeHistory' && (
           <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
         )}
+        <iframe
+          title="buy"
+          src="https://app.uniswap.org/#/swap?outputCurrency=0x476c5e26a75bd202a9683ffd34359c0cc15be0ff&use=V2"
+          height="660px"
+          width="100%"
+          id="myId"
+          style={{
+            border: '0',
+            margin: '0 auto',
+            display: 'block',
+            borderRadius: '10px',
+            maxWidth: '600px',
+            minWidth: '300px',
+          }}
+        />
       </div>
     </main>
   );
