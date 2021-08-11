@@ -6,4 +6,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: $gradient-replacement;
+  &::selection {
+    span {
+      -webkit-text-fill-color: #b3d4fc;
+    }
+    -webkit-text-fill-color: #ffffff;
+  }
 }

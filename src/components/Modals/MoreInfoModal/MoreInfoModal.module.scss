@@ -12,3 +12,7 @@
     margin-top: 6px;
   }
 }
+
+.right {
+  @include flex(row, center, flex-end);
+}

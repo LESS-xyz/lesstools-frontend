@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 // get pair-info-card at pair-explorer page
 export const GET_PAIR_INFO = gql`
-  query Pair($id: ID!) {
+  query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
       reserveUSD
       reserve0
@@ -33,6 +33,31 @@ export const GET_PAIR_INFO = gql`
       where: { pair: $id }
     ) {
       hourlyVolumeUSD
+    }
+    tokens_prices_24h_ago: pair(block: { number: $blockNumber }, id: $id) {
+      token0 {
+        derivedETH
+        derivedUSD
+      }
+      token1 {
+        derivedETH
+        derivedUSD
+      }
+    }
+  }
+`;
+
+// GET BLOCK NUMBER 24h AGO
+export const GET_BLOCK_24H_AGO = gql`
+  query blocks($timestamp: BigInt!) {
+    blocks(
+      first: 1
+      orderBy: timestamp
+      orderDirection: asc
+      where: { timestamp_gte: $timestamp }
+    ) {
+      id
+      number
     }
   }
 `;

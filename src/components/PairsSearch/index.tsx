@@ -5,6 +5,7 @@ import OutsideAlerter from '../../utils/outsideClickWrapper';
 
 import Search from '../Search/index';
 import { SEARCH_BY_ID, SEARCH_BY_NAME } from '../../queries/index';
+import { ISearchByIdResponse, ISearchBySymbolResponse, IPairsBySymbol } from '../../types/search';
 
 import s from './PairsSearch.module.scss';
 
@@ -27,25 +28,17 @@ interface IPairSearchProps {
 
 const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }) => {
   // запросы на граф
-  const [searchById, { loading: searchByIdLoading, data: searchByIdData }] = useLazyQuery(
-    SEARCH_BY_ID,
-    {
-      variables: { id: value },
-    },
-  );
-  const [searchByName, { loading: searchByNameLoading, data: searchByNameData }] = useLazyQuery(
-    SEARCH_BY_NAME,
-    {
-      variables: {
-        name: formatTokens(value)[0] || '',
-        name2: formatTokens(value)[1] || '',
-      },
-    },
-  );
+  const [
+    searchById,
+    { loading: searchByIdLoading, data: searchByIdData },
+  ] = useLazyQuery<ISearchByIdResponse>(SEARCH_BY_ID);
+  const [
+    searchByName,
+    { loading: searchByNameLoading, data: searchByNameData },
+  ] = useLazyQuery<ISearchBySymbolResponse>(SEARCH_BY_NAME);
 
   // формирование пар по символу (форматирование данных с графа в нужный формат)
-  // TODO: add type
-  const [pairsByNameData, setPairsByNameData] = useState<any>([]);
+  const [pairsByNameData, setPairsByNameData] = useState<IPairsBySymbol>([]);
   useEffect(() => {
     const tokens = formatTokens(value);
 
@@ -72,9 +65,14 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
   // поиск пар по (id пары, id токена) или (симоволу токена)
   const searchPairs = () => {
     if (value.startsWith('0x')) {
-      searchById();
+      searchById({ variables: { id: value } });
     } else {
-      searchByName();
+      searchByName({
+        variables: {
+          name: formatTokens(value)[0] || '',
+          name2: formatTokens(value)[1] || '',
+        },
+      });
     }
   };
 
@@ -145,8 +143,8 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
                 {/* pairBase */}
                 {pairsByNameData.length > 0 && (
                   <>
-                    {pairsByNameData.map((symbol: any) =>
-                      symbol.pairBase.map((symbolData: any) => (
+                    {pairsByNameData.map((symbol) =>
+                      symbol.pairBase.map((symbolData) => (
                         <Suggestion
                           key={symbolData.id}
                           otherSymbol={symbolData.token1.symbol}
@@ -160,8 +158,8 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
                         />
                       )),
                     )}
-                    {pairsByNameData.map((symbol: any) =>
-                      symbol.pairQuote.map((symbolData: any) => (
+                    {pairsByNameData.map((symbol) =>
+                      symbol.pairQuote.map((symbolData) => (
                         <Suggestion
                           key={symbolData.id}
                           otherSymbol={symbolData.token0.symbol}

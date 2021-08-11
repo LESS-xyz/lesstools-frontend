@@ -48,14 +48,16 @@ const MoreInfoModal: React.FC<IMoreInfoModalProps> = observer(
             <div className={s.info_right}>soon</div>
           </div>
         </div>
-        <div
-          role="button"
-          tabIndex={0}
-          onKeyDown={handleCancel}
-          onClick={handleCancel}
-          className="modal-close"
-        >
-          Close
+        <div className={s.right}>
+          <div
+            role="button"
+            tabIndex={0}
+            onKeyDown={handleCancel}
+            onClick={handleCancel}
+            className="modal-close"
+          >
+            Close
+          </div>
         </div>
       </Modal>
     );

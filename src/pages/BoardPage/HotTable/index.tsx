@@ -55,6 +55,78 @@ const HotTable: React.FC = () => {
             <img src={compass} alt="compass" />
           </div>
         </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
+        <div className={s.table_body__item}>
+          <div className={s.table_body__item_left}>
+            <div className={s.table_body__item_left__token}>LIME</div>
+            <p>$0.045645</p>
+          </div>
+          <div className={s.table_body__item_right}>
+            <img src={compass} alt="compass" />
+          </div>
+        </div>
       </div>
     </section>
   );

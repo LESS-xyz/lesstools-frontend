@@ -43,7 +43,8 @@
 // info above the table
 .table_info {
   @include flex(row, center, space-between);
-  margin-bottom: 30px;
+  background-color: #291f62;
+  padding: 23px;
 }
 .last_trades {
   @include flex(row, center);

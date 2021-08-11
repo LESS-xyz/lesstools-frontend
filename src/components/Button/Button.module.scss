@@ -3,7 +3,7 @@
 
 .button {
   @include flex(row, center, center, nowrap, inline-flex);
-  background-color: #000;
+  background-color: transparent;
   border: 1px solid var(--blue);
   border-radius: 2px;
   color: var(--blue);

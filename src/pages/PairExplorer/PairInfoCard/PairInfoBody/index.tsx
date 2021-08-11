@@ -13,6 +13,7 @@ import { copyText } from '../../../../utils/copyText';
 import { useMst } from '../../../../store/store';
 import MoreInfoModal from '../../../../components/Modals/MoreInfoModal/index';
 import ShareModal from '../../../../components/Modals/ShareModal/index';
+import TradeModal from '../../../../components/Modals/TradeModal/index';
 
 import s from './PairInfoBody.module.scss';
 
@@ -50,6 +51,10 @@ export interface IPairInfo {
     createdAtTimestamp: string;
   };
   h24_ago_by_sum: Array<{ hourlyVolumeUSD: string }>;
+  tokens_prices_24h_ago: {
+    token0: { derivedETH: string; derivedUSD: string };
+    token1: { derivedETH: string; derivedUSD: string };
+  };
 }
 
 interface IPairInfoBodyProps {
@@ -65,11 +70,13 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
 
     // tbr = token being reviewd
     const [tbr, setTbr] = useState(pairInfo.base_info.token1);
+    const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
     const [otherToken, setOtherToken] = useState(pairInfo.base_info.token0);
 
     useEffect(() => {
       if (WHITELIST.includes(pairInfo.base_info.token1.id)) {
         setTbr(pairInfo.base_info.token0);
+        setTbrIndex('0');
         setOtherToken(pairInfo.base_info.token1);
       }
     }, [pairInfo]);
@@ -81,6 +88,18 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
     const handleOpenShareModal = () => {
       modals.open('Share');
     };
+    const handleOpenTradeModal = () => {
+      modals.open('Trade');
+    };
+
+    // изменение цены токена за 24 часа в процентах
+    const tokenPrice24hAgo =
+      tbrIndex === '1'
+        ? +pairInfo.tokens_prices_24h_ago?.token1.derivedETH
+        : +pairInfo.tokens_prices_24h_ago?.token0.derivedETH;
+    const tokenPrice24HoursChange = new BigNumber(
+      (+tbr.derivedETH / tokenPrice24hAgo) * 100 - 100,
+    ).toFormat(2);
 
     return (
       <section className={s.card}>
@@ -97,6 +116,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
             2,
           )} - Shared from LESSTools.io`}
         />
+        <TradeModal tokenId={tbr.id} />
         {!pairInfo.base_info ? (
           <div className={s.card_no_data}>
             <Loader />
@@ -135,8 +155,17 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                   <div className={s.card_body__price}>
                     ${new BigNumber(tbr.derivedUSD).toFormat(2)}
                   </div>
-                  <div className={s.card_body__info}>
-                    (24h: -8.34%) {new BigNumber(tbr.derivedETH).toFormat(2)} ETH
+                  <div
+                    className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}
+                  >
+                    <span>
+                      (24h:{' '}
+                      {tokenPrice24HoursChange === 'NaN'
+                        ? 'No data'
+                        : `${tokenPrice24HoursChange}%`}
+                      )
+                    </span>{' '}
+                    {new BigNumber(tbr.derivedETH).toFormat(7)} ETH
                   </div>
                   <button
                     tabIndex={0}
@@ -163,14 +192,15 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                       <img src={favImg} alt="img" />
                     </div>
                   </div>
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={`https://app.uniswap.org/#/swap?outputCurrency=${tbr.id}&use=V2`}
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    onKeyDown={() => {}}
+                    onClick={() => handleOpenTradeModal()}
                     className={s.card_trade}
                   >
                     Trade
-                  </a>
+                  </div>
                   <div className={s.card_bot}>Limit/Bot</div>
                 </div>
               </div>

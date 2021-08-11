@@ -10,6 +10,7 @@ import s from './BoardPage.module.scss';
 
 import AdImg from '../../assets/img/sections/ad/ad1.png';
 import BetYou from '../../assets/img/sections/board-page/bet-you.png';
+import bg from '../../assets/img/sections/board-page/background.svg';
 
 const BoardPage: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -55,6 +56,9 @@ const BoardPage: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className={s.board_bg}>
+        <img src={bg} alt="bg" />
       </div>
     </main>
   );

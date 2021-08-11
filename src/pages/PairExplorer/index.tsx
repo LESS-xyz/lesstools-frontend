@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
 import moment from 'moment';
 
-import { GET_PAIR_INFO, GET_PAIR_SWAPS } from '../../queries/index';
+import { GET_PAIR_INFO, GET_PAIR_SWAPS, GET_BLOCK_24H_AGO } from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
 import { IPairSwapsInfo } from '../../types/pairExplorer';
 import AdBlock from '../../components/AdBlock/index';
@@ -16,6 +16,7 @@ import PairsSearch from '../../components/PairsSearch/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
+import { getBlockClient } from '../../index';
 
 import s from './PairExplorer.module.scss';
 
@@ -32,12 +33,27 @@ const PairExplorer: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
   const { id: pairId } = useParams<{ id: string }>();
 
-  // запрос на бэкенд для pair-card info
-  const { loading, data: pairInfo } = useQuery<IPairInfo>(GET_PAIR_INFO, {
+  // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
+  // запрос на граф для получения номера блока 24 часа назад
+  const { loading: blockNumberLoading, data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
+    client: getBlockClient,
     variables: {
-      id: pairId,
+      timestamp: 1599000000,
     },
   });
+  console.log(blockNumberLoading, blocks?.blocks);
+
+  // запрос на граф для pair-card info
+  const { loading, data: pairInfo, refetch: refetchPairInfo } = useQuery<IPairInfo>(GET_PAIR_INFO, {
+    variables: {
+      id: pairId,
+      blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
+    },
+  });
+
+  useEffect(() => {
+    refetchPairInfo();
+  }, [blocks, refetchPairInfo]);
 
   // запрос на получения всех свапов данной пары
   type response = { swaps: Array<IPairSwapsInfo> };
@@ -207,21 +223,6 @@ Fundraising Capital"
         {bottomType === 'tradeHistory' && (
           <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
         )}
-        <iframe
-          title="buy"
-          src="https://app.uniswap.org/#/swap?outputCurrency=0x476c5e26a75bd202a9683ffd34359c0cc15be0ff&use=V2"
-          height="660px"
-          width="100%"
-          id="myId"
-          style={{
-            border: '0',
-            margin: '0 auto',
-            display: 'block',
-            borderRadius: '10px',
-            maxWidth: '600px',
-            minWidth: '300px',
-          }}
-        />
       </div>
     </main>
   );

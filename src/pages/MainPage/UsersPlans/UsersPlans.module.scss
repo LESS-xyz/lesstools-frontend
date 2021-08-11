@@ -70,7 +70,9 @@
     margin-bottom: 20px;
 
     &__title {
-      @include gradient-text;
+      span {
+        @include gradient-text;
+      }
       font-size: 24px;
       text-transform: uppercase;
       margin-bottom: 10px;

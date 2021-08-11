@@ -15,6 +15,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+export const getBlockClient = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/avalanche-blocks',
+  cache: new InMemoryCache(),
+});
+
 ReactDOM.render(
   <ApolloProvider client={client}>
     <Provider value={rootStore}>

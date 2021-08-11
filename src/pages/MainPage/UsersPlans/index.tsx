@@ -61,7 +61,9 @@ const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle }) => {
     <div className={s.card}>
       <div className={s.card_inner}>
         <div className={s.card_header}>
-          <div className={s.card_header__title}>{title}</div>
+          <div className={s.card_header__title}>
+            <span>{title}</span>
+          </div>
           <div className={s.card_header__subtitle}>{subtitle}</div>
         </div>
         <div className={s.card_body}>

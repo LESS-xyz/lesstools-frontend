@@ -4,6 +4,15 @@
 @import '../../styles/mixins/gradient-text.scss';
 
 .board {
+  position: relative;
+  overflow: hidden;
+  &_bg {
+    position: absolute;
+    top: 56%;
+    left: -220px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
 }
 
 .bg {
@@ -13,6 +22,8 @@
 
 .container {
   @include container;
+  position: relative;
+  z-index: 10;
 }
 
 .tables {
@@ -48,7 +59,7 @@
 
 .other {
   @include grid(repeat(3, 1fr), 1fr, 20px);
-  margin-bottom: 90px;
+  padding-bottom: 90px;
 
   &_block {
     img {
