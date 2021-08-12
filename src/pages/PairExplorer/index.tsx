@@ -33,15 +33,15 @@ const PairExplorer: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
   const { id: pairId } = useParams<{ id: string }>();
 
+  // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
   // запрос на граф для получения номера блока 24 часа назад
-  const { loading: blockNumberLoading, data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
+  const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
       timestamp: 1599000000,
     },
   });
-  console.log(blockNumberLoading, blocks?.blocks);
 
   // запрос на граф для pair-card info
   const { loading, data: pairInfo, refetch: refetchPairInfo } = useQuery<IPairInfo>(GET_PAIR_INFO, {

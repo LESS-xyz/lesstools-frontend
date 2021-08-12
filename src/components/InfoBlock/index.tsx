@@ -12,9 +12,11 @@ import s from './InfoBlock.module.scss';
 
 import gasIcon from '../../assets/img/icons/gas.svg';
 import hotIcon from '../../assets/img/icons/hot.svg';
+import { observer } from 'mobx-react-lite';
 
-const InfoBlock: React.FC = () => {
+const InfoBlock: React.FC = observer(() => {
   const { hotPairs } = useMst();
+
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
   type response = { bundle: { ethPrice: string } };
@@ -80,6 +82,6 @@ const InfoBlock: React.FC = () => {
       </div>
     </section>
   );
-};
+});
 
 export default InfoBlock;

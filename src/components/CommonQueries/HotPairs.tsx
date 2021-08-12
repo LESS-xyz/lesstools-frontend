@@ -16,7 +16,6 @@ const HotPairs = () => {
 
   const [getHotPairs, { data }] = useLazyQuery(GET_HOT_PAIRS, {
     client: uniswapCurrentVersion,
-    pollInterval: 300_000,
   });
   useEffect(() => {
     getHotPairs({

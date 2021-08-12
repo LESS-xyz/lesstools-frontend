@@ -64,8 +64,6 @@ const BigSwapExplorer: React.FC = () => {
     // eslint-disable-next-line
   }, [searchValue, liveSwaps]);
 
-  console.log(searchValue);
-
   useEffect(() => {
     if (!loading && liveSwaps !== undefined) {
       const newData: Array<IRowLiveNewPairs> = swapsFromBackend?.pairs.map((swap: INewPair) => {
