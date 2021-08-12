@@ -119,20 +119,7 @@ Fundraising Capital"
       </Helmet>
       <div className={s.container}>
         <AdBlock adImg={ad} />
-        <InfoBlock
-          topTokens={[
-            'KISHU',
-            'JEJUDOGE',
-            'eMax',
-            'IOI',
-            'EPAY',
-            'SHIB',
-            'GTC',
-            'ERN',
-            'LITH',
-            'WWT',
-          ]}
-        />
+        <InfoBlock />
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Live New Pairs</div>

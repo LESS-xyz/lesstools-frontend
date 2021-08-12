@@ -15,8 +15,15 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// для номера блока (pair explorer page)
 export const getBlockClient = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/avalanche-blocks',
+  cache: new InMemoryCache(),
+});
+
+// для hot pairs (hot pairs component)
+export const uniswapCurrentVersion = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-uniswap-v2',
   cache: new InMemoryCache(),
 });
 

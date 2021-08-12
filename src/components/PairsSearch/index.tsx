@@ -63,14 +63,14 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
   }, [searchByNameData]);
 
   // поиск пар по (id пары, id токена) или (симоволу токена)
-  const searchPairs = () => {
-    if (value.startsWith('0x')) {
-      searchById({ variables: { id: value } });
+  const searchPairs = (searchValue: string) => {
+    if (searchValue.startsWith('0x')) {
+      searchById({ variables: { id: searchValue } });
     } else {
       searchByName({
         variables: {
-          name: formatTokens(value)[0] || '',
-          name2: formatTokens(value)[1] || '',
+          name: formatTokens(searchValue)[0] || '',
+          name2: formatTokens(searchValue)[1] || '',
         },
       });
     }
@@ -79,7 +79,7 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
   // TODO: сделать debounce
   // useLazyQuery debounce doesnt work?
   useEffect(() => {
-    searchPairs();
+    searchPairs(value);
     // eslint-disable-next-line
   }, [value]);
 

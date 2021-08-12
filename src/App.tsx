@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage } from './pages';
+import HotPairs from './components/CommonQueries/HotPairs';
 
 import Header from './components/Header/index';
 import Footer from './components/Footer/index';
@@ -10,6 +11,7 @@ export const App: React.FC = () => {
     <Router>
       <div className="App">
         <Header />
+        <HotPairs />
         <Switch>
           <Route path="/" exact>
             <MainPage />

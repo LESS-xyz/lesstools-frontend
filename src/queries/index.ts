@@ -242,3 +242,64 @@ export const SEARCH_BY_NAME = gql`
     }
   }
 `;
+
+export const GET_HOT_PAIRS = gql`
+  query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
+    currentHour: pairHourDatas(
+      orderBy: hourlyTxns
+      orderDirection: desc
+      where: { hourStartUnix: $timestamp1 }
+    ) {
+      pair {
+        id
+        token0 {
+          symbol
+          id
+        }
+        token1 {
+          symbol
+          id
+        }
+      }
+      hourlyTxns
+    }
+
+    oneHour: pairHourDatas(
+      orderBy: hourlyTxns
+      orderDirection: desc
+      where: { hourStartUnix: $timestamp2 }
+    ) {
+      pair {
+        id
+        token0 {
+          symbol
+          id
+        }
+        token1 {
+          symbol
+          id
+        }
+      }
+      hourlyTxns
+    }
+
+    twoHours: pairHourDatas(
+      orderBy: hourlyTxns
+      orderDirection: desc
+      where: { hourStartUnix: $timestamp3 }
+    ) {
+      pair {
+        id
+        token0 {
+          symbol
+          id
+        }
+        token1 {
+          symbol
+          id
+        }
+      }
+      hourlyTxns
+    }
+  }
+`;

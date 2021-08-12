@@ -1,15 +1,19 @@
 import { createContext, useContext } from 'react';
 import { Instance, onSnapshot, types } from 'mobx-state-tree';
 
-import { ModalsModel } from './Models/index';
+import { ModalsModel, HotPairsModel } from './Models/index';
 
 const RootModel = types.model({
   modals: ModalsModel,
+  hotPairs: HotPairsModel,
 });
 
 export const Store = RootModel.create({
   modals: {
     openedModals: [],
+  },
+  hotPairs: {
+    pairs: [],
   },
 });
 

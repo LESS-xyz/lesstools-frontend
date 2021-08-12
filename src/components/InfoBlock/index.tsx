@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { ETH_PRICE_QUERY } from '../../queries/index';
 import BigNumber from 'bignumber.js/bignumber';
+import { Link } from 'react-router-dom';
 
 import { getGasPrice, IGasPrice } from '../../api/getGasPrice';
+import { useMst } from '../../store/store';
+import { WHITELIST } from '../../data/whitelist';
 
 import s from './InfoBlock.module.scss';
 
 import gasIcon from '../../assets/img/icons/gas.svg';
 import hotIcon from '../../assets/img/icons/hot.svg';
 
-interface IInfoBlockProps {
-  topTokens: Array<string>;
-}
-
-const InfoBlock: React.FC<IInfoBlockProps> = ({ topTokens }) => {
+const InfoBlock: React.FC = () => {
+  const { hotPairs } = useMst();
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
   type response = { bundle: { ethPrice: string } };
@@ -65,9 +65,14 @@ const InfoBlock: React.FC<IInfoBlockProps> = ({ topTokens }) => {
       <div className={s.right}>
         <div className={s.marquee}>
           <div className={s.table}>
-            {topTokens.map((token, index) => (
-              <div key={`${token}`} className={s.table_cell}>
-                <span>#{index + 1}</span> {token}
+            {hotPairs.pairs.map((pair, index) => (
+              <div key={`${pair.pair.id}`} className={s.table_cell}>
+                <Link to={`/pair-explorer/${pair.pair.id}`}>
+                  <span>#{index + 1}</span>{' '}
+                  {WHITELIST.includes(pair.pair.token0.id)
+                    ? pair.pair.token1.symbol
+                    : pair.pair.token0.symbol}
+                </Link>
               </div>
             ))}
           </div>
