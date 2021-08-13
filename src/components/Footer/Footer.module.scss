@@ -2,14 +2,15 @@
 @import '../../styles/mixins/flex.scss';
 
 .container {
-  @include container;
+  @include container(1300px);
 }
 
 .footer {
   background-color: var(--footer-background);
-  padding-top: 50px;
   text-align: center;
-  padding-bottom: 25px;
+  padding: 14px 0;
+  position: relative;
+  z-index: 5000000000;
 }
 .logo {
   @include flex(row, center, center, inline-flex);
@@ -29,7 +30,6 @@
 .links {
   display: flex;
   justify-content: center;
-  margin-bottom: 48px;
 }
 .link {
   cursor: pointer;
@@ -53,11 +53,13 @@
 .info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .info_text {
   font-size: 14px;
   color: var(--grey);
+  opacity: 0.5;
 }
 
 .social_links {

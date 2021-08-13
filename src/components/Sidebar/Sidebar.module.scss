@@ -30,6 +30,9 @@
 
     .group_title {
       padding-left: 12px;
+      &__icon {
+        display: block;
+      }
     }
   }
 }
@@ -74,6 +77,14 @@
     &__text {
       font-size: 14px;
       font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 22px;
+      position: relative;
+      top: 5px;
+    }
+    &__icon {
+      display: none;
     }
   }
 }
@@ -99,6 +110,7 @@
     opacity: 0;
     white-space: nowrap;
     margin-left: 12px;
+    pointer-events: none;
   }
 
   &:hover {

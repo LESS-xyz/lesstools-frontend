@@ -29,13 +29,13 @@ export const uniswapCurrentVersion = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Provider value={rootStore}>
-      <Router>
+    <Router>
+      <Provider value={rootStore}>
         <ScrollToTop>
           <App />
         </ScrollToTop>
-      </Router>
-    </Provider>
+      </Provider>
+    </Router>
   </ApolloProvider>,
   document.getElementById('root'),
 );

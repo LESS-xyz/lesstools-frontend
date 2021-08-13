@@ -1,0 +1,54 @@
+@import '../../styles/mixins/container.scss';
+@import '../../styles/mixins/flex.scss';
+
+.page {
+  padding: 30px 0;
+  background: var(--gradient-background);
+}
+
+.container {
+  @include container();
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.block {
+  @include flex(row, normal, center, nowrap, inline-flex);
+  min-width: 800px;
+  background: #0e071f;
+  border: 1px solid var(--blue);
+  border-radius: 2px;
+  padding: 50px 15px 40px;
+  text-align: center;
+
+  letter-spacing: -0.6px;
+  color: #ffffff;
+
+  margin-bottom: 30px;
+
+  &_inner {
+    display: inline-block;
+  }
+
+  &_title {
+    font-size: 36px;
+
+    margin-bottom: 20px;
+  }
+  &_subtitle {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 53px;
+  }
+
+  &_button {
+    cursor: pointer;
+    display: inline-block;
+    background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
+    border-radius: 2px;
+    padding: 16px 20px;
+    font-size: 20px;
+    font-weight: 500;
+  }
+}

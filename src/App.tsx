@@ -1,8 +1,15 @@
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
-import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage } from './pages';
-import HotPairs from './components/CommonQueries/HotPairs';
+import {
+  MainPage,
+  BigSwapExplorer,
+  LiveNewPairs,
+  PairExplorer,
+  BoardPage,
+  UserAccount,
+} from './pages';
 
+import HotPairs from './components/CommonQueries/HotPairs';
 import Footer from './components/Footer/index';
 import Sidebar from './components/Sidebar/index';
 
@@ -27,6 +34,9 @@ export const App: React.FC = () => {
           </Route>
           <Route path="/pair-explorer/:id">
             <PairExplorer />
+          </Route>
+          <Route path="/user-account">
+            <UserAccount />
           </Route>
           <Redirect to="/" />
         </Switch>

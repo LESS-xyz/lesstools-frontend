@@ -127,7 +127,12 @@ const Sidebar: React.FC = () => {
         <LinkSidebar imgDark={bot} imgWhite={botWhite} text="New Pairs Bot" />
       </div>
       <div className={s.subtitle}>others</div>
-      <LinkSidebar imgDark={account} imgWhite={accountWhite} text="User Account" />
+      <LinkSidebar
+        to="/user-account"
+        imgDark={account}
+        imgWhite={accountWhite}
+        text="User Account"
+      />
     </aside>
   );
 };

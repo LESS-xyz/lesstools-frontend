@@ -5,6 +5,7 @@ class ScrollToTop extends React.Component<RouteComponentProps, any> {
   componentDidUpdate(prevProps: RouteComponentProps) {
     if (this.props.location.pathname !== prevProps.location.pathname) {
       window.scrollTo(0, 0);
+      console.log('CHANGE');
     }
   }
 
@@ -12,5 +13,13 @@ class ScrollToTop extends React.Component<RouteComponentProps, any> {
     return this.props.children;
   }
 }
+
+// const ScrollToTop: React.FC<PropsWithChildren<RouteComponentProps>> = ({ children, location }) => {
+//   const { pathname } = location;
+//   useEffect(() => {
+//     console.log(pathname);
+//   }, [pathname]);
+//   return <>{children}</>;
+// };
 
 export default withRouter(ScrollToTop);
