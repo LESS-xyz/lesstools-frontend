@@ -1,16 +1,20 @@
 @import '../../../../styles/mixins/flex.scss';
 @import '../../../../styles/mixins/grid.scss';
+@import '../../../../styles/mixins/gradient-text.scss';
 
 .card {
   height: 100%;
 
   &_inner {
     height: 100%;
-    @include grid(repeat(1, 1fr), auto, 20px);
+    // @include grid(repeat(1, 1fr), auto, 20px);
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.5fr;
+    gap: 10px;
   }
 
   &_sections {
-    @include grid(repeat(2, 1fr), auto, 20px);
+    @include grid(repeat(1, 1fr), auto, 10px);
   }
 
   &_section {
@@ -28,6 +32,7 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 40px;
+      margin-bottom: 25px;
     }
   }
 
@@ -81,7 +86,7 @@
     border-radius: 2px;
     font-size: 26px;
     padding: 16px 50px;
-    margin-bottom: 10px;
+    text-align: center;
   }
   // bot button
   &_bot {
@@ -94,12 +99,12 @@
 
   // fav and share buttons
   &_buttons {
-    @include flex(row, center);
+    @include flex(row, center, normal, nowrap);
     margin-bottom: 20px;
   }
   &_button {
     @include flex(row, center, center);
-    background-color: #312550;
+    background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
     height: 48px;
     width: 48px;
     border-radius: 12px;
@@ -141,7 +146,7 @@
       position: absolute;
       top: 1px;
       left: 1px;
-      width: calc(100% - 3px);
+      width: calc(100% - 2px);
       height: calc(100% - 2px);
       background: #130a28;
       border-radius: 2px;
@@ -255,39 +260,27 @@
 
 // less score
 .score {
-  &_title {
-    font-weight: 700;
-    font-size: 20px;
+  position: relative;
+  @include flex(row, center, center);
+  &_info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    margin-bottom: 50px;
   }
-
-  &_inner {
-    display: grid;
-    grid-template-columns: 4fr 1fr;
-    align-items: center;
+  &_title {
+    font-size: 12px;
+    margin-bottom: 10px;
   }
-
-  &_bars {
-    margin-right: 15px;
-    &__item {
-      width: 100%;
-      height: 5px;
-      background-color: var(--green);
-      margin-bottom: 6px;
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      &:hover {
-        background-color: rgb(46, 109, 30);
-      }
+  &_number {
+    font-size: 33px;
+    font-weight: bold;
+    span {
+      @include gradient-text;
     }
   }
-
-  &_number {
-    font-weight: bold;
-    font-size: 35px;
-    color: var(--green);
+  img {
+    max-width: 100%;
   }
 }

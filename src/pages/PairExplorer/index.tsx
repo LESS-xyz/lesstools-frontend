@@ -13,6 +13,7 @@ import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairsSearch from '../../components/PairsSearch/index';
+import InfoBlock from '../../components/InfoBlock/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
@@ -21,12 +22,8 @@ import { getBlockClient } from '../../index';
 import s from './PairExplorer.module.scss';
 
 import ad from '../../assets/img/sections/ad/ad1.png';
-import filterIcon from '../../assets/img/icons/filter.svg';
 
 const PairExplorer: React.FC = () => {
-  const [bottomType, setBottomType] = useState<'tradeHistory' | 'myPositions' | 'priceAlerts'>(
-    'tradeHistory',
-  );
   const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
     {} as IToken,
   );
@@ -120,6 +117,10 @@ const PairExplorer: React.FC = () => {
     // eslint-disable-next-line
   }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
 
+  // переключалка внизу
+  const [currentOption, setCurrentOption] = useState<'tokenInfo' | 'trades'>('tokenInfo');
+  const [isFavs, setIsFavs] = useState(false);
+
   return (
     <main className={s.page}>
       <Helmet>
@@ -138,7 +139,7 @@ Fundraising Capital"
 
       <div className={s.container}>
         <AdBlock adImg={ad} />
-
+        <InfoBlock />
         <div className={s.info}>
           {!pairInfo ? (
             <Loader />
@@ -157,72 +158,77 @@ Fundraising Capital"
         </div>
 
         <div className={s.main}>
-          <div className={s.chart}>
-            <TradingViewWidget
-              allowfullscreen
-              theme={Themes.DARK}
-              autosize
-              hide_side_toolbar={false}
-              style={BarStyles.AREA}
-              symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
-            />
-          </div>
-          <div className={s.card}>
-            {pairInfo ? (
-              <PairInfoBody
-                loading={loading}
-                pairId={pairId}
-                tokenInfoFromCoingecko={tokenInfoFromCoingecko}
-                pairInfo={pairInfo}
+          <div className={`${s.top} ${isFavs && s.active}`}>
+            <div className={s.chart}>
+              <TradingViewWidget
+                allowfullscreen
+                theme={Themes.DARK}
+                autosize
+                hide_side_toolbar={false}
+                style={BarStyles.AREA}
+                // TODO: fix pair (add weth or thether ?)
+                symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
               />
-            ) : (
-              <Loader />
-            )}
-          </div>
-        </div>
-        <div className={s.table_info}>
-          <div className={s.buttons}>
-            <div
-              tabIndex={0}
-              onKeyDown={() => {}}
-              role="button"
-              onClick={() => setBottomType('tradeHistory')}
-              className={`${s.buttons_item} ${bottomType === 'tradeHistory' && s.active}`}
-            >
-              Trade History
             </div>
-            <div
-              tabIndex={0}
-              onKeyDown={() => {}}
-              role="button"
-              onClick={() => setBottomType('myPositions')}
-              className={`${s.buttons_item} ${bottomType === 'myPositions' && s.active}`}
-            >
-              My Positions
-            </div>
-            <div
-              tabIndex={0}
-              onKeyDown={() => {}}
-              role="button"
-              onClick={() => setBottomType('priceAlerts')}
-              className={`${s.buttons_item} ${bottomType === 'priceAlerts' && s.active}`}
-            >
-              Price Alerts
+            <div className={`${s.favs} ${isFavs && s.active}`}>
+              <div className={s.favs_inner}>
+                favs_inner
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className={s.favs_button}
+                  onKeyDown={() => {}}
+                  onClick={() => setIsFavs(!isFavs)}
+                >
+                  x
+                </div>
+              </div>
             </div>
           </div>
-          <div className={s.last_trades}>
-            <div className={s.last_trades__icon}>
-              <img src={filterIcon} alt="filterIcon" />
-            </div>
-            <div className={s.last_trades__text}>
-              {swaps?.swaps[0]?.pair.token1.symbol} (last {swaps?.swaps.length} trades)
-            </div>
-          </div>
-        </div>
 
-        {bottomType === 'tradeHistory' && (
-          <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
-        )}
+          {/* нижняя часть страницы */}
+          <div className={s.bottom}>
+            <div className={s.options}>
+              <div
+                role="button"
+                tabIndex={0}
+                className={`${s.option} ${currentOption === 'tokenInfo' && s.active}`}
+                onKeyDown={() => {}}
+                onClick={() => setCurrentOption('tokenInfo')}
+              >
+                Token info
+              </div>
+              <div
+                role="button"
+                tabIndex={0}
+                className={`${s.option} ${currentOption === 'trades' && s.active}`}
+                onKeyDown={() => {}}
+                onClick={() => setCurrentOption('trades')}
+              >
+                Trades
+              </div>
+            </div>
+            <div className={s.bottom_content}>
+              {currentOption === 'tokenInfo' && (
+                <div className={s.card}>
+                  {pairInfo ? (
+                    <PairInfoBody
+                      loading={loading}
+                      pairId={pairId}
+                      tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                      pairInfo={pairInfo}
+                    />
+                  ) : (
+                    <Loader />
+                  )}
+                </div>
+              )}
+              {currentOption === 'trades' && (
+                <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

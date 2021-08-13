@@ -6,7 +6,6 @@ import ReactTooltip from 'react-tooltip';
 import { ITokenData } from '../PairInfoHeader';
 import CommunityTrust from '../CommunityTrust/index';
 import Loader from '../../../../components/Loader/index';
-
 import { WHITELIST } from '../../../../data/whitelist';
 import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 import { copyText } from '../../../../utils/copyText';
@@ -21,19 +20,18 @@ import favImg from '../../../../assets/img/icons/favorite.svg';
 import shareImg from '../../../../assets/img/icons/share.svg';
 import marketcap from '../../../../assets/img/icons/marketcap.svg';
 import etherscan from '../../../../assets/img/icons/table/actions-etherscan.svg';
+import scoreBg from '../../../../assets/img/icons/less-score-bg.svg';
 
 const LessScore = () => (
   <div className={s.score}>
-    <div className={s.score_title}>LESS Score</div>
-    <div className={s.score_inner}>
-      <div className={s.score_bars}>
-        <div data-tip="Information: 99" className={s.score_bars__item} />
-        <div data-tip="Transactions: 99" className={s.score_bars__item} />
-        <div data-tip="Holders: 99" className={s.score_bars__item} />
-        <div data-tip="Creation: 99" className={s.score_bars__item} />
-        <div data-tip="Pool: 99" className={s.score_bars__item} />
+    <div className={s.score_info}>
+      <div className={s.score_title}>LessScore</div>
+      <div className={s.score_number}>
+        <span>95%</span>
       </div>
-      <div className={s.score_number}>99</div>
+    </div>
+    <div className={s.score_img}>
+      <img src={scoreBg} alt="scoreBg" />
     </div>
   </div>
 );
@@ -192,17 +190,16 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                       <img src={favImg} alt="img" />
                     </div>
                   </div>
-                  <div
-                    tabIndex={0}
-                    role="button"
-                    onKeyDown={() => {}}
-                    onClick={() => handleOpenTradeModal()}
-                    className={s.card_trade}
-                  >
-                    Trade
-                  </div>
-                  <div className={s.card_bot}>Limit/Bot</div>
                 </div>
+              </div>
+              <div
+                tabIndex={0}
+                role="button"
+                onKeyDown={() => {}}
+                onClick={() => handleOpenTradeModal()}
+                className={s.card_trade}
+              >
+                Trade
               </div>
             </div>
             <div className={s.card_section}>
