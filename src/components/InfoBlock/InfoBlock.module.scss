@@ -62,7 +62,7 @@
 .marquee {
   width: 100%;
   white-space: nowrap;
-  animation: scroll 15s infinite linear;
+  animation: scroll 15s infinite linear forwards;
   @include b(tablet) {
     width: 750px;
   }

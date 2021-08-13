@@ -3,13 +3,13 @@
 
 .page {
   min-height: 100vh;
-  padding-top: 100px;
+  padding-top: 30px;
   padding-bottom: 50px;
   background: var(--gradient-background);
 }
 
 .container {
-  @include container(1390px);
+  @include container;
 }
 
 .info {

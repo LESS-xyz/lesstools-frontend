@@ -1,0 +1,113 @@
+@import '../../styles/mixins/flex.scss';
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  height: 100vh;
+  background: #2f226f;
+  width: 60px;
+  transition: 0.4s ease;
+  text-overflow: ellipsis;
+
+  &:hover {
+    width: 170px;
+
+    .logo_text {
+      display: block;
+    }
+
+    .link {
+      padding-left: 12px;
+      &_text {
+        opacity: 1;
+      }
+    }
+
+    .subtitle {
+      padding-left: 12px;
+    }
+
+    .group_title {
+      padding-left: 12px;
+    }
+  }
+}
+
+.logo {
+  padding: 22px 15px;
+  @include flex(row, center, center, nowrap);
+  &_text {
+    margin-left: 10px;
+    display: none;
+    font-size: 22px;
+    color: #dcdcdc;
+    span {
+      color: #6f45ff;
+    }
+  }
+}
+
+.subtitle {
+  transition: 0.4s ease;
+  background-color: #21194e;
+  padding: 4px 5px;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  color: #908ca6;
+  letter-spacing: 0.425316px;
+  text-transform: uppercase;
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+
+// group
+.group {
+  margin-bottom: 20px;
+
+  &_title {
+    transition: 0.4s ease;
+    overflow: hidden;
+    padding: 12px 5px;
+
+    @include flex(row, center, space-between, nowrap);
+    &__text {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+}
+
+// link
+.link {
+  @include flex(row, center, normal, nowrap);
+  padding: 11px 12px;
+  padding-left: 20px;
+  cursor: pointer;
+  background: #21194e;
+  transition: 0.4s ease;
+  &:hover {
+    justify-content: flex-start;
+  }
+
+  &_img {
+  }
+
+  &_text {
+    transition: opacity 0.2s ease;
+    font-size: 13px;
+    opacity: 0;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+
+  &:hover {
+    background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
+  }
+}
+
+.link_active {
+  .link {
+    background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
+  }
+}

@@ -8,7 +8,7 @@
 }
 
 .container {
-  @include container;
+  @include container(1390px);
 }
 
 .title {

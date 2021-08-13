@@ -3,7 +3,7 @@
 @import '../../../styles/mixins/gradient-text.scss';
 
 .container {
-  @include container;
+  @include container(1390px);
   @include flex(row, center, flex-start);
   height: 100vh;
 }

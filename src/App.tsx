@@ -3,15 +3,15 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import { MainPage, BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage } from './pages';
 import HotPairs from './components/CommonQueries/HotPairs';
 
-import Header from './components/Header/index';
 import Footer from './components/Footer/index';
+import Sidebar from './components/Sidebar/index';
 
 export const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
-        <Header />
         <HotPairs />
+        <Sidebar />
         <Switch>
           <Route path="/" exact>
             <MainPage />

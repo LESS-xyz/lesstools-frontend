@@ -11,12 +11,22 @@ import s from './BoardPage.module.scss';
 import AdImg from '../../assets/img/sections/ad/ad1.png';
 import BetYou from '../../assets/img/sections/board-page/bet-you.png';
 import bg from '../../assets/img/sections/board-page/background.svg';
+import { Helmet } from 'react-helmet';
 
 const BoardPage: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
 
   return (
     <main className={s.board}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Board - LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
+        />
+      </Helmet>
       <div className={s.bg}>
         <div className={s.container}>
           <AdBlock adImg={AdImg} />
