@@ -1,11 +1,12 @@
 import { createContext, useContext } from 'react';
 import { Instance, onSnapshot, types } from 'mobx-state-tree';
 
-import { ModalsModel, HotPairsModel } from './Models/index';
+import { ModalsModel, HotPairsModel, CurrentExchangeModel } from './Models/index';
 
 const RootModel = types.model({
   modals: ModalsModel,
   hotPairs: HotPairsModel,
+  currentExchange: CurrentExchangeModel,
 });
 
 export const Store = RootModel.create({
@@ -14,6 +15,9 @@ export const Store = RootModel.create({
   },
   hotPairs: {
     pairs: [],
+  },
+  currentExchange: {
+    exchange: 'uniswap',
   },
 });
 

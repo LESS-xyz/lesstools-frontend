@@ -1,8 +1,8 @@
 import FavoriteToken from './FavoriteToken/index';
-import Sponsors from './Sponsors/index';
+// import Sponsors from './Sponsors/index';
 
 import s from './Favorites.module.scss';
-import sponsorImg from '../../../assets/img/sections/partners-logos/sponsor.png';
+// import sponsorImg from '../../../assets/img/sections/partners-logos/sponsor.png';
 
 const Favorites: React.FC = () => {
   return (
@@ -13,15 +13,15 @@ const Favorites: React.FC = () => {
         <FavoriteToken />
         <FavoriteToken />
       </div>
-      <div className={s.sponsors}>
+      {/* <div className={s.sponsors}>
         <Sponsors />
-      </div>
-      <div className={s.sponsored}>
+      </div> */}
+      {/* <div className={s.sponsored}>
         <div className={s.title}>Sponsored</div>
         <div className={s.sponsored_img}>
           <img src={sponsorImg} alt="sponsorImg" />
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };

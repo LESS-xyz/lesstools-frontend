@@ -14,9 +14,11 @@
     height: 100%;
     @include flex(row, center, center);
     background: url('../../../assets/img/sections/board-page/bg-vector-1.svg');
+    background-size: cover;
 
-    &.sushi{
+    &.sushi {
       background: url('../../../assets/img/sections/board-page/bg-vector-2.svg');
+      background-size: cover;
     }
   }
 

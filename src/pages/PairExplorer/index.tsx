@@ -8,7 +8,6 @@ import moment from 'moment';
 import { GET_PAIR_INFO, GET_PAIR_SWAPS, GET_BLOCK_24H_AGO } from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
 import { IPairSwapsInfo } from '../../types/pairExplorer';
-import AdBlock from '../../components/AdBlock/index';
 import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
@@ -22,7 +21,6 @@ import Favorites from './Favorites/index';
 
 import s from './PairExplorer.module.scss';
 
-import ad from '../../assets/img/sections/ad/ad1.png';
 import arrow from '../../assets/img/icons/arrow-right.svg';
 import compassBlue from '../../assets/img/icons/compass-blue.svg';
 import compassGr from '../../assets/img/icons/compass-gr.svg';
@@ -181,7 +179,6 @@ Fundraising Capital"
       </Helmet>
 
       <div className={s.container}>
-        <AdBlock adImg={ad} />
         <InfoBlock />
         <div className={s.info}>
           {!pairInfo ? (

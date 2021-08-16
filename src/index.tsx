@@ -4,14 +4,16 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import rootStore, { Provider } from './store/store';
 import ScrollToTop from './utils/scrollToTop';
+import CurrentExchange from './utils/currentExchange';
 import { App } from './App';
 
 import './styles/index.scss';
 
 const client = new ApolloClient({
-  // uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-  // uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-uniswap-v2',
+  // uniswap
   uri: 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
+  // sushiswap
+  // uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
   cache: new InMemoryCache(),
 });
 
@@ -31,9 +33,11 @@ ReactDOM.render(
   <ApolloProvider client={client}>
     <Router>
       <Provider value={rootStore}>
-        <ScrollToTop>
-          <App />
-        </ScrollToTop>
+        <CurrentExchange>
+          <ScrollToTop>
+            <App />
+          </ScrollToTop>
+        </CurrentExchange>
       </Provider>
     </Router>
   </ApolloProvider>,
