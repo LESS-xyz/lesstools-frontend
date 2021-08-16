@@ -21,6 +21,9 @@ import shareImg from '../../../../assets/img/icons/share.svg';
 import marketcap from '../../../../assets/img/icons/marketcap.svg';
 import etherscan from '../../../../assets/img/icons/table/actions-etherscan.svg';
 import scoreBg from '../../../../assets/img/icons/less-score-bg.svg';
+import twitter from '../../../../assets/img/icons/twitter-blue.svg';
+import telegram from '../../../../assets/img/icons/telegram-blue.svg';
+import desktop from '../../../../assets/img/icons/desktop-blue.svg';
 
 const LessScore = () => (
   <div className={s.score}>
@@ -277,15 +280,21 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                       <div className={s.card_link__title}>CoinMarketcap</div>
                     </a>
                     <div className={s.card_link}>
-                      <div className={s.card_link__img}>img</div>
+                      <div className={s.card_link__img}>
+                        <img src={twitter} alt="twitter" />
+                      </div>
                       <div className={s.card_link__title}>Twitter</div>
                     </div>
                     <div className={s.card_link}>
-                      <div className={s.card_link__img}>img</div>
+                      <div className={s.card_link__img}>
+                        <img src={telegram} alt="telegram" />
+                      </div>
                       <div className={s.card_link__title}>Telegram</div>
                     </div>
                     <div className={s.card_link}>
-                      <div className={s.card_link__img}>img</div>
+                      <div className={s.card_link__img}>
+                        <img src={desktop} alt="desktop" />
+                      </div>
                       <div className={s.card_link__title}>Website</div>
                     </div>
                   </div>

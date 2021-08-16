@@ -23,19 +23,22 @@ export const App: React.FC = () => {
           <Route path="/" exact>
             <MainPage />
           </Route>
-          <Route path="/board">
+          <Route exact path="/app">
             <BoardPage />
           </Route>
-          <Route path="/big-swap-explorer">
+          <Route
+            exact
+            path={['/app/sushiswap/big-swap-explorer', '/app/uniswap/big-swap-explorer']}
+          >
             <BigSwapExplorer />
           </Route>
-          <Route path="/live-new-pairs">
+          <Route exact path={['/app/sushiswap/live-new-pairs', '/app/uniswap/live-new-pairs']}>
             <LiveNewPairs />
           </Route>
-          <Route path="/pair-explorer/:id">
+          <Route path={['/app/sushiswap/pair-explorer/:id', '/app/uniswap/pair-explorer/:id']}>
             <PairExplorer />
           </Route>
-          <Route path="/user-account">
+          <Route path="/app/user-account">
             <UserAccount />
           </Route>
           <Redirect to="/" />

@@ -58,7 +58,7 @@ const Actions: React.FC<IActionsProps> = React.memo(({ actions }) => {
       )}
       {actions.liveData && (
         <Link
-          to={`/pair-explorer/${actions.liveData}`}
+          to={`/app/uniswap/pair-explorer/${actions.liveData}`}
           data-tip={`Pair Explorer: ${actions.liveData}`}
           data-place="left"
           data-effect="solid"

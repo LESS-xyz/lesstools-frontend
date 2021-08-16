@@ -18,10 +18,51 @@ import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCo
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient } from '../../index';
+import Favorites from './Favorites/index';
 
 import s from './PairExplorer.module.scss';
 
 import ad from '../../assets/img/sections/ad/ad1.png';
+import arrow from '../../assets/img/icons/arrow-right.svg';
+import compassBlue from '../../assets/img/icons/compass-blue.svg';
+import compassGr from '../../assets/img/icons/compass-gr.svg';
+import tradesBlue from '../../assets/img/icons/trades-blue.svg';
+import tradesGr from '../../assets/img/icons/trades-gr.svg';
+import flagBlue from '../../assets/img/icons/flag-blue.svg';
+import flagGr from '../../assets/img/icons/flag-gr.svg';
+
+type Options = 'tokenInfo' | 'trades' | 'myTrades';
+
+interface IOptionProps {
+  title: string;
+  optionName: Options;
+  currentOptionName: string;
+  setCurrentOption: (option: Options) => void;
+  img: string;
+  imgActive: string;
+}
+
+const Option: React.FC<IOptionProps> = ({
+  optionName,
+  currentOptionName,
+  setCurrentOption,
+  title,
+  img,
+  imgActive,
+}) => {
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      className={`${s.option} ${currentOptionName === optionName && s.active}`}
+      onKeyDown={() => {}}
+      onClick={() => setCurrentOption(optionName)}
+    >
+      <img src={currentOptionName === optionName ? imgActive : img} alt="img" />
+      {title}
+    </div>
+  );
+};
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
@@ -118,8 +159,10 @@ const PairExplorer: React.FC = () => {
   }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
 
   // переключалка внизу
-  const [currentOption, setCurrentOption] = useState<'tokenInfo' | 'trades'>('tokenInfo');
+  const [currentOption, setCurrentOption] = useState<Options>('tokenInfo');
   const [isFavs, setIsFavs] = useState(false);
+  // ⚠️HARDCODE
+  const userAdress = '0x1414b85fe8570780e2b3468588e4dcdd901a76a2';
 
   return (
     <main className={s.page}>
@@ -172,15 +215,15 @@ Fundraising Capital"
             </div>
             <div className={`${s.favs} ${isFavs && s.active}`}>
               <div className={s.favs_inner}>
-                favs_inner
+                <Favorites />
                 <div
                   tabIndex={0}
                   role="button"
-                  className={s.favs_button}
+                  className={`${s.favs_button} ${isFavs && s.active}`}
                   onKeyDown={() => {}}
                   onClick={() => setIsFavs(!isFavs)}
                 >
-                  x
+                  <img src={arrow} alt="X" />
                 </div>
               </div>
             </div>
@@ -189,24 +232,30 @@ Fundraising Capital"
           {/* нижняя часть страницы */}
           <div className={s.bottom}>
             <div className={s.options}>
-              <div
-                role="button"
-                tabIndex={0}
-                className={`${s.option} ${currentOption === 'tokenInfo' && s.active}`}
-                onKeyDown={() => {}}
-                onClick={() => setCurrentOption('tokenInfo')}
-              >
-                Token info
-              </div>
-              <div
-                role="button"
-                tabIndex={0}
-                className={`${s.option} ${currentOption === 'trades' && s.active}`}
-                onKeyDown={() => {}}
-                onClick={() => setCurrentOption('trades')}
-              >
-                Trades
-              </div>
+              <Option
+                title="Token info"
+                setCurrentOption={setCurrentOption}
+                optionName="tokenInfo"
+                currentOptionName={currentOption}
+                img={compassBlue}
+                imgActive={compassGr}
+              />
+              <Option
+                title="Trades"
+                setCurrentOption={setCurrentOption}
+                optionName="trades"
+                currentOptionName={currentOption}
+                img={tradesBlue}
+                imgActive={tradesGr}
+              />
+              <Option
+                title="My Trades"
+                setCurrentOption={setCurrentOption}
+                optionName="myTrades"
+                currentOptionName={currentOption}
+                img={flagBlue}
+                imgActive={flagGr}
+              />
             </div>
             <div className={s.bottom_content}>
               {currentOption === 'tokenInfo' && (
@@ -225,6 +274,13 @@ Fundraising Capital"
               )}
               {currentOption === 'trades' && (
                 <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
+              )}
+              {currentOption === 'myTrades' && (
+                <Table
+                  data={swapsData.filter((row) => row.maker === userAdress)}
+                  header={swapsHeader}
+                  tableType="pairExplorer"
+                />
               )}
             </div>
           </div>

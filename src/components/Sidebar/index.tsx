@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+
+import LinkSidebar from './LinkSidebar/index';
 
 import s from './Sidebar.module.scss';
 
@@ -18,60 +19,6 @@ import bigSwapWhite from '../../assets/img/sections/sidebar/big-swap-white.svg';
 import uniswap from '../../assets/img/sections/sidebar/uniswap.svg';
 import sushiswap from '../../assets/img/sections/sidebar/suchiswap.svg';
 
-interface ILinkProps {
-  imgDark: string;
-  imgWhite: string;
-  text: string;
-  to?: string;
-}
-
-const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
-  const [isHover, setIsHover] = useState(false);
-  const loc = useLocation();
-  useEffect(() => {
-    if (to && loc.pathname.includes(to.slice(0, 8))) {
-      setIsHover(true);
-    } else setIsHover(false);
-  }, [loc, to]);
-
-  if (to)
-    return (
-      <NavLink
-        activeClassName={s.link_active}
-        isActive={() => loc.pathname.includes(to.slice(0, 8))}
-        to={to}
-      >
-        <div
-          className={s.link}
-          onBlur={() => setIsHover(loc.pathname.includes(to.slice(0, 8)))}
-          onMouseOut={() => setIsHover(loc.pathname.includes(to.slice(0, 8)))}
-          onFocus={() => setIsHover(true)}
-          onMouseOver={() => setIsHover(true)}
-        >
-          <div className={s.link_img}>
-            <img src={isHover ? imgWhite : imgDark} alt="img" />
-          </div>
-          <div className={s.link_text}>{text}</div>
-        </div>
-      </NavLink>
-    );
-
-  return (
-    <div
-      className={s.link}
-      onBlur={() => setIsHover(false)}
-      onMouseOut={() => setIsHover(false)}
-      onFocus={() => setIsHover(true)}
-      onMouseOver={() => setIsHover(true)}
-    >
-      <div className={s.link_img}>
-        <img src={isHover ? imgWhite : imgDark} alt="img" />
-      </div>
-      <div className={s.link_text}>{text}</div>
-    </div>
-  );
-};
-
 const Sidebar: React.FC = () => {
   return (
     <aside className={s.sidebar}>
@@ -84,7 +31,7 @@ const Sidebar: React.FC = () => {
         </div>
       </NavLink>
       <div className={s.subtitle}>LESSBOARD</div>
-      <LinkSidebar imgDark={board} imgWhite={board} to="/board" text="LessBoard" />
+      <LinkSidebar imgDark={board} imgWhite={board} to="/app" text="LessBoard" />
       <div className={s.group}>
         <div className={s.group_title}>
           <div className={s.group_title__text}>Uniswap</div>
@@ -95,19 +42,19 @@ const Sidebar: React.FC = () => {
         <LinkSidebar
           imgDark={live}
           imgWhite={liveWhite}
-          to="/live-new-pairs"
+          to="/app/uniswap/live-new-pairs"
           text="Live New Pairs"
         />
         <LinkSidebar
           imgDark={pair}
           imgWhite={pairWhite}
-          to="/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
+          to="/app/uniswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
           text="Pair Explorer"
         />
         <LinkSidebar
           imgDark={bigSwap}
           imgWhite={bigSwapWhite}
-          to="/big-swap-explorer"
+          to="/app/uniswap/big-swap-explorer"
           text="Big Swap Explorer"
         />
       </div>
@@ -118,9 +65,24 @@ const Sidebar: React.FC = () => {
             <img src={sushiswap} alt="img" />
           </div>
         </div>
-        <LinkSidebar imgDark={live} imgWhite={liveWhite} text="Live New Pairs" />
-        <LinkSidebar imgDark={pair} imgWhite={pairWhite} text="Pair Explorer" />
-        <LinkSidebar imgDark={bigSwap} imgWhite={bigSwapWhite} text="Big Swap Explorer" />
+        <LinkSidebar
+          imgDark={live}
+          imgWhite={liveWhite}
+          text="Live New Pairs"
+          to="/app/sushiswap/live-new-pairs"
+        />
+        <LinkSidebar
+          imgDark={pair}
+          imgWhite={pairWhite}
+          text="Pair Explorer"
+          to="/app/sushiswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
+        />
+        <LinkSidebar
+          imgDark={bigSwap}
+          imgWhite={bigSwapWhite}
+          text="Big Swap Explorer"
+          to="/app/sushiswap/big-swap-explorer"
+        />
       </div>
       <div className={s.group}>
         <div className={s.subtitle}>common</div>
@@ -128,7 +90,7 @@ const Sidebar: React.FC = () => {
       </div>
       <div className={s.subtitle}>others</div>
       <LinkSidebar
-        to="/user-account"
+        to="/app/user-account"
         imgDark={account}
         imgWhite={accountWhite}
         text="User Account"
