@@ -108,6 +108,7 @@ const PairExplorer: React.FC = () => {
     variables: {
       id: pairId,
     },
+    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
   });
 
   // запрос на coingecko для получения иконки токена и полного названия
