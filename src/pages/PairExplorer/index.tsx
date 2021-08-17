@@ -5,7 +5,12 @@ import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
 import moment from 'moment';
 
-import { GET_PAIR_INFO, GET_PAIR_SWAPS, GET_BLOCK_24H_AGO } from '../../queries/index';
+import {
+  GET_PAIR_INFO,
+  GET_PAIR_SWAPS,
+  GET_BLOCK_24H_AGO,
+  GET_PAIR_INFO_SUSHIWAP,
+} from '../../queries/index';
 import { IRowPairExplorer } from '../../types/table';
 import { IPairSwapsInfo } from '../../types/pairExplorer';
 import Table, { ITableHeader } from '../../components/Table/index';
@@ -16,8 +21,9 @@ import InfoBlock from '../../components/InfoBlock/index';
 import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
-import { getBlockClient } from '../../index';
+import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import Favorites from './Favorites/index';
+import { useMst } from '../../store/store';
 
 import s from './PairExplorer.module.scss';
 
@@ -68,6 +74,7 @@ const PairExplorer: React.FC = () => {
   );
   const [searchValue, setSearchValue] = useState('');
   const { id: pairId } = useParams<{ id: string }>();
+  const { currentExchange } = useMst();
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
@@ -80,12 +87,16 @@ const PairExplorer: React.FC = () => {
   });
 
   // запрос на граф для pair-card info
-  const { loading, data: pairInfo, refetch: refetchPairInfo } = useQuery<IPairInfo>(GET_PAIR_INFO, {
-    variables: {
-      id: pairId,
-      blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
+  const { loading, data: pairInfo, refetch: refetchPairInfo } = useQuery<IPairInfo>(
+    currentExchange.exchange === 'uniswap' ? GET_PAIR_INFO : GET_PAIR_INFO_SUSHIWAP,
+    {
+      variables: {
+        id: pairId,
+        blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
+      },
+      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
     },
-  });
+  );
 
   useEffect(() => {
     refetchPairInfo();

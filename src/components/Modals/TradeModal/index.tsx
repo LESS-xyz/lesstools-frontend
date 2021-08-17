@@ -30,7 +30,7 @@ const TradeModal: React.FC<ITradeModalProps> = observer(({ tokenId = '' }) => {
             border: '0',
             margin: '0 auto',
             display: 'block',
-            borderRadius: '10px',
+            borderRadius: '0px',
             maxWidth: '600px',
             minWidth: '300px',
           }}

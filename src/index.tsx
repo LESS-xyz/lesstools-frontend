@@ -9,11 +9,15 @@ import { App } from './App';
 
 import './styles/index.scss';
 
-const client = new ApolloClient({
-  // uniswap
+// uniswap (default)
+export const uniswapSubgraph = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
-  // sushiswap
-  // uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
+  cache: new InMemoryCache(),
+});
+
+// sushiswap
+export const sushiswapSubgraph = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
   cache: new InMemoryCache(),
 });
 
@@ -23,14 +27,14 @@ export const getBlockClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-// для hot pairs (hot pairs component)
+// для hot pairs (hot pairs component) -- WILL BE DELETED
 export const uniswapCurrentVersion = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-uniswap-v2',
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
+  <ApolloProvider client={uniswapSubgraph}>
     <Router>
       <Provider value={rootStore}>
         <CurrentExchange>

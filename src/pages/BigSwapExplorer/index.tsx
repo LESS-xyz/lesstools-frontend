@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import moment from 'moment';
+import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
 import InfoBlock from '../../components/InfoBlock/index';
@@ -11,6 +12,8 @@ import { IRowBigSwap } from '../../types/table';
 import { GET_BIG_SWAPS } from '../../queries/index';
 import { IBigSwapInfo } from '../../types/bigSwap';
 import { WHITELIST } from '../../data/whitelist';
+import { useMst } from '../../store/store';
+import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 
 import s from './BigSwapExplorer.module.scss';
 
@@ -29,7 +32,8 @@ const headerData: ITableHeader = [
   { key: 'others', title: 'Others' },
 ];
 
-const BigSwapExplorer: React.FC = () => {
+const BigSwapExplorer: React.FC = observer(() => {
+  const { currentExchange } = useMst();
   const [searchValue, setSearchValue] = useState('');
 
   // table Data
@@ -40,6 +44,7 @@ const BigSwapExplorer: React.FC = () => {
   const { loading, data: swapsData } = useQuery<response>(GET_BIG_SWAPS, {
     variables: { lowerThreshold: 10000 },
     pollInterval: 15000,
+    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
   });
 
   // для фильтрации
@@ -124,7 +129,7 @@ Fundraising Capital"
           <div className={s.info_left}>
             <div className={s.info_title}>Big Swap Explorer</div>
             <div className={s.info_subtitle}>
-              Shows latest big swaps in uniswap with useful information
+              Shows latest big swaps in {currentExchange.exchange} with useful information
             </div>
           </div>
           <div className={s.info_right}>
@@ -139,6 +144,6 @@ Fundraising Capital"
       </div>
     </main>
   );
-};
+});
 
 export default BigSwapExplorer;

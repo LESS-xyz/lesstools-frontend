@@ -1,5 +1,8 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
+
+import { useMst } from '../../../store/store';
 
 import s from './Actions.module.scss';
 
@@ -17,7 +20,9 @@ interface IActionsProps {
   };
 }
 
-const Actions: React.FC<IActionsProps> = React.memo(({ actions }) => {
+const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
+  const { currentExchange } = useMst();
+
   return (
     <div className={s.block}>
       {actions.uniswap && (
@@ -58,7 +63,7 @@ const Actions: React.FC<IActionsProps> = React.memo(({ actions }) => {
       )}
       {actions.liveData && (
         <Link
-          to={`/app/uniswap/pair-explorer/${actions.liveData}`}
+          to={`/app/${currentExchange.exchange}/pair-explorer/${actions.liveData}`}
           data-tip={`Pair Explorer: ${actions.liveData}`}
           data-place="left"
           data-effect="solid"

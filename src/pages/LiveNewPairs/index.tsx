@@ -1,15 +1,18 @@
 import { Helmet } from 'react-helmet';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
+import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
 import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
 import AdBlock from '../../components/AdBlock/index';
-import { GET_LIVE_SWAPS } from '../../queries/index';
+import { GET_LIVE_SWAPS, GET_LIVE_SWAPS_SUSHISWAP } from '../../queries/index';
+import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { INewPair } from '../../types/newPairs';
 import { IRowLiveNewPairs } from '../../types/table';
 import { WHITELIST } from '../../data/whitelist';
+import { useMst } from '../../store/store';
 
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
 
@@ -28,17 +31,22 @@ const headerData: ITableHeader = [
   { key: 'poolRemaining', title: 'Pool Remaining', sortType: 'number' },
 ];
 
-const BigSwapExplorer: React.FC = () => {
+const LiveNewPairs: React.FC = observer(() => {
   const [searchValue, setSearchValue] = useState('');
+  const { currentExchange } = useMst();
 
   // final data for table
   const [tableData, setTableData] = useState<Array<IRowLiveNewPairs>>([]);
 
   // query new pairs
   type response = { pairs: Array<INewPair> };
-  const { loading, data: liveSwaps } = useQuery<response>(GET_LIVE_SWAPS, {
-    pollInterval: 15000,
-  });
+  const { loading, data: liveSwaps } = useQuery<response>(
+    currentExchange.exchange === 'uniswap' ? GET_LIVE_SWAPS : GET_LIVE_SWAPS_SUSHISWAP,
+    {
+      pollInterval: 15000,
+      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    },
+  );
 
   // для фильтрации
   // сначала приходит ответ с бэка, это сетается в setSwapsFromBackend,
@@ -135,6 +143,6 @@ Fundraising Capital"
       </div>
     </main>
   );
-};
+});
 
-export default BigSwapExplorer;
+export default LiveNewPairs;

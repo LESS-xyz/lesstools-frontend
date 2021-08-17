@@ -1,26 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { ETH_PRICE_QUERY } from '../../queries/index';
 import BigNumber from 'bignumber.js/bignumber';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import { getGasPrice, IGasPrice } from '../../api/getGasPrice';
 import { useMst } from '../../store/store';
 import { WHITELIST } from '../../data/whitelist';
+import { ETH_PRICE_QUERY } from '../../queries/index';
+import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 
 import s from './InfoBlock.module.scss';
 
 import gasIcon from '../../assets/img/icons/gas.svg';
 import hotIcon from '../../assets/img/icons/hot.svg';
-import { observer } from 'mobx-react-lite';
 
 const InfoBlock: React.FC = observer(() => {
-  const { hotPairs } = useMst();
+  const { hotPairs, currentExchange } = useMst();
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
   type response = { bundle: { ethPrice: string } };
-  const { data: ethPrice } = useQuery<response>(ETH_PRICE_QUERY, { pollInterval: 30000 });
+  const { data: ethPrice } = useQuery<response>(ETH_PRICE_QUERY, {
+    pollInterval: 30000,
+    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+  });
 
   // get gas price every 10 sec
   useEffect(() => {

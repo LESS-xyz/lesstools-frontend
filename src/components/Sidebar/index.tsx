@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
           imgDark={pair}
           imgWhite={pairWhite}
           text="Pair Explorer"
-          to="/app/sushiswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
+          to="/app/sushiswap/pair-explorer/0xc3f279090a47e80990fe3a9c30d24cb117ef91a8"
         />
         <LinkSidebar
           imgDark={bigSwap}

@@ -67,15 +67,13 @@ interface IPairInfoBodyProps {
 
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
   ({ pairInfo, pairId, tokenInfoFromCoingecko }) => {
-    if (!pairInfo.base_info) return <div>No data</div>;
-
     // tbr = token being reviewd
-    const [tbr, setTbr] = useState(pairInfo.base_info.token1);
+    const [tbr, setTbr] = useState(pairInfo?.base_info?.token1);
     const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
-    const [otherToken, setOtherToken] = useState(pairInfo.base_info.token0);
+    const [otherToken, setOtherToken] = useState(pairInfo?.base_info?.token0);
 
     useEffect(() => {
-      if (WHITELIST.includes(pairInfo.base_info.token1.id)) {
+      if (WHITELIST.includes(pairInfo?.base_info?.token1?.id)) {
         setTbr(pairInfo.base_info.token0);
         setTbrIndex('0');
         setOtherToken(pairInfo.base_info.token1);
@@ -99,8 +97,10 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
         ? +pairInfo.tokens_prices_24h_ago?.token1.derivedETH
         : +pairInfo.tokens_prices_24h_ago?.token0.derivedETH;
     const tokenPrice24HoursChange = new BigNumber(
-      (+tbr.derivedETH / tokenPrice24hAgo) * 100 - 100,
+      (+tbr?.derivedETH / tokenPrice24hAgo) * 100 - 100,
     ).toFormat(2);
+
+    if (!pairInfo.base_info) return <div>No data</div>;
 
     return (
       <section className={s.card}>

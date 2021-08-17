@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-// get pair-info-card at pair-explorer page
+// get pair-info-card at pair-explorer page UNISWAP
 export const GET_PAIR_INFO = gql`
   query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
@@ -33,6 +33,52 @@ export const GET_PAIR_INFO = gql`
       where: { pair: $id }
     ) {
       hourlyVolumeUSD
+    }
+    tokens_prices_24h_ago: pair(block: { number: $blockNumber }, id: $id) {
+      token0 {
+        derivedETH
+        derivedUSD
+      }
+      token1 {
+        derivedETH
+        derivedUSD
+      }
+    }
+  }
+`;
+
+export const GET_PAIR_INFO_SUSHIWAP = gql`
+  query Pair($id: ID!, $blockNumber: Int) {
+    base_info: pair(id: $id) {
+      reserveUSD
+      reserve0
+      reserve1
+      token0 {
+        symbol
+        derivedETH
+        derivedUSD
+        totalSupply
+        id
+      }
+      token1 {
+        symbol
+        derivedETH
+        derivedUSD
+        totalSupply
+        id
+      }
+      txCount
+      liquidityProviderCount
+      volumeUSD
+      createdAtTimestamp: timestamp
+    }
+    h24_ago_by_sum: pairHourDatas(
+      first: 24
+      orderBy: date
+      orderDirection: desc
+      where: { pair: $id }
+    ) {
+      hourlyVolumeUSD: volumeUSD
     }
     tokens_prices_24h_ago: pair(block: { number: $blockNumber }, id: $id) {
       token0 {
@@ -93,7 +139,7 @@ export const GET_PAIR_SWAPS = gql`
   }
 `;
 
-// big swaps table
+// big swaps table (sushiswap and uniswap)
 export const GET_BIG_SWAPS = gql`
   query getBigSwaps($lowerThreshold: BigDecimal) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { amountUSD_gt: $lowerThreshold }) {
@@ -130,9 +176,37 @@ export const GET_BIG_SWAPS = gql`
 // live new pairs table
 export const GET_LIVE_SWAPS = gql`
   query getLiveSwaps {
-    pairs(first: 1000, orderBy: createdAtTimestamp, orderDirection: desc) {
+    pairs(first: 100, orderBy: createdAtTimestamp, orderDirection: desc) {
       id
       createdAtTimestamp
+      creationTxnHash
+      reserve0
+      reserve1
+      initialReserve0
+      initialReserve1
+      reserveUSD
+      token0 {
+        id
+        symbol
+        derivedETH
+        derivedUSD
+      }
+      token1 {
+        id
+        symbol
+        derivedETH
+        derivedUSD
+      }
+    }
+  }
+`;
+
+// live new pairs table SUSHISWAP
+export const GET_LIVE_SWAPS_SUSHISWAP = gql`
+  query getLiveSwaps {
+    pairs(first: 100, orderBy: timestamp, orderDirection: desc) {
+      id
+      createdAtTimestamp: timestamp
       creationTxnHash
       reserve0
       reserve1
