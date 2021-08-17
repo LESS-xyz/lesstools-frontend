@@ -12,6 +12,7 @@ interface ISuggestionProps {
   holders: string;
   txCount: string;
   onClick: () => void;
+  exchange: 'uniswap' | 'sushiswap';
 }
 
 const Suggestion: React.FC<ISuggestionProps> = ({
@@ -23,9 +24,14 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   holders,
   txCount,
   onClick,
+  exchange,
 }) => {
   return (
-    <Link to={`/pair-explorer/${pairId}`} className={s.suggestion} onClick={() => onClick()}>
+    <Link
+      to={`app/${exchange}/pair-explorer/${pairId}`}
+      className={s.suggestion}
+      onClick={() => onClick()}
+    >
       <div className={s.suggestion_title}>
         {otherSymbol}/{tbrSymbol} - {tbrName}
       </div>

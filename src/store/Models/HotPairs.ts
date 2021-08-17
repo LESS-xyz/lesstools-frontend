@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree';
 const TokenModel = types.model({
   id: types.string,
   symbol: types.string,
+  derivedUSD: types.string,
 });
 
 const PairModel = types.model({
@@ -18,12 +19,16 @@ const InfoModel = types.model({
 
 const HotPairsModel = types
   .model({
-    pairs: types.array(InfoModel),
+    uniswap: types.array(InfoModel),
+    sushiswap: types.array(InfoModel),
   })
   .actions((self) => ({
-    //   TODO: fix any
-    setPairs(pairs: any) {
-      self.pairs = pairs;
+    // TODO: fix any
+    setUniPairs(pairs: any) {
+      self.uniswap = pairs;
+    },
+    setSushiPairs(pairs: any) {
+      self.sushiswap = pairs;
     },
   }));
 

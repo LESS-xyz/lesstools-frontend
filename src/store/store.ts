@@ -14,7 +14,8 @@ export const Store = RootModel.create({
     openedModals: [],
   },
   hotPairs: {
-    pairs: [],
+    uniswap: [],
+    sushiswap: [],
   },
   currentExchange: {
     exchange: 'uniswap',

@@ -1,9 +1,37 @@
+import { observer } from 'mobx-react-lite';
+
+import { IPairFromGraph } from '../../../components/CommonQueries/HotPairs';
+
 import s from './HotTable.module.scss';
 
 import uniLogo from '../../../assets/img/sections/board-page/uni-logo.svg';
 import compass from '../../../assets/img/sections/board-page/compass.svg';
 
-const HotTable: React.FC = () => {
+interface ITableCellProps {
+  tokenSymbol: string;
+  tokenPrice: string;
+  pairId: string;
+}
+
+const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice }) => {
+  return (
+    <div className={s.table_body__item}>
+      <div className={s.table_body__item_left}>
+        <div className={s.table_body__item_left__token}>{tokenSymbol}</div>
+        <p>${tokenPrice}</p>
+      </div>
+      <div className={s.table_body__item_right}>
+        <img src={compass} alt="compass" />
+      </div>
+    </div>
+  );
+};
+
+interface IHotTableProps {
+  pairs: Array<IPairFromGraph>;
+}
+
+const HotTable: React.FC<IHotTableProps> = observer(({ pairs }) => {
   return (
     <section className={s.table}>
       <div className={s.table_header}>
@@ -19,117 +47,16 @@ const HotTable: React.FC = () => {
         </div>
       </div>
       <div className={s.table_body}>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
-        <div className={s.table_body__item}>
-          <div className={s.table_body__item_left}>
-            <div className={s.table_body__item_left__token}>LIME</div>
-            <p>$0.045645</p>
-          </div>
-          <div className={s.table_body__item_right}>
-            <img src={compass} alt="compass" />
-          </div>
-        </div>
+        {pairs.map((pair) => (
+          <TableCell
+            tokenPrice={Number(pair.pair.token0.derivedUSD).toFixed(2)}
+            tokenSymbol={pair.pair.token0.symbol}
+            pairId={pair.pair.id}
+          />
+        ))}
       </div>
     </section>
   );
-};
+});
 
 export default HotTable;

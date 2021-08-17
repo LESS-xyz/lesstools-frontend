@@ -1,11 +1,13 @@
 import React, { Dispatch, useEffect, useState, SetStateAction } from 'react';
 import { useLazyQuery } from '@apollo/client';
+import { observer } from 'mobx-react-lite';
+
 import Suggestion from './Suggestion/index';
 import OutsideAlerter from '../../utils/outsideClickWrapper';
-
 import Search from '../Search/index';
 import { SEARCH_BY_ID, SEARCH_BY_NAME } from '../../queries/index';
 import { ISearchByIdResponse, ISearchBySymbolResponse, IPairsBySymbol } from '../../types/search';
+import { useMst } from '../../store/store';
 
 import s from './PairsSearch.module.scss';
 
@@ -26,7 +28,8 @@ interface IPairSearchProps {
   setValue: Dispatch<SetStateAction<string>>;
 }
 
-const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }) => {
+const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, placeholder }) => {
+  const { currentExchange } = useMst();
   // запросы на граф
   const [
     searchById,
@@ -119,6 +122,7 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
                       holders="soon"
                       txCount={searchByIdData?.match_by_pair[0].txCount}
                       onClick={() => setIsClickedOutside(true)}
+                      exchange={currentExchange.exchange}
                     />
                     {/* TODO: ADD TYPES FOR TOKENS */}
                     {/* PAIRS SEARCHED BY TOKEN ID */}
@@ -134,6 +138,7 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
                           holders="soon"
                           txCount={pair.txCount}
                           onClick={() => setIsClickedOutside(true)}
+                          exchange={currentExchange.exchange}
                         />
                       );
                     })}
@@ -155,6 +160,7 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
                           holders="soon"
                           txCount={symbolData.txCount}
                           onClick={() => setIsClickedOutside(true)}
+                          exchange={currentExchange.exchange}
                         />
                       )),
                     )}
@@ -170,6 +176,7 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
                           holders="soon"
                           txCount={symbolData.txCount}
                           onClick={() => setIsClickedOutside(true)}
+                          exchange={currentExchange.exchange}
                         />
                       )),
                     )}
@@ -182,6 +189,6 @@ const PairSearch: React.FC<IPairSearchProps> = ({ value, setValue, placeholder }
       </div>
     </OutsideAlerter>
   );
-};
+});
 
 export default PairSearch;

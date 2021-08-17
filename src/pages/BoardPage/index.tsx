@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { observer } from 'mobx-react-lite';
 
 import PairsSearch from '../../components/PairsSearch/index';
 import AdBlock from '../../components/AdBlock/index';
 import HotTable from './HotTable/index';
 import Tool from './Tool/index';
 import Partner from './Partner/index';
+import { useMst } from '../../store/store';
 
 import s from './BoardPage.module.scss';
 
@@ -15,8 +17,9 @@ import bg from '../../assets/img/sections/board-page/background.svg';
 import uniLogo from '../../assets/img/sections/board-page/uni-logo.svg';
 import sushiLogo from '../../assets/img/sections/board-page/sushi-logo.svg';
 
-const BoardPage: React.FC = () => {
+const BoardPage: React.FC = observer(() => {
   const [searchValue, setSearchValue] = useState('');
+  const { hotPairs } = useMst();
 
   return (
     <main className={s.board}>
@@ -38,8 +41,13 @@ Fundraising Capital"
             setValue={setSearchValue}
           />
           <div className={s.tables}>
-            <HotTable />
-            <HotTable />
+            {/* TODO: FIX THIS SHIT */}
+            {/* eslint-disable-next-line */}
+            {/* @ts-ignore */}
+            <HotTable pairs={hotPairs.uniswap} />
+            {/* eslint-disable-next-line */}
+            {/* @ts-ignore */}
+            <HotTable pairs={hotPairs.sushiswap} />
           </div>
           <div className={s.tools}>
             <Tool
@@ -57,7 +65,7 @@ Fundraising Capital"
               icon={sushiLogo}
               links={[
                 '/app/sushiswap/live-new-pairs',
-                '/app/sushiswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974',
+                '/app/sushiswap/pair-explorer/0xc3f279090a47e80990fe3a9c30d24cb117ef91a8',
                 '/app/sushiswap/big-swap-explorer',
               ]}
               keyName="sushi"
@@ -91,6 +99,6 @@ Fundraising Capital"
       </div>
     </main>
   );
-};
+});
 
 export default BoardPage;
