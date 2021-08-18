@@ -14,18 +14,36 @@ const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
   const [isHover, setIsHover] = useState(false);
   const loc = useLocation();
   useEffect(() => {
-    if (to && loc.pathname === to) {
+    if (
+      to &&
+      loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/')
+    ) {
       setIsHover(true);
     } else setIsHover(false);
   }, [loc, to]);
 
   if (to)
     return (
-      <NavLink activeClassName={s.link_active} exact isActive={() => loc.pathname === to} to={to}>
+      <NavLink
+        activeClassName={s.link_active}
+        exact
+        isActive={() =>
+          loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/')
+        }
+        to={to}
+      >
         <div
           className={s.link}
-          onBlur={() => setIsHover(loc.pathname === to)}
-          onMouseOut={() => setIsHover(loc.pathname === to)}
+          onBlur={() =>
+            setIsHover(
+              loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/'),
+            )
+          }
+          onMouseOut={() =>
+            setIsHover(
+              loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/'),
+            )
+          }
           onFocus={() => setIsHover(true)}
           onMouseOver={() => setIsHover(true)}
         >

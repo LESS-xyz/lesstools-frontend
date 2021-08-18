@@ -5,9 +5,15 @@ import { observer } from 'mobx-react-lite';
 import Suggestion from './Suggestion/index';
 import OutsideAlerter from '../../utils/outsideClickWrapper';
 import Search from '../Search/index';
-import { SEARCH_BY_ID, SEARCH_BY_NAME } from '../../queries/index';
+import {
+  SEARCH_BY_ID,
+  SEARCH_BY_NAME,
+  SEARCH_BY_ID_SUSHISWAP,
+  SEARCH_BY_NAME_SUSHISWAP,
+} from '../../queries/index';
 import { ISearchByIdResponse, ISearchBySymbolResponse, IPairsBySymbol } from '../../types/search';
 import { useMst } from '../../store/store';
+import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 
 import s from './PairsSearch.module.scss';
 
@@ -34,11 +40,21 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, plac
   const [
     searchById,
     { loading: searchByIdLoading, data: searchByIdData },
-  ] = useLazyQuery<ISearchByIdResponse>(SEARCH_BY_ID);
+  ] = useLazyQuery<ISearchByIdResponse>(
+    currentExchange.exchange === 'uniswap' ? SEARCH_BY_ID : SEARCH_BY_ID_SUSHISWAP,
+    {
+      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    },
+  );
   const [
     searchByName,
     { loading: searchByNameLoading, data: searchByNameData },
-  ] = useLazyQuery<ISearchBySymbolResponse>(SEARCH_BY_NAME);
+  ] = useLazyQuery<ISearchBySymbolResponse>(
+    currentExchange.exchange === 'uniswap' ? SEARCH_BY_NAME : SEARCH_BY_NAME_SUSHISWAP,
+    {
+      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    },
+  );
 
   // формирование пар по символу (форматирование данных с графа в нужный формат)
   const [pairsByNameData, setPairsByNameData] = useState<IPairsBySymbol>([]);
@@ -107,7 +123,9 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, plac
         />
         {isActive && (
           <div className={s.suggestions}>
-            <div className={s.suggestions_title}>Search results in UNISWAP</div>
+            <div className={s.suggestions_title}>
+              Search results in <span>{currentExchange.exchange}</span>
+            </div>
             <div className={s.suggestions_body}>
               <div className={s.suggestions_body__inner}>
                 {searchByIdData?.match_by_pair[0] && (

@@ -19,7 +19,7 @@ import sushiLogo from '../../assets/img/sections/board-page/sushi-logo.svg';
 
 const BoardPage: React.FC = observer(() => {
   const [searchValue, setSearchValue] = useState('');
-  const { hotPairs } = useMst();
+  const { hotPairs, currentExchange } = useMst();
 
   return (
     <main className={s.board}>
@@ -36,18 +36,13 @@ Fundraising Capital"
         <div className={s.container}>
           <AdBlock adImg={AdImg} />
           <PairsSearch
-            placeholder="Search pair by token symbol / token id / pair contract id."
+            placeholder={`Search ${currentExchange.exchange} pairs by token symbol / token id / pair contract id.`}
             value={searchValue}
             setValue={setSearchValue}
           />
           <div className={s.tables}>
-            {/* TODO: FIX THIS SHIT */}
-            {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            <HotTable pairs={hotPairs.uniswap} />
-            {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            <HotTable pairs={hotPairs.sushiswap} />
+            <HotTable title="HOT UNI" logo={uniLogo} pairs={hotPairs.uniswap} />
+            <HotTable title="HOT SUSHI" logo={sushiLogo} pairs={hotPairs.sushiswap} />
           </div>
           <div className={s.tools}>
             <Tool

@@ -205,7 +205,7 @@ Fundraising Capital"
           <PairsSearch
             value={searchValue}
             setValue={setSearchValue}
-            placeholder="Search pair by symbol/pair contract"
+            placeholder={`Search ${currentExchange.exchange} pairs by symbol/pair contract`}
           />
         </div>
 

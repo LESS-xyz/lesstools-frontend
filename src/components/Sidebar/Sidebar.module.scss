@@ -98,9 +98,6 @@
   cursor: pointer;
   background: #21194e;
   transition: 0.4s ease;
-  &:hover {
-    justify-content: flex-start;
-  }
 
   &_text {
     transition: opacity 0.1s ease;
@@ -112,6 +109,8 @@
   }
 
   &:hover {
+    justify-content: flex-start;
+
     background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
   }
 }

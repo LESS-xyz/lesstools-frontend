@@ -276,6 +276,43 @@ export const SEARCH_BY_ID = gql`
   }
 `;
 
+// search by id SUSHISWAP
+export const SEARCH_BY_ID_SUSHISWAP = gql`
+  query getPairByPairId($id: ID) {
+    match_by_pair: pairs(where: { id_gte: $id }, first: 3) {
+      id
+      txCount
+      token0 {
+        id
+        symbol
+        name
+      }
+      token1 {
+        id
+        symbol
+        name
+      }
+    }
+    match_by_token: tokens(where: { id_gte: $id }, first: 3) {
+      id
+      pairBase: basePairs {
+        id
+        txCount
+        token0 {
+          id
+          symbol
+          name
+        }
+        token1 {
+          id
+          symbol
+          name
+        }
+      }
+    }
+  }
+`;
+
 // SEARCH BY TOKEN NAME
 export const SEARCH_BY_NAME = gql`
   query searchByName($name: String, $name2: String) {
@@ -317,8 +354,66 @@ export const SEARCH_BY_NAME = gql`
   }
 `;
 
+// search by symbol SUSHISWAP
+export const SEARCH_BY_NAME_SUSHISWAP = gql`
+  query searchByName($name: String, $name2: String) {
+    match_by_symbol: tokens(where: { symbol_contains: $name }) {
+      id
+      symbol
+      pairBase: basePairs {
+        id
+        txCount
+        token0 {
+          symbol
+          name
+          id
+        }
+        token1 {
+          symbol
+          name
+          id
+        }
+      }
+      pairQuote: quotePairs {
+        id
+        txCount
+        token0 {
+          symbol
+          name
+          id
+        }
+        token1 {
+          symbol
+          name
+          id
+        }
+      }
+    }
+    match_by_symbol1: tokens(where: { symbol_contains: $name2 }, first: 1) {
+      id
+    }
+  }
+`;
+
 // hot pairs UNISWAP
+const PAIR_FRAGMENT = gql`
+  fragment PairToken on Pair {
+    id
+    token0 {
+      symbol
+      id
+      derivedUSD
+    }
+    token1 {
+      symbol
+      id
+      derivedUSD
+    }
+  }
+`;
+
 export const GET_HOT_PAIRS = gql`
+  ${PAIR_FRAGMENT}
   query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
     currentHour: pairHourDatas(
       orderBy: hourlyTxns
@@ -326,17 +421,7 @@ export const GET_HOT_PAIRS = gql`
       where: { hourStartUnix: $timestamp1 }
     ) {
       pair {
-        id
-        token0 {
-          symbol
-          id
-          derivedUSD
-        }
-        token1 {
-          symbol
-          id
-          derivedUSD
-        }
+        ...PairToken
       }
       hourlyTxns
     }
@@ -347,17 +432,7 @@ export const GET_HOT_PAIRS = gql`
       where: { hourStartUnix: $timestamp2 }
     ) {
       pair {
-        id
-        token0 {
-          symbol
-          id
-          derivedUSD
-        }
-        token1 {
-          symbol
-          id
-          derivedUSD
-        }
+        ...PairToken
       }
       hourlyTxns
     }
@@ -368,24 +443,15 @@ export const GET_HOT_PAIRS = gql`
       where: { hourStartUnix: $timestamp3 }
     ) {
       pair {
-        id
-        token0 {
-          symbol
-          id
-          derivedUSD
-        }
-        token1 {
-          symbol
-          id
-          derivedUSD
-        }
+        ...PairToken
       }
       hourlyTxns
     }
   }
 `;
-
+// hot pairs SUSHISWAP
 export const GET_HOT_PAIRS_SUSHISWAP = gql`
+  ${PAIR_FRAGMENT}
   query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
     currentHour: pairHourDatas(
       orderBy: txCount
@@ -393,51 +459,21 @@ export const GET_HOT_PAIRS_SUSHISWAP = gql`
       where: { date: $timestamp1 }
     ) {
       pair {
-        id
-        token0 {
-          symbol
-          id
-          derivedUSD
-        }
-        token1 {
-          symbol
-          id
-          derivedUSD
-        }
+        ...PairToken
       }
       hourlyTxns: txCount
     }
 
     oneHour: pairHourDatas(orderBy: txCount, orderDirection: desc, where: { date: $timestamp2 }) {
       pair {
-        id
-        token0 {
-          symbol
-          id
-          derivedUSD
-        }
-        token1 {
-          symbol
-          id
-          derivedUSD
-        }
+        ...PairToken
       }
       hourlyTxns: txCount
     }
 
     twoHours: pairHourDatas(orderBy: txCount, orderDirection: desc, where: { date: $timestamp3 }) {
       pair {
-        id
-        token0 {
-          symbol
-          id
-          derivedUSD
-        }
-        token1 {
-          symbol
-          id
-          derivedUSD
-        }
+        ...PairToken
       }
       hourlyTxns: txCount
     }
