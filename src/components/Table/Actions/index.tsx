@@ -8,6 +8,7 @@ import s from './Actions.module.scss';
 
 import etherscan from '../../../assets/img/icons/table/actions-etherscan.svg';
 import uniswap from '../../../assets/img/icons/table/actions-uniswap.svg';
+import sushiswap from '../../../assets/img/icons/table/actions-sushiswap.svg';
 import unicrypt from '../../../assets/img/icons/table/actions-unicrypt.svg';
 import compass from '../../../assets/img/icons/table/actions-compass.svg';
 
@@ -30,11 +31,15 @@ const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
           data-tip={`Buy at uniswap: ${actions.uniswap}`}
           data-place="left"
           data-effect="solid"
-          href={`https://app.uniswap.org/#/swap?outputCurrency=${actions.uniswap}`}
+          href={
+            currentExchange.exchange === 'uniswap'
+              ? `https://app.uniswap.org/#/swap?outputCurrency=${actions.uniswap}`
+              : `https://app.sushi.com/swap?outputCurrency=${actions.uniswap}`
+          }
           target="_blank"
           rel="noreferrer"
         >
-          <img src={uniswap} alt="uniswap" />
+          <img src={currentExchange.exchange === 'uniswap' ? uniswap : sushiswap} alt="uniswap" />
         </a>
       )}
       {actions.etherscan && (
