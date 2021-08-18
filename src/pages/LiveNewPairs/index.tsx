@@ -124,8 +124,8 @@ Fundraising Capital"
         />
       </Helmet>
       <div className={s.container}>
-        <AdBlock adImg={ad} />
         <InfoBlock />
+        <AdBlock adImg={ad} />
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Live New Pairs</div>

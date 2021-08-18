@@ -22,51 +22,9 @@ import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCo
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
-import Favorites from './Favorites/index';
 import { useMst } from '../../store/store';
 
 import s from './PairExplorer.module.scss';
-
-import arrow from '../../assets/img/icons/arrow-right.svg';
-import compassBlue from '../../assets/img/icons/compass-blue.svg';
-import compassGr from '../../assets/img/icons/compass-gr.svg';
-import tradesBlue from '../../assets/img/icons/trades-blue.svg';
-import tradesGr from '../../assets/img/icons/trades-gr.svg';
-import flagBlue from '../../assets/img/icons/flag-blue.svg';
-import flagGr from '../../assets/img/icons/flag-gr.svg';
-
-type Options = 'tokenInfo' | 'trades' | 'myTrades';
-
-interface IOptionProps {
-  title: string;
-  optionName: Options;
-  currentOptionName: string;
-  setCurrentOption: (option: Options) => void;
-  img: string;
-  imgActive: string;
-}
-
-const Option: React.FC<IOptionProps> = ({
-  optionName,
-  currentOptionName,
-  setCurrentOption,
-  title,
-  img,
-  imgActive,
-}) => {
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      className={`${s.option} ${currentOptionName === optionName && s.active}`}
-      onKeyDown={() => {}}
-      onClick={() => setCurrentOption(optionName)}
-    >
-      <img src={currentOptionName === optionName ? imgActive : img} alt="img" />
-      {title}
-    </div>
-  );
-};
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
@@ -168,9 +126,6 @@ const PairExplorer: React.FC = () => {
     // eslint-disable-next-line
   }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
 
-  // переключалка внизу
-  const [currentOption, setCurrentOption] = useState<Options>('tokenInfo');
-  const [isFavs, setIsFavs] = useState(false);
   // ⚠️HARDCODE
   const userAdress = '0x1414b85fe8570780e2b3468588e4dcdd901a76a2';
 
@@ -192,106 +147,64 @@ Fundraising Capital"
 
       <div className={s.container}>
         <InfoBlock />
-        <div className={s.info}>
-          {!pairInfo ? (
-            <Loader />
-          ) : (
-            <PairInfoHeader
-              token0={pairInfo?.base_info?.token0}
-              token1={pairInfo?.base_info?.token1}
-              tokenInfoFromCoingecko={tokenInfoFromCoingecko}
-            />
-          )}
-          <PairsSearch
-            value={searchValue}
-            setValue={setSearchValue}
-            placeholder={`Search ${currentExchange.exchange} pairs by symbol/pair contract`}
-          />
-        </div>
 
         <div className={s.main}>
-          <div className={`${s.top} ${isFavs && s.active}`}>
-            <div className={s.chart}>
-              <TradingViewWidget
-                allowfullscreen
-                theme={Themes.DARK}
-                autosize
-                hide_side_toolbar={false}
-                style={BarStyles.AREA}
-                // TODO: fix pair (add weth or thether ?)
-                symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
-              />
-            </div>
-            <div className={`${s.favs} ${isFavs && s.active}`}>
-              <div className={s.favs_inner}>
-                <Favorites />
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className={`${s.favs_button} ${isFavs && s.active}`}
-                  onKeyDown={() => {}}
-                  onClick={() => setIsFavs(!isFavs)}
-                >
-                  <img src={arrow} alt="X" />
-                </div>
+          <div className={s.main_inner}>
+            <div className={s.left}>
+              <div className={s.left_inner}>
+                {pairInfo ? (
+                  <PairInfoBody
+                    loading={loading}
+                    pairId={pairId}
+                    tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                    pairInfo={pairInfo}
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
-          </div>
-
-          {/* нижняя часть страницы */}
-          <div className={s.bottom}>
-            <div className={s.options}>
-              <Option
-                title="Token info"
-                setCurrentOption={setCurrentOption}
-                optionName="tokenInfo"
-                currentOptionName={currentOption}
-                img={compassBlue}
-                imgActive={compassGr}
-              />
-              <Option
-                title="Trades"
-                setCurrentOption={setCurrentOption}
-                optionName="trades"
-                currentOptionName={currentOption}
-                img={tradesBlue}
-                imgActive={tradesGr}
-              />
-              <Option
-                title="My Trades"
-                setCurrentOption={setCurrentOption}
-                optionName="myTrades"
-                currentOptionName={currentOption}
-                img={flagBlue}
-                imgActive={flagGr}
-              />
-            </div>
-            <div className={s.bottom_content}>
-              {currentOption === 'tokenInfo' && (
-                <div className={s.card}>
-                  {pairInfo ? (
-                    <PairInfoBody
-                      loading={loading}
-                      pairId={pairId}
-                      tokenInfoFromCoingecko={tokenInfoFromCoingecko}
-                      pairInfo={pairInfo}
-                    />
-                  ) : (
-                    <Loader />
-                  )}
-                </div>
-              )}
-              {currentOption === 'trades' && (
-                <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
-              )}
-              {currentOption === 'myTrades' && (
-                <Table
-                  data={swapsData.filter((row) => row.maker === userAdress)}
-                  header={swapsHeader}
-                  tableType="pairExplorer"
+            <div className={s.center}>
+              <div className={s.info}>
+                {!pairInfo ? (
+                  <Loader />
+                ) : (
+                  <PairInfoHeader
+                    token0={pairInfo?.base_info?.token0}
+                    token1={pairInfo?.base_info?.token1}
+                    tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                  />
+                )}
+                <PairsSearch
+                  value={searchValue}
+                  setValue={setSearchValue}
+                  placeholder={`Search ${currentExchange.exchange} pairs by symbol/pair contract`}
                 />
-              )}
+              </div>
+              <div className={s.chart}>
+                <TradingViewWidget
+                  allowfullscreen
+                  theme={Themes.DARK}
+                  autosize
+                  hide_side_toolbar={false}
+                  style={BarStyles.AREA}
+                  // TODO: fix pair (add weth or thether ?)
+                  symbol={`${pairInfo?.base_info?.token0?.symbol}${pairInfo?.base_info?.token1?.symbol}`}
+                />
+              </div>
             </div>
+
+            <div className={s.right}>
+              <div className={s.right_inner}>right</div>
+            </div>
+
+            {/* нижняя часть страницы */}
+            <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
+            <Table
+              data={swapsData.filter((row) => row.maker === userAdress)}
+              header={swapsHeader}
+              tableType="pairExplorer"
+            />
           </div>
         </div>
       </div>

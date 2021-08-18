@@ -8,7 +8,7 @@ import CommunityTrust from '../CommunityTrust/index';
 import Loader from '../../../../components/Loader/index';
 import { WHITELIST } from '../../../../data/whitelist';
 import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
-import { copyText } from '../../../../utils/copyText';
+// import { copyText } from '../../../../utils/copyText';
 import { useMst } from '../../../../store/store';
 import MoreInfoModal from '../../../../components/Modals/MoreInfoModal/index';
 import ShareModal from '../../../../components/Modals/ShareModal/index';
@@ -66,8 +66,8 @@ interface IPairInfoBodyProps {
 }
 
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
-  ({ pairInfo, pairId, tokenInfoFromCoingecko }) => {
-    // tbr = token being reviewd
+  ({ pairInfo, tokenInfoFromCoingecko }) => {
+    // tbr = token being reviewed
     const [tbr, setTbr] = useState(pairInfo?.base_info?.token1);
     const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
     const [otherToken, setOtherToken] = useState(pairInfo?.base_info?.token0);
@@ -124,75 +124,19 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           </div>
         ) : (
           <div className={s.card_inner}>
-            <div className={s.card_section}>
-              <div className={s.card_section__inner}>
-                <div className={s.card_section__left}>
-                  <div className={s.card_copy}>
-                    <div className={s.card_copy__contract}>
-                      <span>Token contract: </span>
-                      <div
-                        className={s.card_copy__adress}
-                        data-tip="Click to copy"
-                        tabIndex={0}
-                        onKeyDown={() => {}}
-                        role="button"
-                        onClick={() => copyText(tbr.id)}
-                      >
-                        {tbr.id.slice(0, 6)}...
-                        {tbr.id.slice(-4)}
-                      </div>
-                    </div>
-                    <div
-                      tabIndex={0}
-                      data-tip="Click to copy"
-                      onKeyDown={() => {}}
-                      role="button"
-                      className={s.card_copy__adress}
-                      onClick={() => copyText(pairId)}
-                    >
-                      Pair
-                    </div>
-                  </div>
-                  <div className={s.card_body__price}>
-                    ${new BigNumber(tbr.derivedUSD).toFormat(2)}
-                  </div>
-                  <div
-                    className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}
-                  >
-                    <span>
-                      (24h:{' '}
-                      {tokenPrice24HoursChange === 'NaN'
-                        ? 'No data'
-                        : `${tokenPrice24HoursChange}%`}
-                      )
-                    </span>{' '}
-                    {new BigNumber(tbr.derivedETH).toFormat(7)} ETH
-                  </div>
-                  <button
-                    tabIndex={0}
-                    type="button"
-                    onKeyDown={handleOpenMoreInfoModal}
-                    onClick={handleOpenMoreInfoModal}
-                    className={s.market_cap_button}
-                  >
-                    View market cap
-                  </button>
+            <div className={s.header}>
+              <div className={s.card_buttons}>
+                <div
+                  onClick={handleOpenShareModal}
+                  tabIndex={0}
+                  onKeyDown={handleOpenShareModal}
+                  role="button"
+                  className={s.card_button}
+                >
+                  <img src={shareImg} alt="img" />
                 </div>
-                <div className={s.card_section__right}>
-                  <div className={s.card_buttons}>
-                    <div
-                      onClick={handleOpenShareModal}
-                      tabIndex={0}
-                      onKeyDown={handleOpenShareModal}
-                      role="button"
-                      className={s.card_button}
-                    >
-                      <img src={shareImg} alt="img" />
-                    </div>
-                    <div className={s.card_button}>
-                      <img src={favImg} alt="img" />
-                    </div>
-                  </div>
+                <div className={s.card_button}>
+                  <img src={favImg} alt="img" />
                 </div>
               </div>
               <div
@@ -205,100 +149,72 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 Trade
               </div>
             </div>
-            <div className={s.card_section}>
-              <div className={s.card_section__inner}>
-                <div className={s.card_section__left}>
-                  <div className={s.card_section__info}>
-                    <div className={s.card_info}>
-                      <div className={s.card_info__title}>Total liquidity:</div>
-                      <div className={s.card_info__value}>
-                        ${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}
-                      </div>
-                    </div>
-                    <div className={s.card_info}>
-                      <div className={s.card_info__title}>Daily volume:</div>
-                      <div className={s.card_info__value}>
-                        $
-                        {new BigNumber(
-                          pairInfo.h24_ago_by_sum.reduce((acc, cur) => {
-                            return acc + Number(cur.hourlyVolumeUSD);
-                          }, 0),
-                        ).toFormat(2)}
-                      </div>
-                    </div>
-                    <div className={s.card_info}>
-                      <div className={s.card_info__title}>
-                        Pooled {pairInfo.base_info.token0.symbol}:
-                      </div>
-                      <div className={s.card_info__value}>
-                        {new BigNumber(pairInfo.base_info.reserve0).toFormat(2)}
-                      </div>
-                    </div>
-                    <div className={s.card_info}>
-                      <div className={s.card_info__title}>
-                        Pooled {pairInfo.base_info.token1.symbol}:
-                      </div>
-                      <div className={s.card_info__value}>
-                        {new BigNumber(pairInfo.base_info.reserve1).toFormat(2)}
-                      </div>
-                    </div>
-                    <div className={s.card_info}>
-                      <div className={s.card_info__title}>Total tx:</div>
-                      <div className={s.card_info__value}>{pairInfo.base_info.txCount}</div>
-                    </div>
-                    <div className={s.card_info}>
-                      <div className={s.card_info__title}>Holders:</div>
-                      <div className={s.card_info__value}>soon</div>
-                    </div>
-                  </div>
+            <div className={s.price}>
+              <div className={s.card_body__price}>${new BigNumber(tbr.derivedUSD).toFormat(5)}</div>
+              <div className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}>
+                <span>
+                  (24h:{' '}
+                  {tokenPrice24HoursChange === 'NaN' ? 'No data' : `${tokenPrice24HoursChange}%`})
+                </span>{' '}
+                {new BigNumber(tbr.derivedETH).toFormat(7)} ETH
+              </div>
+            </div>
+            <button
+              tabIndex={0}
+              type="button"
+              onKeyDown={handleOpenMoreInfoModal}
+              onClick={handleOpenMoreInfoModal}
+              className={s.market_cap_button}
+            >
+              View market cap
+            </button>
+            <div className={s.token_info}>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>Token contract:</div>
+                <div className={s.token_info__item__value}>0x1414c...7166</div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>Total liquidity:</div>
+                <div className={s.token_info__item__value}>
+                  ${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}
                 </div>
-                <div className={s.card_section__right}>
-                  <div className={s.card_links}>
-                    <a
-                      href={`https://etherscan.io/token/${tbr.id}`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className={s.card_link}
-                    >
-                      <div className={s.card_link__img}>
-                        <img src={etherscan} alt="etherscan" />
-                      </div>
-                      <div className={s.card_link__title}>Etherscan</div>
-                    </a>
-                    <a
-                      href={`https://coinmarketcap.com/currencies/${tokenInfoFromCoingecko?.name?.replace(
-                        /\s/g,
-                        '-',
-                      )}/`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className={s.card_link}
-                    >
-                      <div className={s.card_link__img}>
-                        <img src={marketcap} alt="marketcap" />
-                      </div>
-                      <div className={s.card_link__title}>CoinMarketcap</div>
-                    </a>
-                    <div className={s.card_link}>
-                      <div className={s.card_link__img}>
-                        <img src={twitter} alt="twitter" />
-                      </div>
-                      <div className={s.card_link__title}>Twitter</div>
-                    </div>
-                    <div className={s.card_link}>
-                      <div className={s.card_link__img}>
-                        <img src={telegram} alt="telegram" />
-                      </div>
-                      <div className={s.card_link__title}>Telegram</div>
-                    </div>
-                    <div className={s.card_link}>
-                      <div className={s.card_link__img}>
-                        <img src={desktop} alt="desktop" />
-                      </div>
-                      <div className={s.card_link__title}>Website</div>
-                    </div>
-                  </div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>Daily volume:</div>
+                <div className={s.token_info__item__value}>
+                  $
+                  {new BigNumber(
+                    pairInfo.h24_ago_by_sum.reduce((acc, cur) => {
+                      return acc + Number(cur.hourlyVolumeUSD);
+                    }, 0),
+                  ).toFormat(2)}
                 </div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>
+                  Pooled {pairInfo.base_info.token0.symbol}:
+                </div>
+                <div className={s.token_info__item__value}>
+                  {new BigNumber(pairInfo.base_info.reserve0).toFormat(2)}
+                </div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>
+                  Pooled {pairInfo.base_info.token1.symbol}:
+                </div>
+                <div className={s.token_info__item__value}>
+                  {new BigNumber(pairInfo.base_info.reserve1).toFormat(2)}
+                </div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>Total tx:</div>
+                <div className={s.token_info__item__value}>
+                  {new BigNumber(pairInfo.base_info.txCount).toFormat(2)}
+                </div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>Holders:</div>
+                <div className={s.token_info__item__value}>soon</div>
               </div>
             </div>
             <div className={s.card_sections}>
@@ -308,6 +224,51 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               </div>
               <div className={s.card_section}>
                 <CommunityTrust votesAmount={905} likes={244} dislikes={4} />
+              </div>
+            </div>
+            <div className={s.links}>
+              <a
+                href={`https://etherscan.io/token/${tbr.id}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className={s.card_link}
+              >
+                <div className={s.card_link__img}>
+                  <img src={etherscan} alt="etherscan" />
+                </div>
+                <div className={s.card_link__title}>Etherscan</div>
+              </a>
+              <a
+                href={`https://coinmarketcap.com/currencies/${tokenInfoFromCoingecko?.name?.replace(
+                  /\s/g,
+                  '-',
+                )}/`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className={s.card_link}
+              >
+                <div className={s.card_link__img}>
+                  <img src={marketcap} alt="marketcap" />
+                </div>
+                <div className={s.card_link__title}>CoinMarketcap</div>
+              </a>
+              <div className={s.card_link}>
+                <div className={s.card_link__img}>
+                  <img src={twitter} alt="twitter" />
+                </div>
+                <div className={s.card_link__title}>Twitter</div>
+              </div>
+              <div className={s.card_link}>
+                <div className={s.card_link__img}>
+                  <img src={telegram} alt="telegram" />
+                </div>
+                <div className={s.card_link__title}>Telegram</div>
+              </div>
+              <div className={s.card_link}>
+                <div className={s.card_link__img}>
+                  <img src={desktop} alt="desktop" />
+                </div>
+                <div className={s.card_link__title}>Website</div>
               </div>
             </div>
           </div>
