@@ -11,6 +11,7 @@ import {
   GET_BLOCK_24H_AGO,
   GET_PAIR_INFO_SUSHIWAP,
 } from '../../queries/index';
+import RightAsideBar from './RightAsideBar/index';
 import { IRowPairExplorer } from '../../types/table';
 import { IPairSwapsInfo } from '../../types/pairExplorer';
 import Table, { ITableHeader } from '../../components/Table/index';
@@ -215,7 +216,9 @@ Fundraising Capital"
             </div>
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
               <div className={s.right}>
-                <div className={s.right_inner}>right</div>
+                <div className={s.right_inner}>
+                  <RightAsideBar />
+                </div>
                 <div
                   className={s.right_aside__button}
                   tabIndex={0}
