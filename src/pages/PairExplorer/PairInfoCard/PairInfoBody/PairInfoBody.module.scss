@@ -9,13 +9,9 @@
     height: 100%;
   }
 
-  &_sections {
-    @include grid(repeat(1, 1fr), auto, 10px);
-  }
-
   &_section {
     background: linear-gradient(7.14deg, #040404 -14.6%, #1c0e40 96.74%);
-    padding: 20px;
+    padding: 10px 5px;
     &__right {
       @include flex(column, flex-end);
     }
@@ -209,33 +205,8 @@
   }
 }
 
-// less score
-.score {
-  position: relative;
-  @include flex(row, center, center);
-  &_info {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-  &_title {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  &_number {
-    font-size: 33px;
-    font-weight: bold;
-    span {
-      @include gradient-text;
-    }
-  }
-  img {
-    max-width: 100%;
-  }
-}
-
+// new design v4
+// new design v4
 // new design v4
 .header {
   @include flex(row, center, space-between);
@@ -270,5 +241,33 @@
     &__title {
       color: #8a8695;
     }
+  }
+}
+
+// less score
+.score {
+  position: relative;
+  @include flex(row, center, center);
+  &_info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  &_title {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  &_number {
+    font-size: 33px;
+    font-weight: bold;
+    span {
+      @include gradient-text;
+    }
+  }
+  img {
+    max-width: 100%;
+    max-height: 147px;
   }
 }

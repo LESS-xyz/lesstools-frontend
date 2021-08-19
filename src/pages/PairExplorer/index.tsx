@@ -25,6 +25,7 @@ import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index'
 import { useMst } from '../../store/store';
 
 import s from './PairExplorer.module.scss';
+import arrowRight from '../../assets/img/icons/arrow-right.svg';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
@@ -129,6 +130,9 @@ const PairExplorer: React.FC = () => {
   // ⚠️HARDCODE
   const userAdress = '0x1414b85fe8570780e2b3468588e4dcdd901a76a2';
 
+  const [isLeftSideBar, setIsLeftSideBar] = useState(true);
+  const [isRightSideBar, setIsRightSideBar] = useState(true);
+
   return (
     <main className={s.page}>
       <Helmet>
@@ -144,26 +148,42 @@ Fundraising Capital"
           content="https://og-image.vercel.app/Check%20**WETH%20400%24**%20at%20lesstools.io.png?theme=dark&md=1&fontSize=100px&images=https%3A%2F%2Fs2.coinmarketcap.com%2Fstatic%2Fimg%2Fcoins%2F200x200%2F10279.png&images=https%3A%2F%2Fs2.coinmarketcap.com%2Fstatic%2Fimg%2Fcoins%2F200x200%2F10279.png"
         />
       </Helmet>
+      <InfoBlock />
 
       <div className={s.container}>
-        <InfoBlock />
-
         <div className={s.main}>
-          <div className={s.main_inner}>
-            <div className={s.left}>
-              <div className={s.left_inner}>
-                {pairInfo ? (
-                  <PairInfoBody
-                    loading={loading}
-                    pairId={pairId}
-                    tokenInfoFromCoingecko={tokenInfoFromCoingecko}
-                    pairInfo={pairInfo}
-                  />
-                ) : (
-                  <Loader />
-                )}
+          <div
+            className={`${s.main_inner} ${isLeftSideBar && s.withLeft} ${
+              isRightSideBar && s.withRight
+            } ${isLeftSideBar && isRightSideBar && s.both}`}
+          >
+            <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
+              <div className={s.left}>
+                <div className={s.left_inner}>
+                  {pairInfo ? (
+                    <PairInfoBody
+                      loading={loading}
+                      pairId={pairId}
+                      tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                      pairInfo={pairInfo}
+                    />
+                  ) : (
+                    <Loader />
+                  )}
+                </div>
+                <div
+                  className={s.left_aside__button}
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={() => {}}
+                  onClick={() => setIsLeftSideBar(!isLeftSideBar)}
+                >
+                  <div className={s.left_aside__button_inner}>
+                    <img src={arrowRight} alt=">" />
+                  </div>
+                </div>
               </div>
-            </div>
+            </aside>
             <div className={s.center}>
               <div className={s.info}>
                 {!pairInfo ? (
@@ -178,7 +198,7 @@ Fundraising Capital"
                 <PairsSearch
                   value={searchValue}
                   setValue={setSearchValue}
-                  placeholder={`Search ${currentExchange.exchange} pairs by symbol/pair contract`}
+                  placeholder={`Search ${currentExchange.exchange} pairs`}
                 />
               </div>
               <div className={s.chart}>
@@ -193,19 +213,30 @@ Fundraising Capital"
                 />
               </div>
             </div>
-
-            <div className={s.right}>
-              <div className={s.right_inner}>right</div>
-            </div>
-
-            {/* нижняя часть страницы */}
-            <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
-            <Table
-              data={swapsData.filter((row) => row.maker === userAdress)}
-              header={swapsHeader}
-              tableType="pairExplorer"
-            />
+            <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
+              <div className={s.right}>
+                <div className={s.right_inner}>right</div>
+                <div
+                  className={s.right_aside__button}
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={() => {}}
+                  onClick={() => setIsRightSideBar(!isRightSideBar)}
+                >
+                  <div className={s.right_aside__button_inner}>
+                    <img src={arrowRight} alt=">" />
+                  </div>
+                </div>
+              </div>
+            </aside>
           </div>
+          {/* нижняя часть страницы */}
+          <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
+          <Table
+            data={swapsData.filter((row) => row.maker === userAdress)}
+            header={swapsHeader}
+            tableType="pairExplorer"
+          />
         </div>
       </div>
     </main>
