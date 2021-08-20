@@ -48,7 +48,7 @@ const Favorites: React.FC = () => {
         {isModal && (
           <div className={s.favorites_modal}>
             <div className={s.favorites_modal__inner}>
-              <div className={s.favorites_modal__scroll}>
+              <div className={`${s.favorites_modal__scroll} grey-scroll`}>
                 <Favorite />
                 <Favorite />
                 <Favorite />

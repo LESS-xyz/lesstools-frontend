@@ -53,3 +53,19 @@ main {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #502cc5;
 }
+
+// grey scroll
+.grey-scroll {
+  &::-webkit-scrollbar {
+    width: 6px; /* ширина для вертикального скролла */
+    height: 0px; /* высота для горизонтального скролла */
+    background-color: rgba(255, 255, 255, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #4d4c4d;
+    border-radius: 12px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #3f3c3f;
+  }
+}

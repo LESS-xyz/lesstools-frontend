@@ -22,7 +22,9 @@ export interface IRowLiveNewPairs {
 }
 
 export interface IRowPairExplorer {
-  data: string | Date;
+  data: number;
+  tbr: { id: string; symbol: string };
+  otherToken: { id: string; symbol: string };
   type: 'sell' | 'buy';
   priceUsd: number;
   priceEth: number;

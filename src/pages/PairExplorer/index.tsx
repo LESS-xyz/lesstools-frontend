@@ -3,7 +3,6 @@ import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
-import moment from 'moment';
 
 import {
   GET_PAIR_INFO,
@@ -14,7 +13,6 @@ import {
 import RightAsideBar from './RightAsideBar/index';
 import { IRowPairExplorer } from '../../types/table';
 import { IPairSwapsInfo } from '../../types/pairExplorer';
-import Table, { ITableHeader } from '../../components/Table/index';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairsSearch from '../../components/PairsSearch/index';
@@ -83,17 +81,18 @@ const PairExplorer: React.FC = () => {
   }, [loading, pairInfo]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
-  const [swapsHeader, setSwapsHeader] = useState<ITableHeader>([]);
+  // const [swapsHeader, setSwapsHeader] = useState<ITableHeader>([]);
   // формирования данных для таблицы
   useEffect(() => {
     if (!loadingSwaps && swaps !== undefined) {
-      // TODO: FIX TBR TOKEN VIEW
       const data: Array<IRowPairExplorer> = swaps?.swaps.map((swap) => {
         const TBRindex = WHITELIST.includes(swap.pair.token1.id) ? '0' : '1';
         const OtherIndex = TBRindex === '1' ? '0' : '1';
 
         return {
-          data: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
+          data: +swap.timestamp * 1000,
+          tbr: swap.pair[`token${TBRindex}` as const],
+          otherToken: swap.pair[`token${OtherIndex}` as const],
           type: +swap[`amount${TBRindex}Out` as const] === 0 ? 'sell' : 'buy',
           priceUsd: +swap[`token${TBRindex}PriceUSD` as const],
           priceEth: +swap[`token${TBRindex}PriceETH` as const],
@@ -109,27 +108,27 @@ const PairExplorer: React.FC = () => {
       });
       setSwapsData(data);
 
-      const header: ITableHeader = [
-        { key: 'data', title: 'Date', sortType: 'date' },
-        { key: 'type', title: 'Type', sortType: 'string' },
-        { key: 'priceUsd', title: 'Price USD', sortType: 'number' },
-        { key: 'priceEth', title: 'Price ETH', sortType: 'number' },
-        {
-          key: 'amountEth',
-          title: `Amount ${pairInfo?.base_info?.token1.symbol}`,
-          sortType: 'number',
-        },
-        { key: 'totalEth', title: 'Total ETH', sortType: 'number' },
-        { key: 'maker', title: 'Maker' },
-        { key: 'Others', title: 'Others' },
-      ];
-      setSwapsHeader(header);
+      // const header: ITableHeader = [
+      //   { key: 'data', title: 'Date', sortType: 'date' },
+      //   { key: 'type', title: 'Type', sortType: 'string' },
+      //   { key: 'priceUsd', title: 'Price USD', sortType: 'number' },
+      //   { key: 'priceEth', title: 'Price ETH', sortType: 'number' },
+      //   {
+      //     key: 'amountEth',
+      //     title: `Amount ${pairInfo?.base_info?.token1.symbol}`,
+      //     sortType: 'number',
+      //   },
+      //   { key: 'totalEth', title: 'Total ETH', sortType: 'number' },
+      //   { key: 'maker', title: 'Maker' },
+      //   { key: 'Others', title: 'Others' },
+      // ];
+      // setSwapsHeader(header);
     }
     // eslint-disable-next-line
   }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
 
   // ⚠️HARDCODE
-  const userAdress = '0x1414b85fe8570780e2b3468588e4dcdd901a76a2';
+  // const userAdress = '0x1414b85fe8570780e2b3468588e4dcdd901a76a2';
 
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);
@@ -217,7 +216,7 @@ Fundraising Capital"
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
               <div className={s.right}>
                 <div className={s.right_inner}>
-                  <RightAsideBar />
+                  <RightAsideBar trades={swapsData} />
                 </div>
                 <div
                   className={s.right_aside__button}
@@ -234,12 +233,12 @@ Fundraising Capital"
             </aside>
           </div>
           {/* нижняя часть страницы */}
-          <Table data={swapsData} header={swapsHeader} tableType="pairExplorer" />
-          <Table
+          {/* <Table data={swapsData} tableType="pairExplorer" /> */}
+          {/* <Table
             data={swapsData.filter((row) => row.maker === userAdress)}
             header={swapsHeader}
             tableType="pairExplorer"
-          />
+          /> */}
         </div>
       </div>
     </main>
