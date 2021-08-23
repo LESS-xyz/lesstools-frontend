@@ -2,10 +2,11 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
-import rootStore, { Provider } from './store/store';
+import rootStore, { Provider as StoreProvider } from './store/store';
 import ScrollToTop from './utils/scrollToTop';
 import CurrentExchange from './utils/currentExchange';
 import { App } from './App';
+import { Web3Connector } from './contexts/Web3Connector';
 
 import './styles/index.scss';
 
@@ -36,13 +37,15 @@ export const uniswapCurrentVersion = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider client={uniswapSubgraph}>
     <Router>
-      <Provider value={rootStore}>
-        <CurrentExchange>
-          <ScrollToTop>
-            <App />
-          </ScrollToTop>
-        </CurrentExchange>
-      </Provider>
+      <StoreProvider value={rootStore}>
+        <Web3Connector>
+          <CurrentExchange>
+            <ScrollToTop>
+              <App />
+            </ScrollToTop>
+          </CurrentExchange>
+        </Web3Connector>
+      </StoreProvider>
     </Router>
   </ApolloProvider>,
   document.getElementById('root'),
