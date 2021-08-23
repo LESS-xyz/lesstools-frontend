@@ -15,6 +15,7 @@ const Web3Connector: React.FC = ({ children }) => {
       console.log('LOGIN', adresses);
       user.setUserWalletId(adresses[0]);
     } catch (error) {
+      console.log(error);
       if (error.code === -32002) {
         window.location.reload();
       }
@@ -22,16 +23,20 @@ const Web3Connector: React.FC = ({ children }) => {
   };
 
   const init = () => {
-    const web3 = new Web3Service();
-    console.log('INIT WEB3', web3);
+    try {
+      const web3 = new Web3Service();
+      console.log('INIT WEB3', web3);
 
-    web3.provider.on('accountsChanged', (accounts: string[]) => {
-      console.log('ACCOUNTS CHANGED', accounts);
-      init();
-    });
+      web3.provider.on('accountsChanged', (accounts: string[]) => {
+        console.log('ACCOUNTS CHANGED', accounts);
+        init();
+      });
 
-    setWeb3Provider(web3);
-    login(web3);
+      setWeb3Provider(web3);
+      login(web3);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
