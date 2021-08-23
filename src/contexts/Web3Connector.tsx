@@ -26,6 +26,7 @@ const Web3Connector: React.FC = ({ children }) => {
     try {
       const web3 = new Web3Service();
       console.log('INIT WEB3', web3);
+      if (!web3.provider) return;
 
       web3.provider.on('accountsChanged', (accounts: string[]) => {
         console.log('ACCOUNTS CHANGED', accounts);
