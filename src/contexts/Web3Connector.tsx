@@ -39,7 +39,7 @@ const Web3Connector: React.FC = ({ children }) => {
 
       web3.provider.on('disconnect', (code: string, reason: string) => {
         console.log('ACCOUNT DISCONNECTED', code, reason);
-        user.setUserWalletId(null);
+        user.disconect();
       });
 
       setWeb3Provider(web3);

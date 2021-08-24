@@ -1,13 +1,23 @@
 import axios from 'axios';
 import config from '../../config/index';
 
+type PLATFORM = 'ETH' | 'BSC' | 'POLYGON ';
+
 type IPostMetamaskLoginProps = {
   address: string;
   msg: string;
   signed_msg: string;
 };
 
-export class BackendService {
+type IGetTokenAdditionalInfoProps = {
+  pair_address: string;
+  token_address: string;
+  token_name: string;
+  token_symbol: string;
+  platform: PLATFORM;
+};
+
+class BackendService {
   private axios: any;
 
   constructor() {
@@ -16,12 +26,12 @@ export class BackendService {
     });
   }
 
+  // METAMASK LOGIN
   getMetamaskMessage = async () => {
     try {
       const message = await this.axios.get('/accounts/get_metamask_message/');
       return { data: message.data };
     } catch (error) {
-      console.error('GET METAMASK MESSAGE', error);
       return { data: null, error };
     }
   };
@@ -38,4 +48,22 @@ export class BackendService {
       return { data: '', error };
     }
   };
+
+  // TOKEN PAIR INFO
+  getTokenPairAdditionalData = async (data: IGetTokenAdditionalInfoProps) => {
+    try {
+      const res = await this.axios.post('/analytics/pair_info', {
+        pair_address: data.pair_address,
+        token_address: data.token_address,
+        token_name: data.token_name,
+        token_symbol: data.token_symbol,
+        platform: data.platform,
+      });
+      return { data: res.data };
+    } catch (error) {
+      return { data: '', error };
+    }
+  };
 }
+
+export default new BackendService();

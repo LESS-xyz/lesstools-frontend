@@ -75,7 +75,7 @@
   cursor: pointer;
 
   &__inner {
-    @include flex(row, center, space-between);
+    @include flex(row, center, space-between, nowrap);
     font-size: 16px;
     font-weight: 700;
     border-radius: 12px;

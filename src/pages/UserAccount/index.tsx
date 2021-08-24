@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { useMst } from '../../store/store';
 import { useWeb3Context } from '../../contexts/Web3Connector';
 import { Web3Service } from '../../services/web3/index';
-import { BackendService } from '../../services/backend';
+import backend from '../../services/backend';
 
 import AdBlock from '../../components/AdBlock/index';
 
@@ -12,7 +12,6 @@ import adImg from '../../assets/img/sections/ad/ad1.png';
 import { Helmet } from 'react-helmet';
 
 const web3 = new Web3Service();
-const backend = new BackendService();
 
 const UserAccount: React.FC = observer(() => {
   const { user } = useMst();

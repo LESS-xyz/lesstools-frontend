@@ -44,7 +44,7 @@ const InfoBlock: React.FC = observer(() => {
     <section className={s.info}>
       <div className={s.left}>
         <div className={s.cell}>
-          ETH: ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}
+          <div>ETH: </div> <div> ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}</div>
         </div>
         <div className={s.cell}>
           <div className={s.cell_img}>
@@ -59,7 +59,7 @@ const InfoBlock: React.FC = observer(() => {
             data-place="bottom"
             className={s.cell_text}
           >
-            {(gasPrice?.average || 0) / 10} GWEI
+            <div>{(gasPrice?.average || 0) / 10} GWEI</div>
           </div>
         </div>
         <div className={s.cell}>

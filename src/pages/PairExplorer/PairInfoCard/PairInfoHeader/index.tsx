@@ -14,6 +14,7 @@ export interface ITokenData {
   symbol: string;
   id: string;
   totalSupply: string;
+  name: string;
 }
 
 interface IPairInfoHeaderProps {

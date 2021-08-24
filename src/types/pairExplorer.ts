@@ -9,8 +9,8 @@ export interface IPairSwapsInfo {
   token1PriceUSD: string;
   from: string;
   pair: {
-    token0: { symbol: string; id: string };
-    token1: { symbol: string; id: string };
+    token0: { symbol: string; id: string; name: string };
+    token1: { symbol: string; id: string; name: string };
   };
   timestamp: string;
   transaction: { id: string };

@@ -59,15 +59,17 @@ export interface IPairInfo {
   };
 }
 
+// TODO: fix any for token info from backend
 interface IPairInfoBodyProps {
   pairId: string;
   loading: boolean;
   pairInfo: IPairInfo;
   tokenInfoFromCoingecko: IToken | undefined;
+  tokenInfoFromBackend: any;
 }
 
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
-  ({ pairInfo, pairId, tokenInfoFromCoingecko }) => {
+  ({ pairInfo, pairId, tokenInfoFromCoingecko, tokenInfoFromBackend }) => {
     // tbr = token being reviewed
     const [tbr, setTbr] = useState(pairInfo?.base_info?.token1);
     const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
@@ -173,6 +175,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               <div className={s.token_info__item}>
                 <div className={s.token_info__item__title}>Token contract:</div>
                 <div className={s.token_info__item__value}>
+                  {tbr.id.slice(0, 5)}...{tbr.id.slice(-4)}
+                </div>
+              </div>
+              <div className={s.token_info__item}>
+                <div className={s.token_info__item__title}>Pair contract:</div>
+                <div className={s.token_info__item__value}>
                   {pairId.slice(0, 5)}...{pairId.slice(-4)}
                 </div>
               </div>
@@ -217,7 +225,13 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               </div>
               <div className={s.token_info__item}>
                 <div className={s.token_info__item__title}>Holders:</div>
-                <div className={s.token_info__item__value}>soon</div>
+                <div className={s.token_info__item__value}>
+                  {tokenInfoFromBackend
+                    ? new BigNumber(
+                        tokenInfoFromBackend.token_being_reviewed.holders_count,
+                      ).toFormat(2)
+                    : 'Loading...'}
+                </div>
               </div>
             </div>
             <div className={s.card_section}>

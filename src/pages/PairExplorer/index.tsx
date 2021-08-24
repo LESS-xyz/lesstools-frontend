@@ -22,6 +22,7 @@ import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { useMst } from '../../store/store';
+import backend from '../../services/backend/index';
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
@@ -30,9 +31,14 @@ const PairExplorer: React.FC = () => {
   const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
     {} as IToken,
   );
+  const [tokenInfoFromBackend, setTokenInfoFromBackend] = useState(null);
   const [searchValue, setSearchValue] = useState('');
   const { id: pairId } = useParams<{ id: string }>();
   const { currentExchange } = useMst();
+
+  useEffect(() => {
+    console.log(tokenInfoFromBackend);
+  }, [tokenInfoFromBackend]);
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
@@ -58,7 +64,7 @@ const PairExplorer: React.FC = () => {
 
   useEffect(() => {
     refetchPairInfo();
-  }, [blocks, refetchPairInfo]);
+  }, [blocks, refetchPairInfo, pairId]);
 
   // запрос на получения всех свапов данной пары
   type response = { swaps: Array<IPairSwapsInfo> };
@@ -79,6 +85,25 @@ const PairExplorer: React.FC = () => {
     }
     // eslint-disable-next-line
   }, [loading, pairInfo]);
+
+  // запрос на бэк для доп.инфы по паре
+  useEffect(() => {
+    if (!loading && pairInfo?.base_info) {
+      const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
+        ? pairInfo?.base_info.token0
+        : pairInfo?.base_info.token1;
+
+      backend
+        .getTokenPairAdditionalData({
+          pair_address: pairId,
+          token_address: tbr.id,
+          token_symbol: tbr.symbol,
+          token_name: tbr.name,
+          platform: 'ETH',
+        })
+        .then((res) => setTokenInfoFromBackend(res.data));
+    }
+  }, [loading, pairInfo, pairId]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
   // const [swapsHeader, setSwapsHeader] = useState<ITableHeader>([]);
@@ -165,6 +190,7 @@ Fundraising Capital"
                       loading={loading}
                       pairId={pairId}
                       tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                      tokenInfoFromBackend={tokenInfoFromBackend}
                       pairInfo={pairInfo}
                     />
                   ) : (

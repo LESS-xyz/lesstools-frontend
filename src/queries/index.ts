@@ -8,6 +8,7 @@ export const GET_PAIR_INFO = gql`
       reserve0
       reserve1
       token0 {
+        name
         symbol
         derivedETH
         derivedUSD
@@ -15,6 +16,7 @@ export const GET_PAIR_INFO = gql`
         id
       }
       token1 {
+        name
         symbol
         derivedETH
         derivedUSD
@@ -47,6 +49,7 @@ export const GET_PAIR_INFO = gql`
   }
 `;
 
+// get pair-info-card at pair-explorer page SUSHISWAP
 export const GET_PAIR_INFO_SUSHIWAP = gql`
   query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
@@ -54,6 +57,7 @@ export const GET_PAIR_INFO_SUSHIWAP = gql`
       reserve0
       reserve1
       token0 {
+        name
         symbol
         derivedETH
         derivedUSD
@@ -61,6 +65,7 @@ export const GET_PAIR_INFO_SUSHIWAP = gql`
         id
       }
       token1 {
+        name
         symbol
         derivedETH
         derivedUSD
