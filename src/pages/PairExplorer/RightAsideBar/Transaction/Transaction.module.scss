@@ -1,7 +1,9 @@
 .transaction {
-  display: grid;
-  grid-template-columns: 10px 110px 1fr 17px 1fr;
-  gap: 5px;
+  // display: grid;
+  // grid-template-columns: 10px 110px 1fr 17px 1fr;
+  // gap: 5px;
+  display: flex;
+  align-items: center;
   padding: 12px 10px;
   align-items: center;
   font-size: 14px;
@@ -26,6 +28,7 @@
 }
 
 .transaction_prices {
+  flex-grow: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -49,6 +52,7 @@
 
 .transaction_etherscan {
   cursor: pointer;
+  margin-left: 5px;
   img {
     height: 17px;
     width: 17px;
@@ -56,6 +60,8 @@
 }
 
 .transaction_time {
+  min-width: 25px;
+  margin-left: 5px;
   color: #6b6777;
   font-size: 12px;
   font-weight: 700;

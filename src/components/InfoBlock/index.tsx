@@ -14,9 +14,10 @@ import s from './InfoBlock.module.scss';
 
 import gasIcon from '../../assets/img/icons/gas.svg';
 import hotIcon from '../../assets/img/icons/hot.svg';
+import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.svg';
 
 const InfoBlock: React.FC = observer(() => {
-  const { hotPairs, currentExchange } = useMst();
+  const { hotPairs, currentExchange, user } = useMst();
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
@@ -42,7 +43,7 @@ const InfoBlock: React.FC = observer(() => {
   return (
     <section className={s.info}>
       <div className={s.left}>
-        <div className={`${s.cell} ${s.fill}`}>
+        <div className={s.cell}>
           ETH: ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}
         </div>
         <div className={s.cell}>
@@ -84,6 +85,19 @@ const InfoBlock: React.FC = observer(() => {
           </div>
         </div>
       </div>
+      <Link to="/app/user-account" className={s.metamask_link}>
+        <div className={s.metamask_link__inner}>
+          <MetaMaskIcon className={s.metamask_link__inner_img} />
+          <span>
+            {/* eslint-disable-next-line */}
+            {!user.walletId
+              ? 'Connect'
+              : !user.isVerified
+              ? 'Verify'
+              : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
+          </span>
+        </div>
+      </Link>
     </section>
   );
 });

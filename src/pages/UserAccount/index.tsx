@@ -9,6 +9,7 @@ import AdBlock from '../../components/AdBlock/index';
 import s from './UserAccount.module.scss';
 
 import adImg from '../../assets/img/sections/ad/ad1.png';
+import { Helmet } from 'react-helmet';
 
 const web3 = new Web3Service();
 const backend = new BackendService();
@@ -36,6 +37,15 @@ const UserAccount: React.FC = observer(() => {
 
   return (
     <main className={s.page}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>User Account - LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
+        />
+      </Helmet>
       <div className={s.container}>
         <AdBlock adImg={adImg} />
         <div className={s.block}>

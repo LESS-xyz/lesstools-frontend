@@ -8,19 +8,21 @@
   @include flex(row, center, space-between, nowrap);
 }
 
-// test
 .info {
   background-color: rgba(103, 77, 246, 0.4);
   margin-bottom: 40px;
+  padding: 6px 10px;
 }
 
 .cell {
-  height: 46px;
-  padding: 0 28px;
+  padding: 5px 28px;
   font-weight: bold;
   font-size: 15px;
   color: var(--grey);
-  transition: 0.4s ease;
+
+  &:first-child {
+    border-right: 2px solid #fff;
+  }
 
   &_img {
     margin-right: 5px;
@@ -28,18 +30,12 @@
       height: 24px;
     }
   }
-
-  &:hover,
-  &.fill {
-    background-color: rgba(103, 77, 246, 0.4);
-  }
 }
 
 .table_cell {
   font-size: 14px;
   letter-spacing: -0.531474px;
   color: var(--grey);
-  cursor: pointer;
   span {
     color: var(--orange);
   }
@@ -69,5 +65,24 @@
   }
   &:hover {
     animation-play-state: paused;
+  }
+}
+
+.metamask_link {
+  border-radius: 12px;
+  background: var(--gradient);
+  padding: 2px;
+  cursor: pointer;
+
+  &__inner {
+    @include flex(row, center, space-between);
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 12px;
+    background-color: #312374;
+    padding: 6px 17px;
+    &_img {
+      margin-right: 10px;
+    }
   }
 }
