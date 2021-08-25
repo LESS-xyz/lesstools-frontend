@@ -1,10 +1,7 @@
-// import { copyText } from '../../../../utils/copyText';
-import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 import { WHITELIST } from '../../../../data/whitelist';
 
 import s from './PairInfoHeader.module.scss';
 
-// import copy from '../../../../assets/img/icons/copy.svg';
 import loader from '../../../../assets/loader.svg';
 import { useEffect, useState } from 'react';
 
@@ -20,14 +17,10 @@ export interface ITokenData {
 interface IPairInfoHeaderProps {
   token0: ITokenData | null | undefined;
   token1: ITokenData | null | undefined;
-  tokenInfoFromCoingecko: IToken | undefined;
+  cmcTokenId: number;
 }
 
-const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({
-  token0,
-  token1,
-  tokenInfoFromCoingecko,
-}) => {
+const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({ token0, token1, cmcTokenId }) => {
   const [tbr, setTbr] = useState(token1);
   const [otherToken, setOtherToken] = useState(token0);
 
@@ -46,8 +39,11 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({
     <section className={s.pairInfoHeader}>
       <div className={s.logo}>
         <img
-          src={tokenInfoFromCoingecko?.logoURI?.replace('thumb', 'large') || loader}
+          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${cmcTokenId}.png`}
           alt="logoExample"
+          onError={(e) => {
+            e.currentTarget.src = loader;
+          }}
         />
       </div>
       <div className={s.right}>

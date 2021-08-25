@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../../config/index';
 
-type PLATFORM = 'ETH' | 'BSC' | 'POLYGON ';
+export type PLATFORM = 'ETH' | 'BSC' | 'POLYGON ';
 
 type IPostMetamaskLoginProps = {
   address: string;
@@ -15,6 +15,44 @@ type IGetTokenAdditionalInfoProps = {
   token_name: string;
   token_symbol: string;
   platform: PLATFORM;
+};
+
+type IVoteForPair = {
+  pair_address: string;
+  platform: PLATFORM;
+  vote: 1 | -1;
+  token: string;
+};
+
+type IAddPairToFavorite = {
+  pair_address: string;
+  platform: PLATFORM;
+};
+
+export type IAdditionalInfoFromBackend = {
+  pair: {
+    address: string;
+    dislikes: number;
+    likes: number;
+    is_favourite_of_current_user: boolean;
+    platform: PLATFORM;
+    token_being_reviewed: {
+      bsc_address: null | string;
+      chat_urls: Array<string>;
+      circulating_supply: string;
+      cmc_id: number;
+      cmc_slug: string;
+      eth_address: string;
+      holders_count: number;
+      name: string;
+      polygon_address: null | string;
+      symbol: string;
+      total_supply: string;
+      twitter_url: string;
+      website_url: string;
+    };
+  };
+  vote: 0 | -1 | 1;
 };
 
 class BackendService {
@@ -51,18 +89,68 @@ class BackendService {
 
   // TOKEN PAIR INFO
   getTokenPairAdditionalData = async (data: IGetTokenAdditionalInfoProps) => {
+    const token = localStorage.getItem('lesstools_token');
+    const headers = token
+      ? {
+          Authorization: `Token ${token}`,
+        }
+      : {};
     try {
-      const res = await this.axios.post('/analytics/pair_info', {
-        pair_address: data.pair_address,
-        token_address: data.token_address,
-        token_name: data.token_name,
-        token_symbol: data.token_symbol,
-        platform: data.platform,
-      });
+      const res: {
+        data: IAdditionalInfoFromBackend;
+      } = await this.axios.post(
+        '/analytics/pair_info',
+        {
+          pair_address: data.pair_address,
+          token_address: data.token_address,
+          token_name: data.token_name,
+          token_symbol: data.token_symbol,
+          platform: data.platform,
+        },
+        { headers },
+      );
       return { data: res.data };
     } catch (error) {
-      return { data: '', error };
+      return { data: null, error };
     }
+  };
+
+  voteForPair = async (data: IVoteForPair) => {
+    const headers = {
+      Authorization: `Token ${data.token}`,
+    };
+    const dataPost = {
+      pair_address: data.pair_address,
+      platform: data.platform,
+      vote: data.vote,
+    };
+    try {
+      const res: { data: IAdditionalInfoFromBackend } = await this.axios.post(
+        '/analytics/pair_vote',
+        dataPost,
+        {
+          headers,
+        },
+      );
+      return { data: res.data };
+    } catch (error) {
+      return { data: null, error };
+    }
+  };
+
+  addPairToFavorite = async (data: IAddPairToFavorite) => {
+    const headers = {
+      Authorization: `Token ${localStorage.getItem('lesstools_token')}`,
+    };
+
+    await this.axios.post(
+      '/accounts/add_or_remove_favourite_pair/',
+      {
+        pair_address: data.pair_address,
+        platform: data.platform,
+      },
+      { headers },
+    );
   };
 }
 

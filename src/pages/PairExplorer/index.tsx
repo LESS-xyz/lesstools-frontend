@@ -17,28 +17,23 @@ import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairsSearch from '../../components/PairsSearch/index';
 import InfoBlock from '../../components/InfoBlock/index';
-import { getTokenInfoFromCoingecko, IToken } from '../../api/getTokensInfoFromCoingecko';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { useMst } from '../../store/store';
-import backend from '../../services/backend/index';
+import backend, { IAdditionalInfoFromBackend } from '../../services/backend/index';
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
 
 const PairExplorer: React.FC = () => {
-  const [tokenInfoFromCoingecko, setTokenInfoFromCoingecko] = useState<IToken | undefined>(
-    {} as IToken,
-  );
-  const [tokenInfoFromBackend, setTokenInfoFromBackend] = useState(null);
+  const [
+    tokenInfoFromBackend,
+    setTokenInfoFromBackend,
+  ] = useState<null | IAdditionalInfoFromBackend>(null);
   const [searchValue, setSearchValue] = useState('');
   const { id: pairId } = useParams<{ id: string }>();
-  const { currentExchange } = useMst();
-
-  useEffect(() => {
-    console.log(tokenInfoFromBackend);
-  }, [tokenInfoFromBackend]);
+  const { currentExchange, user } = useMst();
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
@@ -75,17 +70,6 @@ const PairExplorer: React.FC = () => {
     client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
   });
 
-  // запрос на coingecko для получения иконки токена и полного названия
-  useEffect(() => {
-    if (!loading && pairInfo?.base_info) {
-      const tokenToRequest = WHITELIST.includes(pairInfo.base_info.token1.id)
-        ? pairInfo.base_info.token0.id
-        : pairInfo.base_info.token1.id;
-      getTokenInfoFromCoingecko(tokenToRequest).then((res) => setTokenInfoFromCoingecko(res));
-    }
-    // eslint-disable-next-line
-  }, [loading, pairInfo]);
-
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
     if (!loading && pairInfo?.base_info) {
@@ -103,9 +87,10 @@ const PairExplorer: React.FC = () => {
         })
         .then((res) => setTokenInfoFromBackend(res.data));
     }
-  }, [loading, pairInfo, pairId]);
+  }, [loading, pairInfo, pairId, user.isVerified]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
+
   // const [swapsHeader, setSwapsHeader] = useState<ITableHeader>([]);
   // формирования данных для таблицы
   useEffect(() => {
@@ -189,7 +174,6 @@ Fundraising Capital"
                     <PairInfoBody
                       loading={loading}
                       pairId={pairId}
-                      tokenInfoFromCoingecko={tokenInfoFromCoingecko}
                       tokenInfoFromBackend={tokenInfoFromBackend}
                       pairInfo={pairInfo}
                     />
@@ -218,7 +202,7 @@ Fundraising Capital"
                   <PairInfoHeader
                     token0={pairInfo?.base_info?.token0}
                     token1={pairInfo?.base_info?.token1}
-                    tokenInfoFromCoingecko={tokenInfoFromCoingecko}
+                    cmcTokenId={tokenInfoFromBackend?.pair.token_being_reviewed.cmc_id || 0}
                   />
                 )}
                 <PairsSearch
@@ -258,13 +242,6 @@ Fundraising Capital"
               </div>
             </aside>
           </div>
-          {/* нижняя часть страницы */}
-          {/* <Table data={swapsData} tableType="pairExplorer" /> */}
-          {/* <Table
-            data={swapsData.filter((row) => row.maker === userAdress)}
-            header={swapsHeader}
-            tableType="pairExplorer"
-          /> */}
         </div>
       </div>
     </main>

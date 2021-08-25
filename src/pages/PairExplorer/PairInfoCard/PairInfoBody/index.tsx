@@ -7,17 +7,18 @@ import { ITokenData } from '../PairInfoHeader';
 import CommunityTrust from '../CommunityTrust/index';
 import Loader from '../../../../components/Loader/index';
 import { WHITELIST } from '../../../../data/whitelist';
-import { IToken } from '../../../../api/getTokensInfoFromCoingecko';
 // import { copyText } from '../../../../utils/copyText';
 import { useMst } from '../../../../store/store';
 import MoreInfoModal from '../../../../components/Modals/MoreInfoModal/index';
 import ShareModal from '../../../../components/Modals/ShareModal/index';
 import TradeModal from '../../../../components/Modals/TradeModal/index';
+import backend, { IAdditionalInfoFromBackend, PLATFORM } from '../../../../services/backend/index';
+import TokenInfoItem from './TokenInfoItem/index';
 
 import s from './PairInfoBody.module.scss';
 
-import favImg from '../../../../assets/img/icons/favorite.svg';
-import shareImg from '../../../../assets/img/icons/share.svg';
+import { ReactComponent as FavImg } from '../../../../assets/img/icons/favorite.svg';
+import { ReactComponent as ShareImg } from '../../../../assets/img/icons/share.svg';
 import scoreBg from '../../../../assets/img/icons/less-score-bg.svg';
 
 import marketcap from '../../../../assets/img/icons/marketcap.svg';
@@ -25,6 +26,15 @@ import etherscan from '../../../../assets/img/icons/table/actions-etherscan.svg'
 import twitter from '../../../../assets/img/icons/twitter-blue.svg';
 import telegram from '../../../../assets/img/icons/telegram-blue.svg';
 import desktop from '../../../../assets/img/icons/desktop-blue.svg';
+
+export interface IToken {
+  address: string;
+  chainId: number;
+  decimals: number;
+  logoURI: string;
+  name: string;
+  symbol: string;
+}
 
 const LessScore = () => (
   <div className={s.score}>
@@ -59,17 +69,19 @@ export interface IPairInfo {
   };
 }
 
-// TODO: fix any for token info from backend
 interface IPairInfoBodyProps {
   pairId: string;
   loading: boolean;
   pairInfo: IPairInfo;
-  tokenInfoFromCoingecko: IToken | undefined;
-  tokenInfoFromBackend: any;
+  tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
 }
 
+const addPairToFav = (pair_address: string, platform: PLATFORM) => {
+  backend.addPairToFavorite({ pair_address, platform });
+};
+
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
-  ({ pairInfo, pairId, tokenInfoFromCoingecko, tokenInfoFromBackend }) => {
+  ({ pairInfo, pairId, tokenInfoFromBackend }) => {
     // tbr = token being reviewed
     const [tbr, setTbr] = useState(pairInfo?.base_info?.token1);
     const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
@@ -113,6 +125,8 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           otherTokenPrice={otherToken.derivedUSD}
           otherTokenSymbol={otherToken.symbol}
           poolCreated={pairInfo.base_info.createdAtTimestamp}
+          totalSupply={tokenInfoFromBackend?.pair.token_being_reviewed?.total_supply || '0'}
+          pooledTbr={pairInfo.base_info[`reserve${tbrIndex}` as const]}
         />
         <ShareModal
           url={window.location.href}
@@ -136,11 +150,18 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                   role="button"
                   className={s.card_button}
                 >
-                  <img src={shareImg} alt="img" />
+                  <ShareImg />
                 </div>
-                <div className={s.card_button}>
-                  <img src={favImg} alt="img" />
-                </div>
+                <button
+                  onClick={() => addPairToFav(pairId, 'ETH')}
+                  onKeyDown={() => {}}
+                  type="button"
+                  className={`${s.card_button} ${
+                    tokenInfoFromBackend?.pair.is_favourite_of_current_user && s.active
+                  }`}
+                >
+                  <FavImg />
+                </button>
               </div>
               <div
                 tabIndex={0}
@@ -169,77 +190,85 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               onClick={handleOpenMoreInfoModal}
               className={s.market_cap_button}
             >
-              View market cap
+              View more info
             </button>
             <div className={s.token_info}>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>Token contract:</div>
-                <div className={s.token_info__item__value}>
-                  {tbr.id.slice(0, 5)}...{tbr.id.slice(-4)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>Pair contract:</div>
-                <div className={s.token_info__item__value}>
-                  {pairId.slice(0, 5)}...{pairId.slice(-4)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>Total liquidity:</div>
-                <div className={s.token_info__item__value}>
-                  ${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>Daily volume:</div>
-                <div className={s.token_info__item__value}>
-                  $
-                  {new BigNumber(
-                    pairInfo.h24_ago_by_sum.reduce((acc, cur) => {
-                      return acc + Number(cur.hourlyVolumeUSD);
-                    }, 0),
-                  ).toFormat(2)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>
-                  Pooled {pairInfo.base_info.token0.symbol}:
-                </div>
-                <div className={s.token_info__item__value}>
-                  {new BigNumber(pairInfo.base_info.reserve0).toFormat(2)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>
-                  Pooled {pairInfo.base_info.token1.symbol}:
-                </div>
-                <div className={s.token_info__item__value}>
-                  {new BigNumber(pairInfo.base_info.reserve1).toFormat(2)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>Total tx:</div>
-                <div className={s.token_info__item__value}>
-                  {new BigNumber(pairInfo.base_info.txCount).toFormat(2)}
-                </div>
-              </div>
-              <div className={s.token_info__item}>
-                <div className={s.token_info__item__title}>Holders:</div>
-                <div className={s.token_info__item__value}>
-                  {tokenInfoFromBackend
+              <TokenInfoItem
+                title="Token contract:"
+                value={`${tbr.id.slice(0, 5)}...${tbr.id.slice(-4)}`}
+              />
+              <TokenInfoItem
+                title="Pair contract:"
+                value={`${pairId.slice(0, 5)}...${pairId.slice(-4)}`}
+              />
+              <TokenInfoItem
+                title="Total liquidity:"
+                value={`${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}`}
+              />
+              <TokenInfoItem
+                title="Daily volume:"
+                value={`$${new BigNumber(
+                  pairInfo.h24_ago_by_sum.reduce((acc, cur) => {
+                    return acc + Number(cur.hourlyVolumeUSD);
+                  }, 0),
+                ).toFormat(2)}`}
+              />
+              <TokenInfoItem
+                title={`Pooled ${pairInfo.base_info.token0.symbol}`}
+                value={`${new BigNumber(pairInfo.base_info.reserve0).toFormat(2)}`}
+              />
+              <TokenInfoItem
+                title={`Pooled ${pairInfo.base_info.token1.symbol}`}
+                value={`${new BigNumber(pairInfo.base_info.reserve1).toFormat(2)}`}
+              />
+              <TokenInfoItem
+                title="Total tx"
+                value={`${new BigNumber(pairInfo.base_info.txCount).toFormat(2)}`}
+              />
+              <TokenInfoItem
+                title="Holders"
+                value={`${
+                  tokenInfoFromBackend
                     ? new BigNumber(
-                        tokenInfoFromBackend.token_being_reviewed.holders_count,
+                        tokenInfoFromBackend.pair.token_being_reviewed.holders_count,
                       ).toFormat(2)
-                    : 'Loading...'}
-                </div>
-              </div>
+                    : 'Loading...'
+                }`}
+              />
+              <TokenInfoItem
+                title="Market cap"
+                value={`$${
+                  tokenInfoFromBackend
+                    ? new BigNumber(
+                        +tokenInfoFromBackend.pair.token_being_reviewed.circulating_supply *
+                          +tbr.derivedUSD,
+                      ).toFormat(2)
+                    : 'Loading...'
+                }`}
+              />
+              <TokenInfoItem
+                title="Diluted Market cap"
+                value={`$${
+                  tokenInfoFromBackend
+                    ? new BigNumber(
+                        +tokenInfoFromBackend.pair.token_being_reviewed.total_supply *
+                          +tbr.derivedUSD,
+                      ).toFormat(2)
+                    : 'Loading...'
+                }`}
+              />
             </div>
             <div className={s.card_section}>
               <ReactTooltip />
               <LessScore />
             </div>
             <div className={s.card_section}>
-              <CommunityTrust votesAmount={905} likes={505} dislikes={400} />
+              <CommunityTrust
+                likes={tokenInfoFromBackend?.pair.likes || 0}
+                dislikes={tokenInfoFromBackend?.pair.dislikes || 0}
+                currentVote={tokenInfoFromBackend?.vote || 0}
+                pairId={pairId}
+              />
             </div>
             <div className={s.links}>
               <a
@@ -254,10 +283,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 <div className={s.card_link__title}>Etherscan</div>
               </a>
               <a
-                href={`https://coinmarketcap.com/currencies/${tokenInfoFromCoingecko?.name?.replace(
-                  /\s/g,
-                  '-',
-                )}/`}
+                href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug}`}
                 target="_blank"
                 rel="noreferrer noopener"
                 className={s.card_link}
@@ -267,24 +293,38 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 </div>
                 <div className={s.card_link__title}>CoinMarketcap</div>
               </a>
-              <div className={s.card_link}>
+              <a
+                target="_blank"
+                rel="noreferrer noopener"
+                href={tokenInfoFromBackend?.pair.token_being_reviewed.twitter_url}
+                className={s.card_link}
+              >
                 <div className={s.card_link__img}>
                   <img src={twitter} alt="twitter" />
                 </div>
                 <div className={s.card_link__title}>Twitter</div>
-              </div>
-              <div className={s.card_link}>
-                <div className={s.card_link__img}>
-                  <img src={telegram} alt="telegram" />
-                </div>
-                <div className={s.card_link__title}>Telegram</div>
-              </div>
-              <div className={s.card_link}>
+              </a>
+
+              {tokenInfoFromBackend?.pair.token_being_reviewed.chat_urls &&
+                tokenInfoFromBackend.pair.token_being_reviewed.chat_urls.map((link) => (
+                  <a target="_blank" rel="noreferrer noopener" href={link} className={s.card_link}>
+                    <div className={s.card_link__img}>
+                      <img src={telegram} alt="desktop" />
+                    </div>
+                    <div className={s.card_link__title}>Chat</div>
+                  </a>
+                ))}
+              <a
+                target="_blank"
+                rel="noreferrer noopener"
+                href={tokenInfoFromBackend?.pair.token_being_reviewed.website_url}
+                className={s.card_link}
+              >
                 <div className={s.card_link__img}>
                   <img src={desktop} alt="desktop" />
                 </div>
                 <div className={s.card_link__title}>Website</div>
-              </div>
+              </a>
             </div>
           </div>
         )}

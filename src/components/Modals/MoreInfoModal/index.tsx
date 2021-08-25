@@ -14,10 +14,20 @@ interface IMoreInfoModalProps {
   otherTokenPrice: string;
   otherTokenSymbol: string;
   poolCreated: string;
+  totalSupply: string;
+  pooledTbr: string;
 }
 
 const MoreInfoModal: React.FC<IMoreInfoModalProps> = observer(
-  ({ TBRprice, TBRsymbol, otherTokenSymbol, otherTokenPrice, poolCreated }) => {
+  ({
+    TBRprice,
+    TBRsymbol,
+    otherTokenSymbol,
+    otherTokenPrice,
+    poolCreated,
+    totalSupply,
+    pooledTbr,
+  }) => {
     const { modals } = useMst();
 
     const handleCancel = () => {
@@ -41,11 +51,11 @@ const MoreInfoModal: React.FC<IMoreInfoModalProps> = observer(
           </div>
           <div className={s.info}>
             <div className={s.info_left}>Total Supply</div>
-            <div className={s.info_right}>soon</div>
+            <div className={s.info_right}>{new BigNumber(totalSupply).toFormat(2)}</div>
           </div>
           <div className={s.info}>
             <div className={s.info_left}>Pooled TBR</div>
-            <div className={s.info_right}>soon</div>
+            <div className={s.info_right}>{((+pooledTbr / +totalSupply) * 100).toFixed(2)}%</div>
           </div>
         </div>
         <div className={s.right}>

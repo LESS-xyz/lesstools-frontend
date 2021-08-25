@@ -33,8 +33,7 @@ const Web3Connector: React.FC = ({ children }) => {
       web3.provider.on('accountsChanged', (accounts: string[]) => {
         console.log('ACCOUNTS CHANGED', accounts);
         localStorage.removeItem('lesstools_token');
-        user.disconect();
-        init();
+        window.location.reload();
       });
 
       web3.provider.on('disconnect', (code: string, reason: string) => {

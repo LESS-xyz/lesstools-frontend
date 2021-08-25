@@ -65,13 +65,24 @@
     @include flex(row, center, normal, nowrap);
   }
   &_button {
+    width: 32px;
+    height: 32px;
     cursor: pointer;
+    svg {
+      transition: fill 4s ease;
+    }
+    &:hover,
+    &.active {
+      svg circle {
+        fill: #ccd2e3;
+      }
+      svg path {
+        fill: #fff;
+      }
+    }
+
     & + & {
       margin-left: 15px;
-    }
-    img {
-      height: 32px;
-      width: 32px;
     }
   }
 
@@ -232,7 +243,7 @@
 .token_info {
   margin-bottom: 6px;
   &__item {
-    @include flex(row, center, space-between);
+    @include flex(row, center, space-between, nowrap);
     font-size: 15px;
     & + & {
       margin-top: 13px;
@@ -240,6 +251,15 @@
 
     &__title {
       color: #8a8695;
+      width: 40%;
+    }
+
+    &__value {
+      padding-left: 15px;
+      word-break: break-all;
+      text-align: right;
+      width: 60%;
+      line-height: 1.2;
     }
   }
 }

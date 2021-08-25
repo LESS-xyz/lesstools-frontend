@@ -1,6 +1,7 @@
 import Favorites from './Favorites/index';
 import Transaction from './Transaction/index';
 import { IRowPairExplorer } from '../../../types/table';
+import { useMst } from '../../../store/store';
 
 import s from './RightAsideBar.module.scss';
 
@@ -11,6 +12,7 @@ interface isRightSideBarProps {
 }
 
 const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
+  const { user } = useMst();
   return (
     <>
       <Favorites />
@@ -59,7 +61,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
       </div>
       <div className={`${s.trades} grey-scroll`}>
         {trades
-          .filter((trade) => trade.maker.includes('0x'))
+          .filter((trade) => trade.maker === user.walletId)
           .map((trade) => (
             <Transaction
               key={`${trade.maker}-${trade.data}-${trade.totalEth}`}
@@ -73,7 +75,6 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
               otherSymbol={trade.otherToken.symbol}
             />
           ))}
-        {trades.filter((trade) => trade.maker.includes('0x')).length < 1 && <div>No data</div>}
       </div>
     </>
   );
