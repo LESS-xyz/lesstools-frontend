@@ -55,6 +55,10 @@ export type IAdditionalInfoFromBackend = {
   vote: 0 | -1 | 1;
 };
 
+type IGetFavoritesOfUser = {
+  platform: PLATFORM;
+};
+
 class BackendService {
   private axios: any;
 
@@ -115,6 +119,7 @@ class BackendService {
     }
   };
 
+  // VOTE FOR PAIR
   voteForPair = async (data: IVoteForPair) => {
     const headers = {
       Authorization: `Token ${data.token}`,
@@ -138,19 +143,39 @@ class BackendService {
     }
   };
 
-  addPairToFavorite = async (data: IAddPairToFavorite) => {
+  addOrRemovePairToFavorite = async (data: IAddPairToFavorite) => {
     const headers = {
       Authorization: `Token ${localStorage.getItem('lesstools_token')}`,
     };
 
-    await this.axios.post(
-      '/accounts/add_or_remove_favourite_pair/',
-      {
-        pair_address: data.pair_address,
-        platform: data.platform,
-      },
-      { headers },
-    );
+    try {
+      const res = await this.axios.post(
+        '/accounts/add_or_remove_favourite_pair/',
+        {
+          pair_address: data.pair_address,
+          platform: data.platform,
+        },
+        { headers },
+      );
+
+      return { data: res.data };
+    } catch (error) {
+      return { data: null, error };
+    }
+  };
+
+  getFavoritesOfUser = async (data: IGetFavoritesOfUser) => {
+    const headers = {
+      Authorization: `Token ${localStorage.getItem('lesstools_token')}`,
+    };
+    try {
+      const res = await this.axios.get(`/accounts/favourite_pairs/${data.platform}`, {
+        headers,
+      });
+      return { data: res.data };
+    } catch (error) {
+      return { data: null, error };
+    }
   };
 }
 

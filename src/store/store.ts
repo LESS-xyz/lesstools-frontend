@@ -24,6 +24,7 @@ export const Store = RootModel.create({
   user: {
     walletId: null,
     isVerified: false,
+    favoritePairs: [],
   },
 });
 

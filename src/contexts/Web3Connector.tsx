@@ -38,6 +38,7 @@ const Web3Connector: React.FC = ({ children }) => {
 
       web3.provider.on('disconnect', (code: string, reason: string) => {
         console.log('ACCOUNT DISCONNECTED', code, reason);
+        localStorage.removeItem('lesstools_token');
         user.disconect();
       });
 
@@ -49,10 +50,14 @@ const Web3Connector: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (location.pathname === '/app/user-account' || localStorage.getItem('lesstools_token'))
-      init();
+    if (location.pathname === '/app/user-account') init();
     // eslint-disable-next-line
   }, [location]);
+
+  useEffect(() => {
+    if (localStorage.getItem('lesstools_token')) init();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Web3ConnectorContext.Provider value={{ web3: web3Provider, handleInit: () => init() }}>

@@ -484,3 +484,20 @@ export const GET_HOT_PAIRS_SUSHISWAP = gql`
     }
   }
 `;
+
+// get favs pairs
+export const GET_FAVORITES_PAIRS = gql`
+  query getFavsPairs($ids: [String]) {
+    pairs(where: { id_in: $ids }) {
+      id
+      token0 {
+        symbol
+        derivedUSD
+      }
+      token1 {
+        symbol
+        derivedUSD
+      }
+    }
+  }
+`;

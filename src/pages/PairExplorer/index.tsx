@@ -45,7 +45,7 @@ const PairExplorer: React.FC = () => {
     },
   });
 
-  // запрос на граф для pair-card info
+  // запрос для pair-card info [ГРАФ]
   const { loading, data: pairInfo, refetch: refetchPairInfo } = useQuery<IPairInfo>(
     currentExchange.exchange === 'uniswap' ? GET_PAIR_INFO : GET_PAIR_INFO_SUSHIWAP,
     {
@@ -57,11 +57,12 @@ const PairExplorer: React.FC = () => {
     },
   );
 
+  // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАф]
   useEffect(() => {
     refetchPairInfo();
   }, [blocks, refetchPairInfo, pairId]);
 
-  // запрос на получения всех свапов данной пары
+  // запрос на получения всех свапов данной пары [ГРАФ]
   type response = { swaps: Array<IPairSwapsInfo> };
   const { loading: loadingSwaps, data: swaps } = useQuery<response>(GET_PAIR_SWAPS, {
     variables: {
@@ -136,9 +137,6 @@ const PairExplorer: React.FC = () => {
     }
     // eslint-disable-next-line
   }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
-
-  // ⚠️HARDCODE
-  // const userAdress = '0x1414b85fe8570780e2b3468588e4dcdd901a76a2';
 
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);

@@ -20,7 +20,6 @@ import s from './PairInfoBody.module.scss';
 import { ReactComponent as FavImg } from '../../../../assets/img/icons/favorite.svg';
 import { ReactComponent as ShareImg } from '../../../../assets/img/icons/share.svg';
 import scoreBg from '../../../../assets/img/icons/less-score-bg.svg';
-
 import marketcap from '../../../../assets/img/icons/marketcap.svg';
 import etherscan from '../../../../assets/img/icons/table/actions-etherscan.svg';
 import twitter from '../../../../assets/img/icons/twitter-blue.svg';
@@ -76,10 +75,6 @@ interface IPairInfoBodyProps {
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
 }
 
-const addPairToFav = (pair_address: string, platform: PLATFORM) => {
-  backend.addPairToFavorite({ pair_address, platform });
-};
-
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
   ({ pairInfo, pairId, tokenInfoFromBackend }) => {
     // tbr = token being reviewed
@@ -95,7 +90,8 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
       }
     }, [pairInfo]);
 
-    const { modals } = useMst();
+    // MODALS
+    const { modals, user } = useMst();
     const handleOpenMoreInfoModal = () => {
       modals.open('MoreInfo');
     };
@@ -114,6 +110,21 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
     const tokenPrice24HoursChange = new BigNumber(
       (+tbr?.derivedETH / tokenPrice24hAgo) * 100 - 100,
     ).toFormat(2);
+
+    const addOrRemovePairToFavs = async (pair_address: string, platform: PLATFORM) => {
+      const res = await backend.addOrRemovePairToFavorite({
+        pair_address,
+        platform,
+      });
+
+      if (!res.data) {
+        const newPairs = user.favoritePairs.filter((pair) => pair.id !== pair_address);
+        user.setFavoritesPairs(newPairs);
+      } else {
+        const newPairs = [{ id: pairId, token0: otherToken, token1: tbr }, ...user.favoritePairs];
+        user.setFavoritesPairs(newPairs);
+      }
+    };
 
     if (!pairInfo.base_info) return <div>No data</div>;
 
@@ -135,6 +146,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           )} - Shared from LESSTools.io`}
         />
         <TradeModal tokenId={tbr.id} />
+        <ReactTooltip />
         {!pairInfo.base_info ? (
           <div className={s.card_no_data}>
             <Loader />
@@ -153,11 +165,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                   <ShareImg />
                 </div>
                 <button
-                  onClick={() => addPairToFav(pairId, 'ETH')}
+                  onClick={() => addOrRemovePairToFavs(pairId, 'ETH')}
                   onKeyDown={() => {}}
                   type="button"
+                  disabled={!user.isVerified}
                   className={`${s.card_button} ${
-                    tokenInfoFromBackend?.pair.is_favourite_of_current_user && s.active
+                    user.favoritePairs.some((pair) => pair.id === pairId) && s.active
                   }`}
                 >
                   <FavImg />
@@ -259,7 +272,6 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               />
             </div>
             <div className={s.card_section}>
-              <ReactTooltip />
               <LessScore />
             </div>
             <div className={s.card_section}>
