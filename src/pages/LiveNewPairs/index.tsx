@@ -4,7 +4,6 @@ import { useQuery } from '@apollo/client';
 import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
-import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
 import AdBlock from '../../components/AdBlock/index';
 import { GET_LIVE_SWAPS, GET_LIVE_SWAPS_SUSHISWAP } from '../../queries/index';
@@ -124,7 +123,6 @@ Fundraising Capital"
         />
       </Helmet>
       <div className={s.container}>
-        <InfoBlock />
         <AdBlock adImg={ad} />
         <div className={s.info}>
           <div className={s.info_left}>

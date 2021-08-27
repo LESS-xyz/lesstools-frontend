@@ -5,7 +5,6 @@ import moment from 'moment';
 import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
-import InfoBlock from '../../components/InfoBlock/index';
 import Search from '../../components/Search/index';
 import AdBlock from '../../components/AdBlock/index';
 import { IRowBigSwap } from '../../types/table';
@@ -124,7 +123,6 @@ Fundraising Capital"
       </Helmet>
       <div className={s.container}>
         <AdBlock adImg={ad} />
-        <InfoBlock />
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Big Swap Explorer</div>

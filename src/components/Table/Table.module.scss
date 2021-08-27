@@ -1,8 +1,12 @@
 @import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/media.scss';
 
 .table_wrap {
   overflow: auto;
   max-height: 630px;
+  @include b(extramobile) {
+    margin: 0 -10px;
+  }
 }
 
 table {
@@ -26,7 +30,8 @@ table {
       color: #ff7143;
       background: rgb(39, 27, 91);
       .th_inner {
-        @include flex(row, center, flex-start, no-wrap);
+        @include flex(row, center, flex-start, nowrap);
+        white-space: nowrap;
       }
 
       .th_sorter {
@@ -65,7 +70,7 @@ table {
 
       span {
         display: inline-block;
-        // max-width: 175px;
+        max-width: 175px;
         word-break: break-all;
         line-height: 1.2;
       }
