@@ -10,12 +10,18 @@
 
 .info {
   background-color: rgba(103, 77, 246, 0.4);
-  margin-bottom: 40px;
-  padding: 6px 10px;
+  padding: 6px 10px 6px 55px;
+  overflow: hidden;
+  @include b(tablet) {
+    padding: 6px 10px;
+  }
 }
 
 .cell {
   padding: 5px 28px;
+  @include b(tablet) {
+    padding: 6px 16px;
+  }
   font-weight: bold;
   font-size: 15px;
   color: var(--grey);

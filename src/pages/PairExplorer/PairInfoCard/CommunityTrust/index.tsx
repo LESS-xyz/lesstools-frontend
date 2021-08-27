@@ -101,7 +101,11 @@ const CommunityTrust: React.FC<ICommunityTrust> = ({ likes, dislikes, currentVot
             <div className={s.info_bar}>
               <div
                 className={s.info_bar__bg}
-                style={{ width: `${(likesAmount / (likesAmount + dislikesAmount)) * 100}%` }}
+                style={{
+                  width: `${
+                    likesAmount ? (likesAmount / (likesAmount + dislikesAmount)) * 100 : 0
+                  }%`,
+                }}
               />
             </div>
           </div>

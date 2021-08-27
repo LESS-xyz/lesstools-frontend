@@ -491,10 +491,12 @@ export const GET_FAVORITES_PAIRS = gql`
     pairs(where: { id_in: $ids }) {
       id
       token0 {
+        id
         symbol
         derivedUSD
       }
       token1 {
+        id
         symbol
         derivedUSD
       }

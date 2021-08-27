@@ -30,6 +30,11 @@ export class Web3Service {
     this.provider.close();
   };
 
+  public getBalance = async (walletId: string) => {
+    const balance = await this.web3Provider.eth.getBalance(walletId);
+    return balance;
+  };
+
   public signMessage = async ({ userAdress, message }: SignMessageProps) => {
     try {
       return await this.web3Provider.eth.personal.sign(message, userAdress);

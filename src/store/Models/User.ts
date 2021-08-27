@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree';
 const TokenModel = types.model({
   derivedUSD: types.string,
   symbol: types.string,
+  id: types.string,
 });
 
 const FavoritePairModel = types.model({

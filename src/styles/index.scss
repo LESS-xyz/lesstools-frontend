@@ -1,6 +1,7 @@
 @import './reset';
 @import './fonts';
 @import './theme';
+@import './mixins/media.scss';
 
 body {
   background-color: var(--body-background-color);
@@ -19,6 +20,9 @@ body {
 main {
   padding-left: 60px !important;
   flex-grow: 1;
+  @include b(tablet) {
+    padding-left: 0 !important;
+  }
 }
 
 // sider on the main page

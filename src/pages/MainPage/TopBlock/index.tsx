@@ -1,5 +1,6 @@
-import s from './TopBlock.module.scss';
 import Button from '../../../components/Button/index';
+
+import s from './TopBlock.module.scss';
 
 const TopBlock: React.FC = () => {
   return (
@@ -18,7 +19,7 @@ const TopBlock: React.FC = () => {
             </div>
             <div className={s.buttons}>
               <Button big>Watch video</Button>
-              <Button gradient big>
+              <Button big to="/app">
                 <span>Launch App</span>
               </Button>
             </div>

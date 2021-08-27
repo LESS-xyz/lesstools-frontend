@@ -12,12 +12,16 @@ import {
 import HotPairs from './components/CommonQueries/HotPairs';
 import Footer from './components/Footer/index';
 import Sidebar from './components/Sidebar/index';
+import InfoBlock from './components/InfoBlock';
 
 export const App: React.FC = () => {
   return (
     <div className="App">
       <HotPairs />
-      <Sidebar />
+      <Route path="/app">
+        <InfoBlock />
+        <Sidebar />
+      </Route>
       <Switch>
         <Route path="/" exact>
           <MainPage />

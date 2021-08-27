@@ -57,7 +57,7 @@ const HotTable: React.FC<IHotTableProps> = observer(({ pairs, title, logo }) => 
               WHITELIST.includes(pair.pair.token1.id)
                 ? pair.pair.token0.derivedUSD
                 : pair.pair.token1.derivedUSD,
-            ).toFixed(8)}
+            ).toFixed(5)}
             tokenSymbol={
               WHITELIST.includes(pair.pair.token1.id)
                 ? pair.pair.token0.symbol

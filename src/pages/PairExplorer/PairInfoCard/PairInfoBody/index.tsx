@@ -120,6 +120,9 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
       if (!res.data) {
         const newPairs = user.favoritePairs.filter((pair) => pair.id !== pair_address);
         user.setFavoritesPairs(newPairs);
+      } else if (typeof res.data === 'string') {
+        // ВЫВЕСТИ МОДАЛКУ
+        console.log('ПЕРЕБОР');
       } else {
         const newPairs = [{ id: pairId, token0: otherToken, token1: tbr }, ...user.favoritePairs];
         user.setFavoritesPairs(newPairs);

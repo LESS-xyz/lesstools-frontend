@@ -49,9 +49,11 @@
   transform: translateX(-50%);
 
   &__scroll {
-    padding-right: 6px;
     max-height: 284px;
-    overflow-y: scroll;
+    &.scroll {
+      overflow-y: scroll;
+      padding-right: 6px;
+    }
   }
 
   &__inner {

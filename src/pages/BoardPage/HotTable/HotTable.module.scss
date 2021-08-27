@@ -1,6 +1,7 @@
 @import '../../../styles/mixins/flex.scss';
 @import '../../../styles/mixins/grid.scss';
 @import '../../../styles/mixins/gradient-text.scss';
+@import '../../../styles/mixins/media.scss';
 
 .table {
 }
@@ -46,11 +47,19 @@
   background: linear-gradient(90deg, #161126 0%, #1c0e40 100%);
   padding: 20px;
   @include grid(repeat(2, 1fr), 1fr, 10px);
+  @include b(extramobile) {
+    background: none;
+    padding: 10px;
+  }
 
   &__item {
     background-color: rgba(103, 77, 246, 0.21);
     padding: 10px 10px 10px 25px;
     @include flex(row, center, space-between);
+    @include b(extramobile) {
+      padding: 10px;
+      font-weight: 400;
+    }
 
     &_left__token {
       margin-bottom: 6px;

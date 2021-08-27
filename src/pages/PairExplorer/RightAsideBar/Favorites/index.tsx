@@ -9,6 +9,7 @@ import backend, { PLATFORM } from '../../../../services/backend/index';
 import { GET_FAVORITES_PAIRS } from '../../../../queries/index';
 import { sushiswapSubgraph, uniswapSubgraph } from '../../../../index';
 import { useMst } from '../../../../store/store';
+import { WHITELIST } from '../../../../data/whitelist';
 
 import s from './Favorites.module.scss';
 
@@ -94,24 +95,42 @@ const Favorites: React.FC = observer(() => {
           onClick={() => setIsModal(!isModal)}
         >
           <div className={s.favorites_main__left}>
-            <div className={s.favorites_main__left__title}>Favorites</div>
-            <div className={s.favorites_main__left__symbol}>LESS</div>
-          </div>
-          <div className={s.favorites_main__right}>
-            <div className={s.favorites_main__right_price}>$5,540</div>
-            <div className={s.favorites_main__right_arrow}>
-              <img src={arrowRight} alt=">" />
+            <div className={s.favorites_main__left__title}>Favourites</div>
+            <div className={s.favorites_main__left__symbol}>
+              {user.favoritePairs.length > 0 ? user.favoritePairs[0].token1.symbol : 'No pairs'}
             </div>
           </div>
+          <div className={s.favorites_main__right}>
+            <div className={s.favorites_main__right_price}>
+              {user.favoritePairs.length > 0
+                ? `$${new BigNumber(user.favoritePairs[0].token1.derivedUSD).toFormat(2)}`
+                : ''}
+            </div>
+            {user.favoritePairs.length > 0 && (
+              <div className={s.favorites_main__right_arrow}>
+                <img src={arrowRight} alt=">" />
+              </div>
+            )}
+          </div>
         </div>
-        {isModal && !loading && user.favoritePairs && (
+        {isModal && !loading && user.favoritePairs.length > 0 && (
           <div className={s.favorites_modal}>
             <div className={s.favorites_modal__inner}>
-              <div className={`${s.favorites_modal__scroll} grey-scroll`}>
+              <div
+                className={`${s.favorites_modal__scroll} grey-scroll ${
+                  user.favoritePairs.length > 5 && s.scroll
+                }`}
+              >
                 {user.favoritePairs.map((pair: any) => (
                   <Favorite
-                    symbol={pair.token0.symbol}
-                    price={pair.token0.derivedUSD}
+                    symbol={
+                      WHITELIST.includes(pair.token1.id) ? pair.token0.symbol : pair.token1.symbol
+                    }
+                    price={
+                      WHITELIST.includes(pair.token1.id)
+                        ? pair.token0.derivedUSD
+                        : pair.token1.derivedUSD
+                    }
                     pairId={pair.id}
                     deletePair={() => deletePair(pair.id, 'ETH')}
                     currentExchange={currentExchange.exchange}
