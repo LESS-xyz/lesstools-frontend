@@ -1,13 +1,20 @@
 import { createContext, useContext } from 'react';
 import { Instance, onSnapshot, types } from 'mobx-state-tree';
 
-import { ModalsModel, HotPairsModel, CurrentExchangeModel, UserModel } from './Models/index';
+import {
+  ModalsModel,
+  HotPairsModel,
+  CurrentExchangeModel,
+  UserModel,
+  MobileMenuModel,
+} from './Models/index';
 
 const RootModel = types.model({
   modals: ModalsModel,
   hotPairs: HotPairsModel,
   currentExchange: CurrentExchangeModel,
   user: UserModel,
+  mobileMenu: MobileMenuModel,
 });
 
 export const Store = RootModel.create({
@@ -25,6 +32,9 @@ export const Store = RootModel.create({
     walletId: null,
     isVerified: false,
     favoritePairs: [],
+  },
+  mobileMenu: {
+    isActive: false,
   },
 });
 

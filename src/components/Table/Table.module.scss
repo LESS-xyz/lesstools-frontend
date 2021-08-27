@@ -4,9 +4,6 @@
 .table_wrap {
   overflow: auto;
   max-height: 630px;
-  @include b(extramobile) {
-    margin: 0 -10px;
-  }
 }
 
 table {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
+import { useMst } from '../../../store/store';
+
 import s from '../Sidebar.module.scss';
 
 interface ILinkProps {
@@ -13,6 +15,8 @@ interface ILinkProps {
 const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
   const [isHover, setIsHover] = useState(false);
   const loc = useLocation();
+  const { mobileMenu } = useMst();
+
   useEffect(() => {
     if (
       to &&
@@ -31,6 +35,7 @@ const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
           loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/')
         }
         to={to}
+        onClick={() => mobileMenu.toogleMobileMenu()}
       >
         <div
           className={s.link}

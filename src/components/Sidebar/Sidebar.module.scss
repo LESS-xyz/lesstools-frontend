@@ -10,8 +10,20 @@
   width: 60px;
   transition: 0.2s ease;
   text-overflow: ellipsis;
-  @include b(tablet){
-    left: 100%;
+
+  @media (max-height: 640px) {
+    overflow-y: scroll;
+  }
+
+  @include b(tablet) {
+    top: -110%;
+    transition: 0.8s ease;
+    z-index: 50000000;
+    width: 100% !important;
+    height: calc(100vh - 52px);
+    &.active {
+      top: 52px;
+    }
   }
 
   &:hover {
@@ -39,9 +51,36 @@
       }
     }
   }
+
+  @include b(tablet) {
+    .logo_text {
+      display: block;
+    }
+
+    .link {
+      padding-left: 12px;
+      &_text {
+        opacity: 1;
+      }
+    }
+
+    .subtitle {
+      padding-left: 12px;
+    }
+
+    .group_title {
+      padding-left: 12px;
+      &__icon {
+        display: block;
+      }
+    }
+  }
 }
 
 .logo {
+  @include b(tablet) {
+    display: none;
+  }
   padding: 22px 15px;
   @include flex(row, center, center, nowrap);
   &_text {

@@ -9,12 +9,16 @@ body {
   font-weight: normal;
   color: var(--body-color);
   overflow-x: hidden;
+  &.fixed {
+    overflow: hidden;
+  }
 }
 
 .App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
 }
 
 main {

@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import LinkSidebar from './LinkSidebar/index';
+import { useMst } from '../../store/store';
 
 import s from './Sidebar.module.scss';
 
@@ -19,9 +21,10 @@ import bigSwapWhite from '../../assets/img/sections/sidebar/big-swap-white.svg';
 import uniswap from '../../assets/img/sections/sidebar/uniswap.svg';
 import sushiswap from '../../assets/img/sections/sidebar/suchiswap.svg';
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC = observer(() => {
+  const { mobileMenu } = useMst();
   return (
-    <aside className={s.sidebar}>
+    <aside className={`${s.sidebar} ${mobileMenu.isActive && s.active} grey-scroll`}>
       <NavLink to="/" className={s.logo}>
         <div className={s.logo_icon}>
           <img src={logo} alt="logo" />
@@ -97,6 +100,6 @@ const Sidebar: React.FC = () => {
       />
     </aside>
   );
-};
+});
 
 export default Sidebar;
