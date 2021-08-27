@@ -16,7 +16,6 @@ import { IPairSwapsInfo } from '../../types/pairExplorer';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairsSearch from '../../components/PairsSearch/index';
-import InfoBlock from '../../components/InfoBlock/index';
 import Loader from '../../components/Loader/index';
 import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
@@ -156,7 +155,6 @@ Fundraising Capital"
           content="https://og-image.vercel.app/Check%20**WETH%20400%24**%20at%20lesstools.io.png?theme=dark&md=1&fontSize=100px&images=https%3A%2F%2Fs2.coinmarketcap.com%2Fstatic%2Fimg%2Fcoins%2F200x200%2F10279.png&images=https%3A%2F%2Fs2.coinmarketcap.com%2Fstatic%2Fimg%2Fcoins%2F200x200%2F10279.png"
         />
       </Helmet>
-      <InfoBlock />
 
       <div className={s.container}>
         <div className={s.main}>

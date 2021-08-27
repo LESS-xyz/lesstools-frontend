@@ -1,9 +1,13 @@
 @import '../../styles/mixins/container.scss';
 @import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/media.scss';
 
 .page {
   min-height: 100vh;
   background: var(--gradient-background);
+  @include b(extramobile) {
+    background: none;
+  }
 }
 
 .container {
@@ -17,16 +21,19 @@
   // grid-template-columns: 4fr 1fr;
   align-items: center;
   padding: 0 30px;
+  @include b(1250) {
+    padding: 0;
+  }
 }
 
 // card and chart
 .main {
-  margin-top: -33px;
+  padding-top: 7px;
 }
 
 .main_inner {
   min-height: 90vh;
-  margin-bottom: 13px;
+  margin-bottom: 7px;
   display: grid;
   grid-template-columns: 10fr;
   gap: 7px;
@@ -41,6 +48,15 @@
   }
   &.both {
     grid-template-columns: 300px 10fr 300px;
+  }
+  @include b(1250) {
+    grid-template-columns: 1fr 2fr !important;
+    grid-template-areas: 'left chart' 'right right';
+    grid-auto-rows: auto;
+  }
+  @include b(850) {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: 'left' 'chart' ' right';
   }
 }
 
@@ -58,6 +74,13 @@
       img {
         transform: rotate(180deg);
       }
+    }
+  }
+  @include b(1250) {
+    width: 100%;
+    grid-area: left;
+    &__button {
+      display: none;
     }
   }
   &__button {
@@ -105,6 +128,13 @@
       }
     }
   }
+  @include b(1250) {
+    width: 100%;
+    grid-area: right;
+    &__button {
+      display: none;
+    }
+  }
   &__button {
     background: #6f45ff;
     padding: 2px;
@@ -140,16 +170,26 @@
   height: 100%;
   padding: 2px;
   position: relative;
+  @include b(850) {
+    background: none;
+    padding: 0;
+  }
 }
 
 .left_inner {
   background: linear-gradient(90deg, #190f31 0%, #000000 100%);
   height: 100%;
+  @include b(850) {
+    background: none;
+  }
 }
 
 .right_inner {
   background: linear-gradient(35deg, #190f31 0%, #000000 100%);
   height: 100%;
+  @include b(850) {
+    background: none;
+  }
 }
 
 .left {
@@ -168,6 +208,12 @@
 
 .chart {
   flex-grow: 1;
+  @include b(1250) {
+    grid-area: chart;
+  }
+  @include b(850) {
+    height: 250px;
+  }
 }
 
 // community trust and banner

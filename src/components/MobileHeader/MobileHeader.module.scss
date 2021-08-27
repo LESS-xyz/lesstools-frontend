@@ -7,6 +7,9 @@
   @include b(tablet) {
     @include flex(row, center, space-between);
   }
+  position: relative;
+  z-index: 99999999999999999;
+  background-color: #000;
 }
 
 .logo {

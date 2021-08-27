@@ -20,9 +20,9 @@
     transition: 0.8s ease;
     z-index: 50000000;
     width: 100% !important;
-    height: calc(100% - 52px);
+    height: calc(100% - 56px);
     &.active {
-      top: 52px;
+      top: 56px;
     }
   }
 
