@@ -11,8 +11,14 @@ const MobileHeader: React.FC = () => {
 
   return (
     <div className={s.header}>
-      <button onClick={() => mobileMenu.toogleMobileMenu()} type="button" className={s.burger}>
-        menuF
+      <button
+        onClick={() => mobileMenu.toogleMobileMenu()}
+        type="button"
+        className={`${s.burger} ${mobileMenu.isActive && s.active}`}
+      >
+        <div className={s.burger_line} />
+        <div className={s.burger_line} />
+        <div className={s.burger_line} />
       </button>
       <div className={s.logo}>
         <div className={s.logo_icon}>
