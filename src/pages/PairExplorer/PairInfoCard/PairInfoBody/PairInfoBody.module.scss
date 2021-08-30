@@ -70,6 +70,8 @@
     cursor: pointer;
     svg {
       transition: fill 4s ease;
+      width: 32px;
+      height: 32px;
     }
     &.active {
       svg circle {
