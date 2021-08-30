@@ -200,6 +200,7 @@
   padding: 10px;
   @include b(850) {
     background: none;
+    padding: 15px 0;
   }
 }
 
@@ -278,13 +279,16 @@
 
 .mobile_block {
   display: none;
-  @include b(mobile) {
+  &__favs {
+    margin: 15px 0;
+  }
+  @include b(850) {
     display: block;
   }
 }
 
 .info {
-  @include b(mobile) {
+  @include b(850) {
     display: none;
   }
 }

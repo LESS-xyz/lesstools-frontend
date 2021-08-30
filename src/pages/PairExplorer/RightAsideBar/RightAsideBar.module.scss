@@ -83,7 +83,7 @@
 }
 
 .favs {
-  @include b(mobile) {
+  @include b(850) {
     display: none;
   }
 }

@@ -165,7 +165,18 @@ Fundraising Capital"
               setValue={setSearchValue}
               placeholder={`Search ${currentExchange.exchange} pairs`}
             />
-            <Favorites />
+            <div className={s.mobile_block__favs}>
+              <Favorites />
+            </div>
+            {!pairInfo ? (
+              <Loader />
+            ) : (
+              <PairInfoHeader
+                token0={pairInfo?.base_info?.token0}
+                token1={pairInfo?.base_info?.token1}
+                cmcTokenId={tokenInfoFromBackend?.pair.token_being_reviewed.cmc_id || 0}
+              />
+            )}
           </div>
 
           <div

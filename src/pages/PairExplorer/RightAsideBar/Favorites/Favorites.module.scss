@@ -3,7 +3,7 @@
 .favorites {
   padding: 10px;
   position: relative;
-  @include b(mobile) {
+  @include b(850) {
     padding: 10px 0;
   }
 }
