@@ -1,10 +1,16 @@
 @import '../../../styles/mixins/container.scss';
 @import '../../../styles/mixins/grid.scss';
 @import '../../../styles/mixins/gradient-text.scss';
+@import '../../../styles/mixins/media.scss';
 
 .block {
   background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
   padding: 100px 0 50px;
+  @include b(mobile) {
+    padding-bottom: 25px;
+    background: none;
+    padding-top: 0;
+  }
 }
 
 .container {
@@ -17,6 +23,9 @@
   font-size: 40px;
   color: var(--grey);
   margin-bottom: 70px;
+  @include b(mobile){
+    margin-bottom: 20px;
+  }
 }
 
 .info_bottom {
@@ -24,10 +33,14 @@
   font-size: 12px;
   line-height: 1.2;
   color: var(--grey);
+  @include b(extramobile) {
+    text-align: justify;
+  }
 }
 
 .cards {
   @include grid(repeat(2, 1fr), auto, 0px);
+
   grid-column-gap: 100px;
   grid-row-gap: 172px;
   padding-bottom: 200px;
@@ -43,11 +56,24 @@
     height: 67%;
     background-color: var(--blue);
   }
+
+  @include b(mobile) {
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    padding-bottom: 25px;
+    margin-bottom: 0;
+    &_line {
+      display: none;
+    }
+  }
 }
 // card
 .card {
   position: relative;
   min-height: 357px;
+  @include b(mobile) {
+    min-height: 0;
+  }
   background: radial-gradient(
       183.35% 154.66% at 71.43% 105.88%,
       rgba(111, 69, 255, 0) 0%,
@@ -57,6 +83,9 @@
   padding: 10px;
 
   &.rightCard {
+    @include b(mobile) {
+      top: 0;
+    }
     top: 172px;
 
     &::after {
@@ -73,6 +102,11 @@
     height: 16px;
     width: 16px;
     border-radius: 50%;
+  }
+  @include b(mobile) {
+    &::after {
+      display: none;
+    }
   }
 
   &_header {

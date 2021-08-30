@@ -2,6 +2,7 @@
 @import '../../../styles/mixins/grid.scss';
 @import '../../../styles/mixins/flex.scss';
 @import '../../../styles/mixins/gradient-text.scss';
+@import '../../../styles/mixins/media.scss';
 
 .container {
   @include container(1060px);
@@ -13,6 +14,9 @@
 
 .cards {
   @include grid(repeat(2, 1fr), 1fr, 30px);
+  @include b(mobile) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card_text {
@@ -25,8 +29,15 @@
   }
 
   &__title {
+    display: inline-block;
     @include gradient-text;
     font-size: 40px;
+    @include b(mobile) {
+      font-size: 35px;
+    }
+    @include b(extramobile) {
+      font-size: 25px;
+    }
     margin-bottom: 30px;
   }
 
@@ -39,6 +50,9 @@
 
 .card_img {
   @include flex(row, flex-end, center);
+  @include b(mobile) {
+    display: none;
+  }
   height: 350px;
   background: radial-gradient(
       47.2% 137.33% at 51.49% 51.91%,

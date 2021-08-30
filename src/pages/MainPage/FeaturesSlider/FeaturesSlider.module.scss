@@ -1,4 +1,5 @@
 @import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/media.scss';
 
 .block {
   overflow: hidden;
@@ -17,7 +18,16 @@
   position: absolute;
   top: 100px;
   right: 50px;
+  z-index: 5;
   @include flex(row, center);
+  @include b(890) {
+    top: 55%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    padding: 0 10px;
+    justify-content: space-between;
+  }
 }
 
 .button {
@@ -26,9 +36,15 @@
   height: 42px;
   background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
   @include flex(row, center, center);
+  @include b(890) {
+    background: var(--gradient);
+    svg path {
+      stroke: #fff;
+    }
+  }
 
   &:first-child {
-    img {
+    svg {
       transform: rotate(180deg);
     }
   }
@@ -53,21 +69,10 @@
 }
 
 .slider {
-  left: 100px;
+  padding: 0 50px;
   position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    width: 5%;
-    height: 100%;
-    background: linear-gradient(270deg, rgba(26, 13, 59, 0) 0%, #1a0d3a 100%);
-    transition: 0.2s ease;
+  @include b(mobile) {
+    padding: 0 10px;
   }
 
   &.fade {

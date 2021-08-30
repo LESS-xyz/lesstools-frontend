@@ -1,4 +1,5 @@
 @import '../../../styles/mixins/container.scss';
+@import '../../../styles/mixins/media.scss';
 
 .block {
   padding-top: 90px;
@@ -13,6 +14,9 @@
   text-align: center;
   color: var(--grey);
   margin-bottom: 70px;
+  @include b(extramobile) {
+    display: none;
+  }
 }
 
 .logos {
@@ -22,6 +26,13 @@
   grid-row-gap: 90px;
   grid-column-gap: 45px;
   margin-bottom: 90px;
+  @include b(mobile) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include b(extramobile) {
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 20px;
+  }
 }
 
 .logo {
@@ -29,7 +40,7 @@
   display: flex;
   justify-content: center;
 
-  img{
+  img {
     max-width: 100%;
   }
 }

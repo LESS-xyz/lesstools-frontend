@@ -1,8 +1,73 @@
 import React from 'react';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Pagination } from 'swiper';
+
+import 'swiper/swiper.scss';
 import s from './TeamBlock.module.scss';
+
 import man from '../../../assets/img/sections/team-photos/man.png';
 import twitterIcon from '../../../assets/img/icons/twitter-team-link.svg';
 import telegramIcon from '../../../assets/img/icons/telegram-team-link.svg';
+
+SwiperCore.use([Pagination]);
+
+const data = [
+  {
+    img: man,
+    name: 'Jhon Smith',
+    country: 'Belgium',
+    lang: 'English',
+    description: 'Co-founder of Less Network, Lead Software Engineer & Architect',
+    twitter: '/',
+    telegram: '/',
+  },
+  {
+    img: man,
+    name: 'Jhon Smit',
+    country: 'Belgium',
+    lang: 'English',
+    description: 'Co-founder of Less Network, Lead Software Engineer & Architect',
+    twitter: '/',
+    telegram: '/',
+  },
+  {
+    img: man,
+    name: 'Jhon Sith',
+    country: 'Belgium',
+    lang: 'English',
+    description: 'Co-founder of Less Network, Lead Software Engineer & Architect',
+    twitter: '/',
+    telegram: '/',
+  },
+  {
+    img: man,
+    name: 'Jhon Smth',
+    country: 'Belgium',
+    lang: 'English',
+    description: 'Co-founder of Less Network, Lead Software Engineer & Architect',
+    twitter: '/',
+    telegram: '/',
+  },
+  {
+    img: man,
+    name: 'Jhon ith',
+    country: 'Belgium',
+    lang: 'English',
+    description: 'Co-founder of Less Network, Lead Software Engineer & Architect',
+    twitter: '/',
+    telegram: '/',
+  },
+  {
+    img: man,
+    name: 'Jhon Smi',
+    country: 'Belgium',
+    lang: 'English',
+    description: 'Co-founder of Less Network, Lead Software Engineer & Architect',
+    twitter: '/',
+    telegram: '/',
+  },
+];
 
 interface ICardProps {
   img: string;
@@ -56,61 +121,19 @@ const TeamBlock: React.FC = () => {
       <div className={s.container}>
         <div className={s.inner}>
           <div className={s.title}>TEAM MEMBERS</div>
+          <div className={s.slider}>
+            <Swiper spaceBetween={20} slidesPerView={1}>
+              {data.map((team) => (
+                <SwiperSlide key={`${team.name}-${team.description}`}>
+                  <Card {...team} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
           <div className={s.cards}>
-            <Card
-              img={man}
-              name="John Smith"
-              country="USA"
-              lang="English"
-              description="Co-founder of Less Network, Lead Software Engineer & Architect"
-              twitter="/"
-              telegram="/"
-            />
-            <Card
-              img={man}
-              name="John Smith"
-              country="USA"
-              lang="English"
-              description="Co-founder of Less Network, Lead Software Engineer & Architect"
-              twitter="/"
-              telegram="/"
-            />
-            <Card
-              img={man}
-              name="John Smith"
-              country="USA"
-              lang="English"
-              description="Co-founder of Less Network, Lead Software Engineer & Architect"
-              twitter="/"
-              telegram="/"
-            />
-            <Card
-              img={man}
-              name="John Smith"
-              country="USA"
-              lang="English"
-              description="Co-founder of Less Network, Lead Software Engineer & Architect"
-              twitter="/"
-              telegram="/"
-            />
-            <Card
-              img={man}
-              name="John Smith"
-              country="USA"
-              lang="English"
-              description="Co-founder of Less Network, Lead Software Engineer & Architect"
-              twitter="/"
-              telegram="/"
-            />
-            <Card
-              img={man}
-              name="John Smith"
-              country="USA"
-              lang="English"
-              description="Co-founder of Less Network, Lead Software Engineer & Architect"
-              twitter="/"
-              telegram="/"
-            />
+            {data.map((team) => (
+              <Card key={`${team.name}-${team.description}`} {...team} />
+            ))}
           </div>
         </div>
       </div>

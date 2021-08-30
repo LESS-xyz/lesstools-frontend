@@ -17,7 +17,7 @@ const CardText: React.FC<ICardTextProps> = ({ title, subtitle }) => {
   return (
     <div className={s.card_text}>
       <div className={s.card_text__inner}>
-        <div className={s.card_text__title}>{title}</div>
+        <span className={s.card_text__title}>{title}</span>
         <div className={s.card_text__subtitle}>{subtitle}</div>
       </div>
     </div>

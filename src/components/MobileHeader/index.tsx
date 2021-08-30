@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { useMst } from '../../store/store';
 
@@ -20,14 +21,14 @@ const MobileHeader: React.FC = () => {
         <div className={s.burger_line} />
         <div className={s.burger_line} />
       </button>
-      <div className={s.logo}>
+      <Link to="/" className={s.logo}>
         <div className={s.logo_icon}>
           <Logo width="20px" height="23px" />
         </div>
         <div className={s.logo_text}>
           less<span>tools</span>
         </div>
-      </div>
+      </Link>
       <div />
     </div>
   );

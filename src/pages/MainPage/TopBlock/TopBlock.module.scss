@@ -1,19 +1,29 @@
 @import '../../../styles/mixins/container.scss';
 @import '../../../styles/mixins/flex.scss';
 @import '../../../styles/mixins/gradient-text.scss';
+@import '../../../styles/mixins/media.scss';
 
 .container {
   @include container(1390px);
   @include flex(row, center, flex-start);
   height: 100vh;
+  @include b(extramobile) {
+    height: 80vh;
+  }
 }
 
 .block {
   background: var(--gradient-background);
+  @include b(extramobile) {
+    background: none;
+  }
 }
 .bg_wrap {
   background: url('../../../assets/img/sections/main/bg-main.svg') no-repeat right top;
   background-size: contain;
+  @include b(tablet) {
+    background: none;
+  }
 }
 
 .title {
@@ -21,6 +31,13 @@
   font-size: 50px;
   line-height: 1.2;
   margin-bottom: 30px;
+
+  @include b(mobile) {
+    font-size: 36px;
+  }
+  @include b(extramobile) {
+    font-size: 25px;
+  }
 }
 
 .subtitle {
@@ -32,4 +49,13 @@
     @include gradient-text;
     padding-right: 1px;
   }
+  @include b(extramobile) {
+    max-width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+  }
+}
+
+.buttons {
+  display: flex;
 }
