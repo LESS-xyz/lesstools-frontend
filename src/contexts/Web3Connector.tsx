@@ -20,6 +20,7 @@ const Web3Connector: React.FC = ({ children }) => {
       }
     } catch (error) {
       if (error.code === -32002) {
+        localStorage.removeItem('lesstools_token');
         window.location.reload();
       }
     }
@@ -52,7 +53,7 @@ const Web3Connector: React.FC = ({ children }) => {
   useEffect(() => {
     if (location.pathname === '/app/user-account') init();
     // eslint-disable-next-line
-  }, [location]);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (localStorage.getItem('lesstools_token')) init();

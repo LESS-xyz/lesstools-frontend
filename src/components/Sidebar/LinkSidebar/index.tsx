@@ -35,7 +35,7 @@ const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
           loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/')
         }
         to={to}
-        onClick={() => mobileMenu.toogleMobileMenu()}
+        onClick={() => mobileMenu.setMobileMenu(false)}
       >
         <div
           className={s.link}

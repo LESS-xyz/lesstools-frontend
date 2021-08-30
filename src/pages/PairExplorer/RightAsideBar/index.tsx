@@ -15,7 +15,9 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
   const { user } = useMst();
   return (
     <>
-      <Favorites />
+      <div className={s.favs}>
+        <Favorites />
+      </div>
       <div className={s.table_header}>
         <div className={s.table_header__title}>Token amount</div>
         <div className={s.table_header__title}>Time ago</div>
@@ -75,6 +77,9 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
               otherSymbol={trade.otherToken.symbol}
             />
           ))}
+        {trades.filter((trade) => trade.maker === user.walletId).length < 1 && (
+          <div className={s.zero_trades}>You have 0 trades for this pair</div>
+        )}
       </div>
     </>
   );

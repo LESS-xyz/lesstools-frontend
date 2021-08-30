@@ -17,6 +17,7 @@ import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
 import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
 import PairsSearch from '../../components/PairsSearch/index';
 import Loader from '../../components/Loader/index';
+import Favorites from './RightAsideBar/Favorites/index';
 import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { useMst } from '../../store/store';
@@ -158,6 +159,15 @@ Fundraising Capital"
 
       <div className={s.container}>
         <div className={s.main}>
+          <div className={s.mobile_block}>
+            <PairsSearch
+              value={searchValue}
+              setValue={setSearchValue}
+              placeholder={`Search ${currentExchange.exchange} pairs`}
+            />
+            <Favorites />
+          </div>
+
           <div
             className={`${s.main_inner} ${isLeftSideBar && s.withLeft} ${
               isRightSideBar && s.withRight
@@ -165,7 +175,7 @@ Fundraising Capital"
           >
             <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
               <div className={s.left}>
-                <div className={s.left_inner}>
+                <div className={`${s.left_inner} grey-scroll`}>
                   {pairInfo ? (
                     <PairInfoBody
                       loading={loading}

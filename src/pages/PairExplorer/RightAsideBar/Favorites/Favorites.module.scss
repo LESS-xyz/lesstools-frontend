@@ -3,6 +3,9 @@
 .favorites {
   padding: 10px;
   position: relative;
+  @include b(mobile) {
+    padding: 10px 0;
+  }
 }
 
 .favorites_main {
@@ -13,6 +16,7 @@
   background-color: #382984;
   padding: 7px 10px;
   border-radius: 8px;
+
   &__left {
     &__title {
       color: #867dba;
@@ -52,7 +56,10 @@
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
-
+  z-index: 100;
+  @include b(mobile) {
+    width: 100%;
+  }
   &__scroll {
     max-height: 284px;
     &.scroll {

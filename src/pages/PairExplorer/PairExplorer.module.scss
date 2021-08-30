@@ -67,6 +67,10 @@
   left: -307px;
   transition: 0.4s ease;
   z-index: 10;
+  max-height: 90vh;
+  @include b(850) {
+    max-height: 100%;
+  }
   &.active {
     position: relative;
     left: 0;
@@ -82,6 +86,8 @@
     &__button {
       display: none;
     }
+    position: relative;
+    left: 0;
   }
   &__button {
     background: linear-gradient(259deg, #6f45ff 0%, #ff6365 100%);
@@ -119,6 +125,10 @@
   right: -307px;
   transition: 0.4s ease;
   z-index: 10;
+  max-height: 90vh;
+  @include b(850) {
+    max-height: 100%;
+  }
   &.active {
     position: relative;
     right: 0;
@@ -134,6 +144,8 @@
     &__button {
       display: none;
     }
+    position: relative;
+    right: 0;
   }
   &__button {
     background: #6f45ff;
@@ -179,6 +191,13 @@
 .left_inner {
   background: linear-gradient(90deg, #190f31 0%, #000000 100%);
   height: 100%;
+  max-height: inherit;
+  overflow-y: auto;
+  direction: rtl;
+  & > * {
+    direction: ltr;
+  }
+  padding: 10px;
   @include b(850) {
     background: none;
   }
@@ -187,14 +206,9 @@
 .right_inner {
   background: linear-gradient(35deg, #190f31 0%, #000000 100%);
   height: 100%;
+  overflow-y: auto;
   @include b(850) {
     background: none;
-  }
-}
-
-.left {
-  &_inner {
-    padding: 10px;
   }
 }
 
@@ -259,5 +273,18 @@
     &.active {
       background-color: #5454d4;
     }
+  }
+}
+
+.mobile_block {
+  display: none;
+  @include b(mobile) {
+    display: block;
+  }
+}
+
+.info {
+  @include b(mobile) {
+    display: none;
   }
 }

@@ -8,6 +8,9 @@ const MobileMenuModel = types
     toogleMobileMenu() {
       self.isActive = !self.isActive;
     },
+    setMobileMenu(foo: boolean) {
+      self.isActive = foo;
+    },
   }));
 
 export default MobileMenuModel;
