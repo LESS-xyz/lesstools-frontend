@@ -16,6 +16,7 @@
   @include grid(repeat(2, 1fr), 1fr, 30px);
   @include b(mobile) {
     grid-template-columns: 1fr;
+    gap: 45px;
   }
 }
 
@@ -23,6 +24,11 @@
   @include flex(row, center, flex-start);
   height: 350px;
   background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+  position: relative;
+
+  @include b(mobile) {
+    height: 260px;
+  }
 
   &__inner {
     padding: 0 40px;
@@ -32,9 +38,9 @@
     display: inline-block;
     @include gradient-text;
     font-size: 40px;
-    @include b(mobile) {
-      font-size: 35px;
-    }
+    position: relative;
+    z-index: 5;
+
     @include b(extramobile) {
       font-size: 25px;
     }
@@ -44,7 +50,43 @@
   &__subtitle {
     font-size: 22px;
     line-height: 1.2;
+    position: relative;
+    z-index: 5;
     color: var(--grey);
+  }
+
+  &__img {
+    display: none;
+    @include b(extramobile) {
+      display: block;
+    }
+    position: relative;
+    animation: top-down 3s ease-in-out infinite;
+    img {
+      width: 80px;
+    }
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @include b(mobile) {
+    align-items: flex-end;
+    padding-bottom: 36px;
+  }
+}
+
+@keyframes top-down {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -15px;
+  }
+
+  100% {
+    top: 0;
   }
 }
 

@@ -8,7 +8,8 @@
   @include flex(row, center, flex-start);
   height: 100vh;
   @include b(extramobile) {
-    height: 80vh;
+    padding: 20px 10px 40px 10px;
+    height: auto;
   }
 }
 
@@ -58,4 +59,21 @@
 
 .buttons {
   display: flex;
+}
+
+.header_mob {
+  display: none;
+  &__title {
+    font-size: 17px;
+    margin-left: 5px;
+    span {
+      color: var(--blue);
+    }
+  }
+  @include b(extramobile) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 13px 0;
+  }
 }

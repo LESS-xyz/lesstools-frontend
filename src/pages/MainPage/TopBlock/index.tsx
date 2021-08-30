@@ -1,10 +1,18 @@
 import Button from '../../../components/Button/index';
 
+import { ReactComponent as Logo } from '../../../assets/img/icons/logo.svg';
+
 import s from './TopBlock.module.scss';
 
 const TopBlock: React.FC = () => {
   return (
     <section className={s.block}>
+      <div className={s.header_mob}>
+        <Logo height="30px" />
+        <div className={s.header_mob__title}>
+          less<span>tools</span>
+        </div>
+      </div>
       <div className={s.bg_wrap}>
         <div className={s.container}>
           <div className={s.inner}>

@@ -1,4 +1,8 @@
+import { Swiper, SwiperSlide } from 'swiper/react';
+
 import s from './UsersPlans.module.scss';
+import 'swiper/swiper.scss';
+
 import featureIcon from '../../../assets/img/icons/feature.svg';
 
 const FreeUserPlanData = [
@@ -89,17 +93,30 @@ const UsersPlans: React.FC = () => {
           <div className={s.title}>Less user plans</div>
           <div className={s.subtitle}>Choose your subscription tier and upgrade now!</div>
           <div className={s.cards}>
-            <UserPlan title="Free" subtitle="- / hold" features={FreeUserPlanData} />
-            <UserPlan
-              title="Standart"
-              subtitle="$150.00/$75.00 paid in Less/Monthly Subscription** -or- 20,000 Less/Hold*"
-              features={StandartUserPlanData}
-            />
-            <UserPlan
-              title="Premium"
-              subtitle="100,000 LESS / hold*"
-              features={PremiumUserPlanData}
-            />
+            <Swiper
+              slidesPerView={1}
+              autoHeight
+              breakpoints={{ 900: { slidesPerView: 3 } }}
+              spaceBetween={20}
+            >
+              <SwiperSlide>
+                <UserPlan title="Free" subtitle="- / hold" features={FreeUserPlanData} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <UserPlan
+                  title="Standart"
+                  subtitle="$150.00/$75.00 paid in Less/Monthly Subscription** -or- 20,000 Less/Hold*"
+                  features={StandartUserPlanData}
+                />
+              </SwiperSlide>
+              <SwiperSlide>
+                <UserPlan
+                  title="Premium"
+                  subtitle="100,000 LESS / hold*"
+                  features={PremiumUserPlanData}
+                />
+              </SwiperSlide>
+            </Swiper>
           </div>
           <div className={s.info}>
             <p>
