@@ -42,62 +42,66 @@ const InfoBlock: React.FC = observer(() => {
 
   return (
     <section className={s.info}>
-      <div className={s.left}>
-        <div className={s.cell}>
-          <div>ETH: </div> <div> ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}</div>
-        </div>
-        <div className={s.cell}>
-          <div className={s.cell_img}>
-            <img src={gasIcon} alt="gasIcon" />
+      <div className={s.info_inner}>
+        <div className={s.left}>
+          <div className={s.cell}>
+            <div className={s.cell_text}>
+              ETH: ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}
+            </div>
           </div>
-          <div
-            data-multiline
-            data-tip={`Low: ${(gasPrice?.safeLow || 0) / 10} <br/> Medium: ${
-              (gasPrice?.average || 0) / 10
-            } <br/> Fast: ${(gasPrice?.fast || 0) / 10}`}
-            data-effect="solid"
-            data-place="bottom"
-            className={s.cell_text}
-          >
-            <div>{(gasPrice?.average || 0) / 10} GWEI</div>
+          <div className={s.cell}>
+            <div className={s.cell_img}>
+              <img src={gasIcon} alt="gasIcon" />
+            </div>
+            <div
+              data-multiline
+              data-tip={`Low: ${(gasPrice?.safeLow || 0) / 10} <br/> Medium: ${
+                (gasPrice?.average || 0) / 10
+              } <br/> Fast: ${(gasPrice?.fast || 0) / 10}`}
+              data-effect="solid"
+              data-place="bottom"
+              className={s.cell_text}
+            >
+              <span>{(gasPrice?.average || 0) / 10} GWEI</span>
+            </div>
+          </div>
+          <div className={s.cell}>
+            <div className={s.cell_img}>
+              <img src={hotIcon} alt="hotIcon" />
+            </div>
+            <div className={s.cell_text}>HOT PAIRS</div>
           </div>
         </div>
-        <div className={s.cell}>
-          <div className={s.cell_img}>
-            <img src={hotIcon} alt="hotIcon" />
+        <div className={s.right}>
+          <div className={s.marquee}>
+            <div className={s.table}>
+              {hotPairs[currentExchange.exchange].map((pair, index) => (
+                <div key={`${pair.pair.id}`} className={s.table_cell}>
+                  <Link to={`/app/${currentExchange.exchange}/pair-explorer/${pair.pair.id}`}>
+                    <span>#{index + 1}</span>{' '}
+                    {WHITELIST.includes(pair.pair.token0.id)
+                      ? pair.pair.token1.symbol
+                      : pair.pair.token0.symbol}
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className={s.cell_text}>HOT PAIRS</div>
         </div>
+        <Link to="/app/user-account" className={s.metamask_link}>
+          <div className={s.metamask_link__inner}>
+            <MetaMaskIcon className={s.metamask_link__inner_img} />
+            <span>
+              {/* eslint-disable-next-line */}
+              {!user.walletId
+                ? 'Connect'
+                : !user.isVerified
+                ? 'Verify'
+                : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
+            </span>
+          </div>
+        </Link>
       </div>
-      <div className={s.right}>
-        <div className={s.marquee}>
-          <div className={s.table}>
-            {hotPairs[currentExchange.exchange].map((pair, index) => (
-              <div key={`${pair.pair.id}`} className={s.table_cell}>
-                <Link to={`/app/${currentExchange.exchange}/pair-explorer/${pair.pair.id}`}>
-                  <span>#{index + 1}</span>{' '}
-                  {WHITELIST.includes(pair.pair.token0.id)
-                    ? pair.pair.token1.symbol
-                    : pair.pair.token0.symbol}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <Link to="/app/user-account" className={s.metamask_link}>
-        <div className={s.metamask_link__inner}>
-          <MetaMaskIcon className={s.metamask_link__inner_img} />
-          <span>
-            {/* eslint-disable-next-line */}
-            {!user.walletId
-              ? 'Connect'
-              : !user.isVerified
-              ? 'Verify'
-              : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
-          </span>
-        </div>
-      </Link>
     </section>
   );
 });

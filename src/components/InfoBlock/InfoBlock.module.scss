@@ -1,7 +1,7 @@
 @import '../../styles/mixins/flex.scss';
 @import '../../styles/mixins/media.scss';
 
-.info,
+.info_inner,
 .left,
 .cell,
 .table {
@@ -12,8 +12,19 @@
   background-color: rgba(103, 77, 246, 0.4);
   padding: 6px 10px 6px 55px;
   overflow: hidden;
+  &:hover {
+    .info_inner {
+      animation-play-state: paused;
+    }
+  }
   @include b(tablet) {
     padding: 6px 10px;
+  }
+  @include b(850) {
+    &_inner {
+      animation: scroll 25s infinite linear forwards;
+      width: 700px;
+    }
   }
 }
 
@@ -36,6 +47,10 @@
       height: 24px;
     }
   }
+
+  &_text {
+    white-space: nowrap;
+  }
 }
 
 .table_cell {
@@ -51,6 +66,9 @@
 .right {
   overflow: hidden;
   flex-grow: 1;
+  @include b(850) {
+    overflow: visible;
+  }
 }
 // бегущая строка
 @keyframes scroll {
@@ -58,12 +76,11 @@
     transform: translate(100%, 0);
   }
   100% {
-    transform: translate(-100%, 0);
+    transform: translate(-200%, 0);
   }
 }
 
 .marquee {
-  width: 100%;
   white-space: nowrap;
   animation: scroll 15s infinite linear forwards;
   @include b(tablet) {
@@ -72,6 +89,9 @@
   &:hover {
     animation-play-state: paused;
   }
+  @include b(850) {
+    animation: none;
+  }
 }
 
 .metamask_link {
@@ -79,6 +99,7 @@
   background: var(--gradient);
   padding: 2px;
   cursor: pointer;
+  margin-left: 30px;
 
   &__inner {
     @include flex(row, center, space-between, nowrap);
