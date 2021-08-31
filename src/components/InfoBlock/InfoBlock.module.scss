@@ -22,7 +22,7 @@
   }
   @include b(850) {
     &_inner {
-      animation: scroll 25s infinite linear forwards;
+      animation: scroll 10s infinite linear forwards;
       width: 700px;
     }
   }
@@ -68,6 +68,7 @@
   flex-grow: 1;
   @include b(850) {
     overflow: visible;
+    margin-right: 60px;
   }
 }
 // бегущая строка
@@ -82,7 +83,7 @@
 
 .marquee {
   white-space: nowrap;
-  animation: scroll 15s infinite linear forwards;
+  animation: scroll 25s infinite linear forwards;
   @include b(tablet) {
     width: 750px;
   }
@@ -99,7 +100,6 @@
   background: var(--gradient);
   padding: 2px;
   cursor: pointer;
-  margin-left: 30px;
 
   &__inner {
     @include flex(row, center, space-between, nowrap);

@@ -21,7 +21,7 @@ const MobileHeader: React.FC = () => {
         <div className={s.burger_line} />
         <div className={s.burger_line} />
       </button>
-      <Link to="/" className={s.logo}>
+      <Link to="/" className={s.logo} onClick={() => mobileMenu.setMobileMenu(false)}>
         <div className={s.logo_icon}>
           <Logo width="20px" height="23px" />
         </div>
