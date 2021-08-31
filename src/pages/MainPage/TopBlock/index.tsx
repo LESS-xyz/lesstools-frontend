@@ -7,13 +7,13 @@ import s from './TopBlock.module.scss';
 const TopBlock: React.FC = () => {
   return (
     <section className={s.block}>
-      <div className={s.header_mob}>
-        <Logo height="30px" />
-        <div className={s.header_mob__title}>
-          less<span>tools</span>
-        </div>
-      </div>
       <div className={s.bg_wrap}>
+        <div className={s.header}>
+          <Logo />
+          <div className={s.header__title}>
+            less<span>tools</span>
+          </div>
+        </div>
         <div className={s.container}>
           <div className={s.inner}>
             <div className={s.title}>

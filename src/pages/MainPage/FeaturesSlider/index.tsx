@@ -107,6 +107,10 @@ const FeaturesSlider: React.FC = () => {
             900: {
               slidesPerView: 2.2,
             },
+
+            1800: {
+              slidesPerView: 3,
+            },
           }}
         >
           {slidesData.map((slide, index) => (

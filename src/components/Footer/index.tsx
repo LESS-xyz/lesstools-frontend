@@ -4,6 +4,7 @@ import twitter from '../../assets/img/icons/twitter.svg';
 import telegram from '../../assets/img/icons/telegram.svg';
 import github from '../../assets/img/icons/github.svg';
 import medium from '../../assets/img/icons/medium.svg';
+import logo from '../../assets/img/icons/logo.svg';
 
 const Footer: React.FC = () => {
   return (
@@ -32,6 +33,11 @@ const Footer: React.FC = () => {
               <div className={s.social_link}>
                 <img src={github} alt="github" />
               </div>
+            </div>
+            <div className={s.line} />
+            <div className={s.logo}>
+              <img src={logo} alt="logo" />
+              <div>less</div>
             </div>
           </div>
         </div>

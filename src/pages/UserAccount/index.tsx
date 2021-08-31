@@ -1,15 +1,17 @@
 import { observer } from 'mobx-react-lite';
+import { Helmet } from 'react-helmet';
+
 import { useMst } from '../../store/store';
 import { useWeb3Context } from '../../contexts/Web3Connector';
 import { Web3Service } from '../../services/web3/index';
 import backend from '../../services/backend';
-
+import VerifiedPage from './VerifiedPage/index';
 import AdBlock from '../../components/AdBlock/index';
+import { CardsSlider } from '../MainPage/UsersPlans/index';
 
 import s from './UserAccount.module.scss';
 
 import adImg from '../../assets/img/sections/ad/ad1.png';
-import { Helmet } from 'react-helmet';
 
 const web3 = new Web3Service();
 
@@ -47,49 +49,56 @@ Fundraising Capital"
       </Helmet>
       <div className={s.container}>
         <AdBlock adImg={adImg} />
-        <div className={s.block}>
-          <div className={s.block_inner}>
-            <div className={s.block_title}>Connect your Wallet</div>
-            <div className={s.block_subtitle}>Connect your wallet with LessTools.</div>
-            {user.walletId ? (
-              <div className={s.block_button}>
-                {user.walletId.slice(0, 8)}...{user.walletId.slice(-5)}
+        {!user.isVerified ? (
+          <>
+            <div className={s.block}>
+              <div className={s.block_inner}>
+                <div className={s.block_title}>Connect your Wallet</div>
+                <div className={s.block_subtitle}>Connect your wallet with LessTools.</div>
+                {user.walletId ? (
+                  <div className={s.block_button}>
+                    {user.walletId.slice(0, 8)}...{user.walletId.slice(-5)}
+                  </div>
+                ) : (
+                  <div
+                    role="button"
+                    className={s.block_button}
+                    tabIndex={0}
+                    onKeyDown={() => {}}
+                    onClick={() => handleInit()}
+                  >
+                    Connect to Metamask
+                  </div>
+                )}
               </div>
-            ) : (
-              <div
-                role="button"
-                className={s.block_button}
-                tabIndex={0}
-                onKeyDown={() => {}}
-                onClick={() => handleInit()}
-              >
-                Connect to Metamask
-              </div>
-            )}
-          </div>
-        </div>
-        <div className={s.block}>
-          <div className={s.block_inner}>
-            <div className={s.block_title}>Verify your wallet</div>
-            <div className={s.block_subtitle}>
-              <p>Verify your wallet into LessTools</p>
-              <p>By verifying your wallet we will validate the ownership of your wallet.</p>
             </div>
-            {user.isVerified ? (
-              <div className={s.block_button}>Verified wallet</div>
-            ) : (
-              <div
-                className={s.block_button}
-                tabIndex={0}
-                role="button"
-                onKeyDown={() => {}}
-                onClick={() => verifyUser()}
-              >
-                Verify your wallet
+            <div className={s.block}>
+              <div className={s.block_inner}>
+                <div className={s.block_title}>Verify your wallet</div>
+                <div className={s.block_subtitle}>
+                  <p>Verify your wallet into LessTools</p>
+                  <p>By verifying your wallet we will validate the ownership of your wallet.</p>
+                </div>
+                {user.isVerified ? (
+                  <div className={s.block_button}>Verified wallet</div>
+                ) : (
+                  <button
+                    className={`${s.block_button} ${!user.walletId && s.grey}`}
+                    disabled={!user.walletId}
+                    type="button"
+                    onKeyDown={() => {}}
+                    onClick={() => verifyUser()}
+                  >
+                    Verify your wallet
+                  </button>
+                )}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          </>
+        ) : (
+          <VerifiedPage userId={user.walletId || ''} />
+        )}
+        <CardsSlider />
       </div>
     </main>
   );

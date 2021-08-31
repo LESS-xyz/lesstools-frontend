@@ -4,10 +4,14 @@ import { Web3Service } from '../services/web3/index';
 
 import { useMst } from '../store/store';
 
-const Web3ConnectorContext = React.createContext({ web3: {}, handleInit: () => {} });
+const Web3ConnectorContext = React.createContext({
+  web3: {},
+  handleInit: () => {},
+  disconect: () => {},
+});
 
 const Web3Connector: React.FC = ({ children }) => {
-  const [web3Provider, setWeb3Provider] = useState({});
+  const [web3Provider, setWeb3Provider] = useState<any>({});
   const { user } = useMst();
   const location = useLocation();
 
@@ -50,6 +54,11 @@ const Web3Connector: React.FC = ({ children }) => {
     }
   };
 
+  const disconect = () => {
+    user.disconect();
+    localStorage.removeItem('lesstools_token');
+  };
+
   useEffect(() => {
     if (location.pathname === '/app/user-account') init();
     // eslint-disable-next-line
@@ -61,7 +70,9 @@ const Web3Connector: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <Web3ConnectorContext.Provider value={{ web3: web3Provider, handleInit: () => init() }}>
+    <Web3ConnectorContext.Provider
+      value={{ web3: web3Provider, handleInit: () => init(), disconect: () => disconect() }}
+    >
       {children}
     </Web3ConnectorContext.Provider>
   );

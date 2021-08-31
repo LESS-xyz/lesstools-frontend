@@ -6,7 +6,7 @@
 
 .block {
   padding-top: 100px;
-  @include b(mobile){
+  @include b(mobile) {
     padding-top: 40px;
   }
 }
@@ -92,5 +92,31 @@
   }
   @include b(mobile) {
     display: none;
+  }
+}
+
+.custom_nav {
+  margin-bottom: 30px;
+  display: none;
+  @include b(890) {
+    @include flex(row, center, center);
+  }
+}
+
+.custom_nav__button {
+  width: 42px;
+  height: 42px;
+  background: var(--gradient);
+  @include flex(row, center, center);
+
+  svg path {
+    stroke: #fff;
+  }
+
+  &:first-child {
+    transform: rotate(180deg);
+  }
+  &:last-child {
+    margin-left: 25px;
   }
 }

@@ -1,5 +1,7 @@
 @import '../../styles/mixins/container.scss';
 @import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/gradient-text.scss';
+@import '../../styles/mixins/media.scss';
 
 .page {
   padding: 30px 0;
@@ -7,7 +9,7 @@
 }
 
 .container {
-  @include container();
+  @include container(1390px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +17,8 @@
 
 .block {
   @include flex(row, normal, center, nowrap, inline-flex);
-  min-width: 800px;
+  width: 100%;
+  max-width: 800px;
   background: #0e071f;
   border: 1px solid var(--blue);
   border-radius: 2px;
@@ -42,6 +45,22 @@
     margin-bottom: 53px;
   }
 
+  &_wallet {
+    font-size: 27px;
+    margin-bottom: 20px;
+    span {
+      @include gradient-text;
+    }
+  }
+
+  &_balance {
+    font-size: 36px;
+    margin-bottom: 20px;
+    span {
+      @include gradient-text;
+    }
+  }
+
   &_button {
     cursor: pointer;
     display: inline-block;
@@ -49,6 +68,14 @@
     border-radius: 2px;
     padding: 16px 20px;
     font-size: 20px;
+    color: #fff;
     font-weight: 500;
+
+    &.grey {
+      background: transparent;
+      color: var(--grey);
+      border: 1px solid #6f45ff;
+      border-radius: 2px;
+    }
   }
 }

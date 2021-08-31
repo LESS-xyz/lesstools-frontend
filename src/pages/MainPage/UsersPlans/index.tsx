@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import s from './UsersPlans.module.scss';
 import 'swiper/swiper.scss';
 
 import featureIcon from '../../../assets/img/icons/feature.svg';
+import { ReactComponent as ArrowBlue } from '../../../assets/img/icons/arrow-blue.svg';
 
 const FreeUserPlanData = [
   'Real-time data & chart',
@@ -85,6 +87,56 @@ const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle }) => {
   );
 };
 
+export const CardsSlider: React.FC = () => {
+  const [sliderInstance, setSliderInstance] = useState<any>(null);
+  return (
+    <>
+      <div className={s.custom_nav}>
+        <button
+          type="button"
+          onClick={() => sliderInstance.slidePrev()}
+          className={s.custom_nav__button}
+        >
+          <ArrowBlue />
+        </button>
+        <button
+          type="button"
+          onClick={() => sliderInstance.slideNext()}
+          className={s.custom_nav__button}
+        >
+          <ArrowBlue />
+        </button>
+      </div>
+      <Swiper
+        slidesPerView={1}
+        autoHeight
+        breakpoints={{ 900: { slidesPerView: 3 } }}
+        spaceBetween={20}
+        onSwiper={(slider) => setSliderInstance(slider)}
+        loop
+      >
+        <SwiperSlide>
+          <UserPlan title="Free" subtitle="- / hold" features={FreeUserPlanData} />
+        </SwiperSlide>
+        <SwiperSlide>
+          <UserPlan
+            title="Standart"
+            subtitle="$150.00/$75.00 paid in Less/Monthly Subscription** -or- 20,000 Less/Hold*"
+            features={StandartUserPlanData}
+          />
+        </SwiperSlide>
+        <SwiperSlide>
+          <UserPlan
+            title="Premium"
+            subtitle="100,000 LESS / hold*"
+            features={PremiumUserPlanData}
+          />
+        </SwiperSlide>
+      </Swiper>
+    </>
+  );
+};
+
 const UsersPlans: React.FC = () => {
   return (
     <section className={s.block}>
@@ -92,32 +144,7 @@ const UsersPlans: React.FC = () => {
         <div className={s.inner}>
           <div className={s.title}>Less user plans</div>
           <div className={s.subtitle}>Choose your subscription tier and upgrade now!</div>
-          <div className={s.cards}>
-            <Swiper
-              slidesPerView={1}
-              autoHeight
-              breakpoints={{ 900: { slidesPerView: 3 } }}
-              spaceBetween={20}
-            >
-              <SwiperSlide>
-                <UserPlan title="Free" subtitle="- / hold" features={FreeUserPlanData} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <UserPlan
-                  title="Standart"
-                  subtitle="$150.00/$75.00 paid in Less/Monthly Subscription** -or- 20,000 Less/Hold*"
-                  features={StandartUserPlanData}
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <UserPlan
-                  title="Premium"
-                  subtitle="100,000 LESS / hold*"
-                  features={PremiumUserPlanData}
-                />
-              </SwiperSlide>
-            </Swiper>
-          </div>
+          <CardsSlider />
           <div className={s.info}>
             <p>
               ** To qualify for the 50% DISCOUNT ($75 in LESS) you must hold at least 5000 LESS in

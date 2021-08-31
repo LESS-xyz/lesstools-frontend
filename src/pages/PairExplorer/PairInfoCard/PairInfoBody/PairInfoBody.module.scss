@@ -284,9 +284,7 @@
   &_number {
     font-size: 33px;
     font-weight: bold;
-    span {
-      @include gradient-text;
-    }
+    color: var(--blue);
   }
   img {
     max-width: 100%;

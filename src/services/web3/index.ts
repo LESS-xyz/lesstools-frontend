@@ -26,10 +26,6 @@ export class Web3Service {
     return this.provider.request({ method: 'eth_requestAccounts' });
   };
 
-  public disconect = async () => {
-    this.provider.close();
-  };
-
   public getBalance = async (walletId: string) => {
     const balance = await this.web3Provider.eth.getBalance(walletId);
     return balance;

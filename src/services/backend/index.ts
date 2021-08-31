@@ -65,6 +65,7 @@ class BackendService {
   constructor() {
     this.axios = axios.create({
       baseURL: config.APIS.backend,
+      // withCredentials: true,
     });
   }
 
