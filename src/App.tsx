@@ -20,18 +20,22 @@ import { useEffect } from 'react';
 
 export const App: React.FC = observer(() => {
   const { mobileMenu } = useMst();
+
   useEffect(() => {
     const body = document.querySelector('body');
     if (mobileMenu.isActive) body?.classList.add('fixed');
     else body?.classList.remove('fixed');
   }, [mobileMenu.isActive]);
+
   return (
     <div className="App">
       <HotPairs />
       <Route path="/app">
         <MobileHeader />
-        <InfoBlock />
         <Sidebar />
+      </Route>
+      <Route path={['/app/sushiswap', '/app/uniswap']}>
+        <InfoBlock />
       </Route>
       <Switch>
         <Route path="/" exact>
