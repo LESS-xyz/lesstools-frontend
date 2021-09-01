@@ -60,16 +60,18 @@ interface IUserPlanProps {
   features: Array<string>;
   title: string;
   subtitle: string;
+  userPlan: string | undefined;
+  itemKey: string;
 }
 
-const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle }) => {
+const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle, itemKey, userPlan }) => {
   return (
     <div className={s.card}>
       <div className={s.card_inner}>
-        <div className={s.card_header}>
+        <div className={`${s.card_header} ${itemKey === userPlan && s.active}`}>
           <div className={s.card_header__title}>
             <span>{title}</span>
-          </div>
+          </div>  
           <div className={s.card_header__subtitle}>{subtitle}</div>
         </div>
         <div className={s.card_body}>
@@ -87,7 +89,11 @@ const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle }) => {
   );
 };
 
-export const CardsSlider: React.FC = () => {
+interface ICardsSlider {
+  userPlan?: string;
+}
+
+export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
   const [sliderInstance, setSliderInstance] = useState<any>(null);
   return (
     <>
@@ -116,18 +122,28 @@ export const CardsSlider: React.FC = () => {
         loop
       >
         <SwiperSlide>
-          <UserPlan title="Free" subtitle="- / hold" features={FreeUserPlanData} />
+          <UserPlan
+            userPlan={userPlan}
+            itemKey="Free"
+            title="Free"
+            subtitle="- / hold"
+            features={FreeUserPlanData}
+          />
         </SwiperSlide>
         <SwiperSlide>
           <UserPlan
-            title="Standart"
+            userPlan={userPlan}
+            title="Standard"
+            itemKey="Standard"
             subtitle="$150.00/$75.00 paid in Less/Monthly Subscription** -or- 20,000 Less/Hold*"
             features={StandartUserPlanData}
           />
         </SwiperSlide>
         <SwiperSlide>
           <UserPlan
+            userPlan={userPlan}
             title="Premium"
+            itemKey="Premium"
             subtitle="100,000 LESS / hold*"
             features={PremiumUserPlanData}
           />

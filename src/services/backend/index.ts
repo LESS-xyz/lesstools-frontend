@@ -178,6 +178,30 @@ class BackendService {
       return { data: null, error };
     }
   };
+
+  getUserPlan = async () => {
+    const headers = {
+      Authorization: `Token ${localStorage.getItem('lesstools_token')}`,
+    };
+    try {
+      const res = await this.axios.get('/accounts/', { headers });
+      return { data: res.data };
+    } catch (error) {
+      return {
+        data: null,
+        error,
+      };
+    }
+  };
+
+  getPlanPrices = async () => {
+    try {
+      const res = await this.axios.get('/accounts/price/');
+      return { data: res.data };
+    } catch (error) {
+      return { data: null, error };
+    }
+  };
 }
 
 export default new BackendService();

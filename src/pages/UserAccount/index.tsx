@@ -8,6 +8,7 @@ import backend from '../../services/backend';
 import VerifiedPage from './VerifiedPage/index';
 import AdBlock from '../../components/AdBlock/index';
 import { CardsSlider } from '../MainPage/UsersPlans/index';
+import InfoModal from '../../components/Modals/InfoModal/index';
 
 import s from './UserAccount.module.scss';
 
@@ -33,6 +34,14 @@ const UserAccount: React.FC = observer(() => {
     if (token.data.key) {
       user.setIsUserVerified(true);
       localStorage.setItem('lesstools_token', token.data.key);
+      const res = await backend.getUserPlan();
+      if (res.data) {
+        user.setLessBalance(res.data.holdings['bsc testnet']);
+        user.setUserPlan({
+          planByHolding: res.data.plan_by_holding,
+          planByPayments: res.data.plan_by_payments,
+        });
+      }
     }
   };
 
@@ -47,6 +56,7 @@ const UserAccount: React.FC = observer(() => {
 Fundraising Capital"
         />
       </Helmet>
+      <InfoModal />
       <div className={s.container}>
         <AdBlock adImg={adImg} />
         {!user.isVerified ? (
@@ -96,9 +106,9 @@ Fundraising Capital"
             </div>
           </>
         ) : (
-          <VerifiedPage userId={user.walletId || ''} />
+          <VerifiedPage />
         )}
-        <CardsSlider />
+        <CardsSlider userPlan={user.userPlan} />
       </div>
     </main>
   );

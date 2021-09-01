@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Web3Service } from '../services/web3/index';
-
+import backend from '../services/backend/index';
 import { useMst } from '../store/store';
 
 const Web3ConnectorContext = React.createContext({
@@ -12,7 +12,7 @@ const Web3ConnectorContext = React.createContext({
 
 const Web3Connector: React.FC = ({ children }) => {
   const [web3Provider, setWeb3Provider] = useState<any>({});
-  const { user } = useMst();
+  const { user, modals } = useMst();
   const location = useLocation();
 
   const login = async (web3: Web3Service) => {
@@ -21,6 +21,15 @@ const Web3Connector: React.FC = ({ children }) => {
       user.setUserWalletId(adresses[0]);
       if (localStorage.getItem('lesstools_token')) {
         user.setIsUserVerified(true);
+        const res = await backend.getUserPlan();
+
+        if (res.data) {
+          user.setLessBalance(res.data.holdings['bsc testnet']);
+          user.setUserPlan({
+            planByHolding: res.data.plan_by_holding,
+            planByPayments: res.data.plan_by_payments,
+          });
+        }
       }
     } catch (error) {
       if (error.code === -32002) {
@@ -33,7 +42,10 @@ const Web3Connector: React.FC = ({ children }) => {
   const init = () => {
     try {
       const web3 = new Web3Service();
-      if (!web3.provider) return;
+      if (!web3.provider) {
+        modals.open('Info', 'No Metamask (or other Web3 Provider) installed');
+        return;
+      }
 
       web3.provider.on('accountsChanged', (accounts: string[]) => {
         console.log('ACCOUNTS CHANGED', accounts);

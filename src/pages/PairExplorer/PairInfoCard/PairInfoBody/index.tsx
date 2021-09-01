@@ -12,6 +12,7 @@ import { useMst } from '../../../../store/store';
 import MoreInfoModal from '../../../../components/Modals/MoreInfoModal/index';
 import ShareModal from '../../../../components/Modals/ShareModal/index';
 import TradeModal from '../../../../components/Modals/TradeModal/index';
+import InfoModal from '../../../../components/Modals/InfoModal/index';
 import backend, { IAdditionalInfoFromBackend, PLATFORM } from '../../../../services/backend/index';
 import TokenInfoItem from './TokenInfoItem/index';
 
@@ -101,6 +102,9 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
     const handleOpenTradeModal = () => {
       modals.open('Trade');
     };
+    const handleOpenInfoModal = (text: string) => {
+      modals.open('Info', text);
+    };
 
     // изменение цены токена за 24 часа в процентах
     const tokenPrice24hAgo =
@@ -121,8 +125,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
         const newPairs = user.favoritePairs.filter((pair) => pair.id !== pair_address);
         user.setFavoritesPairs(newPairs);
       } else if (typeof res.data === 'string') {
-        // ВЫВЕСТИ МОДАЛКУ
-        console.log('ПЕРЕБОР');
+        handleOpenInfoModal('You have a limit on 10 favorite pairs because of the free plan');
       } else {
         const newPairs = [{ id: pairId, token0: otherToken, token1: tbr }, ...user.favoritePairs];
         user.setFavoritesPairs(newPairs);
@@ -150,6 +153,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
         />
         <TradeModal tokenId={tbr.id} />
         <ReactTooltip />
+        <InfoModal />
         {!pairInfo.base_info ? (
           <div className={s.card_no_data}>
             <Loader />

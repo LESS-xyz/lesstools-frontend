@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
 import backend from '../../../../services/backend/index';
 import { useMst } from '../../../../store/store';
@@ -19,8 +20,7 @@ interface IVoteItem {
   voteType: 1 | -1;
   percent: string;
   vote: (voteType: 1 | -1) => void;
-  // TODO: change to user plan
-  isVerified: boolean;
+  isDisabled: boolean;
   currentUserVote: 0 | 1 | -1;
 }
 
@@ -28,14 +28,14 @@ const VoteItem: React.FC<IVoteItem> = ({
   voteType,
   percent,
   vote,
-  isVerified,
+  isDisabled,
   currentUserVote,
 }) => {
   return (
     <div
-      data-tip="To vote u should verify your wallet"
+      data-tip="To vote u should have a Standard subscription"
       data-effect="solid"
-      data-tip-disable={isVerified}
+      data-tip-disable={!isDisabled}
       className={`${s.vote} ${currentUserVote === voteType && s.active}`}
     >
       <button
@@ -43,7 +43,7 @@ const VoteItem: React.FC<IVoteItem> = ({
         onClick={() => vote(voteType)}
         onKeyDown={() => {}}
         tabIndex={0}
-        disabled={!isVerified}
+        disabled={isDisabled}
         type="button"
       >
         <img src={voteType === 1 ? thumbUp : thumbDown} alt="vote" />
@@ -53,76 +53,78 @@ const VoteItem: React.FC<IVoteItem> = ({
   );
 };
 
-const CommunityTrust: React.FC<ICommunityTrust> = ({ likes, dislikes, currentVote, pairId }) => {
-  const { user } = useMst();
-  const [currentUserVote, setCurrentUserVote] = useState(currentVote);
-  const [likesAmount, setLikesAmount] = useState(likes);
-  const [dislikesAmount, setDislikesAmount] = useState(dislikes);
+const CommunityTrust: React.FC<ICommunityTrust> = observer(
+  ({ likes, dislikes, currentVote, pairId }) => {
+    const { user } = useMst();
+    const [currentUserVote, setCurrentUserVote] = useState(currentVote);
+    const [likesAmount, setLikesAmount] = useState(likes);
+    const [dislikesAmount, setDislikesAmount] = useState(dislikes);
 
-  useEffect(() => {
-    setCurrentUserVote(currentVote);
-    setDislikesAmount(dislikes);
-    setLikesAmount(likes);
-  }, [currentVote, likes, dislikes]);
+    useEffect(() => {
+      setCurrentUserVote(currentVote);
+      setDislikesAmount(dislikes);
+      setLikesAmount(likes);
+    }, [currentVote, likes, dislikes]);
 
-  const vote = async (voteType: 1 | -1) => {
-    const res = await backend.voteForPair({
-      pair_address: pairId,
-      platform: 'ETH',
-      vote: voteType,
-      token: localStorage.getItem('lesstools_token') || '',
-    });
-    if (res.data) {
-      setCurrentUserVote(res.data?.vote);
-      setLikesAmount(res.data.pair.likes);
-      setDislikesAmount(res.data.pair.dislikes);
-    }
-  };
+    const vote = async (voteType: 1 | -1) => {
+      const res = await backend.voteForPair({
+        pair_address: pairId,
+        platform: 'ETH',
+        vote: voteType,
+        token: localStorage.getItem('lesstools_token') || '',
+      });
+      if (res.data) {
+        setCurrentUserVote(res.data?.vote);
+        setLikesAmount(res.data.pair.likes);
+        setDislikesAmount(res.data.pair.dislikes);
+      }
+    };
 
-  return (
-    <section className={s.block}>
-      <div className={s.block_inner}>
-        <div className={s.title}>Community Trust</div>
-        <div className={s.votes}>
-          <VoteItem
-            vote={vote}
-            voteType={1}
-            percent={(likesAmount + dislikesAmount > 0
-              ? (likesAmount / (likesAmount + dislikesAmount)) * 100
-              : 0
-            ).toFixed(2)}
-            isVerified={user.isVerified}
-            currentUserVote={currentUserVote}
-          />
-          <div className={s.info}>
-            <div className={s.info_count}>
-              <span>({likesAmount + dislikesAmount} votes)</span>
+    return (
+      <section className={s.block}>
+        <div className={s.block_inner}>
+          <div className={s.title}>Community Trust</div>
+          <div className={s.votes}>
+            <VoteItem
+              vote={vote}
+              voteType={1}
+              percent={(likesAmount + dislikesAmount > 0
+                ? (likesAmount / (likesAmount + dislikesAmount)) * 100
+                : 0
+              ).toFixed(2)}
+              isDisabled={user.userPlan === 'Free'}
+              currentUserVote={currentUserVote}
+            />
+            <div className={s.info}>
+              <div className={s.info_count}>
+                <span>({likesAmount + dislikesAmount} votes)</span>
+              </div>
+              <div className={s.info_bar}>
+                <div
+                  className={s.info_bar__bg}
+                  style={{
+                    width: `${
+                      likesAmount ? (likesAmount / (likesAmount + dislikesAmount)) * 100 : 0
+                    }%`,
+                  }}
+                />
+              </div>
             </div>
-            <div className={s.info_bar}>
-              <div
-                className={s.info_bar__bg}
-                style={{
-                  width: `${
-                    likesAmount ? (likesAmount / (likesAmount + dislikesAmount)) * 100 : 0
-                  }%`,
-                }}
-              />
-            </div>
+            <VoteItem
+              vote={vote}
+              voteType={-1}
+              percent={(likesAmount + dislikesAmount > 0
+                ? (dislikesAmount / (likesAmount + dislikesAmount)) * 100
+                : 0
+              ).toFixed(2)}
+              isDisabled={user.userPlan === 'Free'}
+              currentUserVote={currentUserVote}
+            />
           </div>
-          <VoteItem
-            vote={vote}
-            voteType={-1}
-            percent={(likesAmount + dislikesAmount > 0
-              ? (dislikesAmount / (likesAmount + dislikesAmount)) * 100
-              : 0
-            ).toFixed(2)}
-            isVerified={user.isVerified}
-            currentUserVote={currentUserVote}
-          />
         </div>
-      </div>
-    </section>
-  );
-};
+      </section>
+    );
+  },
+);
 
 export default CommunityTrust;

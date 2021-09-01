@@ -70,6 +70,19 @@
     min-height: 124px;
     margin-bottom: 20px;
 
+    &.active {
+      background: var(--gradient);
+      .card_header__subtitle {
+        color: #fff;
+      }
+      .card_header__title {
+        span {
+          color: #fff;
+          -webkit-text-fill-color: #fff;
+        }
+      }
+    }
+
     &__title {
       span {
         @include gradient-text;

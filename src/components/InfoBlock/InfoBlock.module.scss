@@ -22,7 +22,7 @@
   }
   @include b(850) {
     &_inner {
-      animation: scroll 10s infinite linear forwards;
+      animation: scroll 25s infinite linear forwards;
       width: 700px;
     }
   }

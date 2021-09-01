@@ -20,6 +20,7 @@ const RootModel = types.model({
 export const Store = RootModel.create({
   modals: {
     openedModals: [],
+    modalText: '',
   },
   hotPairs: {
     uniswap: [],
@@ -32,6 +33,9 @@ export const Store = RootModel.create({
     walletId: null,
     isVerified: false,
     favoritePairs: [],
+    lessBalance: 0,
+    planByHolding: 'Free',
+    planByPayments: 'Free',
   },
   mobileMenu: {
     isActive: false,

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
@@ -16,7 +17,6 @@ import Footer from './components/Footer/index';
 import Sidebar from './components/Sidebar/index';
 import InfoBlock from './components/InfoBlock';
 import MobileHeader from './components/MobileHeader';
-import { useEffect } from 'react';
 
 export const App: React.FC = observer(() => {
   const { mobileMenu } = useMst();
@@ -30,6 +30,7 @@ export const App: React.FC = observer(() => {
   return (
     <div className="App">
       <HotPairs />
+
       <Route path="/app">
         <MobileHeader />
         <Sidebar />
@@ -37,6 +38,7 @@ export const App: React.FC = observer(() => {
       <Route path={['/app/sushiswap', '/app/uniswap']}>
         <InfoBlock />
       </Route>
+
       <Switch>
         <Route path="/" exact>
           <MainPage />
