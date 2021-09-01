@@ -7,8 +7,11 @@
   @include b(tablet) {
     @include flex(row, center, space-between);
   }
-  position: relative;
-  z-index: 99999999999999999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000000000;
+  width: 100%;
   background-color: #000;
 }
 

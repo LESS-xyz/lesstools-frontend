@@ -135,7 +135,7 @@ export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
             userPlan={userPlan}
             title="Standard"
             itemKey="Standard"
-            subtitle="$150.00/$75.00 paid in Less/Monthly Subscription** -or- 20,000 Less/Hold*"
+            subtitle="$100.00 paid/Monthly Subscription** -or- 50,000 Less/Hold*"
             features={StandartUserPlanData}
           />
         </SwiperSlide>
