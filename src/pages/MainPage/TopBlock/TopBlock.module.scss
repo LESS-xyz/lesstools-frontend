@@ -54,6 +54,9 @@
   @include b(extramobile) {
     background: none;
   }
+  @include b(tablet) {
+    margin-top: -60px;
+  }
 }
 .bg_wrap {
   background: url('../../../assets/img/sections/main/bg-main.svg') no-repeat right top;
