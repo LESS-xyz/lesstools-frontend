@@ -8,8 +8,8 @@ import s from './Sidebar.module.scss';
 
 import logo from '../../assets/img/sections/sidebar/logo.svg';
 import board from '../../assets/img/sections/sidebar/board.svg';
-import bot from '../../assets/img/sections/sidebar/bot.svg';
-import botWhite from '../../assets/img/sections/sidebar/bot-white.svg';
+// import bot from '../../assets/img/sections/sidebar/bot.svg';
+// import botWhite from '../../assets/img/sections/sidebar/bot-white.svg';
 import account from '../../assets/img/sections/sidebar/account.svg';
 import accountWhite from '../../assets/img/sections/sidebar/account-white.svg';
 import live from '../../assets/img/sections/sidebar/live.svg';
@@ -78,7 +78,7 @@ const Sidebar: React.FC = observer(() => {
           imgDark={pair}
           imgWhite={pairWhite}
           text="Pair Explorer"
-          to="/app/sushiswap/pair-explorer/0xc3f279090a47e80990fe3a9c30d24cb117ef91a8"
+          to="/app/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a"
         />
         <LinkSidebar
           imgDark={bigSwap}
@@ -87,10 +87,10 @@ const Sidebar: React.FC = observer(() => {
           to="/app/sushiswap/big-swap-explorer"
         />
       </div>
-      <div className={s.group}>
+      {/* <div className={s.group}>
         <div className={s.subtitle}>common</div>
         <LinkSidebar imgDark={bot} imgWhite={botWhite} text="New Pairs Bot" />
-      </div>
+      </div> */}
       <div className={s.subtitle}>others</div>
       <LinkSidebar
         to="/app/user-account"

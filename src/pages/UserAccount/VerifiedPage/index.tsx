@@ -9,6 +9,10 @@ import config from '../../../config/index';
 
 import s from '../UserAccount.module.scss';
 
+import checkMark from '../../../assets/img/icons/checkmark.svg';
+
+const SECONDS_FOR_UPDATE = 60000;
+
 const VerifiedPage: React.FC = observer(() => {
   const { disconect } = useWeb3Context();
   const [isCheckMark, setIsCheckMark] = useState(false);
@@ -27,6 +31,50 @@ const VerifiedPage: React.FC = observer(() => {
   useEffect(() => {
     getPlanPrices();
   }, []);
+
+  // pooling subscription data
+  const [timer, setTimer] = useState(SECONDS_FOR_UPDATE / 1000);
+  const [timersIds, setTimersIds] = useState<Array<NodeJS.Timeout>>([]);
+
+  const updateUserPlan = async () => {
+    const res = await backend.getUserPlan();
+
+    if (res.data) {
+      user.setLessBalance(res.data.holdings['bsc testnet']);
+      user.setUserPlan({
+        planByHolding: res.data.plan_by_holding,
+        planByPayments: res.data.plan_by_payments,
+      });
+    }
+    return res.data;
+  };
+
+  const checkingUserPlan = async () => {
+    updateUserPlan();
+
+    const timerSecondsId = setInterval(() => {
+      setTimer((prevState) => prevState - 1);
+    }, 1000);
+    setTimersIds((prev) => [...prev, timerSecondsId]);
+
+    const timerId = setInterval(async () => {
+      const data = await updateUserPlan();
+
+      if (data.plan_by_holding === 'Free' && data.plan_by_payments === 'Free') {
+        setTimer(SECONDS_FOR_UPDATE / 1000);
+      } else {
+        clearInterval(timerSecondsId);
+        clearInterval(timerId);
+      }
+    }, SECONDS_FOR_UPDATE);
+    setTimersIds((prev) => [...prev, timerId]);
+  };
+
+  useEffect(() => {
+    return () => {
+      timersIds.forEach((timerId) => clearInterval(timerId));
+    };
+  }, [timersIds]);
 
   return (
     <>
@@ -77,10 +125,15 @@ const VerifiedPage: React.FC = observer(() => {
             <div className={s.check}>
               <button
                 type="button"
-                onClick={() => setIsCheckMark(true)}
+                onClick={() => {
+                  setIsCheckMark(true);
+                  checkingUserPlan();
+                }}
                 aria-label="check"
                 className={`${s.check_mark} ${isCheckMark && s.active}`}
-              />
+              >
+                <img src={checkMark} alt="checkMark" />
+              </button>
               <div className={s.block_title}>Step 2</div>
             </div>
             <div className={s.block_subtitle}>
@@ -88,6 +141,7 @@ const VerifiedPage: React.FC = observer(() => {
                 ? 'We are checking your transfer. This may take 5 minutes.'
                 : 'I’ve alredy done the transfer'}
             </div>
+            {isCheckMark && <div className={s.block_subtitle}>Time to next check: {timer}</div>}
           </div>
         </div>
       )}

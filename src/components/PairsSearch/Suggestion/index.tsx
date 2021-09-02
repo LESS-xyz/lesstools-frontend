@@ -21,7 +21,6 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   tbrName,
   tokenId,
   pairId,
-  holders,
   txCount,
   onClick,
   exchange,
@@ -48,10 +47,10 @@ const Suggestion: React.FC<ISuggestionProps> = ({
             {pairId.slice(0, 5)}...{pairId.slice(-5)}
           </div>
         </div>
-        <div className={s.suggestion_body__item}>
+        {/* <div className={s.suggestion_body__item}>
           <div className={s.suggestion_body__item_title}>Holders:</div>
           <div className={s.suggestion_body__item_value}>{holders}</div>
-        </div>
+        </div> */}
         <div className={s.suggestion_body__item}>
           <div className={s.suggestion_body__item_title}>Tx:</div>
           <div className={s.suggestion_body__item_value}>{new BigNumber(txCount).toFormat(2)}</div>

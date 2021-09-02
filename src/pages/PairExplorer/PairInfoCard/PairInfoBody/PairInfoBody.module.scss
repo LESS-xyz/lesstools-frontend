@@ -243,8 +243,22 @@
 
 .token_info {
   margin-bottom: 6px;
+
   &__item {
     @include flex(row, center, space-between, nowrap);
+    &.copy {
+      .token_info__item__value {
+        cursor: pointer;
+        @include flex(row, center, flex-end, nowrap);
+        &::after {
+          content: '';
+          background: url('../../../../assets/img/icons/copy.svg') 0 0 no-repeat;
+          width: 24px;
+          height: 24px;
+          margin-left: 5px;
+        }
+      }
+    }
     font-size: 15px;
     & + & {
       margin-top: 6px;
@@ -257,8 +271,9 @@
     }
 
     &__value {
-      padding-left: 15px;
+      padding-left: 5px;
       word-break: break-all;
+      color: #fff;
       text-align: right;
       width: 60%;
       line-height: 1.2;

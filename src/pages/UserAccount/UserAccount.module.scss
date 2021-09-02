@@ -122,9 +122,16 @@
     border: 2px solid #353945;
     border-radius: 4px;
     margin-right: 10px;
+    @include flex(row, center, center);
+    img {
+      display: none;
+    }
     &.active {
       background: var(--gradient);
       border: none;
+      img {
+        display: block;
+      }
     }
   }
 }

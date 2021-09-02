@@ -71,7 +71,7 @@ const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle, itemKey
         <div className={`${s.card_header} ${itemKey === userPlan && s.active}`}>
           <div className={s.card_header__title}>
             <span>{title}</span>
-          </div>  
+          </div>
           <div className={s.card_header__subtitle}>{subtitle}</div>
         </div>
         <div className={s.card_body}>
@@ -135,7 +135,7 @@ export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
             userPlan={userPlan}
             title="Standard"
             itemKey="Standard"
-            subtitle="$100.00 paid/Monthly Subscription** -or- 50,000 Less/Hold*"
+            subtitle="$100.00 paid/Monthly Subscription -or- 50,000 Less/Hold*"
             features={StandartUserPlanData}
           />
         </SwiperSlide>
@@ -144,7 +144,7 @@ export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
             userPlan={userPlan}
             title="Premium"
             itemKey="Premium"
-            subtitle="100,000 LESS / hold*"
+            subtitle="$200.00 paid/Monthly Subscription -or- 200,000 Less/Hold*"
             features={PremiumUserPlanData}
           />
         </SwiperSlide>
@@ -162,10 +162,6 @@ const UsersPlans: React.FC = () => {
           <div className={s.subtitle}>Choose your subscription tier and upgrade now!</div>
           <CardsSlider />
           <div className={s.info}>
-            <p>
-              ** To qualify for the 50% DISCOUNT ($75 in LESS) you must hold at least 5000 LESS in
-              your wallet apart from the payment.
-            </p>
             <p>
               * Hold means that you must have the necessary tokens in your ERC20 wallet at the time
               of sign in and login, this process will be done through Metamask.

@@ -15,17 +15,13 @@ import TradeModal from '../../../../components/Modals/TradeModal/index';
 import InfoModal from '../../../../components/Modals/InfoModal/index';
 import backend, { IAdditionalInfoFromBackend, PLATFORM } from '../../../../services/backend/index';
 import TokenInfoItem from './TokenInfoItem/index';
+import Links from './Links/index';
 
 import s from './PairInfoBody.module.scss';
 
 import { ReactComponent as FavImg } from '../../../../assets/img/icons/favorite.svg';
 import { ReactComponent as ShareImg } from '../../../../assets/img/icons/share.svg';
 import scoreBg from '../../../../assets/img/icons/less-score-bg.svg';
-import marketcap from '../../../../assets/img/icons/marketcap.svg';
-import etherscan from '../../../../assets/img/icons/table/actions-etherscan.svg';
-import twitter from '../../../../assets/img/icons/twitter-blue.svg';
-import telegram from '../../../../assets/img/icons/telegram-blue.svg';
-import desktop from '../../../../assets/img/icons/desktop-blue.svg';
 
 export interface IToken {
   address: string;
@@ -216,10 +212,14 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               <TokenInfoItem
                 title="Token contract:"
                 value={`${tbr.id.slice(0, 5)}...${tbr.id.slice(-4)}`}
+                copy
+                copyValue={tbr.id}
               />
               <TokenInfoItem
                 title="Pair contract:"
                 value={`${pairId.slice(0, 5)}...${pairId.slice(-4)}`}
+                copy
+                copyValue={pairId}
               />
               <TokenInfoItem
                 title="Total liquidity:"
@@ -289,62 +289,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 pairId={pairId}
               />
             </div>
-            <div className={s.links}>
-              <a
-                href={`https://etherscan.io/token/${tbr.id}`}
-                target="_blank"
-                rel="noreferrer noopener"
-                className={s.card_link}
-              >
-                <div className={s.card_link__img}>
-                  <img src={etherscan} alt="etherscan" />
-                </div>
-                <div className={s.card_link__title}>Etherscan</div>
-              </a>
-              <a
-                href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug}`}
-                target="_blank"
-                rel="noreferrer noopener"
-                className={s.card_link}
-              >
-                <div className={s.card_link__img}>
-                  <img src={marketcap} alt="marketcap" />
-                </div>
-                <div className={s.card_link__title}>CoinMarketcap</div>
-              </a>
-              <a
-                target="_blank"
-                rel="noreferrer noopener"
-                href={tokenInfoFromBackend?.pair.token_being_reviewed.twitter_url}
-                className={s.card_link}
-              >
-                <div className={s.card_link__img}>
-                  <img src={twitter} alt="twitter" />
-                </div>
-                <div className={s.card_link__title}>Twitter</div>
-              </a>
-
-              {tokenInfoFromBackend?.pair.token_being_reviewed.chat_urls &&
-                tokenInfoFromBackend.pair.token_being_reviewed.chat_urls.map((link) => (
-                  <a target="_blank" rel="noreferrer noopener" href={link} className={s.card_link}>
-                    <div className={s.card_link__img}>
-                      <img src={telegram} alt="desktop" />
-                    </div>
-                    <div className={s.card_link__title}>Chat</div>
-                  </a>
-                ))}
-              <a
-                target="_blank"
-                rel="noreferrer noopener"
-                href={tokenInfoFromBackend?.pair.token_being_reviewed.website_url}
-                className={s.card_link}
-              >
-                <div className={s.card_link__img}>
-                  <img src={desktop} alt="desktop" />
-                </div>
-                <div className={s.card_link__title}>Website</div>
-              </a>
-            </div>
+            <Links tokenInfoFromBackend={tokenInfoFromBackend} tokenId={tbr.id} />
           </div>
         )}
       </section>

@@ -60,7 +60,7 @@ Fundraising Capital"
               icon={sushiLogo}
               links={[
                 '/app/sushiswap/live-new-pairs',
-                '/app/sushiswap/pair-explorer/0xc3f279090a47e80990fe3a9c30d24cb117ef91a8',
+                '/app/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a',
                 '/app/sushiswap/big-swap-explorer',
               ]}
               keyName="sushi"

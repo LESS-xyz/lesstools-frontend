@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
       <div className={s.container}>
         <div className={s.inner}>
           <div className={s.info}>
-            <div className={s.info_text}>2021 © Lesspad a product of Less Token — less.xyz</div>
+            <div className={s.info_text}>2021 © LessTools a product of Less Network — less.xyz</div>
             {/* <div className={s.links}>
               <div className={s.link}>Pools</div>
               <div className={s.link}>Voting</div>

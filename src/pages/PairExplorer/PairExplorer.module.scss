@@ -3,7 +3,7 @@
 @import '../../styles/mixins/media.scss';
 
 .page {
-  min-height: 100vh;
+  // min-height: 90vh;
   background: var(--gradient-background);
   @include b(extramobile) {
     background: none;
@@ -12,6 +12,7 @@
 
 .container {
   @include container;
+  overflow-x: hidden;
 }
 
 .info {
@@ -68,6 +69,7 @@
   transition: 0.4s ease;
   z-index: 10;
   max-height: 90vh;
+  height: 100%;
   @include b(850) {
     max-height: 100%;
   }

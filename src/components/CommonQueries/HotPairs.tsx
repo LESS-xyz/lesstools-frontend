@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { useMst } from '../../store/store';
 import { GET_HOT_PAIRS, GET_HOT_PAIRS_SUSHISWAP } from '../../queries/index';
-import { uniswapCurrentVersion, sushiswapSubgraph } from '../../index';
+import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { WHITELIST } from '../../data/whitelist';
 
 // get timestamp code of the start of current hour
@@ -36,21 +36,21 @@ const HotPairs: React.FC = () => {
   const { hotPairs } = useMst();
 
   const { data } = useQuery<response>(GET_HOT_PAIRS, {
-    client: uniswapCurrentVersion,
+    client: uniswapSubgraph,
+    // HARDCODE
     variables: {
-      timestamp1: getStartOfHour(),
-      timestamp2: getStartOfHour() - 3600,
-      timestamp3: getStartOfHour() - 7200,
+      timestamp1: 1598338800,
+      timestamp2: 1598338800 - 3600,
+      timestamp3: 1598338800 - 7200,
     },
   });
 
   const { data: sushiPairs } = useQuery<response>(GET_HOT_PAIRS_SUSHISWAP, {
     client: sushiswapSubgraph,
-    // HARDCODE
     variables: {
-      timestamp1: 1623924000,
-      timestamp2: 1623924000 - 3600,
-      timestamp3: 1623924000 - 7200,
+      timestamp1: getStartOfHour(),
+      timestamp2: getStartOfHour() - 3600,
+      timestamp3: getStartOfHour() - 7200,
     },
   });
 

@@ -12,7 +12,7 @@
   text-overflow: ellipsis;
 
   @media (max-height: 640px) {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   @include b(tablet) {
