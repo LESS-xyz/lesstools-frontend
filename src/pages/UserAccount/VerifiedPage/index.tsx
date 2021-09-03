@@ -100,7 +100,21 @@ const VerifiedPage: React.FC = observer(() => {
         <div className={s.block}>
           <div className={s.block_inner}>
             <div className={s.block_title}>Your wallet have an active subscription</div>
-            <div className={s.block_subtitle}>Subscription: {user.userPlan} </div>
+            <div className={s.block_wallet}>
+              Subscription: <span>{user.userPlan}</span>{' '}
+            </div>
+            <div className={s.block_group}>
+              <div className={s.block_group__text}>Plan by holding: {user.planByHolding}</div>
+              <div className={s.block_group__text}>Plan by payments: {user.planByPayments}</div>
+            </div>
+            {user.userPlan === 'Standard' && (
+              <div className={s.block_subtext}>
+                To get a PREMIUM plan you need to hold{' '}
+                {new BigNumber(prices.holding * 2).toFormat(0)} LESS or pay{' '}
+                {user.planByPayments === user.userPlan ? prices.payment : prices.payment * 2}$ /
+                Monthly Subscription
+              </div>
+            )}
           </div>
         </div>
       ) : (
