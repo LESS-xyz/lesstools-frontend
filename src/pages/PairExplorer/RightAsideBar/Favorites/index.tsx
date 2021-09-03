@@ -22,15 +22,24 @@ interface IFavorite {
   pairId: string;
   deletePair: () => void;
   currentExchange: 'uniswap' | 'sushiswap';
+  closeModal: () => void;
 }
 
-const Favorite: React.FC<IFavorite> = ({ symbol, price, deletePair, pairId, currentExchange }) => {
+const Favorite: React.FC<IFavorite> = ({
+  symbol,
+  price,
+  deletePair,
+  pairId,
+  currentExchange,
+  closeModal,
+}) => {
   return (
     <div className={s.favorites_item}>
       <div className={s.favorites_item__left}>
         <Link
           to={`/app/${currentExchange}/pair-explorer/${pairId}`}
           className={s.favorites_item__left__symbol}
+          onClick={() => closeModal()}
         >
           {symbol}
         </Link>
@@ -134,6 +143,7 @@ const Favorites: React.FC = observer(() => {
                     pairId={pair.id}
                     deletePair={() => deletePair(pair.id, 'ETH')}
                     currentExchange={currentExchange.exchange}
+                    closeModal={() => setIsModal(false)}
                   />
                 ))}
               </div>
