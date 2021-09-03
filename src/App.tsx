@@ -3,14 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import { useMst } from './store/store';
-import {
-  MainPage,
-  BigSwapExplorer,
-  LiveNewPairs,
-  PairExplorer,
-  BoardPage,
-  UserAccount,
-} from './pages';
+import { BigSwapExplorer, LiveNewPairs, PairExplorer, BoardPage, UserAccount } from './pages';
 
 import HotPairs from './components/CommonQueries/HotPairs';
 import Footer from './components/Footer/index';
@@ -30,32 +23,26 @@ export const App: React.FC = observer(() => {
   return (
     <div className="App">
       <HotPairs />
-
-      <Route path="/app">
-        <MobileHeader />
-        <Sidebar />
-      </Route>
-      <Route path={['/app/sushiswap', '/app/uniswap']}>
+      <MobileHeader />
+      <Sidebar />
+      <Route path={['/sushiswap', '/uniswap']}>
         <InfoBlock />
       </Route>
 
       <Switch>
-        <Route path="/" exact>
-          <MainPage />
-        </Route>
-        <Route exact path="/app">
+        <Route exact path="/">
           <BoardPage />
         </Route>
-        <Route exact path={['/app/sushiswap/big-swap-explorer', '/app/uniswap/big-swap-explorer']}>
+        <Route exact path={['/sushiswap/big-swap-explorer', '/uniswap/big-swap-explorer']}>
           <BigSwapExplorer />
         </Route>
-        <Route exact path={['/app/sushiswap/live-new-pairs', '/app/uniswap/live-new-pairs']}>
+        <Route exact path={['/sushiswap/live-new-pairs', '/uniswap/live-new-pairs']}>
           <LiveNewPairs />
         </Route>
-        <Route path={['/app/sushiswap/pair-explorer/:id', '/app/uniswap/pair-explorer/:id']}>
+        <Route path={['/sushiswap/pair-explorer/:id', '/uniswap/pair-explorer/:id']}>
           <PairExplorer />
         </Route>
-        <Route path="/app/user-account">
+        <Route path="/user-account">
           <UserAccount />
         </Route>
         <Redirect to="/" />

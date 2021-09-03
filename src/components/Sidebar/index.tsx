@@ -45,19 +45,19 @@ const Sidebar: React.FC = observer(() => {
         <LinkSidebar
           imgDark={live}
           imgWhite={liveWhite}
-          to="/app/uniswap/live-new-pairs"
+          to="/uniswap/live-new-pairs"
           text="Live New Pairs"
         />
         <LinkSidebar
           imgDark={pair}
           imgWhite={pairWhite}
-          to="/app/uniswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
+          to="/uniswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
           text="Pair Explorer"
         />
         <LinkSidebar
           imgDark={bigSwap}
           imgWhite={bigSwapWhite}
-          to="/app/uniswap/big-swap-explorer"
+          to="/uniswap/big-swap-explorer"
           text="Big Swap Explorer"
         />
       </div>
@@ -72,19 +72,19 @@ const Sidebar: React.FC = observer(() => {
           imgDark={live}
           imgWhite={liveWhite}
           text="Live New Pairs"
-          to="/app/sushiswap/live-new-pairs"
+          to="/sushiswap/live-new-pairs"
         />
         <LinkSidebar
           imgDark={pair}
           imgWhite={pairWhite}
           text="Pair Explorer"
-          to="/app/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a"
+          to="/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a"
         />
         <LinkSidebar
           imgDark={bigSwap}
           imgWhite={bigSwapWhite}
           text="Big Swap Explorer"
-          to="/app/sushiswap/big-swap-explorer"
+          to="/sushiswap/big-swap-explorer"
         />
       </div>
       {/* <div className={s.group}>
@@ -93,7 +93,7 @@ const Sidebar: React.FC = observer(() => {
       </div> */}
       <div className={s.subtitle}>others</div>
       <LinkSidebar
-        to="/app/user-account"
+        to="/user-account"
         imgDark={account}
         imgWhite={accountWhite}
         text="User Account"
