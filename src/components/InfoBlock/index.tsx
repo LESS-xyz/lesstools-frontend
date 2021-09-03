@@ -88,7 +88,7 @@ const InfoBlock: React.FC = observer(() => {
             </div>
           </div>
         </div>
-        <Link to="/app/user-account" className={s.metamask_link}>
+        <Link to="/user-account" className={s.metamask_link}>
           <div className={s.metamask_link__inner}>
             <MetaMaskIcon className={s.metamask_link__inner_img} />
             <span>
