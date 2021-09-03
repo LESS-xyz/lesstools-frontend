@@ -10,16 +10,13 @@ import Type from './Type/index';
 
 import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
 
-import s from './Table.module.scss';
-
-// TODO: pool amount in live pairs make component to prevent new render
-
 // преобразовывает входной JSON в объект с JSX полями для вставку в таблицу
 export const dataConverter = {
   // для таблицы на странице big swap
   bigSwap(data: Array<IRowBigSwap>) {
     return data.map((row) => ({
-      pair: <span className={s.pair}>{row.pair}</span>,
+      // pair: <span className={s.pair}>{row.pair}</span>,
+      pair: <TokenName token={row.pair} pairId={row.others.liveData || ''} />,
       time: row.time,
       type: <Type type={row.type} />,
       quantity: new BigNumber(row.quantity).toFormat(2),
@@ -34,7 +31,7 @@ export const dataConverter = {
   // для таблицы на странице live new pairs
   liveNewPairs(data: Array<IRowLiveNewPairs>, isUsd: boolean) {
     return data.map((row) => ({
-      token: <TokenName token={row.token} />,
+      token: <TokenName token={row.token} pairId={row.actions.liveData || ''} />,
       listedSince: (
         <ListedSince
           key={JSON.stringify(row.listedSince)}

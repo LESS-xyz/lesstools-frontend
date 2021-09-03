@@ -1,9 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
+import { useMst } from '../../../store/store';
 
 import s from '../Table.module.scss';
 
-const TokenName: React.FC<{ token: string }> = React.memo(({ token }) => {
-  return <span className={s.token}>{token}</span>;
+const TokenName: React.FC<{ token: string; pairId: string }> = React.memo(({ token, pairId }) => {
+  const { currentExchange } = useMst();
+  return (
+    <Link to={`/app/${currentExchange.exchange}/pair-explorer/${pairId}`} className={s.token}>
+      <span>{token}</span>
+    </Link>
+  );
 });
 
 export default TokenName;
