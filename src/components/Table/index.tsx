@@ -122,7 +122,6 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
         </thead>
 
         <tbody className={s.table_body}>
-          <ReactTooltip />
           {/* eslint-disable-next-line */}
           {/* @ts-ignore */}
           {dataConverter[tableType](tableData, isUsd)

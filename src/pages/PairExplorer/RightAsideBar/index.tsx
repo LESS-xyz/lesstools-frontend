@@ -25,7 +25,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
       <div className={`${s.transactions} grey-scroll`}>
         {trades.map((trade) => (
           <Transaction
-            key={`${trade.maker}-${trade.data}-${trade.totalEth}`}
+            key={`${trade.maker}-${trade.data}-${trade.totalEth}-${trade.amountEth}`}
             ethPrice={trade.totalEth}
             priceUsd={trade.priceUsd}
             amountEth={trade.amountEth}
@@ -66,7 +66,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
           .filter((trade) => trade.maker === user.walletId)
           .map((trade) => (
             <Transaction
-              key={`${trade.maker}-${trade.data}-${trade.totalEth}`}
+              key={`${trade.maker}-${trade.data}-${trade.totalEth}-${trade.amountEth}`}
               ethPrice={trade.totalEth}
               priceUsd={trade.priceUsd}
               amountEth={trade.amountEth}

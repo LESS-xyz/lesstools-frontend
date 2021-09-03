@@ -59,7 +59,13 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
 
         {tokenInfoFromBackend?.pair.token_being_reviewed.chat_urls &&
           tokenInfoFromBackend.pair.token_being_reviewed.chat_urls.map((link: string) => (
-            <a target="_blank" rel="noreferrer noopener" href={link} className={s.card_link}>
+            <a
+              key={link}
+              target="_blank"
+              rel="noreferrer noopener"
+              href={link}
+              className={s.card_link}
+            >
               <div className={s.card_link__img}>
                 {link.includes('t.me/') && <TelegramIcon />}
                 {link.includes('discord') && <DiscordIcon />}

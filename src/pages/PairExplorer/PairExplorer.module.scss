@@ -48,7 +48,7 @@
     grid-template-columns: 10fr 300px;
   }
   &.both {
-    grid-template-columns: 300px 10fr 300px;
+    grid-template-columns: 300px 10fr 330px;
   }
   @include b(1250) {
     grid-template-columns: 1fr 2fr !important;
@@ -122,9 +122,9 @@
 
 .right_aside {
   position: absolute;
-  width: 300px;
+  width: 330px;
   height: 100%;
-  right: -307px;
+  right: -337px;
   transition: 0.4s ease;
   z-index: 10;
   max-height: 90vh;

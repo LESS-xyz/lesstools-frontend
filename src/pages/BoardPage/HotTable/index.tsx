@@ -53,6 +53,7 @@ const HotTable: React.FC<IHotTableProps> = observer(({ pairs, title, logo }) => 
       <div className={s.table_body}>
         {pairs.map((pair: IPairFromGraph) => (
           <TableCell
+            key={`${pair.hourlyTxns}-${pair.pair.id}`}
             tokenPrice={Number(
               WHITELIST.includes(pair.pair.token1.id)
                 ? pair.pair.token0.derivedUSD
