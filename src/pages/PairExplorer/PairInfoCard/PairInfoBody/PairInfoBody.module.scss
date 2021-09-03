@@ -97,6 +97,10 @@
     position: relative;
     border-radius: 2px;
 
+    &.etherscan {
+      margin-bottom: 10px;
+    }
+
     &__img,
     &__title {
       position: relative;
@@ -108,7 +112,22 @@
         height: 18px;
         width: 18px;
       }
+
+      svg {
+        height: 18px;
+        width: 18px;
+      }
       margin-right: 10px;
+    }
+
+    &:hover {
+      svg path {
+        fill: #fff;
+      }
+      svg.desktop_icon path {
+        fill: #674df6;
+        stroke: #fff;
+      }
     }
 
     &::after {
@@ -125,10 +144,6 @@
 
     &:hover::after {
       background: var(--gradient);
-    }
-
-    & + & {
-      margin-top: 10px;
     }
   }
 
@@ -309,4 +324,11 @@
 
 .links {
   padding-bottom: 10px;
+}
+
+.chat_links {
+  margin: 10px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
