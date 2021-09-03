@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
 import Search from '../../components/Search/index';
-import AdBlock from '../../components/AdBlock/index';
+// import AdBlock from '../../components/AdBlock/index';
 import { IRowBigSwap } from '../../types/table';
 import { GET_BIG_SWAPS } from '../../queries/index';
 import { IBigSwapInfo } from '../../types/bigSwap';
@@ -16,7 +16,7 @@ import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 
 import s from './BigSwapExplorer.module.scss';
 
-import ad from '../../assets/img/sections/ad/ad1.png';
+// import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
 
 // headers for table
@@ -122,7 +122,7 @@ Fundraising Capital"
         />
       </Helmet>
       <div className={s.container}>
-        <AdBlock adImg={ad} />
+        {/* <AdBlock adImg={ad} /> */}
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Big Swap Explorer</div>

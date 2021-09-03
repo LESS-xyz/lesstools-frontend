@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
 import Search from '../../components/Search/index';
-import AdBlock from '../../components/AdBlock/index';
+// import AdBlock from '../../components/AdBlock/index';
 import { GET_LIVE_SWAPS, GET_LIVE_SWAPS_SUSHISWAP } from '../../queries/index';
 import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { INewPair } from '../../types/newPairs';
@@ -15,7 +15,7 @@ import { useMst } from '../../store/store';
 
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
 
-import ad from '../../assets/img/sections/ad/ad1.png';
+// import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
 
 // headers for table
@@ -123,7 +123,7 @@ Fundraising Capital"
         />
       </Helmet>
       <div className={s.container}>
-        <AdBlock adImg={ad} />
+        {/* <AdBlock adImg={ad} /> */}
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Live New Pairs</div>
