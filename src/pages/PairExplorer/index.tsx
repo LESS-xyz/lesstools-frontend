@@ -32,6 +32,7 @@ const PairExplorer: React.FC = () => {
     setTokenInfoFromBackend,
   ] = useState<null | IAdditionalInfoFromBackend>(null);
   const [searchValue, setSearchValue] = useState('');
+  const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
   const { id: pairId } = useParams<{ id: string }>();
   const { currentExchange, user } = useMst();
 
@@ -41,8 +42,7 @@ const PairExplorer: React.FC = () => {
   const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
-      // timestamp: 1599000000,
-      timestamp: Date.now() - 24 * 3600,
+      timestamp: currentExchange.exchange === 'uniswap' ? 1599000000 : timestamp24hAgo,
     },
   });
 
