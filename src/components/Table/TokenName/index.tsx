@@ -8,7 +8,7 @@ import s from '../Table.module.scss';
 const TokenName: React.FC<{ token: string; pairId: string }> = React.memo(({ token, pairId }) => {
   const { currentExchange } = useMst();
   return (
-    <Link to={`/app/${currentExchange.exchange}/pair-explorer/${pairId}`} className={s.token}>
+    <Link to={`/${currentExchange.exchange}/pair-explorer/${pairId}`} className={s.token}>
       <span>{token}</span>
     </Link>
   );

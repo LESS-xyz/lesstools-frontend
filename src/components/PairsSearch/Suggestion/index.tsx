@@ -27,7 +27,7 @@ const Suggestion: React.FC<ISuggestionProps> = ({
 }) => {
   return (
     <Link
-      to={`/app/${exchange}/pair-explorer/${pairId}`}
+      to={`/${exchange}/pair-explorer/${pairId}`}
       className={s.suggestion}
       onClick={() => onClick()}
     >

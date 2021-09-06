@@ -34,7 +34,7 @@ const Sidebar: React.FC = observer(() => {
         </div>
       </NavLink>
       <div className={s.subtitle}>LESSBOARD</div>
-      <LinkSidebar imgDark={board} imgWhite={board} to="/app" text="LessBoard" />
+      <LinkSidebar imgDark={board} imgWhite={board} to="/" text="LessBoard" />
       <div className={s.group}>
         <div className={s.group_title}>
           <div className={s.group_title__text}>Uniswap</div>

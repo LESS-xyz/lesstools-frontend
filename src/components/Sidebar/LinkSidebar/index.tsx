@@ -20,7 +20,7 @@ const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
   useEffect(() => {
     if (
       to &&
-      loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/')
+      loc.pathname.split('/').slice(0, 3).join('/') === to.split('/').slice(0, 3).join('/')
     ) {
       setIsHover(true);
     } else setIsHover(false);
@@ -32,7 +32,7 @@ const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
         activeClassName={s.link_active}
         exact
         isActive={() =>
-          loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/')
+          loc.pathname.split('/').slice(0, 3).join('/') === to.split('/').slice(0, 3).join('/')
         }
         to={to}
         onClick={() => mobileMenu.setMobileMenu(false)}
@@ -41,12 +41,12 @@ const LinkSidebar: React.FC<ILinkProps> = ({ imgDark, text, imgWhite, to }) => {
           className={s.link}
           onBlur={() =>
             setIsHover(
-              loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/'),
+              loc.pathname.split('/').slice(0, 3).join('/') === to.split('/').slice(0, 3).join('/'),
             )
           }
           onMouseOut={() =>
             setIsHover(
-              loc.pathname.split('/').slice(0, 4).join('/') === to.split('/').slice(0, 4).join('/'),
+              loc.pathname.split('/').slice(0, 3).join('/') === to.split('/').slice(0, 3).join('/'),
             )
           }
           onFocus={() => setIsHover(true)}

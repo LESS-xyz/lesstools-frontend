@@ -33,7 +33,7 @@ const VoteItem: React.FC<IVoteItem> = ({
 }) => {
   return (
     <div
-      data-tip="To vote u should have a Standard subscription"
+      data-tip="To vote u should verify your wallet"
       data-effect="solid"
       data-tip-disable={!isDisabled}
       className={`${s.vote} ${currentUserVote === voteType && s.active}`}
@@ -92,7 +92,7 @@ const CommunityTrust: React.FC<ICommunityTrust> = observer(
                 ? (likesAmount / (likesAmount + dislikesAmount)) * 100
                 : 0
               ).toFixed(2)}
-              isDisabled={user.userPlan === 'Free'}
+              isDisabled={!user.isVerified}
               currentUserVote={currentUserVote}
             />
             <div className={s.info}>
@@ -117,7 +117,7 @@ const CommunityTrust: React.FC<ICommunityTrust> = observer(
                 ? (dislikesAmount / (likesAmount + dislikesAmount)) * 100
                 : 0
               ).toFixed(2)}
-              isDisabled={user.userPlan === 'Free'}
+              isDisabled={!user.isVerified}
               currentUserVote={currentUserVote}
             />
           </div>
