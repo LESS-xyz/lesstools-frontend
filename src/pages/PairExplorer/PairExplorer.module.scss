@@ -11,7 +11,7 @@
 }
 
 .container {
-  @include container;
+  @include container(3500px);
   overflow-x: hidden;
 }
 

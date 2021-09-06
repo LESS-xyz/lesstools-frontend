@@ -195,7 +195,11 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
             >
               View more info
             </button>
-            <Links tokenInfoFromBackend={tokenInfoFromBackend} tokenId={tbr.id} />
+            <Links
+              tokenName={tbr.name}
+              tokenInfoFromBackend={tokenInfoFromBackend}
+              tokenId={tbr.id}
+            />
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"

@@ -15,9 +15,10 @@ import { ReactComponent as ChatIcon } from '../../../../../assets/img/icons/chat
 interface ILinksProps {
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
   tokenId: string;
+  tokenName: string;
 }
 
-const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
+const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, tokenName }) => {
   return (
     <div className={s.links}>
       <a
@@ -31,7 +32,7 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
         </div>
       </a>
       <a
-        href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug}`}
+        href={`https://coinmarketcap.com/currencies/${tokenName}`}
         target="_blank"
         rel="noreferrer noopener"
         className={s.card_link}

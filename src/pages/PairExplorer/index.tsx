@@ -41,7 +41,8 @@ const PairExplorer: React.FC = () => {
   const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
-      timestamp: 1599000000,
+      // timestamp: 1599000000,
+      timestamp: Date.now() - 24 * 3600,
     },
   });
 

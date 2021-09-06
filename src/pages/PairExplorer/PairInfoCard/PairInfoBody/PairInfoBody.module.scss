@@ -100,6 +100,7 @@
     font-size: 16px;
     position: relative;
     border-radius: 2px;
+    transition: 0.4s ease;
 
     &.etherscan {
       margin-bottom: 10px;
@@ -124,6 +125,7 @@
     }
 
     &:hover {
+      transform: scale(1.2);
       svg path {
         fill: #fff;
       }
