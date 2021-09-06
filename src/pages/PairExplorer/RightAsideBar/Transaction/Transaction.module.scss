@@ -61,10 +61,10 @@
 
 .transaction_time {
   min-width: 25px;
-  margin-left: 5px;
+  margin-left: 10px;
   color: #6b6777;
   font-size: 12px;
   font-weight: 700;
-  word-break: break-all;
+  white-space: nowrap;
   text-align: right;
 }

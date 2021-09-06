@@ -49,9 +49,9 @@ Fundraising Capital"
               title="Uniswap V2"
               icon={uniLogo}
               links={[
-                '/app/uniswap/live-new-pairs',
-                '/app/uniswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974',
-                '/app/uniswap/big-swap-explorer',
+                '/uniswap/live-new-pairs',
+                '/uniswap/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974',
+                '/uniswap/big-swap-explorer',
               ]}
               keyName="uni"
             />
@@ -59,9 +59,9 @@ Fundraising Capital"
               title="Sushiswap"
               icon={sushiLogo}
               links={[
-                '/app/sushiswap/live-new-pairs',
-                '/app/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a',
-                '/app/sushiswap/big-swap-explorer',
+                '/sushiswap/live-new-pairs',
+                '/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a',
+                '/sushiswap/big-swap-explorer',
               ]}
               keyName="sushi"
             />
