@@ -22,7 +22,7 @@ const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice, pairId,
         <div className={s.table_body__item_left__token}>{tokenSymbol}</div>
         <p>${tokenPrice}</p>
       </div>
-      <Link to={`/app/${exchange}/pair-explorer/${pairId}`} className={s.table_body__item_right}>
+      <Link to={`/${exchange}/pair-explorer/${pairId}`} className={s.table_body__item_right}>
         <img src={compass} alt="compass" />
       </Link>
     </div>

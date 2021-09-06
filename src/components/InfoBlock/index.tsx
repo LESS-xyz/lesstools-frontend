@@ -77,7 +77,7 @@ const InfoBlock: React.FC = observer(() => {
             <div className={s.table}>
               {hotPairs[currentExchange.exchange].map((pair, index) => (
                 <div key={`${pair.pair.id}`} className={s.table_cell}>
-                  <Link to={`/app/${currentExchange.exchange}/pair-explorer/${pair.pair.id}`}>
+                  <Link to={`/${currentExchange.exchange}/pair-explorer/${pair.pair.id}`}>
                     <span>#{index + 1}</span>{' '}
                     {WHITELIST.includes(pair.pair.token0.id)
                       ? pair.pair.token1.symbol
