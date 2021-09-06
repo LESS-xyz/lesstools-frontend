@@ -6,13 +6,10 @@ import { useWeb3Context } from '../../contexts/Web3Connector';
 import { Web3Service } from '../../services/web3/index';
 import backend from '../../services/backend';
 import VerifiedPage from './VerifiedPage/index';
-import AdBlock from '../../components/AdBlock/index';
 // import { CardsSlider } from '../MainPage/UsersPlans/index';
 import InfoModal from '../../components/Modals/InfoModal/index';
 
 import s from './UserAccount.module.scss';
-
-import adImg from '../../assets/img/sections/ad/ad1.png';
 
 const web3 = new Web3Service();
 
@@ -58,7 +55,6 @@ Fundraising Capital"
       </Helmet>
       <InfoModal />
       <div className={s.container}>
-        <AdBlock adImg={adImg} />
         {!user.isVerified ? (
           <>
             <div className={s.block}>
