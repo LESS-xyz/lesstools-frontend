@@ -16,12 +16,12 @@ import InfoModal from '../../../../components/Modals/InfoModal/index';
 import backend, { IAdditionalInfoFromBackend, PLATFORM } from '../../../../services/backend/index';
 import TokenInfoItem from './TokenInfoItem/index';
 import Links from './Links/index';
+import LessScore from './LessScore/index';
 
 import s from './PairInfoBody.module.scss';
 
 import { ReactComponent as FavImg } from '../../../../assets/img/icons/favorite.svg';
 import { ReactComponent as ShareImg } from '../../../../assets/img/icons/share.svg';
-import scoreBg from '../../../../assets/img/icons/less-score-bg.svg';
 
 export interface IToken {
   address: string;
@@ -31,20 +31,6 @@ export interface IToken {
   name: string;
   symbol: string;
 }
-
-const LessScore = () => (
-  <div className={s.score}>
-    <div className={s.score_info}>
-      <div className={s.score_title}>LessScore</div>
-      <div className={s.score_number}>
-        <span>95%</span>
-      </div>
-    </div>
-    <div className={s.score_img}>
-      <img src={scoreBg} alt="scoreBg" />
-    </div>
-  </div>
-);
 
 export interface IPairInfo {
   base_info: {
@@ -107,6 +93,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
       tbrIndex === '1'
         ? +pairInfo.tokens_prices_24h_ago?.token1.derivedETH
         : +pairInfo.tokens_prices_24h_ago?.token0.derivedETH;
+
     const tokenPrice24HoursChange = new BigNumber(
       (+tbr?.derivedETH / tokenPrice24hAgo) * 100 - 100,
     ).toFormat(2);
@@ -280,7 +267,13 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               />
             </div>
             <div className={s.card_section}>
-              <LessScore />
+              <LessScore
+                txCount={pairInfo.base_info.txCount}
+                holdersCount={tokenInfoFromBackend?.pair.token_being_reviewed.holders_count || 0}
+                cost24H={tokenPrice24HoursChange}
+                links={tokenInfoFromBackend?.pair.token_being_reviewed.chat_urls || ['']}
+                totalLiquidity={pairInfo.base_info.reserveUSD}
+              />
             </div>
             <div className={s.card_section}>
               <CommunityTrust
