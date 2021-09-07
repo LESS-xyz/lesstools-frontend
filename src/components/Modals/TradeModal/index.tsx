@@ -11,7 +11,7 @@ interface ITradeModalProps {
 }
 
 const TradeModal: React.FC<ITradeModalProps> = observer(({ tokenId = '' }) => {
-  const { modals } = useMst();
+  const { modals, currentExchange } = useMst();
 
   const handleCancel = () => {
     modals.close('Trade');
@@ -22,7 +22,11 @@ const TradeModal: React.FC<ITradeModalProps> = observer(({ tokenId = '' }) => {
       <div className={s.modal}>
         <iframe
           title="buy"
-          src={`https://app.uniswap.org/#/swap?outputCurrency=${tokenId}&use=V2`}
+          src={
+            currentExchange.exchange === 'uniswap'
+              ? `https://app.uniswap.org/#/swap?outputCurrency=${tokenId}&use=V3`
+              : 'https://app.sushi.com/swap'
+          }
           height="660px"
           width="100%"
           id="myId"

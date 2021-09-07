@@ -67,11 +67,10 @@ const BigSwapExplorer: React.FC = observer(() => {
       });
       setSwapsFromBackend({ swaps: newSwaps || [] });
     } else setSwapsFromBackend(swapsData || { swaps: [] });
-    // eslint-disable-next-line
   }, [searchValue, swapsData]);
 
   useEffect(() => {
-    if (!loading && swapsData !== undefined) {
+    if (!loading && swapsFromBackend.swaps.length) {
       const newData: Array<IRowBigSwap> = swapsFromBackend?.swaps.map((swap: IBigSwapInfo) => {
         // TBR = Token Being Reviewd
         const TBRSymbol = WHITELIST.includes(swap.pair.token1.id)
@@ -107,7 +106,6 @@ const BigSwapExplorer: React.FC = observer(() => {
       });
       setTableData(newData);
     }
-    // eslint-disable-next-line
   }, [loading, swapsFromBackend]);
 
   return (

@@ -12,6 +12,7 @@ interface IInputProps {
   placeholder?: string;
   big?: boolean;
   loading?: boolean;
+  setValue?: (str: string) => void;
 }
 
 const Search: React.FC<IInputProps> = ({
@@ -21,11 +22,15 @@ const Search: React.FC<IInputProps> = ({
   big,
   onFocus,
   loading = false,
+  setValue,
 }) => {
   const [inputValue, setInputValue] = useState(value);
   const handleOnChange = (str: string) => {
     setInputValue(str);
     onChange(str);
+    if (setValue) {
+      setValue(str);
+    }
   };
   return (
     <div className={`${s.input} ${big && s.big}`}>
@@ -43,7 +48,9 @@ const Search: React.FC<IInputProps> = ({
           }
         }}
         value={inputValue}
-        onChange={(e) => handleOnChange(e.target.value)}
+        onChange={(e) => {
+          handleOnChange(e.target.value);
+        }}
         type="text"
         placeholder={placeholder}
       />

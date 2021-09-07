@@ -68,7 +68,7 @@ const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
       )}
       {actions.liveData && (
         <Link
-          to={`/app/${currentExchange.exchange}/pair-explorer/${actions.liveData}`}
+          to={`/${currentExchange.exchange}/pair-explorer/${actions.liveData}`}
           data-tip={`Pair Explorer: ${actions.liveData}`}
           data-place="left"
           data-effect="solid"

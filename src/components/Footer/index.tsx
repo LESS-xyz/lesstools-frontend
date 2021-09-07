@@ -21,18 +21,38 @@ const Footer: React.FC = () => {
               <div className={s.link}>Staking</div>
             </div> */}
             <div className={s.social_links}>
-              <div className={s.social_link}>
+              <a
+                href="https://twitter.com/LessToken"
+                rel="noreferrer"
+                target="_blank"
+                className={s.social_link}
+              >
                 <img src={twitter} alt="twitter" />
-              </div>
-              <div className={s.social_link}>
+              </a>
+              <a
+                href="https://less-token.medium.com/"
+                rel="noreferrer"
+                target="_blank"
+                className={s.social_link}
+              >
                 <img src={medium} alt="medium" />
-              </div>
-              <div className={s.social_link}>
+              </a>
+              <a
+                href="https://t.me/lesstokenann"
+                rel="noreferrer"
+                target="_blank"
+                className={s.social_link}
+              >
                 <img src={telegram} alt="telegram" />
-              </div>
-              <div className={s.social_link}>
+              </a>
+              <a
+                href="https://github.com/LESS-xyz"
+                rel="noreferrer"
+                target="_blank"
+                className={s.social_link}
+              >
                 <img src={github} alt="github" />
-              </div>
+              </a>
             </div>
             <div className={s.line} />
             <div className={s.logo}>

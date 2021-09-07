@@ -68,11 +68,10 @@ const LiveNewPairs: React.FC = observer(() => {
       });
       setSwapsFromBackend({ pairs: newSwaps || [] });
     } else setSwapsFromBackend(liveSwaps || { pairs: [] });
-    // eslint-disable-next-line
   }, [searchValue, liveSwaps]);
 
   useEffect(() => {
-    if (!loading && liveSwaps !== undefined) {
+    if (!loading && swapsFromBackend.pairs.length) {
       const newData: Array<IRowLiveNewPairs> = swapsFromBackend?.pairs.map((swap: INewPair) => {
         // TBR = Token Being Reviewd
         const TBRSymbol = WHITELIST.includes(swap.token1.id)
@@ -108,7 +107,6 @@ const LiveNewPairs: React.FC = observer(() => {
       });
       setTableData(newData);
     }
-    // eslint-disable-next-line
   }, [loading, swapsFromBackend]);
 
   return (

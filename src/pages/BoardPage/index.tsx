@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { observer } from 'mobx-react-lite';
 
@@ -18,7 +17,6 @@ import uniLogo from '../../assets/img/sections/board-page/uni-logo.svg';
 import sushiLogo from '../../assets/img/sections/board-page/sushi-logo.svg';
 
 const BoardPage: React.FC = observer(() => {
-  const [searchValue, setSearchValue] = useState('');
   const { hotPairs, currentExchange } = useMst();
 
   return (
@@ -37,8 +35,6 @@ Fundraising Capital"
           {/* <AdBlock adImg={AdImg} /> */}
           <PairsSearch
             placeholder={`Search ${currentExchange.exchange} pairs by token symbol / token id / pair contract id.`}
-            value={searchValue}
-            setValue={setSearchValue}
           />
           <div className={s.tables}>
             <HotTable title="HOT UNI" logo={uniLogo} pairs={hotPairs.uniswap} />

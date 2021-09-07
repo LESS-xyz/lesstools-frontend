@@ -18,7 +18,7 @@
   @include b(tablet) {
     top: -110%;
     transition: 0.8s ease;
-    z-index: 50000000;
+    z-index: 999;
     width: 100% !important;
     height: calc(100% - 56px);
     &.active {
@@ -144,6 +144,7 @@
 
   &_text {
     transition: opacity 0.1s ease;
+    width: 0px;
     font-size: 13px;
     opacity: 0;
     white-space: nowrap;

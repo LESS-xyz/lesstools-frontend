@@ -31,7 +31,6 @@ const PairExplorer: React.FC = () => {
     tokenInfoFromBackend,
     setTokenInfoFromBackend,
   ] = useState<null | IAdditionalInfoFromBackend>(null);
-  const [searchValue, setSearchValue] = useState('');
   const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
   const { id: pairId } = useParams<{ id: string }>();
   const { currentExchange, user } = useMst();
@@ -58,7 +57,7 @@ const PairExplorer: React.FC = () => {
     },
   );
 
-  // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАф]
+  // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАФ]
   useEffect(() => {
     refetchPairInfo();
   }, [blocks, refetchPairInfo, pairId]);
@@ -93,7 +92,6 @@ const PairExplorer: React.FC = () => {
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
 
-  // const [swapsHeader, setSwapsHeader] = useState<ITableHeader>([]);
   // формирования данных для таблицы
   useEffect(() => {
     if (!loadingSwaps && swaps !== undefined) {
@@ -119,25 +117,8 @@ const PairExplorer: React.FC = () => {
         };
       });
       setSwapsData(data);
-
-      // const header: ITableHeader = [
-      //   { key: 'data', title: 'Date', sortType: 'date' },
-      //   { key: 'type', title: 'Type', sortType: 'string' },
-      //   { key: 'priceUsd', title: 'Price USD', sortType: 'number' },
-      //   { key: 'priceEth', title: 'Price ETH', sortType: 'number' },
-      //   {
-      //     key: 'amountEth',
-      //     title: `Amount ${pairInfo?.base_info?.token1.symbol}`,
-      //     sortType: 'number',
-      //   },
-      //   { key: 'totalEth', title: 'Total ETH', sortType: 'number' },
-      //   { key: 'maker', title: 'Maker' },
-      //   { key: 'Others', title: 'Others' },
-      // ];
-      // setSwapsHeader(header);
     }
-    // eslint-disable-next-line
-  }, [loadingSwaps, swaps, pairInfo?.base_info?.token1?.symbol]);
+  }, [loadingSwaps, swaps]);
 
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);
@@ -161,11 +142,7 @@ Fundraising Capital"
       <div className={s.container}>
         <div className={s.main}>
           <div className={s.mobile_block}>
-            <PairsSearch
-              value={searchValue}
-              setValue={setSearchValue}
-              placeholder={`Search ${currentExchange.exchange} pairs`}
-            />
+            <PairsSearch placeholder={`Search ${currentExchange.exchange} pairs`} />
             <div className={s.mobile_block__favs}>
               <Favorites />
             </div>
@@ -223,11 +200,7 @@ Fundraising Capital"
                     cmcTokenId={tokenInfoFromBackend?.pair.token_being_reviewed.cmc_id || 0}
                   />
                 )}
-                <PairsSearch
-                  value={searchValue}
-                  setValue={setSearchValue}
-                  placeholder={`Search ${currentExchange.exchange} pairs`}
-                />
+                <PairsSearch placeholder={`Search ${currentExchange.exchange} pairs`} />
               </div>
               <div className={s.chart}>
                 <TradingViewWidget

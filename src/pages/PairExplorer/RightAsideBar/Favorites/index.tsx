@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js/bignumber';
 import { observer } from 'mobx-react-lite';
@@ -70,19 +70,17 @@ const Favorites: React.FC = observer(() => {
     if (!loading && favs) {
       user.setFavoritesPairs(favs.pairs);
     }
-    // eslint-disable-next-line
-  }, [loading, favs]);
+  }, [loading, favs, user]);
 
   // получение избранных пар с графа
-  const getFavoritePairs = async () => {
+  const getFavoritePairs = useCallback(async () => {
     const ids = await backend.getFavoritesOfUser({ platform: 'ETH' });
     getPairsFromGraph({ variables: { ids: ids?.data?.map((id: string) => id.toLowerCase()) } });
-  };
+  }, [getPairsFromGraph]);
 
   useEffect(() => {
     getFavoritePairs();
-    // eslint-disable-next-line
-  }, []);
+  }, [getFavoritePairs]);
 
   const deletePair = async (pair_address: string, platform: PLATFORM) => {
     backend.addOrRemovePairToFavorite({ pair_address, platform });

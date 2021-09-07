@@ -10,7 +10,7 @@ interface IToolProps {
   keyName: string;
 }
 
-const Tool: React.FC<IToolProps> = React.memo(({ links, title, icon, keyName }) => {
+const Tool: React.FC<IToolProps> = ({ links, title, icon, keyName }) => {
   return (
     <section className={s.tool}>
       <div className={`${s.tool_header} ${s[keyName]}`}>
@@ -30,6 +30,6 @@ const Tool: React.FC<IToolProps> = React.memo(({ links, title, icon, keyName }) 
       </div>
     </section>
   );
-});
+};
 
 export default Tool;

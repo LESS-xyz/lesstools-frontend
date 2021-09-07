@@ -33,7 +33,7 @@ const UserAccount: React.FC = observer(() => {
       localStorage.setItem('lesstools_token', token.data.key);
       const res = await backend.getUserPlan();
       if (res.data) {
-        user.setLessBalance(res.data.holdings['bsc testnet']);
+        user.setLessBalance(res.data.holdings.ethereum ? res.data.holdings.ethereum : 0);
         user.setUserPlan({
           planByHolding: res.data.plan_by_holding,
           planByPayments: res.data.plan_by_payments,

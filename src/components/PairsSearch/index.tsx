@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useState, SetStateAction } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { observer } from 'mobx-react-lite';
 
@@ -30,11 +30,20 @@ const formatTokens = (name: string) => {
 
 interface IPairSearchProps {
   placeholder: string;
-  value: string;
-  setValue: Dispatch<SetStateAction<string>>;
 }
 
-const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, placeholder }) => {
+function debounce(fn: (...args: any) => void, ms: number) {
+  let timer: NodeJS.Timeout;
+  return function (args: any) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn(args);
+    }, ms);
+  };
+}
+
+const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
+  const [value, setValue] = useState('');
   const { currentExchange } = useMst();
   // запросы на граф
   const [
@@ -58,6 +67,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, plac
 
   // формирование пар по символу (форматирование данных с графа в нужный формат)
   const [pairsByNameData, setPairsByNameData] = useState<IPairsBySymbol>([]);
+
   useEffect(() => {
     const tokens = formatTokens(value);
 
@@ -78,29 +88,29 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, plac
     } else {
       setPairsByNameData(searchByNameData?.match_by_symbol || []);
     }
-    // eslint-disable-next-line
-  }, [searchByNameData]);
+  }, [searchByNameData, value]);
 
   // поиск пар по (id пары, id токена) или (симоволу токена)
-  const searchPairs = (searchValue: string) => {
-    if (searchValue.startsWith('0x')) {
-      searchById({ variables: { id: searchValue } });
-    } else {
-      searchByName({
-        variables: {
-          name: formatTokens(searchValue)[0] || '',
-          name2: formatTokens(searchValue)[1] || '',
-        },
-      });
-    }
-  };
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce((searchValue: string) => {
+        if (searchValue.length > 0) {
+          if (searchValue.startsWith('0x')) {
+            searchById({ variables: { id: searchValue } });
+          } else {
+            searchByName({
+              variables: {
+                name: formatTokens(searchValue)[0] || '',
+                name2: formatTokens(searchValue)[1] || '',
+              },
+            });
+          }
+        }
+      }, 500),
+    [searchById, searchByName],
+  );
 
-  // TODO: сделать debounce
-  // useLazyQuery debounce doesnt work?
-  useEffect(() => {
-    searchPairs(value);
-    // eslint-disable-next-line
-  }, [value]);
+  const searchPairs = useCallback((str) => debouncedSearch(str), [debouncedSearch]);
 
   // при нажатии за пределами поиска закрывать предложения
   const [isClickedOutside, setIsClickedOutside] = useState(false);
@@ -116,7 +126,8 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ value, setValue, plac
       <div className={s.search}>
         <Search
           value={value}
-          onChange={setValue}
+          setValue={setValue}
+          onChange={searchPairs}
           placeholder={placeholder}
           onFocus={onInputFocus}
           loading={searchByIdLoading || searchByNameLoading}

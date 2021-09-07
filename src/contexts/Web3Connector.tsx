@@ -21,10 +21,10 @@ const Web3Connector: React.FC = ({ children }) => {
       user.setUserWalletId(adresses[0]);
       if (localStorage.getItem('lesstools_token')) {
         user.setIsUserVerified(true);
-        const res = await backend.getUserPlan();
 
+        const res = await backend.getUserPlan();
         if (res.data) {
-          user.setLessBalance(res.data.holdings['bsc testnet']);
+          user.setLessBalance(res.data.holdings.ethereum ? res.data.holdings.ethereum : 0);
           user.setUserPlan({
             planByHolding: res.data.plan_by_holding,
             planByPayments: res.data.plan_by_payments,
