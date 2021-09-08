@@ -65,10 +65,9 @@
     @include flex(row, center, normal, nowrap);
   }
   &_button {
-    width: 32px;
-    height: 32px;
     cursor: pointer;
     svg {
+      display: block;
       transition: fill 4s ease;
       width: 32px;
       height: 32px;
