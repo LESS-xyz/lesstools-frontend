@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
@@ -123,6 +123,15 @@ const PairExplorer: React.FC = () => {
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);
 
+  const tbr = WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+    ? pairInfo?.base_info.token0.symbol
+    : pairInfo?.base_info.token1.symbol;
+
+  const tradingViewWatchList = useMemo(
+    () => [`USDT${tbr}`, `${tbr}USDT`, `${tbr}WETH`, `WETH${tbr}`, `USD${tbr}`, `${tbr}USD`],
+    [tbr],
+  );
+
   return (
     <main className={s.page}>
       <Helmet>
@@ -208,28 +217,7 @@ Fundraising Capital"
                   autosize
                   hide_side_toolbar={false}
                   style={BarStyles.AREA}
-                  watchlist={[
-                    `USDT${
-                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                        ? pairInfo?.base_info.token0.symbol
-                        : pairInfo?.base_info.token1.symbol
-                    }`,
-                    `${
-                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                        ? pairInfo?.base_info.token0.symbol
-                        : pairInfo?.base_info.token1.symbol
-                    }USDT`,
-                    `${
-                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                        ? pairInfo?.base_info.token0.symbol
-                        : pairInfo?.base_info.token1.symbol
-                    }WETH`,
-                    `WETH${
-                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                        ? pairInfo?.base_info.token0.symbol
-                        : pairInfo?.base_info.token1.symbol
-                    }`,
-                  ]}
+                  watchlist={tradingViewWatchList}
                   symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                       ? pairInfo?.base_info.token0.symbol
