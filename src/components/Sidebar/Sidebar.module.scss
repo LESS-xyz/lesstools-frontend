@@ -8,7 +8,6 @@
   height: 100vh;
   background: #2f226f;
   width: 60px;
-  transition: 0.2s ease;
   text-overflow: ellipsis;
 
   @media (max-height: 640px) {
@@ -17,11 +16,11 @@
 
   @include b(tablet) {
     top: -110%;
-    transition: 0.8s ease;
     z-index: 999;
     width: 100% !important;
     height: calc(100% - 56px);
     &.active {
+      transition: 0.8s ease;
       top: 56px;
     }
   }
