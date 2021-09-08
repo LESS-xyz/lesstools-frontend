@@ -37,6 +37,7 @@
       padding-left: 12px;
       &_text {
         opacity: 1;
+        transition: opacity 0.4s ease 0.1s;
       }
     }
 
@@ -143,7 +144,6 @@
   transition: 0.4s ease;
 
   &_text {
-    transition: opacity 0.1s ease;
     width: 0px;
     font-size: 13px;
     opacity: 0;
