@@ -2,7 +2,8 @@ import { WHITELIST } from '../../../../data/whitelist';
 
 import s from './PairInfoHeader.module.scss';
 
-import loader from '../../../../assets/loader.svg';
+// import loader from '../../../../assets/loader.svg';
+import tokenIcon from '../../../../assets/img/icons/token-placeholder.svg';
 import { useEffect, useState } from 'react';
 
 export interface ITokenData {
@@ -42,7 +43,7 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({ token0, token1, cmcTok
           src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${cmcTokenId}.png`}
           alt="logoExample"
           onError={(e) => {
-            e.currentTarget.src = loader;
+            e.currentTarget.src = tokenIcon;
           }}
         />
       </div>

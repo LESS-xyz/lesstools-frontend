@@ -209,8 +209,16 @@ Fundraising Capital"
                   hide_side_toolbar={false}
                   style={BarStyles.AREA}
                   watchlist={[
-                    `USDT${pairInfo?.base_info.token0.symbol}`,
-                    `${pairInfo?.base_info.token0.symbol}USDT`,
+                    `USDT${
+                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                        ? pairInfo?.base_info.token0.symbol
+                        : pairInfo?.base_info.token1.symbol
+                    }`,
+                    `${
+                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                        ? pairInfo?.base_info.token0.symbol
+                        : pairInfo?.base_info.token1.symbol
+                    }USDT`,
                     `${
                       WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                         ? pairInfo?.base_info.token0.symbol

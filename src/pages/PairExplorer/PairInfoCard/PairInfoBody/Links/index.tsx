@@ -15,10 +15,9 @@ import { ReactComponent as ChatIcon } from '../../../../../assets/img/icons/chat
 interface ILinksProps {
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
   tokenId: string;
-  tokenName: string;
 }
 
-const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, tokenName }) => {
+const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
   return (
     <div className={s.links}>
       <a
@@ -31,16 +30,18 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, tokenName
           <img src={etherscan} alt="etherscan" />
         </div>
       </a>
-      <a
-        href={`https://coinmarketcap.com/currencies/${tokenName}`}
-        target="_blank"
-        rel="noreferrer noopener"
-        className={s.card_link}
-      >
-        <div className={s.card_link__img}>
-          <img src={marketcap} alt="marketcap" />
-        </div>
-      </a>
+      {tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug && (
+        <a
+          href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug}`}
+          target="_blank"
+          rel="noreferrer noopener"
+          className={s.card_link}
+        >
+          <div className={s.card_link__img}>
+            <img src={marketcap} alt="marketcap" />
+          </div>
+        </a>
+      )}
       {tokenInfoFromBackend?.pair.token_being_reviewed.twitter_url && (
         <a
           target="_blank"
