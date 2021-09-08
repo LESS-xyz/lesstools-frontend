@@ -229,7 +229,7 @@
     grid-area: chart;
   }
   @include b(850) {
-    height: 250px;
+    height: 90vh;
     margin-bottom: 25px;
   }
 }

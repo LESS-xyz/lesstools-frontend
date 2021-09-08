@@ -132,7 +132,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           url={window.location.href}
           text={`Check ${tbr.symbol} at LESSTools! Price: $${(+tbr.derivedUSD).toFixed(
             2,
-          )} - Shared from LESSTools.io`}
+          )} - Shared from tools.less.xyz`}
         />
         <TradeModal tokenId={tbr.id} />
         <ReactTooltip />
