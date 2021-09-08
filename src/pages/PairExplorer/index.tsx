@@ -204,11 +204,24 @@ Fundraising Capital"
               </div>
               <div className={s.chart}>
                 <TradingViewWidget
-                  allowfullscreen
                   theme={Themes.DARK}
                   autosize
                   hide_side_toolbar={false}
                   style={BarStyles.AREA}
+                  watchlist={[
+                    `USDT${pairInfo?.base_info.token0.symbol}`,
+                    `${pairInfo?.base_info.token0.symbol}USDT`,
+                    `${
+                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                        ? pairInfo?.base_info.token0.symbol
+                        : pairInfo?.base_info.token1.symbol
+                    }WETH`,
+                    `WETH${
+                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                        ? pairInfo?.base_info.token0.symbol
+                        : pairInfo?.base_info.token1.symbol
+                    }`,
+                  ]}
                   symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                       ? pairInfo?.base_info.token0.symbol

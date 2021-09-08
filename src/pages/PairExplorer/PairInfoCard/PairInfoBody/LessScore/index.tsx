@@ -47,7 +47,6 @@ const LessScore: React.FC<ILessScoreProps> = ({
     } else if (+totalLiquidity > 100_000) newScore += 9;
 
     setScore(newScore);
-    // eslint-disable-next-line
   }, [txCount, holdersCount, cost24H, links, totalLiquidity]);
 
   return (
