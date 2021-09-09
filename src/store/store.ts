@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { Instance, onSnapshot, types } from 'mobx-state-tree';
+import { Instance, types } from 'mobx-state-tree';
 
 import {
   ModalsModel,
@@ -44,9 +44,9 @@ export const Store = RootModel.create({
 
 const rootStore = Store;
 
-onSnapshot(rootStore, (snapshot) => {
-  console.log('Snapshot: ', snapshot);
-});
+// onSnapshot(rootStore, (snapshot) => {
+//   console.log('Snapshot: ', snapshot);
+// });
 
 export type RootInstance = Instance<typeof RootModel>;
 const RootStoreContext = createContext<null | RootInstance>(null);

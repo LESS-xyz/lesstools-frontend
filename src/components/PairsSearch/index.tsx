@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { observer } from 'mobx-react-lite';
 
@@ -121,9 +121,12 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
     setIsClickedOutside(false);
   };
 
+  const searchBlock = useRef<HTMLDivElement>(null);
+  console.log(searchBlock.current?.offsetWidth);
+
   return (
     <OutsideAlerter fn={() => setIsClickedOutside(true)}>
-      <div className={s.search}>
+      <div className={s.search} ref={searchBlock}>
         <Search
           value={value}
           setValue={setValue}

@@ -18,7 +18,7 @@ export interface ITokenData {
 interface IPairInfoHeaderProps {
   token0: ITokenData | null | undefined;
   token1: ITokenData | null | undefined;
-  cmcTokenId: number;
+  cmcTokenId: number | null;
 }
 
 const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({ token0, token1, cmcTokenId }) => {
@@ -40,11 +40,12 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({ token0, token1, cmcTok
     <section className={s.pairInfoHeader}>
       <div className={s.logo}>
         <img
-          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${cmcTokenId}.png`}
+          src={
+            cmcTokenId
+              ? `https://s2.coinmarketcap.com/static/img/coins/64x64/${cmcTokenId}.png`
+              : tokenIcon
+          }
           alt="logoExample"
-          onError={(e) => {
-            e.currentTarget.src = tokenIcon;
-          }}
         />
       </div>
       <div className={s.right}>

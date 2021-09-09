@@ -135,6 +135,7 @@ const Favorites: React.FC = observer(() => {
               >
                 {user.favoritePairs.map((pair: any) => (
                   <Favorite
+                    key={`${pair.id}-${pair.token1.id}-${pair.token0.id}`}
                     symbol={
                       WHITELIST.includes(pair.token1.id) ? pair.token0.symbol : pair.token1.symbol
                     }
