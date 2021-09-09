@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import s from './Footer.module.scss';
 
 import twitter from '../../assets/img/icons/twitter.svg';
@@ -55,10 +57,10 @@ const Footer: React.FC = () => {
               </a>
             </div>
             <div className={s.line} />
-            <div className={s.logo}>
+            <Link to="/" className={s.logo}>
               <img src={logo} alt="logo" />
               <div>less</div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
