@@ -3,7 +3,7 @@
 .block {
   font-size: 16px;
   color: var(--grey);
-  min-width: 160px;
+  min-width: 170px;
   @include flex(row, center);
 
   &::before {

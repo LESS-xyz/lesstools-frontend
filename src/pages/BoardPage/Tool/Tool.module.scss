@@ -1,0 +1,51 @@
+@import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/gradient-text.scss';
+.tool {
+}
+
+.tool_header {
+  height: 145px;
+
+  &.uni {
+    background: url('../../../assets/img/sections/board-page/tool-bg-1.svg') 0 0 no-repeat, #1d1540;
+    background-size: cover;
+  }
+
+  &.sushi {
+    background: url('../../../assets/img/sections/board-page/tool-bg-2.svg') 0 0 no-repeat, #1d1540;
+    background-size: cover;
+  }
+
+  @include flex(row, center, center);
+
+  &__img {
+    position: relative;
+    img {
+      width: 90px;
+      height: 90px;
+    }
+  }
+}
+
+.tool_body {
+  padding: 30px 20px 20px;
+  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+
+  &__title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    span {
+      @include gradient-text;
+    }
+  }
+
+  &__buttons a {
+    width: 100%;
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

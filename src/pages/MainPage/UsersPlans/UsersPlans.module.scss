@@ -2,6 +2,7 @@
 @import '../../../styles/mixins/flex.scss';
 @import '../../../styles/mixins/grid.scss';
 @import '../../../styles/mixins/gradient-text.scss';
+@import '../../../styles/mixins/media.scss';
 
 .block {
   padding: 100px 0;
@@ -30,7 +31,7 @@
 }
 
 .container {
-  @include container;
+  @include container(1390px);
 }
 
 .title {
@@ -50,7 +51,7 @@
 
 .cards {
   //   @include flex(row, center);
-  @include grid(repeat(3, 1fr), auto, 25px);
+  // @include grid(repeat(3, 1fr), auto, 25px);
 }
 
 // card
@@ -69,8 +70,23 @@
     min-height: 124px;
     margin-bottom: 20px;
 
+    &.active {
+      background: var(--gradient);
+      .card_header__subtitle {
+        color: #fff;
+      }
+      .card_header__title {
+        span {
+          color: #fff;
+          -webkit-text-fill-color: #fff;
+        }
+      }
+    }
+
     &__title {
-      @include gradient-text;
+      span {
+        @include gradient-text;
+      }
       font-size: 24px;
       text-transform: uppercase;
       margin-bottom: 10px;
@@ -95,5 +111,31 @@
         margin-right: 10px;
       }
     }
+  }
+}
+
+.custom_nav {
+  margin-bottom: 30px;
+  display: none;
+  @include b(890) {
+    @include flex(row, center, center);
+  }
+}
+
+.custom_nav__button {
+  width: 42px;
+  height: 42px;
+  background: var(--gradient);
+  @include flex(row, center, center);
+
+  svg path {
+    stroke: #fff;
+  }
+
+  &:first-child {
+    transform: rotate(180deg);
+  }
+  &:last-child {
+    margin-left: 25px;
   }
 }

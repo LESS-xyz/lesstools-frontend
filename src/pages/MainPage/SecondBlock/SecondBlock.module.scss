@@ -1,5 +1,6 @@
 @import '../../../styles/mixins/grid.scss';
 @import '../../../styles/mixins/flex.scss';
+@import '../../../styles/mixins/media.scss';
 
 .block {
   background: radial-gradient(
@@ -12,11 +13,28 @@
 }
 
 .inner {
-  @include grid;
-  grid-gap: 50px;
+  display: flex;
+
+  @include b(mobile) {
+    .right {
+      padding-left: 50px;
+    }
+  }
+  @include b(extramobile) {
+    flex-wrap: wrap;
+    .left {
+      width: 90%;
+      margin-bottom: 20px;
+    }
+    .right {
+      width: 100%;
+      padding: 20px 10px;
+    }
+  }
 }
 
 .left {
+  width: 50%;
   position: relative;
   .bg {
     position: relative;
@@ -31,9 +49,9 @@
 
       &.coins {
         position: absolute;
-        top: -20px;
+        top: -40px;
         transform: scale(1.1);
-        left: 15px;
+        left: -15px;
         max-width: 100%;
       }
     }
@@ -41,9 +59,21 @@
 }
 
 .right {
+  width: 50%;
+  padding-left: 75px;
+  padding-right: 25px;
   @include flex(row, center);
   .text {
     font-size: 30px;
+    @include b(tablet) {
+      font-size: 22px;
+    }
+    @include b(mobile) {
+      font-size: 18px;
+    }
+    @include b(extramobile) {
+      font-size: 25px;
+    }
     line-height: 1.2;
     max-width: 550px;
     color: var(--grey);

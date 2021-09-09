@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import s from './ListedSince.module.scss';
+
 import { getSecondsFromDate } from '../../../utils/getSecondsFromDate';
 import { formatTime } from '../../../utils/formatTime';
+
+import s from './ListedSince.module.scss';
 
 interface IListedSinceProps {
   date: string | Date;
@@ -18,7 +20,6 @@ const ListedSince: React.FC<IListedSinceProps> = ({ date }) => {
     return () => {
       clearInterval(timerId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

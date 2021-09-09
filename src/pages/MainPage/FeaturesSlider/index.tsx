@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import s from './FeaturesSlider.module.scss';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper.scss';
+
 import slideBg1 from '../../../assets/img/sections/slider-img/slide-bg-1.png';
 import poolExporerIcon from '../../../assets/img/icons/pool-explorer.svg';
 import pairExporerIcon from '../../../assets/img/icons/pair-explorer.svg';
 import bigSwapExporerIcon from '../../../assets/img/icons/big-swap-explorer.svg';
-import arrowBlue from '../../../assets/img/icons/arrow-blue.svg';
+import { ReactComponent as ArrowBlue } from '../../../assets/img/icons/arrow-blue.svg';
+
+import 'swiper/swiper.scss';
+import s from './FeaturesSlider.module.scss';
 
 interface ISlideProps {
   bgImage: string;
@@ -71,7 +73,7 @@ const FeaturesSlider: React.FC = () => {
           className={s.button}
           onClick={() => sliderInstance.slidePrev()}
         >
-          <img src={arrowBlue} alt="arrowBlue" />
+          <ArrowBlue />
         </button>
         <button
           type="button"
@@ -81,13 +83,13 @@ const FeaturesSlider: React.FC = () => {
           className={s.button}
           onClick={() => sliderInstance.slideNext()}
         >
-          <img src={arrowBlue} alt="arrowBlue" />
+          <ArrowBlue />
         </button>
       </div>
       <div className={`${s.slider} ${isSliderMove && s.fade}`}>
         <Swiper
           spaceBetween={20}
-          slidesPerView={2.2}
+          slidesPerView={1}
           freeMode
           onSwiper={(slider) => setSliderInstance(slider)}
           onSliderFirstMove={() => setIsSliderMove(true)}
@@ -100,9 +102,19 @@ const FeaturesSlider: React.FC = () => {
             setIsSliderEnd(slider.isEnd);
             setIsSliderMove(true);
           }}
+          breakpoints={{
+            // when window width is >= 320px
+            900: {
+              slidesPerView: 2.2,
+            },
+
+            1800: {
+              slidesPerView: 3,
+            },
+          }}
         >
-          {slidesData.map((slide) => (
-            <SwiperSlide>
+          {slidesData.map((slide, index) => (
+            <SwiperSlide key={`${JSON.stringify(slide)}${index * index}`}>
               <Slide {...slide} />
             </SwiperSlide>
           ))}

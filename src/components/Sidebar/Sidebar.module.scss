@@ -1,0 +1,174 @@
+@import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/media.scss';
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  height: 100vh;
+  background: #2f226f;
+  width: 60px;
+  text-overflow: ellipsis;
+  &:hover {
+    transition: 0.3s ease 0.1s;
+  }
+
+  @media (max-height: 640px) {
+    overflow-y: auto;
+  }
+
+  @include b(tablet) {
+    top: -110%;
+    z-index: 999;
+    width: 100% !important;
+    height: calc(100% - 56px);
+    &.active {
+      transition: 0.8s ease;
+      top: 56px;
+    }
+  }
+
+  &:hover {
+    width: 170px;
+
+    .logo_text {
+      margin-left: 10px;
+      transition: transform 0.2s ease 0.2s;
+      transform: scale(1);
+    }
+
+    .link {
+      padding-left: 12px;
+      &_text {
+        opacity: 1;
+        transition: opacity 0.4s ease 0.2s;
+      }
+    }
+
+    .subtitle {
+      padding-left: 12px;
+    }
+
+    .group_title {
+      padding-left: 12px;
+      &__icon {
+        transform: scale(1);
+        width: 22px;
+        transition: transform 0.2s ease 0.2s, width 0.2s ease 0.2s;
+      }
+    }
+  }
+
+  @include b(tablet) {
+    .logo_text {
+      display: block;
+    }
+
+    .link {
+      padding-left: 12px;
+      &_text {
+        opacity: 1;
+      }
+    }
+
+    .subtitle {
+      padding-left: 12px;
+    }
+
+    .group_title {
+      padding-left: 12px;
+      &__icon {
+        display: block;
+      }
+    }
+  }
+}
+
+.logo {
+  @include b(tablet) {
+    display: none;
+  }
+  padding: 22px 15px;
+  @include flex(row, center, normal, nowrap);
+  &_text {
+    transform: scale(0);
+    width: 0;
+    margin-left: 0;
+    font-size: 22px;
+    color: #dcdcdc;
+    span {
+      color: #6f45ff;
+    }
+  }
+}
+
+.subtitle {
+  transition: 0.4s ease;
+  background-color: #21194e;
+  padding: 4px 5px;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  color: #908ca6;
+  letter-spacing: 0.425316px;
+  text-transform: uppercase;
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+
+// group
+.group {
+  margin-bottom: 20px;
+
+  &_title {
+    transition: 0.4s ease;
+    overflow: hidden;
+    padding: 12px 5px;
+    background: #512c65;
+
+    @include flex(row, center, space-between, nowrap);
+    &__text {
+      font-size: 14px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 22px;
+      position: relative;
+      top: 5px;
+    }
+    &__icon {
+      transform: scale(0);
+      width: 0;
+    }
+  }
+}
+
+// link
+.link {
+  @include flex(row, center, normal, nowrap);
+  padding: 11px 12px;
+  padding-left: 20px;
+  cursor: pointer;
+  background: #21194e;
+  transition: 0.4s ease;
+
+  &_text {
+    width: 0px;
+    font-size: 13px;
+    opacity: 0;
+    white-space: nowrap;
+    margin-left: 12px;
+    pointer-events: none;
+  }
+
+  &:hover {
+    justify-content: flex-start;
+
+    background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
+  }
+}
+
+.link_active {
+  .link {
+    background: linear-gradient(90deg, #6f45ff 0%, #ff6365 100%);
+  }
+}

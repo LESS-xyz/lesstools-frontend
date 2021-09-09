@@ -1,9 +1,13 @@
 @import '../../styles/mixins/container.scss';
 @import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/media.scss';
 
 .section {
-  padding: 100px 0;
-  min-height: 100vh;
+  padding: 30px 0;
+  background: var(--gradient-background);
+  @include b(extramobile) {
+    background: none;
+  }
 }
 
 .container {
@@ -17,7 +21,17 @@
 
 .info {
   margin-bottom: 30px;
-  @include flex(row, center, space-between);
+  @include flex(row, center, space-between, nowrap);
+  @include b(mobile) {
+    flex-wrap: wrap-reverse;
+  }
+
+  &_right {
+    @include b(mobile) {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+  }
 
   &_title {
     font-size: 31px;

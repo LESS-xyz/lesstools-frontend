@@ -1,4 +1,5 @@
-import s from './MainPage.module.scss';
+import { Helmet } from 'react-helmet';
+
 import TopBlock from './TopBlock/index';
 import SecondBlock from './SecondBlock/index';
 import CardsBlock from './CardsBlock/index';
@@ -7,6 +8,9 @@ import TeamBlock from './TeamBlock/index';
 import UsersPlans from './UsersPlans/index';
 import RoadMap from './RoadMap/index';
 import FeaturesSlider from './FeaturesSlider/index';
+
+import s from './MainPage.module.scss';
+
 import partnerLogo1 from '../../assets/img/sections/partners-logos/logo-1.svg';
 
 const partnersLogos = [
@@ -23,6 +27,15 @@ const partnersLogos = [
 const MainPage: React.FC = () => {
   return (
     <section className={s.page}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
+        />
+      </Helmet>
       <div className={s.inner}>
         <TopBlock />
         <SecondBlock />

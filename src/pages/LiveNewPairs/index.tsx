@@ -1,113 +1,132 @@
-import Table from '../../components/Table/index';
-import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
-import InfoBlock from '../../components/InfoBlock/index';
-import Search from '../../components/Search/index';
+import { Helmet } from 'react-helmet';
 import { useEffect, useState } from 'react';
-import AdBlock from '../../components/AdBlock/index';
-import ad from '../../assets/img/sections/ad/ad1.png';
+import { useQuery } from '@apollo/client';
+import { observer } from 'mobx-react-lite';
+
+import Table, { ITableHeader } from '../../components/Table/index';
+import Search from '../../components/Search/index';
+// import AdBlock from '../../components/AdBlock/index';
+import { GET_LIVE_SWAPS, GET_LIVE_SWAPS_SUSHISWAP } from '../../queries/index';
+import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
+import { INewPair } from '../../types/newPairs';
+import { IRowLiveNewPairs } from '../../types/table';
+import { WHITELIST } from '../../data/whitelist';
+import { useMst } from '../../store/store';
+
+import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
+
+// import ad from '../../assets/img/sections/ad/ad1.png';
+import loader from '../../assets/loader.svg';
 
 // headers for table
-const headerData = [
-  { key: 'token', title: 'Token' },
-  { key: 'listedSince', title: 'Listed Since' },
+const headerData: ITableHeader = [
+  { key: 'token', title: 'Token', sortType: 'string' },
+  { key: 'listedSince', title: 'Listed Since', sortType: 'number' },
   { key: 'actions', title: 'Actions' },
-  { key: 'contractDetails', title: 'Contract Details' },
-  { key: 'tokenPrice', title: 'Token Price' },
-  { key: 'totalLiquidity', title: 'Total Liquidity' },
-  { key: 'poolAmount', title: 'Pool Amount' },
-  { key: 'poolVariation', title: 'Pool Variation' },
-  { key: 'poolRemaining', title: 'Pool Remaining' },
+  { key: 'tokenPrice', title: 'Token Price', sortType: 'tokenPrice' },
+  { key: 'totalLiquidity', title: 'Total Liquidity', sortType: 'number' },
+  { key: 'poolAmount', title: 'Initial Pool Amount', sortType: 'number' },
+  { key: 'poolVariation', title: 'Pool Variation', sortType: 'number' },
+  { key: 'poolRemaining', title: 'Pool Remaining', sortType: 'number' },
 ];
 
-const tableDataExample = [
-  {
-    token: 'BabyPig',
-    listedSince: '2021-07-05 11:37:12',
-    actions: {
-      unicrypt: '0xer39293',
-      liveData: '0xer2334',
-    },
-    contractDetails: ['cash', 'plus'],
-    tokenPrice: { usd: 0.32423, eth: 0.00000003 },
-    totalLiquidity: 0.69,
-    poolAmount: 6.33404,
-    poolVariation: -22.31,
-    poolRemaining: 6.70472,
-  },
-  {
-    token: 'bezos',
-    listedSince: '2021-07-02 13:48:43',
-    actions: {
-      uniswap: '0x543534gfdgdf',
-      etherscan: '0x3423423dfs',
-      unicrypt: '0xer39293',
-      liveData: '0xer2334',
-    },
-    contractDetails: ['plus'],
-    tokenPrice: { usd: 0.32423, eth: 0.0000000376 },
-    totalLiquidity: 3341154,
-    poolAmount: 6.33404,
-    poolVariation: 202.31,
-    poolRemaining: 6.70472,
-  },
-  {
-    token: 'elonmusk',
-    listedSince: '2021-06-02 13:48:45',
-    actions: {
-      uniswap: '0x543534gfdgdf',
-      etherscan: '0x3423423dfs',
-      unicrypt: '0xer39293',
-      liveData: '0xer2334',
-    },
-    contractDetails: ['plus', 'lock'],
-    tokenPrice: { usd: 1.32423, eth: 0.00000003 },
-    totalLiquidity: 33330.769,
-    poolAmount: 6.33404,
-    poolVariation: 552.31,
-    poolRemaining: 6.70472,
-  },
-  {
-    token: 'jejdogo',
-    listedSince: '2021-07-02 13:48:13',
-    actions: {
-      uniswap: '0x543534gfdgdf',
-    },
-    contractDetails: ['plus', 'lock', 'proxy', 'cash'],
-    tokenPrice: { usd: 0.32423, eth: 0.00000003 },
-    totalLiquidity: 31213.769,
-    poolAmount: 6.33404,
-    poolVariation: -2.31,
-    poolRemaining: 6.70472,
-  },
-];
-
-const BigSwapExplorer: React.FC = () => {
+const LiveNewPairs: React.FC = observer(() => {
   const [searchValue, setSearchValue] = useState('');
-  const [tableData, setTableData] = useState([...tableDataExample]);
+  const { currentExchange } = useMst();
+
+  // final data for table
+  const [tableData, setTableData] = useState<Array<IRowLiveNewPairs>>([]);
+
+  // query new pairs
+  type response = { pairs: Array<INewPair> };
+  const { loading, data: liveSwaps } = useQuery<response>(
+    currentExchange.exchange === 'uniswap' ? GET_LIVE_SWAPS : GET_LIVE_SWAPS_SUSHISWAP,
+    {
+      pollInterval: 15000,
+      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    },
+  );
+
+  // для фильтрации
+  // сначала приходит ответ с бэка, это сетается в setSwapsFromBackend,
+  // после обработка и сетается в setTableData
+  const [swapsFromBackend, setSwapsFromBackend] = useState<response>({ pairs: [] });
+  useEffect(() => {
+    if (liveSwaps) setSwapsFromBackend(liveSwaps);
+  }, [liveSwaps]);
+
+  // фильтрация
+  useEffect(() => {
+    if (searchValue) {
+      const newSwaps = liveSwaps?.pairs.filter((data) => {
+        if (
+          data.token0.symbol.includes(searchValue.toUpperCase()) ||
+          data.token1.symbol.includes(searchValue.toUpperCase())
+        )
+          return true;
+        return false;
+      });
+      setSwapsFromBackend({ pairs: newSwaps || [] });
+    } else setSwapsFromBackend(liveSwaps || { pairs: [] });
+  }, [searchValue, liveSwaps]);
 
   useEffect(() => {
-    const filtredTable = [...tableDataExample.filter((row) => row.token.includes(searchValue))];
-    setTableData(filtredTable);
-  }, [searchValue]);
+    if (!loading && swapsFromBackend.pairs.length) {
+      const newData: Array<IRowLiveNewPairs> = swapsFromBackend?.pairs.map((swap: INewPair) => {
+        // TBR = Token Being Reviewd
+        const TBRSymbol = WHITELIST.includes(swap.token1.id)
+          ? swap.token0.symbol
+          : swap.token1.symbol;
+        const TBRindex = WHITELIST.includes(swap.token0.id) ? '1' : '0';
+        const TBRaddress = swap[`token${TBRindex}` as const].id;
+
+        const otherTokenIndex = TBRindex === '1' ? '0' : '1';
+
+        const poolAmount = +swap[`initialReserve${otherTokenIndex}` as const];
+        const poolRemaining = +swap[`reserve${otherTokenIndex}` as const];
+
+        let poolVariation = (poolRemaining / poolAmount) * 100 - 100;
+
+        if (poolAmount === poolRemaining) poolVariation = 0;
+        if (poolAmount === 0 && poolRemaining !== 0) poolVariation = 100;
+
+        return {
+          token: TBRSymbol,
+          listedSince: swap.createdAtTimestamp,
+          actions: {
+            uniswap: TBRaddress,
+            etherscan: swap.creationTxnHash,
+            unicrypt: swap.id,
+            liveData: swap.id,
+          },
+          tokenPrice: {
+            usd: +swap[`token${TBRindex}` as const].derivedUSD,
+            eth: +swap[`token${TBRindex}` as const].derivedETH,
+          },
+          totalLiquidity: +swap.reserveUSD,
+          poolAmount,
+          poolVariation,
+          poolRemaining,
+          otherTokenSymbol: swap[`token${otherTokenIndex}` as const].symbol,
+        };
+      });
+      setTableData(newData);
+    }
+  }, [loading, swapsFromBackend]);
 
   return (
     <main className={s.section}>
-      <div className={s.container}>
-        <AdBlock adImg={ad} />
-        <InfoBlock
-          topTokens={[
-            'KISHU',
-            'JEJUDOGE',
-            'eMax',
-            'IOI',
-            'EPAY',
-            'SHIB',
-            'GTC',
-            'ERN',
-            'LITH',
-            'WWT',
-          ]}
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>LiveNewPairs - LessTools</title>
+        <meta
+          name="description"
+          content="Multi-Chain Decentralized
+Fundraising Capital"
         />
+      </Helmet>
+      <div className={s.container}>
+        {/* <AdBlock adImg={ad} /> */}
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Live New Pairs</div>
@@ -117,12 +136,14 @@ const BigSwapExplorer: React.FC = () => {
             <Search value={searchValue} onChange={setSearchValue} placeholder="Search" />
           </div>
         </div>
-        {/*  eslint-disable-next-line */}
-        {/* @ts-ignore */}
-        <Table data={tableData} header={headerData} tableType="liveNewPairs" />
+        {loading && liveSwaps === undefined ? (
+          <img src={loader} alt="loader" />
+        ) : (
+          <Table data={tableData} header={headerData} tableType="liveNewPairs" />
+        )}
       </div>
     </main>
   );
-};
+});
 
-export default BigSwapExplorer;
+export default LiveNewPairs;

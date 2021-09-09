@@ -6,28 +6,30 @@ export interface IRowBigSwap {
   totalEth: number;
   totalUsd: number;
   change: number;
-  others: { liveData: string; etherscan: string };
+  others: { liveData?: string; etherscan: string };
 }
 
 export interface IRowLiveNewPairs {
   token: string;
   listedSince: string | Date;
   actions: { uniswap?: string; unicrypt?: string; etherscan?: string; liveData?: string };
-  contractDetails: Array<'plus' | 'lock' | 'proxy' | 'cash'>;
   tokenPrice: { usd: number; eth: number };
   totalLiquidity: number;
   poolAmount: number;
   poolVariation: number;
   poolRemaining: number;
+  otherTokenSymbol: string;
 }
 
 export interface IRowPairExplorer {
-  data: string | Date;
+  data: number;
+  tbr: { id: string; symbol: string };
+  otherToken: { id: string; symbol: string };
   type: 'sell' | 'buy';
   priceUsd: number;
   priceEth: number;
   amountEth: number;
   totalEth: number;
   maker: string;
-  others: { liveData: string; etherscan: string };
+  others: { liveData?: string; etherscan: string };
 }

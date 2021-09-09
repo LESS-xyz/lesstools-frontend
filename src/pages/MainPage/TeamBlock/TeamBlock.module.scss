@@ -2,9 +2,13 @@
 @import '../../../styles/mixins/grid.scss';
 @import '../../../styles/mixins/flex.scss';
 @import '../../../styles/mixins/gradient-text.scss';
+@import '../../../styles/mixins/media.scss';
 
 .block {
   padding-top: 100px;
+  @include b(mobile) {
+    padding-top: 40px;
+  }
 }
 
 .title {
@@ -16,10 +20,6 @@
 
 .container {
   @include container(1015px);
-}
-
-.cards {
-  @include grid(repeat(3, 1fr), 1fr, 50px);
 }
 
 .card {
@@ -74,5 +74,49 @@
     &__lang {
       margin-bottom: 0;
     }
+  }
+}
+
+.slider {
+  display: none;
+  @include b(mobile) {
+    display: block;
+  }
+}
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  @include b(tablet) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @include b(mobile) {
+    display: none;
+  }
+}
+
+.custom_nav {
+  margin-bottom: 30px;
+  display: none;
+  @include b(890) {
+    @include flex(row, center, center);
+  }
+}
+
+.custom_nav__button {
+  width: 42px;
+  height: 42px;
+  background: var(--gradient);
+  @include flex(row, center, center);
+
+  svg path {
+    stroke: #fff;
+  }
+
+  &:first-child {
+    transform: rotate(180deg);
+  }
+  &:last-child {
+    margin-left: 25px;
   }
 }

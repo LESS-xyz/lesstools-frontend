@@ -29,15 +29,7 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: [
-    'react',
-    'import',
-    'jsx-a11y',
-    'react-hooks',
-    '@typescript-eslint',
-    'simple-import-sort',
-    'prettier',
-  ],
+  plugins: ['react', 'import', 'jsx-a11y', 'react-hooks', '@typescript-eslint', 'prettier'],
   overrides: [
     {
       files: '*.js',
@@ -110,22 +102,6 @@ module.exports = {
     ],
     'no-confusing-arrow': ['error', { allowParens: false }],
     'no-underscore-dangle': ['error', { allow: ['__typename'] }],
-    'simple-import-sort/sort': [
-      'warn',
-      {
-        // https://github.com/lydell/eslint-plugin-simple-import-sort/blob/master/examples/.eslintrc.js#L71
-        groups: [
-          [
-            '^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)',
-          ],
-          ['^react', '^@?\\w'],
-          ['^\\u0000'],
-          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
-          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-          ['^.+\\.s?css$'],
-        ],
-      },
-    ],
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'no-use-before-define': 'off',

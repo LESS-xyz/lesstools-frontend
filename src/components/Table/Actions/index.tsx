@@ -1,7 +1,14 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
+
+import { useMst } from '../../../store/store';
+
 import s from './Actions.module.scss';
+
 import etherscan from '../../../assets/img/icons/table/actions-etherscan.svg';
 import uniswap from '../../../assets/img/icons/table/actions-uniswap.svg';
+import sushiswap from '../../../assets/img/icons/table/actions-sushiswap.svg';
 import unicrypt from '../../../assets/img/icons/table/actions-unicrypt.svg';
 import compass from '../../../assets/img/icons/table/actions-compass.svg';
 
@@ -14,7 +21,9 @@ interface IActionsProps {
   };
 }
 
-const Actions: React.FC<IActionsProps> = ({ actions }) => {
+const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
+  const { currentExchange } = useMst();
+
   return (
     <div className={s.block}>
       {actions.uniswap && (
@@ -22,11 +31,15 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
           data-tip={`Buy at uniswap: ${actions.uniswap}`}
           data-place="left"
           data-effect="solid"
-          href={`https://uniswap.org/swap/${actions.uniswap}`}
+          href={
+            currentExchange.exchange === 'uniswap'
+              ? `https://app.uniswap.org/#/swap?outputCurrency=${actions.uniswap}`
+              : `https://app.sushi.com/swap?outputCurrency=${actions.uniswap}`
+          }
           target="_blank"
           rel="noreferrer"
         >
-          <img src={uniswap} alt="uniswap" />
+          <img src={currentExchange.exchange === 'uniswap' ? uniswap : sushiswap} alt="uniswap" />
         </a>
       )}
       {actions.etherscan && (
@@ -46,7 +59,7 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
           data-tip="See at unicrypt"
           data-place="left"
           data-effect="solid"
-          href={`https://unicrypt.io/${actions.unicrypt}`}
+          href={`https://app.unicrypt.network/amm/uni-v2/pair/${actions.unicrypt}`}
           target="_blank"
           rel="noreferrer"
         >
@@ -54,17 +67,17 @@ const Actions: React.FC<IActionsProps> = ({ actions }) => {
         </a>
       )}
       {actions.liveData && (
-        <a
-          data-tip={`Live data: ${actions.liveData}`}
+        <Link
+          to={`/${currentExchange.exchange}/pair-explorer/${actions.liveData}`}
+          data-tip={`Pair Explorer: ${actions.liveData}`}
           data-place="left"
           data-effect="solid"
-          href={`/livedata/${actions.liveData}`}
         >
           <img src={compass} alt="compass" />
-        </a>
+        </Link>
       )}
     </div>
   );
-};
+});
 
 export default Actions;

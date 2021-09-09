@@ -1,44 +1,80 @@
+@import '../../styles/mixins/flex.scss';
+@import '../../styles/mixins/media.scss';
+
 .table_wrap {
   overflow: auto;
+  max-height: 630px;
 }
 
 table {
   width: 100%;
   min-width: 1200px;
+  border-collapse: separate;
+  border-spacing: 0;
+
   thead {
+    & tr:nth-child(1) th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
     th {
+      vertical-align: middle;
+      padding: 20px 10px;
+      text-align: left;
       font-weight: 500;
       font-size: 14px;
       color: #ff7143;
-      background: rgba(103, 77, 246, 0.3);
+      background: rgb(39, 27, 91);
+      .th_inner {
+        @include flex(row, center, flex-start, nowrap);
+        white-space: nowrap;
+      }
+
+      .th_sorter {
+        cursor: pointer;
+        margin-left: 7px;
+
+        &__up {
+          margin-bottom: 3px;
+        }
+      }
     }
   }
+  tbody {
+    tr {
+      transition: background-color 0.4s ease;
+      &.odd {
+        background: #000;
+      }
 
-  tr {
-    transition: background-color 0.4s ease;
-    &.odd {
-      background: #000;
+      &.even {
+        background: rgba(111, 69, 255, 0.2);
+      }
+
+      &:hover {
+        background-color: rgba(204, 203, 203, 0.293);
+      }
     }
 
-    &.even {
-      background: rgba(111, 69, 255, 0.2);
-    }
+    th {
+      text-align: left;
+      padding: 0 10px;
+      height: 62px;
+      vertical-align: middle;
+      font-weight: 400;
+      font-size: 16px;
 
-    &:hover {
-      background-color: rgba(204, 203, 203, 0.293);
-    }
-  }
+      span {
+        display: inline-block;
+        max-width: 175px;
+        word-break: break-all;
+        line-height: 1.2;
+      }
 
-  th {
-    text-align: left;
-    padding-left: 20px;
-    height: 62px;
-    vertical-align: middle;
-    font-weight: 400;
-    font-size: 16px;
-
-    &:hover {
-      background-color: rgba(161, 149, 149, 0.453);
+      &:hover {
+        background-color: rgba(161, 149, 149, 0.453);
+      }
     }
   }
 }
@@ -50,4 +86,9 @@ span {
     color: #09bfb4;
     text-transform: uppercase;
   }
+}
+
+.token {
+  color: #09bfb4;
+  text-transform: uppercase;
 }

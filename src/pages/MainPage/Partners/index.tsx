@@ -22,8 +22,8 @@ const Partners: React.FC<IFeaturedAlumniProps> = ({ logos, title }) => {
         <div className={s.inner}>
           <div className={s.title}>{title}</div>
           <div className={s.logos}>
-            {logos.map((logo) => (
-              <LogoBlock img={logo} />
+            {logos.map((logo, index) => (
+              <LogoBlock key={JSON.stringify({ logo, index })} img={logo} />
             ))}
           </div>
         </div>

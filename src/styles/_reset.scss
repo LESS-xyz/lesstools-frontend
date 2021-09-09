@@ -404,6 +404,12 @@ textarea {
   color: #222;
 }
 
+a {
+  color: inherit;
+  font-family: inherit;
+  text-decoration: none;
+}
+
 ::selection {
   text-shadow: none;
 

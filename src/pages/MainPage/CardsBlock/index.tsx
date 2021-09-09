@@ -7,17 +7,21 @@ import cardImgNotifications from '../../../assets/img/sections/main/card-notific
 interface ICardTextProps {
   title: string;
   subtitle: string;
+  img: string;
 }
 
 interface ICardImgProps {
   img: string;
 }
 
-const CardText: React.FC<ICardTextProps> = ({ title, subtitle }) => {
+const CardText: React.FC<ICardTextProps> = ({ title, subtitle, img }) => {
   return (
     <div className={s.card_text}>
       <div className={s.card_text__inner}>
-        <div className={s.card_text__title}>{title}</div>
+        <div className={s.card_text__img}>
+          <img src={img} alt="img" />
+        </div>
+        <span className={s.card_text__title}>{title}</span>
         <div className={s.card_text__subtitle}>{subtitle}</div>
       </div>
     </div>
@@ -45,20 +49,27 @@ const CardsBlock: React.FC = () => {
             <CardText
               title="RESPONSIVE"
               subtitle="LESSTools works on any device: desktop, tablet or mobile."
+              img={cardImgResponsive}
             />
             <CardImg img={cardImgResponsive} />
             <CardImg img={cardImgSubscriptions} />
             <CardText
               title="SUBSCRIPTIONS"
               subtitle="Purchase LESS via exchanges to enable LESS subscriptions."
+              img={cardImgSubscriptions}
             />
             <CardText
               title="STORE YOUR DATA"
               subtitle="Save your data and access it from any device."
+              img={cardImgData}
             />
             <CardImg img={cardImgData} />
             <CardImg img={cardImgNotifications} />
-            <CardText title="NOTIFICATIONS" subtitle="Set-up your live notifications." />
+            <CardText
+              title="NOTIFICATIONS"
+              subtitle="Set-up your live notifications."
+              img={cardImgNotifications}
+            />
           </div>
         </div>
       </div>

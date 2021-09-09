@@ -1,22 +1,27 @@
 @import '../../../../styles/mixins/flex.scss';
 
 .pairInfoHeader {
-  @include flex(row, center);
+  @include flex(row, center, normal, nowrap);
 }
 
 .logo {
-  margin-right: 23px;
+  margin-right: 13px;
   img {
-    height: 64px;
+    height: 35px;
+    // border-radius: 50%;
   }
 }
 
 .right {
   &_top {
     @include flex(row, center);
-    margin-bottom: 10px;
 
     &__pair {
+      span {
+        &:last-child {
+          font-weight: 700;
+        }
+      }
       font-size: 31px;
     }
 
@@ -54,7 +59,7 @@
       &_body {
         color: #fff;
         margin-left: 5px;
-        
+
         &__copy {
           @include flex(row, center);
 

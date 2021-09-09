@@ -7,7 +7,13 @@ interface ITokenPrice {
 }
 
 const TokenPrice: React.FC<ITokenPrice> = ({ usd, eth, isUsd }) => {
-  return <div>{isUsd ? `$${usd}` : `${new BigNumber(eth).toFormat()} ETH`}</div>;
+  return (
+    <>
+      {isUsd
+        ? `$${new BigNumber(usd).toFormat(usd.toString().length > 5 ? 10 : 5)}`
+        : `${new BigNumber(eth).toFormat(eth.toString().length > 5 ? 10 : 5)} ETH`}
+    </>
+  );
 };
 
 export default TokenPrice;
