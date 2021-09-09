@@ -104,7 +104,12 @@ const Favorites: React.FC = observer(() => {
           <div className={s.favorites_main__left}>
             <div className={s.favorites_main__left__title}>Favourites</div>
             <div className={s.favorites_main__left__symbol}>
-              {user.favoritePairs.length > 0 ? user.favoritePairs[0].token1.symbol : 'No pairs'}
+              {/* eslint-disable-next-line */}
+              {user.favoritePairs.length > 0
+                ? WHITELIST.includes(user.favoritePairs[0].token1.id)
+                  ? user.favoritePairs[0].token0.symbol
+                  : user.favoritePairs[0].token1.symbol
+                : 'No pairs'}
             </div>
           </div>
           <div className={s.favorites_main__right}>

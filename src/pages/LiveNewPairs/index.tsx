@@ -89,7 +89,7 @@ const LiveNewPairs: React.FC = observer(() => {
 
         if (poolAmount === poolRemaining) poolVariation = 0;
         if (poolAmount === 0 && poolRemaining !== 0) poolVariation = 100;
-        
+
         return {
           token: TBRSymbol,
           listedSince: swap.createdAtTimestamp,

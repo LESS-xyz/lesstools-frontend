@@ -51,6 +51,10 @@ const HotTable: React.FC<IHotTableProps> = observer(({ pairs, title, logo }) => 
         </div>
       </div>
       <div className={s.table_body}>
+        {pairs.length < 1 &&
+          new Array(10)
+            .fill(1)
+            .map((el, index) => <div key={`${el}-${index * index}`} className={s.empty_cell} />)}
         {pairs.map((pair: IPairFromGraph) => (
           <TableCell
             key={`${pair.hourlyTxns}-${pair.pair.id}`}

@@ -66,3 +66,17 @@
     }
   }
 }
+
+.empty_cell {
+  background-color: rgba(103, 77, 246, 0.21);
+  box-shadow: 0 -200px 100px -120px #120b29 inset;
+  animation: background 3s infinite alternate;
+  height: 54px;
+}
+
+@keyframes background {
+  50% {
+    background: #120b29;
+    box-shadow: 0 -200px 100px -100px rgba(103, 77, 246, 0.21) inset;
+  }
+}
