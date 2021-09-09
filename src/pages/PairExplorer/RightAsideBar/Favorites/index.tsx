@@ -37,7 +37,7 @@ const Favorite: React.FC<IFavorite> = ({
     <div className={s.favorites_item}>
       <div className={s.favorites_item__left}>
         <Link
-          to={`/app/${currentExchange}/pair-explorer/${pairId}`}
+          to={`/${currentExchange}/pair-explorer/${pairId}`}
           className={s.favorites_item__left__symbol}
           onClick={() => closeModal()}
         >

@@ -82,6 +82,14 @@ const LiveNewPairs: React.FC = observer(() => {
 
         const otherTokenIndex = TBRindex === '1' ? '0' : '1';
 
+        const poolAmount = +swap[`initialReserve${otherTokenIndex}` as const];
+        const poolRemaining = +swap[`reserve${otherTokenIndex}` as const];
+
+        let poolVariation = (poolRemaining / poolAmount) * 100 - 100;
+
+        if (poolAmount === poolRemaining) poolVariation = 0;
+        if (poolAmount === 0 && poolRemaining !== 0) poolVariation = 100;
+        
         return {
           token: TBRSymbol,
           listedSince: swap.createdAtTimestamp,
@@ -96,12 +104,9 @@ const LiveNewPairs: React.FC = observer(() => {
             eth: +swap[`token${TBRindex}` as const].derivedETH,
           },
           totalLiquidity: +swap.reserveUSD,
-          poolAmount: +swap[`initialReserve${otherTokenIndex}` as const],
-          poolVariation:
-            (+swap[`reserve${otherTokenIndex}` as const] * 100) /
-              +swap[`initialReserve${otherTokenIndex}` as const] -
-            100,
-          poolRemaining: +swap[`reserve${otherTokenIndex}` as const],
+          poolAmount,
+          poolVariation,
+          poolRemaining,
           otherTokenSymbol: swap[`token${otherTokenIndex}` as const].symbol,
         };
       });
