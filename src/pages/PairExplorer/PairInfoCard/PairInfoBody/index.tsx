@@ -231,7 +231,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               />
               <TokenInfoItem
                 title="Total tx"
-                value={`${new BigNumber(pairInfo.base_info.txCount).toFormat(2)}`}
+                value={`${new BigNumber(pairInfo.base_info.txCount).toFormat(0)}`}
               />
               <TokenInfoItem
                 title="Holders"
@@ -239,7 +239,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                   tokenInfoFromBackend
                     ? new BigNumber(
                         tokenInfoFromBackend.pair.token_being_reviewed.holders_count,
-                      ).toFormat(2)
+                      ).toFormat(0)
                     : 'Loading...'
                 }`}
               />

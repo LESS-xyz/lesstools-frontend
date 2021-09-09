@@ -14,6 +14,7 @@ import {
 import { ISearchByIdResponse, ISearchBySymbolResponse, IPairsBySymbol } from '../../types/search';
 import { useMst } from '../../store/store';
 import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
+import { useElementWidth } from '../../hooks/useElementWidth';
 
 import s from './PairsSearch.module.scss';
 
@@ -122,7 +123,8 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
   };
 
   const searchBlock = useRef<HTMLDivElement>(null);
-  console.log(searchBlock.current?.offsetWidth);
+
+  const width = useElementWidth(searchBlock);
 
   return (
     <OutsideAlerter fn={() => setIsClickedOutside(true)}>
@@ -155,6 +157,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
                       txCount={searchByIdData?.match_by_pair[0].txCount}
                       onClick={() => setIsClickedOutside(true)}
                       exchange={currentExchange.exchange}
+                      small={width < 500}
                     />
                     {/* TODO: ADD TYPES FOR TOKENS */}
                     {/* PAIRS SEARCHED BY TOKEN ID */}
@@ -171,6 +174,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
                           txCount={pair.txCount}
                           onClick={() => setIsClickedOutside(true)}
                           exchange={currentExchange.exchange}
+                          small={width < 500}
                         />
                       );
                     })}
@@ -193,6 +197,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
                           txCount={symbolData.txCount}
                           onClick={() => setIsClickedOutside(true)}
                           exchange={currentExchange.exchange}
+                          small={width < 500}
                         />
                       )),
                     )}
@@ -209,6 +214,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
                           txCount={symbolData.txCount}
                           onClick={() => setIsClickedOutside(true)}
                           exchange={currentExchange.exchange}
+                          small={width < 500}
                         />
                       )),
                     )}

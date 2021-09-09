@@ -13,6 +13,7 @@ interface ISuggestionProps {
   txCount: string;
   onClick: () => void;
   exchange: 'uniswap' | 'sushiswap';
+  small: boolean;
 }
 
 const Suggestion: React.FC<ISuggestionProps> = ({
@@ -24,6 +25,7 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   txCount,
   onClick,
   exchange,
+  small,
 }) => {
   return (
     <Link
@@ -34,7 +36,7 @@ const Suggestion: React.FC<ISuggestionProps> = ({
       <div className={s.suggestion_title}>
         {otherSymbol}/{tbrSymbol} - {tbrName}
       </div>
-      <div className={s.suggestion_body}>
+      <div className={`${s.suggestion_body} ${small && s.small}`}>
         <div className={s.suggestion_body__item}>
           <div className={s.suggestion_body__item_title}>Token:</div>
           <div className={s.suggestion_body__item_value}>

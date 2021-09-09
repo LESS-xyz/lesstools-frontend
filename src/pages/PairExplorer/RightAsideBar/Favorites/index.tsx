@@ -114,8 +114,11 @@ const Favorites: React.FC = observer(() => {
           </div>
           <div className={s.favorites_main__right}>
             <div className={s.favorites_main__right_price}>
+              {/* eslint-disable-next-line */}
               {user.favoritePairs.length > 0
-                ? `$${new BigNumber(user.favoritePairs[0].token1.derivedUSD).toFormat(2)}`
+                ? WHITELIST.includes(user.favoritePairs[0].token1.id)
+                  ? `$${new BigNumber(user.favoritePairs[0].token0.derivedUSD).toFormat(2)}`
+                  : `$${new BigNumber(user.favoritePairs[0].token1.derivedUSD).toFormat(2)}`
                 : ''}
             </div>
             {user.favoritePairs.length > 0 && (
