@@ -137,9 +137,7 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
                   .map((cell: any, index) => (
                     <>
                       <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
-                        <Link to="/">
-                          <span>{cell}</span>
-                        </Link>
+                        <span>{cell}</span>
                       </th>
                     </>
                   ))}
