@@ -18,12 +18,14 @@ interface ITableCellProps {
 const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice, pairId, exchange }) => {
   return (
     <div className={s.table_body__item}>
-      <div className={s.table_body__item_left}>
-        <div className={s.table_body__item_left__token}>{tokenSymbol}</div>
-        <p>${tokenPrice}</p>
-      </div>
-      <Link to={`/${exchange}/pair-explorer/${pairId}`} className={s.table_body__item_right}>
-        <img src={compass} alt="compass" />
+      <Link to={`/${exchange}/pair-explorer/${pairId}`}>
+        <div className={s.table_body__item_left}>
+          <div className={s.table_body__item_left__token}>{tokenSymbol}</div>
+          <p>${tokenPrice}</p>
+        </div>
+        <span>
+          <img src={compass} alt="compass" />
+        </span>
       </Link>
     </div>
   );

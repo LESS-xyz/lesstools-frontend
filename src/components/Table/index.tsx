@@ -10,6 +10,7 @@ import s from './Table.module.scss';
 
 import sorterDown from '../../assets/img/icons/table/sort-down.svg';
 import sorterUp from '../../assets/img/icons/table/sort-up.svg';
+import { Link } from 'react-router-dom';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 
 export type ITableHeader = Array<{
@@ -136,7 +137,9 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
                   .map((cell: any, index) => (
                     <>
                       <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
-                        <span>{cell}</span>
+                        <Link to="/">
+                          <span>{cell}</span>
+                        </Link>
                       </th>
                     </>
                   ))}
