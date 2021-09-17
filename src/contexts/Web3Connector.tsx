@@ -31,7 +31,7 @@ const Web3Connector: React.FC = ({ children }) => {
           });
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === -32002) {
         localStorage.removeItem('lesstools_token');
         window.location.reload();

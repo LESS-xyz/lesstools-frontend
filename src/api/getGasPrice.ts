@@ -10,7 +10,7 @@ export async function getGasPrice(): Promise<IGasPrice> {
     const res = await fetch('https://gas.api.0x.org/source/median?output=eth_gas_station');
     const data = await res.json();
     return data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error);
   }
 }
