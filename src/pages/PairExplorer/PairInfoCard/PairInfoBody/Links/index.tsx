@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { IAdditionalInfoFromBackend } from '../../../../../services/backend/index';
 
@@ -11,6 +11,12 @@ import { ReactComponent as TelegramIcon } from '../../../../../assets/img/icons/
 import { ReactComponent as DesktopIcon } from '../../../../../assets/img/icons/desktop-blue.svg';
 import { ReactComponent as DiscordIcon } from '../../../../../assets/img/icons/discord-blue.svg';
 import { ReactComponent as ChatIcon } from '../../../../../assets/img/icons/chat-blue.svg';
+import { ReactComponent as PlusIcon } from '../../../../../assets/img/icons/plus.svg';
+import { ReactComponent as MinusIcon } from '../../../../../assets/img/icons/minus.svg';
+import { ReactComponent as LockIcon } from '../../../../../assets/img/icons/lock.svg';
+import { ReactComponent as EmailIcon } from '../../../../../assets/img/icons/email.svg';
+import { ReactComponent as UniswapIcon } from '../../../../../assets/img/icons/uniswap.svg';
+import { ReactComponent as CoingeckoIcon } from '../../../../../assets/img/icons/coingecko.svg';
 
 interface ILinksProps {
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
@@ -18,6 +24,10 @@ interface ILinksProps {
 }
 
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
+  const [openAdditional, setOpenAdditional] = useState(false);
+
+  const handleOpenAdditional = () => setOpenAdditional(!openAdditional);
+
   return (
     <div className={s.links}>
       <a
@@ -83,6 +93,44 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
           </div>
         </a>
       )}
+      <div>
+        <div
+          className={s.card_link}
+          role="button"
+          tabIndex={0}
+          onClick={handleOpenAdditional}
+          onKeyDown={() => {}}
+        >
+          <div className={s.card_link__img}>
+            {openAdditional ? <MinusIcon /> : <PlusIcon />}
+          </div>
+        </div>
+        {openAdditional && (
+          <div className={s.additionalMenu}>
+            <div className={s.additionalMenuInner}>
+              <div className={s.additionalMenuItem}>
+                <div className={s.additionalMenuItemText}>
+                  Lock
+                </div>
+                <UniswapIcon className={s.additionalMenuItemIcon} />
+                <LockIcon className={s.additionalMenuItemIcon} />
+              </div>
+              <div className={s.additionalMenuItem}>
+                <div className={s.additionalMenuItemText}>
+                  Token
+                </div>
+                <CoingeckoIcon className={s.additionalMenuItemIcon} />
+              </div>
+              <div className={s.additionalMenuItem}>
+                <div className={s.additionalMenuItemText}>
+                  Info
+                </div>
+                <EmailIcon className={s.additionalMenuItemIcon} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
