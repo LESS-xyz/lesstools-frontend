@@ -216,7 +216,7 @@ Fundraising Capital"
                   theme={Themes.DARK}
                   autosize
                   hide_side_toolbar={false}
-                  style={BarStyles.AREA}
+                  style={BarStyles.CANDLES}
                   watchlist={tradingViewWatchList}
                   symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
