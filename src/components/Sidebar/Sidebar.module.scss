@@ -9,8 +9,23 @@
   background: #2f226f;
   width: 60px;
   text-overflow: ellipsis;
+
   &:hover {
     transition: 0.3s ease 0.1s;
+
+    .group_title_arrow {
+      @include flex(row, center, center, nowrap);
+      opacity: 1;
+      transition: opacity 2s;
+      width: 20px;
+      height: 20px;
+
+      img {
+        display: block;
+        opacity: 1;
+        transition: opacity 2s;
+      }
+    }
   }
 
   @media (max-height: 640px) {
@@ -117,13 +132,29 @@
 
 // group
 .group {
-  margin-bottom: 20px;
+  user-select: none;
 
   &_title {
     transition: 0.4s ease;
     overflow: hidden;
     padding: 12px 5px;
     background: #512c65;
+    cursor: pointer;
+
+    &_arrow {
+      //@include flex(row, center, center, nowrap);
+      display: none;
+      opacity: 0;
+      width: 0px;
+      height: 0px;
+      transform: rotate(180deg);
+      transition: transform 0.4s, opacity 0.4s;
+
+      &_rotated {
+        transform: rotate(0deg);
+        transition: transform 0.4s;
+      }
+    }
 
     @include flex(row, center, space-between, nowrap);
     &__text {
