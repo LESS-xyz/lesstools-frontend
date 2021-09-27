@@ -1,7 +1,9 @@
 @import '../../../styles/mixins/flex.scss';
 
 .partner {
-  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+  @include flex(row, normal, normal, nowrap);
+  gap: 20px;
+  width: 100%;
   padding: 30px;
 
   &_logo {

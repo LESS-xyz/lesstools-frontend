@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { WHITELIST } from '../../../data/whitelist';
@@ -7,6 +8,12 @@ import { IPairFromGraph } from '../../../components/CommonQueries/HotPairs';
 import s from './HotTable.module.scss';
 
 import compass from '../../../assets/img/sections/board-page/compass.svg';
+import Checkbox from '../../../components/Checkbox';
+
+enum Exchanges {
+  Uniswap = 'Uni',
+  Sushiswap = 'Sushi',
+}
 
 interface ITableCellProps {
   tokenSymbol: string;
@@ -32,32 +39,61 @@ const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice, pairId,
 };
 
 interface IHotTableProps {
-  pairs: any;
-  title: string;
-  logo: string;
+  pairs?: any;
+  title?: string;
+  logo?: string;
 }
 
-const HotTable: React.FC<IHotTableProps> = observer(({ pairs, title, logo }) => {
+const HotTable: React.FC<IHotTableProps> = observer((props) => {
+  const { pairs = {}, title } = props;
+
+  const [exchange, setExchange] = useState<Exchanges>(Exchanges.Uniswap);
+
+  let pairsCurrent = [];
+  if (exchange === Exchanges.Uniswap) {
+    pairsCurrent = pairs.uniswap;
+  } else if (exchange === Exchanges.Sushiswap) {
+    pairsCurrent = pairs.sushiswap;
+  }
+
   return (
     <section className={s.table}>
       <div className={s.table_header}>
         <div className={`${s.table_header__bg} ${s.sushi}`}>
           <div className={s.table_header__icon}>
-            <div className={s.table_header__icon_img}>
-              <img src={logo} alt="logo" />
-            </div>
+            <div className={s.table_header__icon_img}>{/* <img src={logo} alt="logo" /> */}</div>
             <div className={s.table_header__icon_text}>
               <span>{title}</span>
             </div>
           </div>
         </div>
       </div>
+      <div className={s.checkboxes}>
+        <Checkbox
+          onClick={() => setExchange(Exchanges.Uniswap)}
+          checked={exchange === Exchanges.Uniswap}
+        >
+          Hot {Exchanges.Uniswap}
+        </Checkbox>
+        <Checkbox
+          onClick={() => setExchange(Exchanges.Sushiswap)}
+          checked={exchange === Exchanges.Sushiswap}
+        >
+          Hot {Exchanges.Sushiswap}
+        </Checkbox>
+        {/* <Checkbox */}
+        {/*  onClick={() => setNetwork(Networks.Polygon)} */}
+        {/*  checked={network === Networks.Polygon} */}
+        {/* > */}
+        {/*  Hot {Networks.Polygon} */}
+        {/* </Checkbox> */}
+      </div>
       <div className={s.table_body}>
-        {pairs.length < 1 &&
+        {!pairsCurrent.length &&
           new Array(10)
             .fill(1)
             .map((el, index) => <div key={`${el}-${index * index}`} className={s.empty_cell} />)}
-        {pairs.map((pair: IPairFromGraph) => (
+        {pairsCurrent.map((pair: IPairFromGraph) => (
           <TableCell
             key={`${pair.hourlyTxns}-${pair.pair.id}`}
             tokenPrice={Number(

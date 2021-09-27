@@ -31,6 +31,7 @@ const formatTokens = (name: string) => {
 
 interface IPairSearchProps {
   placeholder: string;
+  big?: boolean;
 }
 
 function debounce(fn: (...args: any) => void, ms: number) {
@@ -43,7 +44,7 @@ function debounce(fn: (...args: any) => void, ms: number) {
   };
 }
 
-const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
+const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placeholder }) => {
   const [value, setValue] = useState('');
   const { currentExchange } = useMst();
   // запросы на граф
@@ -130,6 +131,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ placeholder }) => {
     <OutsideAlerter fn={() => setIsClickedOutside(true)}>
       <div className={s.search} ref={searchBlock}>
         <Search
+          big={big}
           value={value}
           setValue={setValue}
           onChange={searchPairs}

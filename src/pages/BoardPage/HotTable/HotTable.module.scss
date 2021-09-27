@@ -4,10 +4,11 @@
 @import '../../../styles/mixins/media.scss';
 
 .table {
+  width: 100%;
 }
 
 .table_header {
-  height: 80px;
+  height: 60px;
   background-color: #2b1b64;
 
   &__bg {
@@ -27,15 +28,16 @@
     @include flex(row, center, center);
     &_img {
       img {
-        height: 48px;
-        width: 48px;
+        height: 30px;
+        width: 30px;
       }
 
-      margin-right: 22px;
+      margin-right: 10px;
     }
     &_text {
       span {
-        font-size: 30px;
+        font-size: 20px;
+        line-height: 26px;
         font-weight: 700;
         @include gradient-text;
       }
@@ -44,7 +46,6 @@
 }
 
 .table_body {
-  background: linear-gradient(90deg, #161126 0%, #1c0e40 100%);
   padding: 20px;
   @include grid(repeat(2, 1fr), 1fr, 10px);
   @include b(extramobile) {
@@ -82,4 +83,10 @@
     background: #120b29;
     box-shadow: 0 -200px 100px -100px rgba(103, 77, 246, 0.21) inset;
   }
+}
+
+.checkboxes {
+  @include flex(row, center, center);
+  gap: 10px;
+  padding: 21px 10px;
 }
