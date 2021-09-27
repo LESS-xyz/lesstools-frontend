@@ -10,10 +10,9 @@ import s from './HotTable.module.scss';
 import compass from '../../../assets/img/sections/board-page/compass.svg';
 import Checkbox from '../../../components/Checkbox';
 
-enum Networks {
-  Ethereum = 'ETH',
-  Binance = 'BSC',
-  Polygon = 'Polygon',
+enum Exchanges {
+  Uniswap = 'Uni',
+  Sushiswap = 'Sushi',
 }
 
 interface ITableCellProps {
@@ -48,14 +47,12 @@ interface IHotTableProps {
 const HotTable: React.FC<IHotTableProps> = observer((props) => {
   const { pairs = {}, title } = props;
 
-  const [network, setNetwork] = useState<Networks>(Networks.Ethereum);
+  const [exchange, setExchange] = useState<Exchanges>(Exchanges.Uniswap);
 
   let pairsCurrent = [];
-  if (network === Networks.Ethereum) {
+  if (exchange === Exchanges.Uniswap) {
     pairsCurrent = pairs.uniswap;
-  } else if (network === Networks.Binance) {
-    pairsCurrent = pairs.sushiswap;
-  } else if (network === Networks.Polygon) {
+  } else if (exchange === Exchanges.Sushiswap) {
     pairsCurrent = pairs.sushiswap;
   }
 
@@ -73,23 +70,23 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
       </div>
       <div className={s.checkboxes}>
         <Checkbox
-          onClick={() => setNetwork(Networks.Ethereum)}
-          checked={network === Networks.Ethereum}
+          onClick={() => setExchange(Exchanges.Uniswap)}
+          checked={exchange === Exchanges.Uniswap}
         >
-          Hot {Networks.Ethereum}
+          Hot {Exchanges.Uniswap}
         </Checkbox>
         <Checkbox
-          onClick={() => setNetwork(Networks.Binance)}
-          checked={network === Networks.Binance}
+          onClick={() => setExchange(Exchanges.Sushiswap)}
+          checked={exchange === Exchanges.Sushiswap}
         >
-          Hot {Networks.Binance}
+          Hot {Exchanges.Sushiswap}
         </Checkbox>
-        <Checkbox
-          onClick={() => setNetwork(Networks.Polygon)}
-          checked={network === Networks.Polygon}
-        >
-          Hot {Networks.Polygon}
-        </Checkbox>
+        {/* <Checkbox */}
+        {/*  onClick={() => setNetwork(Networks.Polygon)} */}
+        {/*  checked={network === Networks.Polygon} */}
+        {/* > */}
+        {/*  Hot {Networks.Polygon} */}
+        {/* </Checkbox> */}
       </div>
       <div className={s.table_body}>
         {!pairsCurrent.length &&
