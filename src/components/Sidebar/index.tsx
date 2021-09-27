@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
+import { Networks } from '../../config/networks';
 import LinkSidebar from './LinkSidebar/index';
 import { useMst } from '../../store/store';
 
@@ -24,20 +25,15 @@ import bigSwapWhite from '../../assets/img/sections/sidebar/big-swap-white.svg';
 import ethereum from '../../assets/img/sections/sidebar/ethereum.svg';
 import { useState, useCallback } from 'react';
 
-enum Network {
-  Ethereum = 'Ethereum',
-  Binance = 'Binance',
-}
-
 const Sidebar: React.FC = observer(() => {
   const { mobileMenu } = useMst();
 
-  const [activeNetworks, setActiveNetworks] = useState<Network[]>([Network.Ethereum]);
+  const [activeNetworks, setActiveNetworks] = useState<Networks[]>([Networks.Ethereum]);
 
-  const handleChangeActiveNetwork = (network: Network) => {
-    let newNetworks: Network[] = [...activeNetworks];
+  const handleChangeActiveNetwork = (network: Networks) => {
+    let newNetworks: Networks[] = [...activeNetworks];
     if (activeNetworks.includes(network)) {
-      newNetworks = newNetworks.filter((item: Network) => item !== network);
+      newNetworks = newNetworks.filter((item: Networks) => item !== network);
     } else {
       newNetworks.push(network);
     }
@@ -45,7 +41,7 @@ const Sidebar: React.FC = observer(() => {
   };
 
   const isActiveNetwork = useCallback(
-    (item: Network) => activeNetworks.includes(item),
+    (item: Networks) => activeNetworks.includes(item),
     [activeNetworks],
   );
 
@@ -66,13 +62,13 @@ const Sidebar: React.FC = observer(() => {
           className={s.group_title}
           role="button"
           tabIndex={0}
-          onClick={() => handleChangeActiveNetwork(Network.Ethereum)}
+          onClick={() => handleChangeActiveNetwork(Networks.Ethereum)}
           onKeyDown={() => {}}
         >
           {!mobileMenu.isActive && (
             <div
               className={`${s.group_title_arrow} ${
-                isActiveNetwork(Network.Ethereum) && s.group_title_arrow_rotated
+                isActiveNetwork(Networks.Ethereum) && s.group_title_arrow_rotated
               }`}
             >
               <img src={arrowWhite} alt="img" />
@@ -83,7 +79,7 @@ const Sidebar: React.FC = observer(() => {
             <img src={ethereum} alt="img" />
           </div>
         </div>
-        {isActiveNetwork(Network.Ethereum) && (
+        {isActiveNetwork(Networks.Ethereum) && (
           <>
             <LinkSidebar
               imgDark={live}
@@ -111,13 +107,13 @@ const Sidebar: React.FC = observer(() => {
           className={s.group_title}
           role="button"
           tabIndex={0}
-          onClick={() => handleChangeActiveNetwork(Network.Binance)}
+          onClick={() => handleChangeActiveNetwork(Networks.Binance)}
           onKeyDown={() => {}}
         >
           {!mobileMenu.isActive && (
             <div
               className={`${s.group_title_arrow} ${
-                isActiveNetwork(Network.Binance) && s.group_title_arrow_rotated
+                isActiveNetwork(Networks.Binance) && s.group_title_arrow_rotated
               }`}
             >
               <img src={arrowWhite} alt="img" />
@@ -128,7 +124,7 @@ const Sidebar: React.FC = observer(() => {
             <img src={ethereum} alt="img" />
           </div>
         </div>
-        {isActiveNetwork(Network.Binance) && (
+        {isActiveNetwork(Networks.Binance) && (
           <>
             <LinkSidebar
               imgDark={live}
