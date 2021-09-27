@@ -22,6 +22,12 @@ export const sushiswapSubgraph = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// joe trader avalanche
+export const joeTraderSubgraph = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/joe-trader-lesstools',
+  cache: new InMemoryCache(),
+});
+
 // для номера блока (pair explorer page)
 export const getBlockClient = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/avalanche-blocks',

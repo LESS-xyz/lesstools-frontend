@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { WHITELIST } from '../../../data/whitelist';
@@ -7,6 +8,13 @@ import { IPairFromGraph } from '../../../components/CommonQueries/HotPairs';
 import s from './HotTable.module.scss';
 
 import compass from '../../../assets/img/sections/board-page/compass.svg';
+import Checkbox from '../../../components/Checkbox';
+
+enum Networks {
+  Ethereum = 'ETH',
+  Binance = 'BSC',
+  Polygon = 'Polygon',
+}
 
 interface ITableCellProps {
   tokenSymbol: string;
@@ -32,32 +40,63 @@ const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice, pairId,
 };
 
 interface IHotTableProps {
-  pairs: any;
-  title: string;
-  logo: string;
+  pairs?: any;
+  title?: string;
+  logo?: string;
 }
 
-const HotTable: React.FC<IHotTableProps> = observer(({ pairs, title, logo }) => {
+const HotTable: React.FC<IHotTableProps> = observer((props) => {
+  const { pairs = {}, title } = props;
+
+  const [network, setNetwork] = useState<Networks>(Networks.Ethereum);
+
+  let pairsCurrent = [];
+  if (network === Networks.Ethereum) {
+    pairsCurrent = pairs.uniswap;
+  } else if (network === Networks.Binance) {
+    pairsCurrent = pairs.sushiswap;
+  } else if (network === Networks.Polygon) {
+    pairsCurrent = pairs.sushiswap;
+  }
+
   return (
     <section className={s.table}>
       <div className={s.table_header}>
         <div className={`${s.table_header__bg} ${s.sushi}`}>
           <div className={s.table_header__icon}>
-            <div className={s.table_header__icon_img}>
-              <img src={logo} alt="logo" />
-            </div>
+            <div className={s.table_header__icon_img}>{/* <img src={logo} alt="logo" /> */}</div>
             <div className={s.table_header__icon_text}>
               <span>{title}</span>
             </div>
           </div>
         </div>
       </div>
+      <div className={s.checkboxes}>
+        <Checkbox
+          onClick={() => setNetwork(Networks.Ethereum)}
+          checked={network === Networks.Ethereum}
+        >
+          Hot {Networks.Ethereum}
+        </Checkbox>
+        <Checkbox
+          onClick={() => setNetwork(Networks.Binance)}
+          checked={network === Networks.Binance}
+        >
+          Hot {Networks.Binance}
+        </Checkbox>
+        <Checkbox
+          onClick={() => setNetwork(Networks.Polygon)}
+          checked={network === Networks.Polygon}
+        >
+          Hot {Networks.Polygon}
+        </Checkbox>
+      </div>
       <div className={s.table_body}>
-        {pairs.length < 1 &&
+        {!pairsCurrent.length &&
           new Array(10)
             .fill(1)
             .map((el, index) => <div key={`${el}-${index * index}`} className={s.empty_cell} />)}
-        {pairs.map((pair: IPairFromGraph) => (
+        {pairsCurrent.map((pair: IPairFromGraph) => (
           <TableCell
             key={`${pair.hourlyTxns}-${pair.pair.id}`}
             tokenPrice={Number(

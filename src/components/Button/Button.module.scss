@@ -4,9 +4,9 @@
 .button {
   @include flex(row, center, center, nowrap);
   background-color: transparent;
-  border: 1px solid var(--blue);
+  border: 2px solid var(--blue);
   border-radius: 2px;
-  color: var(--blue);
+  color: #fff;
   padding: 10px;
   height: 42px;
   font-size: 16px;
