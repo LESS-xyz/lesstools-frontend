@@ -82,14 +82,14 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
         <Favorites />
       </div>
       <div className={s.table_header}>
-        <div className={s.table_header__title} style={{ minWidth: 124 }}>
+        <div className={`${s.table_header__title} ${s.amount}`}>
           Token amount
         </div>
-        <div className={s.table_header__title} style={{ minWidth: 82 }}>
+        <div className={`${s.table_header__title} ${s.usd}`}>
           <Popup items={[TokenModes.TokenValue, TokenModes.TradePrice]} onChange={setModeToken} />
         </div>
-        <div className={s.table_header__title} style={{ minWidth: 42 }}>
-          Time ago
+        <div className={`${s.table_header__title} ${s.time}`}>
+          Age
         </div>
       </div>
       <div className={`${s.transactions} grey-scroll`}>
@@ -128,14 +128,14 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
         </div>
       </div>
       <div className={s.table_header}>
-        <div className={s.table_header__title} style={{ minWidth: 124 }}>
+        <div className={`${s.table_header__title} ${s.amount}`}>
           Token amount
         </div>
-        <div className={s.table_header__title} style={{ minWidth: 82 }}>
+        <div className={`${s.table_header__title} ${s.usd}`}>
           <Popup items={[TokenModes.TokenValue, TokenModes.TradePrice]} onChange={setModeTokenOfMyTrades} />
         </div>
-        <div className={s.table_header__title} style={{ minWidth: 42 }}>
-          Time ago
+        <div className={`${s.table_header__title} ${s.time}`}>
+          Age
         </div>
       </div>
       <div className={`${s.trades} grey-scroll`}>

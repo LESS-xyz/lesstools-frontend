@@ -1,11 +1,15 @@
+@import '../../../../styles/mixins/media';
+@import '../../../../styles/mixins/grid';
+@import '../../../../styles/mixins/flex';
+
 .transaction {
   // display: grid;
   // grid-template-columns: 10px 110px 1fr 17px 1fr;
   // gap: 5px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 12px 10px;
-  align-items: center;
   font-size: 14px;
   font-weight: 500;
 
@@ -32,13 +36,23 @@
   display: grid;
   grid-template-columns: 1fr 42px;
   padding-right: 10px;
+
+  @include b(1242) {
+    @include flex(row, center, normal, nowrap);
+    width: 100%;
+  }
 }
+
 .transaction_price {
   min-width: 82px;
   margin-right: 6px;
   text-align: right;
   &__value:first-child {
     margin-bottom: 6px;
+  }
+
+  @include b(1242) {
+    max-width: 82px;
   }
 }
 .transaction_symbols {
@@ -50,8 +64,14 @@
 }
 
 .transaction_usd {
-  min-width: 82px;
+  min-width: 72px;
   text-align: right;
+
+  @include b(1242) {
+    min-width: 72px;
+    width: 100%;
+    text-align: left;
+  }
 }
 
 .transaction_etherscan {
@@ -64,7 +84,7 @@
 }
 
 .transaction_time {
-  min-width: 25px;
+  min-width: 42px;
   margin-left: 10px;
   color: #6b6777;
   font-size: 12px;
