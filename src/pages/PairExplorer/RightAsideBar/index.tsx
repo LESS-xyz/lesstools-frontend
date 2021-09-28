@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Favorites from './Favorites/index';
 import Transaction from './Transaction/index';
 import { IRowPairExplorer } from '../../../types/table';
@@ -6,28 +7,97 @@ import { useMst } from '../../../store/store';
 import s from './RightAsideBar.module.scss';
 
 import tradesWhite from '../../../assets/img/icons/trades-white.svg';
+import arrowWhite from '../../../assets/img/sections/pair-explorer/arrow-white.svg';
+
+enum TokenModes {
+  TokenValue = 'Token value',
+  TradePrice = 'Trade price',
+}
 
 interface isRightSideBarProps {
   trades: IRowPairExplorer[];
 }
 
+interface IPopupProps {
+  items: string[];
+  onChange: (value: string) => void;
+}
+
+const Popup: React.FC<IPopupProps> = (props) => {
+  const { items = [], onChange = () => {} } = props;
+
+  const [openPopup, setOpenPopup] = useState<boolean>(false);
+  const [modeToken, setModeToken] = useState<string>(TokenModes.TokenValue);
+
+  return (
+    <div>
+      <div
+        className={s.label}
+        role="button"
+        tabIndex={0}
+        onKeyDown={() => {}}
+        onClick={() => setOpenPopup(true)}
+      >
+        <div>{modeToken}</div>
+        <img src={arrowWhite} alt=""/>
+      </div>
+
+      {openPopup && (
+        <div className={s.popup}>
+          {items.map((item: string) => {
+            return (
+              <div
+                key={item}
+                role="button"
+                tabIndex={0}
+                onKeyDown={() => {}}
+                onClick={() => {
+                  onChange(item);
+                  setModeToken(item);
+                  setOpenPopup(false);
+                }}
+              >
+                {item}
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
   const { user } = useMst();
+
+  const [modeToken, setModeToken] = useState<string>(TokenModes.TokenValue);
+  const isModeTokenTokenValue = modeToken === TokenModes.TokenValue;
+
+  const [modeTokenOfMyTrades, setModeTokenOfMyTrades] = useState<string>(TokenModes.TokenValue);
+  const isModeTokenOfMyTradesTokenValue = modeTokenOfMyTrades === TokenModes.TokenValue;
+
   return (
     <>
       <div className={s.favs}>
         <Favorites />
       </div>
       <div className={s.table_header}>
-        <div className={s.table_header__title}>Token amount</div>
-        <div className={s.table_header__title}>Time ago</div>
+        <div className={s.table_header__title} style={{ minWidth: 124 }}>
+          Token amount
+        </div>
+        <div className={s.table_header__title} style={{ minWidth: 82 }}>
+          <Popup items={[TokenModes.TokenValue, TokenModes.TradePrice]} onChange={setModeToken} />
+        </div>
+        <div className={s.table_header__title} style={{ minWidth: 42 }}>
+          Time ago
+        </div>
       </div>
       <div className={`${s.transactions} grey-scroll`}>
         {trades.map((trade) => (
           <Transaction
             key={`${trade.maker}-${trade.data}-${trade.totalEth}-${trade.amountEth}`}
             ethPrice={trade.totalEth}
-            priceUsd={trade.priceUsd}
+            priceUsd={isModeTokenTokenValue ? trade.priceUsd * 2 : trade.priceUsd}
             amountEth={trade.amountEth}
             type={trade.type}
             etherscan={trade.others.etherscan}
@@ -58,8 +128,15 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
         </div>
       </div>
       <div className={s.table_header}>
-        <div className={s.table_header__title}>Token amount</div>
-        <div className={s.table_header__title}>Time ago</div>
+        <div className={s.table_header__title} style={{ minWidth: 124 }}>
+          Token amount
+        </div>
+        <div className={s.table_header__title} style={{ minWidth: 82 }}>
+          <Popup items={[TokenModes.TokenValue, TokenModes.TradePrice]} onChange={setModeTokenOfMyTrades} />
+        </div>
+        <div className={s.table_header__title} style={{ minWidth: 42 }}>
+          Time ago
+        </div>
       </div>
       <div className={`${s.trades} grey-scroll`}>
         {trades
@@ -68,7 +145,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
             <Transaction
               key={`${trade.maker}-${trade.data}-${trade.totalEth}-${trade.amountEth}`}
               ethPrice={trade.totalEth}
-              priceUsd={trade.priceUsd}
+              priceUsd={isModeTokenOfMyTradesTokenValue ? trade.priceUsd * 2 : trade.priceUsd}
               amountEth={trade.amountEth}
               type={trade.type}
               etherscan={trade.others.etherscan}

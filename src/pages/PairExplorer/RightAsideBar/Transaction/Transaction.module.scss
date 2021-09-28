@@ -30,10 +30,11 @@
 .transaction_prices {
   flex-grow: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 42px;
   padding-right: 10px;
 }
 .transaction_price {
+  min-width: 82px;
   margin-right: 6px;
   text-align: right;
   &__value:first-child {
@@ -41,6 +42,7 @@
   }
 }
 .transaction_symbols {
+  min-width: 42px;
   color: #6b6777;
   &__item:first-child {
     margin-bottom: 6px;
@@ -48,6 +50,7 @@
 }
 
 .transaction_usd {
+  min-width: 82px;
   text-align: right;
 }
 

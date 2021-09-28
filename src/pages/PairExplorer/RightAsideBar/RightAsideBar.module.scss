@@ -1,15 +1,52 @@
 @import '../../../styles/mixins/gradient-text.scss';
 @import '../../../styles/mixins/media.scss';
+@import '../../../styles/mixins/flex';
 
 .table_header {
+  position: relative;
   background-color: #201346;
-  padding: 12px 10px;
+  padding: 0 10px;
+  height: 33px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   &__title {
     color: #ff7143;
     font-weight: 500;
     font-size: 14px;
+  }
+}
+
+.label {
+  @include flex(row, center, center, nowrap);
+  gap: 5px;
+  padding: 10px 5px;
+  cursor: pointer;
+
+  > img {
+    width: 8px;
+  }
+
+  &:hover {
+    background: var(--gradient);
+    color: #fff;
+  }
+}
+
+.popup {
+  position: absolute;
+  top: 100%;
+  background: var(--footer-background);
+
+  > div {
+    padding: 10px 5px;
+    cursor: pointer;
+    color: #fff;
+
+    &:hover {
+      background: var(--gradient);
+      color: #fff;
+    }
   }
 }
 
