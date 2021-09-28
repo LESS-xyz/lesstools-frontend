@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import moment from 'moment';
 import { observer } from 'mobx-react-lite';
@@ -12,16 +12,17 @@ import { GET_BIG_SWAPS } from '../../queries/index';
 import { IBigSwapInfo } from '../../types/bigSwap';
 import { WHITELIST } from '../../data/whitelist';
 import { useMst } from '../../store/store';
-import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
+import { sushiswapSubgraph, uniswapSubgraph } from '../../index';
 
 import s from './BigSwapExplorer.module.scss';
-
 // import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
+import { Exchanges } from "../../config/exchanges";
 
 // headers for table
 const headerData: ITableHeader = [
   { key: 'pair', title: 'Pair', sortType: 'string' },
+  { key: 'exchange', title: 'Exchange', sortType: 'string' },
   { key: 'time', title: 'Time', sortType: 'date' },
   { key: 'type', title: 'Type', sortType: 'string' },
   { key: 'quantity', title: 'Quantity', sortType: 'number' },
@@ -89,6 +90,7 @@ const BigSwapExplorer: React.FC = observer(() => {
 
         return {
           pair: TBRSymbol,
+          exchange: Exchanges.Uniswap, // todo
           time: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
           type: TBRtype,
           quantity: TBRquantity,
