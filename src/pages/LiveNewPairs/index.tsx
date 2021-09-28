@@ -94,7 +94,7 @@ const LiveNewPairs: React.FC = observer(() => {
 
         return {
           token: TBRSymbol,
-          exchange: Exchanges.Uniswap,
+          exchange: Exchanges.Uniswap, // todo
           listedSince: swap.createdAtTimestamp,
           actions: {
             uniswap: TBRaddress,

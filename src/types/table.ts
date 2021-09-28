@@ -2,6 +2,7 @@ import { Exchanges } from "../config/exchanges";
 
 export interface IRowBigSwap {
   pair: string;
+  exchange: Exchanges;
   time: string | Date;
   type: 'sell' | 'buy';
   quantity: number;

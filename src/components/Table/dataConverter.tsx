@@ -17,6 +17,7 @@ export const dataConverter = {
     return data.map((row) => ({
       // pair: <span className={s.pair}>{row.pair}</span>,
       pair: <TokenName token={row.pair} pairId={row.others.liveData || ''} />,
+      exchange: row.exchange,
       time: row.time,
       type: <Type type={row.type} />,
       quantity: new BigNumber(row.quantity).toFormat(2),
