@@ -4,16 +4,12 @@ import { Link } from 'react-router-dom';
 import { WHITELIST } from '../../../data/whitelist';
 
 import { IPairFromGraph } from '../../../components/CommonQueries/HotPairs';
+import { Networks } from '../../../config/networks';
 
 import s from './HotTable.module.scss';
 
 import compass from '../../../assets/img/sections/board-page/compass.svg';
 import Checkbox from '../../../components/Checkbox';
-
-enum Exchanges {
-  Uniswap = 'Uni',
-  Sushiswap = 'Sushi',
-}
 
 interface ITableCellProps {
   tokenSymbol: string;
@@ -47,12 +43,12 @@ interface IHotTableProps {
 const HotTable: React.FC<IHotTableProps> = observer((props) => {
   const { pairs = {}, title } = props;
 
-  const [exchange, setExchange] = useState<Exchanges>(Exchanges.Uniswap);
+  const [network, setNetwork] = useState<Networks>(Networks.Ethereum);
 
   let pairsCurrent = [];
-  if (exchange === Exchanges.Uniswap) {
+  if (network === Networks.Ethereum) {
     pairsCurrent = pairs.uniswap;
-  } else if (exchange === Exchanges.Sushiswap) {
+  } else if (network === Networks.Binance) {
     pairsCurrent = pairs.sushiswap;
   }
 
@@ -70,16 +66,16 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
       </div>
       <div className={s.checkboxes}>
         <Checkbox
-          onClick={() => setExchange(Exchanges.Uniswap)}
-          checked={exchange === Exchanges.Uniswap}
+          onClick={() => setNetwork(Networks.Ethereum)}
+          checked={network === Networks.Ethereum}
         >
-          Hot {Exchanges.Uniswap}
+          Hot ETH
         </Checkbox>
         <Checkbox
-          onClick={() => setExchange(Exchanges.Sushiswap)}
-          checked={exchange === Exchanges.Sushiswap}
+          onClick={() => setNetwork(Networks.Binance)}
+          checked={network === Networks.Binance}
         >
-          Hot {Exchanges.Sushiswap}
+          Hot BSC
         </Checkbox>
         {/* <Checkbox */}
         {/*  onClick={() => setNetwork(Networks.Polygon)} */}

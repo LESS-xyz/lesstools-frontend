@@ -7,7 +7,7 @@ type CheckboxType = 'default' | 'light' | 'button';
 
 interface Props {
   onClick: (value: boolean) => void;
-  children: any[];
+  children: any[] | any;
   className?: string;
   type?: CheckboxType;
   checked?: boolean;
