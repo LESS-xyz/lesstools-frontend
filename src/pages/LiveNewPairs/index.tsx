@@ -14,6 +14,7 @@ import { WHITELIST } from '../../data/whitelist';
 import { useMst } from '../../store/store';
 
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
+import { Exchanges } from '../../config/exchanges';
 
 // import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
@@ -21,6 +22,7 @@ import loader from '../../assets/loader.svg';
 // headers for table
 const headerData: ITableHeader = [
   { key: 'token', title: 'Token', sortType: 'string' },
+  { key: 'exchange', title: 'Exchange', sortType: 'string' },
   { key: 'listedSince', title: 'Listed Since', sortType: 'number' },
   { key: 'actions', title: 'Actions' },
   { key: 'tokenPrice', title: 'Token Price', sortType: 'tokenPrice' },
@@ -92,6 +94,7 @@ const LiveNewPairs: React.FC = observer(() => {
 
         return {
           token: TBRSymbol,
+          exchange: Exchanges.Uniswap,
           listedSince: swap.createdAtTimestamp,
           actions: {
             uniswap: TBRaddress,

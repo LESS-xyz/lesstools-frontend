@@ -1,3 +1,5 @@
+import { Exchanges } from "../config/exchanges";
+
 export interface IRowBigSwap {
   pair: string;
   time: string | Date;
@@ -11,6 +13,7 @@ export interface IRowBigSwap {
 
 export interface IRowLiveNewPairs {
   token: string;
+  exchange: Exchanges;
   listedSince: string | Date;
   actions: { uniswap?: string; unicrypt?: string; etherscan?: string; liveData?: string };
   tokenPrice: { usd: number; eth: number };

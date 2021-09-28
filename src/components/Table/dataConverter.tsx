@@ -32,6 +32,7 @@ export const dataConverter = {
   liveNewPairs(data: Array<IRowLiveNewPairs>, isUsd: boolean) {
     return data.map((row) => ({
       token: <TokenName token={row.token} pairId={row.actions.liveData || ''} />,
+      exchange: row.exchange,
       listedSince: (
         <ListedSince
           key={JSON.stringify(row.listedSince)}

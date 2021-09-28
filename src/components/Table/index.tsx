@@ -5,6 +5,7 @@ import { dataConverter } from './dataConverter';
 import { IRowBigSwap, IRowLiveNewPairs, IRowPairExplorer } from '../../types/table';
 import TokenPriceHeader from './TokenPriceHeader';
 import { dataSorter } from './dataSorter';
+import { ExchangesIcons } from '../../config/exchanges';
 
 import s from './Table.module.scss';
 
@@ -126,22 +127,35 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
           {/* @ts-ignore */}
           {dataConverter[tableType](tableData, isUsd)
             .slice(0, scrollKoef * 100)
-            .map((row: any, i: number) => (
-              <tr
-                key={`${JSON.stringify(tableData[i])}${i * i}`}
-                className={i % 2 === 0 ? s.even : s.odd}
-              >
-                {Object.values(row)
-                  .slice(0, -1)
-                  .map((cell: any, index) => (
-                    <>
-                      <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
-                        <span>{cell}</span>
-                      </th>
-                    </>
-                  ))}
-              </tr>
-            ))}
+            .map((row: any, i: number) => {
+              return (
+                <tr
+                  key={`${JSON.stringify(tableData[i])}${i * i}`}
+                  className={i % 2 === 0 ? s.even : s.odd}
+                >
+                  {Object.values(row)
+                    .slice(0, -1)
+                    .map((cell: any, index) => {
+                      if (index === 1) {
+                        return (
+                          <>
+                            <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
+                              <img src={ExchangesIcons[cell]} alt=""/>
+                            </th>
+                          </>
+                        )
+                      }
+                      return (
+                        <>
+                          <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
+                            <span>{cell}</span>
+                          </th>
+                        </>
+                      );
+                    })}
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>
