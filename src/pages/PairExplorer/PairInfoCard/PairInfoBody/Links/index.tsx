@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { IAdditionalInfoFromBackend } from '../../../../../services/backend/index';
+import Coingecko from '../../../../../services/Coingecko';
 
 import s from '../PairInfoBody.module.scss';
 
@@ -25,8 +26,29 @@ interface ILinksProps {
 
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
   const [openAdditional, setOpenAdditional] = useState(false);
+  const [coingeckoLink, setCoingeckoLink] = useState('');
 
   const handleOpenAdditional = () => setOpenAdditional(!openAdditional);
+
+  const getCoingeckoLink = useCallback(async () => {
+    try {
+      if (!tokenInfoFromBackend) return;
+      const { symbol } = tokenInfoFromBackend?.pair?.token_being_reviewed;
+      if (!symbol) return;
+      const coinInfo = await Coingecko.getCoinInfo({ symbol });
+      if (!coinInfo) return;
+      const { id } = coinInfo;
+      const newCoingeckoLink = `https://www.coingecko.com/en/coins/${id}`;
+      setCoingeckoLink(newCoingeckoLink);
+      console.log('Links props:', { tokenInfoFromBackend, id, symbol });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [tokenInfoFromBackend]);
+
+  useEffect(() => {
+    getCoingeckoLink();
+  }, [getCoingeckoLink]);
 
   return (
     <div className={s.links}>
@@ -101,30 +123,27 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
           onClick={handleOpenAdditional}
           onKeyDown={() => {}}
         >
-          <div className={s.card_link__img}>
-            {openAdditional ? <MinusIcon /> : <PlusIcon />}
-          </div>
+          <div className={s.card_link__img}>{openAdditional ? <MinusIcon /> : <PlusIcon />}</div>
         </div>
         {openAdditional && (
           <div className={s.additionalMenu}>
             <div className={s.additionalMenuInner}>
               <div className={s.additionalMenuItem}>
-                <div className={s.additionalMenuItemText}>
-                  Lock
-                </div>
+                <div className={s.additionalMenuItemText}>Lock</div>
                 <UniswapIcon className={s.additionalMenuItemIcon} />
                 <LockIcon className={s.additionalMenuItemIcon} />
               </div>
-              <div className={s.additionalMenuItem}>
-                <div className={s.additionalMenuItemText}>
-                  Token
-                </div>
+              <a
+                className={s.additionalMenuItem}
+                href={coingeckoLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className={s.additionalMenuItemText}>Token</div>
                 <CoingeckoIcon className={s.additionalMenuItemIcon} />
-              </div>
+              </a>
               <div className={s.additionalMenuItem}>
-                <div className={s.additionalMenuItemText}>
-                  Info
-                </div>
+                <div className={s.additionalMenuItemText}>Info</div>
                 <EmailIcon className={s.additionalMenuItemIcon} />
               </div>
             </div>
