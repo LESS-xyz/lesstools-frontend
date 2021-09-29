@@ -147,6 +147,51 @@ const Sidebar: React.FC = observer(() => {
           </>
         )}
       </div>
+      <div className={s.group}>
+        <div
+          className={s.group_title}
+          role="button"
+          tabIndex={0}
+          onClick={() => handleChangeActiveNetwork(Networks.Polygon)}
+          onKeyDown={() => {}}
+        >
+          {!mobileMenu.isActive && (
+            <div
+              className={`${s.group_title_arrow} ${
+                isActiveNetwork(Networks.Polygon) && s.group_title_arrow_rotated
+              }`}
+            >
+              <img src={arrowWhite} alt="img" />
+            </div>
+          )}
+          <div className={s.group_title__text}>Polygon</div>
+          <div className={s.group_title__icon}>
+            <img src={ethereum} alt="img" />
+          </div>
+        </div>
+        {isActiveNetwork(Networks.Polygon) && (
+          <>
+            <LinkSidebar
+              imgDark={live}
+              imgWhite={liveWhite}
+              text="Live New Pairs"
+              to="/sushiswap/live-new-pairs"
+            />
+            <LinkSidebar
+              imgDark={pair}
+              imgWhite={pairWhite}
+              text="Pair Explorer"
+              to="/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a"
+            />
+            <LinkSidebar
+              imgDark={bigSwap}
+              imgWhite={bigSwapWhite}
+              text="Big Swap Explorer"
+              to="/sushiswap/big-swap-explorer"
+            />
+          </>
+        )}
+      </div>
       {/* <div className={s.group}>
         <div className={s.subtitle}>common</div>
         <LinkSidebar imgDark={bot} imgWhite={botWhite} text="New Pairs Bot" />
