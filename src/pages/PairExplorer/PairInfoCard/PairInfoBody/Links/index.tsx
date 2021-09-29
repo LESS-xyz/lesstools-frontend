@@ -24,9 +24,24 @@ interface ILinksProps {
   tokenId: string;
 }
 
+const ExchangesByPlatform: any = {
+  ETH: {
+    Uniswap: 'uni-v2',
+    Sushiswap: 'sushi-v1',
+  },
+  BSC: {
+    Pancake: 'pancake-v2',
+  },
+  POLYGON: {
+    Quickswap: 'quickswap-v1',
+  },
+};
+
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
   const [openAdditional, setOpenAdditional] = useState(false);
+  // links
   const [coingeckoLink, setCoingeckoLink] = useState('');
+  const [unicryptLink, setUnicryptLink] = useState('');
 
   const handleOpenAdditional = () => setOpenAdditional(!openAdditional);
 
@@ -40,7 +55,25 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
       const { id } = coinInfo;
       const newCoingeckoLink = `https://www.coingecko.com/en/coins/${id}`;
       setCoingeckoLink(newCoingeckoLink);
-      console.log('Links props:', { tokenInfoFromBackend, id, symbol });
+      console.log('Links getCoingeckoLink:', { tokenInfoFromBackend, coinInfo });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [tokenInfoFromBackend]);
+
+  const getUnicryptLink = useCallback(async () => {
+    try {
+      if (!tokenInfoFromBackend) return;
+      const { address, platform } = tokenInfoFromBackend?.pair;
+      if (!address) return;
+      let exchange = 'uni-v2';
+      const exchanges = ExchangesByPlatform[platform];
+      if (exchanges && Object.entries(exchanges)) {
+        [exchange] = Object.values(exchanges);
+      }
+      const newUnicryptLink = `https://app.unicrypt.network/amm/${exchange}/pair/${address}`;
+      setUnicryptLink(newUnicryptLink);
+      console.log('Links getUnicryptLink:', { tokenInfoFromBackend, address });
     } catch (e) {
       console.error(e);
     }
@@ -49,6 +82,10 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
   useEffect(() => {
     getCoingeckoLink();
   }, [getCoingeckoLink]);
+
+  useEffect(() => {
+    getUnicryptLink();
+  }, [getUnicryptLink]);
 
   return (
     <div className={s.links}>
@@ -128,11 +165,16 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
         {openAdditional && (
           <div className={s.additionalMenu}>
             <div className={s.additionalMenuInner}>
-              <div className={s.additionalMenuItem}>
+              <a
+                className={s.additionalMenuItem}
+                href={unicryptLink}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <div className={s.additionalMenuItemText}>Lock</div>
                 <UniswapIcon className={s.additionalMenuItemIcon} />
                 <LockIcon className={s.additionalMenuItemIcon} />
-              </div>
+              </a>
               <a
                 className={s.additionalMenuItem}
                 href={coingeckoLink}
