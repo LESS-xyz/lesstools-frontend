@@ -119,7 +119,7 @@ const Sidebar: React.FC = observer(() => {
               <img src={arrowWhite} alt="img" />
             </div>
           )}
-          <div className={s.group_title__text}>Binance</div>
+          <div className={s.group_title__text}>BSC</div>
           <div className={s.group_title__icon}>
             <img src={ethereum} alt="img" />
           </div>
