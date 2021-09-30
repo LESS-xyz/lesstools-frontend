@@ -134,15 +134,6 @@ const PairExplorer: React.FC = () => {
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);
 
-  // const tbr = WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-  //   ? pairInfo?.base_info.token0.symbol
-  //   : pairInfo?.base_info.token1.symbol;
-  // const tradingViewWatchList = useMemo(
-  //   () => [`USDT${tbr}`, `${tbr}USDT`, `${tbr}WETH`, `WETH${tbr}`, `USD${tbr}`, `${tbr}USD`],
-  //   [tbr],
-  // );
-  const tradingViewWatchList: string[] = [];
-
   return (
     <main className={s.page}>
       <Helmet>
@@ -228,12 +219,11 @@ Fundraising Capital"
                   autosize
                   hide_side_toolbar={false}
                   style={BarStyles.CANDLES}
-                  watchlist={tradingViewWatchList}
                   symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                       ? pairInfo?.base_info?.token0?.symbol
                       : pairInfo?.base_info?.token1?.symbol
-                  }WETH`}
+                  }USD`}
                   allow_symbol_change={false}
                 />
               </div>
