@@ -13,10 +13,11 @@ import {
 } from '../../queries/index';
 import { ISearchByIdResponse, ISearchBySymbolResponse, IPairsBySymbol } from '../../types/search';
 import { useMst } from '../../store/store';
-import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
+import { ApolloClientsForExchanges } from '../../index';
 import { useElementWidth } from '../../hooks/useElementWidth';
 
 import s from './PairsSearch.module.scss';
+import { uppercaseFirstLetter } from "../../utils/prettifiers";
 
 // при вводе в поиск символы токенов форматирует их
 const formatTokens = (name: string) => {
@@ -47,23 +48,31 @@ function debounce(fn: (...args: any) => void, ms: number) {
 const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placeholder }) => {
   const [value, setValue] = useState('');
   const { currentExchange } = useMst();
+  const { exchange } = currentExchange;
+
+  const isExchange = useCallback(
+    (v: string) => exchange.toLowerCase() === v.toLowerCase(),
+    [exchange],
+  );
+  const client: any = ApolloClientsForExchanges[uppercaseFirstLetter(exchange.toLowerCase())];
+
   // запросы на граф
   const [
     searchById,
     { loading: searchByIdLoading, data: searchByIdData },
   ] = useLazyQuery<ISearchByIdResponse>(
-    currentExchange.exchange === 'uniswap' ? SEARCH_BY_ID : SEARCH_BY_ID_SUSHISWAP,
+    isExchange('uniswap') ? SEARCH_BY_ID : SEARCH_BY_ID_SUSHISWAP,
     {
-      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+      client,
     },
   );
   const [
     searchByName,
     { loading: searchByNameLoading, data: searchByNameData },
   ] = useLazyQuery<ISearchBySymbolResponse>(
-    currentExchange.exchange === 'uniswap' ? SEARCH_BY_NAME : SEARCH_BY_NAME_SUSHISWAP,
+    isExchange('uniswap') ? SEARCH_BY_NAME : SEARCH_BY_NAME_SUSHISWAP,
     {
-      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+      client,
     },
   );
 

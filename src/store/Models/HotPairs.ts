@@ -21,6 +21,7 @@ const HotPairsModel = types
   .model({
     uniswap: types.array(InfoModel),
     sushiswap: types.array(InfoModel),
+    quickswap: types.array(InfoModel),
   })
   .actions((self) => ({
     // TODO: fix any
@@ -29,6 +30,9 @@ const HotPairsModel = types
     },
     setSushiPairs(pairs: any) {
       self.sushiswap = pairs;
+    },
+    setQuickswapPairs(pairs: any) {
+      self.quickswap = pairs;
     },
   }));
 

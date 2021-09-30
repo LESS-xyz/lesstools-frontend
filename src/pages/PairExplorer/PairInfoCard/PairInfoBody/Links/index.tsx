@@ -184,10 +184,11 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
                 <div className={s.additionalMenuItemText}>Token</div>
                 <CoingeckoIcon className={s.additionalMenuItemIcon} />
               </a>
-              <div className={s.additionalMenuItem}>
+              {/* on coingecko, cmc, cryptocompare doesnt exist. only on etherscan with PRO plan. */}
+              <a className={s.additionalMenuItem} href="mailto:contact@less.xyz">
                 <div className={s.additionalMenuItemText}>Info</div>
                 <EmailIcon className={s.additionalMenuItemIcon} />
-              </div>
+              </a>
             </div>
           </div>
         )}

@@ -39,7 +39,11 @@ export const App: React.FC = observer(() => {
         <Route exact path={['/sushiswap/live-new-pairs', '/uniswap/live-new-pairs']}>
           <LiveNewPairs />
         </Route>
-        <Route path={['/sushiswap/pair-explorer/:id', '/uniswap/pair-explorer/:id']}>
+        <Route path={[
+          '/sushiswap/pair-explorer/:id',
+          '/uniswap/pair-explorer/:id',
+          '/quickswap/pair-explorer/:id',
+        ]}>
           <PairExplorer />
         </Route>
         <Route path="/user-account">

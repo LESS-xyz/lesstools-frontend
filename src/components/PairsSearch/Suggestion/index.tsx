@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js/bignumber';
+import { Exchange } from "../../../config/exchanges";
 
 import s from '../PairsSearch.module.scss';
 
@@ -12,7 +13,7 @@ interface ISuggestionProps {
   holders: string;
   txCount: string;
   onClick: () => void;
-  exchange: 'uniswap' | 'sushiswap';
+  exchange: Exchange;
   small: boolean;
 }
 

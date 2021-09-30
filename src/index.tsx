@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 
 import rootStore, { Provider as StoreProvider } from './store/store';
 import ScrollToTop from './utils/scrollToTop';
@@ -9,24 +10,37 @@ import { App } from './App';
 import { Web3Connector } from './contexts/Web3Connector';
 
 import './styles/index.scss';
+import { Subgraphs } from './config/subgraphs';
+
+const httpLink = (uri: string) =>
+  new HttpLink({
+    uri,
+  });
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(`GraphQL error: ${message}`, { locations, path }),
+    );
+  if (networkError) console.log(`GraphQL network error: ${networkError}`);
+});
+
+const initApolloClient = (uri: string) =>
+  new ApolloClient({
+    uri,
+    link: from([errorLink, httpLink(uri)]),
+    cache: new InMemoryCache(),
+  });
+
+export interface IApolloClients {
+  [key: string]: any;
+}
 
 // uniswap (default)
-export const uniswapSubgraph = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
-  cache: new InMemoryCache(),
-});
+export const uniswapSubgraph = initApolloClient(Subgraphs.Uniswap);
 
-// sushiswap
-export const sushiswapSubgraph = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
-  cache: new InMemoryCache(),
-});
-
-// joe trader avalanche
-export const joeTraderSubgraph = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/rock-n-block/joe-trader-lesstools',
-  cache: new InMemoryCache(),
-});
+// sushiswap for Ethereum
+export const sushiswapSubgraph = initApolloClient(Subgraphs.Sushiswap);
 
 // для номера блока (pair explorer page)
 export const getBlockClient = new ApolloClient({
@@ -40,8 +54,24 @@ export const uniswapCurrentVersion = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+export const ApolloClientsForExchanges: IApolloClients = {
+  Uniswap: initApolloClient(Subgraphs.Uniswap),
+  Sushiswap: initApolloClient(Subgraphs.Sushiswap),
+  Pancake: initApolloClient(Subgraphs.Pancake),
+  Honeyswap: initApolloClient(Subgraphs.Honeyswap),
+  Spookyswap: initApolloClient(Subgraphs.Spookyswap),
+  Mdexbsc: initApolloClient(Subgraphs.Mdexbsc),
+  Biswap: initApolloClient(Subgraphs.Biswap),
+  Babyswap: initApolloClient(Subgraphs.Babyswap),
+  Apeswap: initApolloClient(Subgraphs.Apeswap),
+  Spiritswap: initApolloClient(Subgraphs.Spiritswap),
+  Joetrader: initApolloClient(Subgraphs.Joetrader),
+  Pangolin: initApolloClient(Subgraphs.Pangolin),
+  Quickswap: initApolloClient(Subgraphs.Quickswap),
+};
+
 ReactDOM.render(
-  <ApolloProvider client={uniswapSubgraph}>
+  <ApolloProvider client={ApolloClientsForExchanges.Uniswap}>
     <Router>
       <StoreProvider value={rootStore}>
         <Web3Connector>
