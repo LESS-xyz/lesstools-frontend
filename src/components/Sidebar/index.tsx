@@ -181,7 +181,7 @@ const Sidebar: React.FC = observer(() => {
               imgDark={pair}
               imgWhite={pairWhite}
               text="Pair Explorer"
-              to="/quickswap/pair-explorer/0x831753DD7087CaC61aB5644b308642cc1c33Dc13"
+              to="/quickswap/pair-explorer/0x0024739eb63fb6697e63698c93c77b9508f15ab2"
             />
             <LinkSidebar
               imgDark={bigSwap}

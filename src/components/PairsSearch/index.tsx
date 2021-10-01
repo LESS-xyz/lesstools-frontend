@@ -61,7 +61,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
     searchById,
     { loading: searchByIdLoading, data: searchByIdData },
   ] = useLazyQuery<ISearchByIdResponse>(
-    isExchange('uniswap') ? SEARCH_BY_ID : SEARCH_BY_ID_SUSHISWAP,
+    isExchange('sushiswap') ? SEARCH_BY_ID_SUSHISWAP : SEARCH_BY_ID,
     {
       client,
     },
@@ -70,7 +70,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
     searchByName,
     { loading: searchByNameLoading, data: searchByNameData },
   ] = useLazyQuery<ISearchBySymbolResponse>(
-    isExchange('uniswap') ? SEARCH_BY_NAME : SEARCH_BY_NAME_SUSHISWAP,
+    isExchange('sushiswap') ? SEARCH_BY_NAME_SUSHISWAP : SEARCH_BY_NAME,
     {
       client,
     },

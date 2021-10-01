@@ -37,3 +37,23 @@ export const ExchangesIcons: IExchangesIcons = {
   [Exchanges.Joetrader]: uniswap,
   [Exchanges.Pangolin]: uniswap,
 }
+
+export interface IUnicryptExchangesNames {
+  [key: string]: string
+}
+
+export const UnicryptExchangesNames: IUnicryptExchangesNames = {
+  [Exchanges.Uniswap]: 'uni-v2',
+  [Exchanges.Sushiswap]: 'sushi-v1',
+  [Exchanges.Pancake]: 'pancake-v2',
+  [Exchanges.Quickswap]: 'quickswap-v1',
+  [Exchanges.Honeyswap]: 'honey-v1',
+  [Exchanges.Spookyswap]: '',
+  [Exchanges.Mdex]: '',
+  [Exchanges.Biswap]: '',
+  [Exchanges.Babyswap]: '',
+  [Exchanges.Apeswap]: '',
+  [Exchanges.Spiritswap]: '',
+  [Exchanges.Joetrader]: '',
+  [Exchanges.Pangolin]: '',
+};

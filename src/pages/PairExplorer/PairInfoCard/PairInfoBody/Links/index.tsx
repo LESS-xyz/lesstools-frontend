@@ -18,37 +18,30 @@ import { ReactComponent as LockIcon } from '../../../../../assets/img/icons/lock
 import { ReactComponent as EmailIcon } from '../../../../../assets/img/icons/email.svg';
 import { ReactComponent as UniswapIcon } from '../../../../../assets/img/icons/uniswap.svg';
 import { ReactComponent as CoingeckoIcon } from '../../../../../assets/img/icons/coingecko.svg';
+import { UnicryptExchangesNames } from '../../../../../config/exchanges';
+import { uppercaseFirstLetter } from '../../../../../utils/prettifiers';
 
 interface ILinksProps {
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
   tokenId: string;
+  exchange?: string;
 }
 
-const ExchangesByPlatform: any = {
-  ETH: {
-    Uniswap: 'uni-v2',
-    Sushiswap: 'sushi-v1',
-  },
-  BSC: {
-    Pancake: 'pancake-v2',
-  },
-  POLYGON: {
-    Quickswap: 'quickswap-v1',
-  },
-};
-
-const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
+const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange }) => {
   const [openAdditional, setOpenAdditional] = useState(false);
   // links
-  const [coingeckoLink, setCoingeckoLink] = useState('');
-  const [unicryptLink, setUnicryptLink] = useState('');
+  const [coingeckoLink, setCoingeckoLink] = useState<string>('');
+  const [unicryptLink, setUnicryptLink] = useState<string>('');
+  const [email] = useState<string>('');
+
+  const isAdditionalNeeded = coingeckoLink || unicryptLink || email;
 
   const handleOpenAdditional = () => setOpenAdditional(!openAdditional);
 
   const getCoingeckoLink = useCallback(async () => {
     try {
       if (!tokenInfoFromBackend) return;
-      const { symbol } = tokenInfoFromBackend?.pair?.token_being_reviewed;
+      const { symbol } = tokenInfoFromBackend?.pair?.token_being_reviewed || {};
       if (!symbol) return;
       const coinInfo = await Coingecko.getCoinInfo({ symbol });
       if (!coinInfo) return;
@@ -64,20 +57,22 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
   const getUnicryptLink = useCallback(async () => {
     try {
       if (!tokenInfoFromBackend) return;
-      const { address, platform } = tokenInfoFromBackend?.pair;
+      // const { address, platform } = tokenInfoFromBackend?.pair || {};
+      const { address } = tokenInfoFromBackend?.pair || {};
       if (!address) return;
-      let exchange = 'uni-v2';
-      const exchanges = ExchangesByPlatform[platform];
-      if (exchanges && Object.entries(exchanges)) {
-        [exchange] = Object.values(exchanges);
-      }
-      const newUnicryptLink = `https://app.unicrypt.network/amm/${exchange}/pair/${address}`;
+      // let exchange = 'uni-v2';
+      // const exchanges = ExchangesByPlatform[platform] || {};
+      // if (exchanges && Object.entries(exchanges)) [exchange] = Object.values(exchanges) || [];
+      const exchangeName = UnicryptExchangesNames[uppercaseFirstLetter(exchange || '')];
+      const newUnicryptLink = exchangeName
+        ? `https://app.unicrypt.network/amm/${exchangeName}/pair/${address}`
+        : '';
       setUnicryptLink(newUnicryptLink);
       console.log('Links getUnicryptLink:', { tokenInfoFromBackend, address });
     } catch (e) {
       console.error(e);
     }
-  }, [tokenInfoFromBackend]);
+  }, [tokenInfoFromBackend, exchange]);
 
   useEffect(() => {
     getCoingeckoLink();
@@ -99,9 +94,9 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
           <img src={etherscan} alt="etherscan" />
         </div>
       </a>
-      {tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug && (
+      {tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_slug && (
         <a
-          href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair.token_being_reviewed.cmc_slug}`}
+          href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_slug}`}
           target="_blank"
           rel="noreferrer noopener"
           className={s.card_link}
@@ -111,11 +106,11 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
           </div>
         </a>
       )}
-      {tokenInfoFromBackend?.pair.token_being_reviewed.twitter_url && (
+      {tokenInfoFromBackend?.pair?.token_being_reviewed?.twitter_url && (
         <a
           target="_blank"
           rel="noreferrer noopener"
-          href={tokenInfoFromBackend?.pair.token_being_reviewed.twitter_url}
+          href={tokenInfoFromBackend?.pair?.token_being_reviewed?.twitter_url}
           className={s.card_link}
         >
           <div className={s.card_link__img}>
@@ -124,8 +119,8 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
         </a>
       )}
 
-      {tokenInfoFromBackend?.pair.token_being_reviewed.chat_urls &&
-        tokenInfoFromBackend.pair.token_being_reviewed.chat_urls.map((link: string) => (
+      {tokenInfoFromBackend?.pair?.token_being_reviewed?.chat_urls &&
+        tokenInfoFromBackend?.pair?.token_being_reviewed?.chat_urls?.map((link: string) => (
           <a
             key={link}
             target="_blank"
@@ -140,11 +135,11 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
             </div>
           </a>
         ))}
-      {tokenInfoFromBackend?.pair.token_being_reviewed.website_url && (
+      {tokenInfoFromBackend?.pair?.token_being_reviewed?.website_url && (
         <a
           target="_blank"
           rel="noreferrer noopener"
-          href={tokenInfoFromBackend?.pair.token_being_reviewed.website_url}
+          href={tokenInfoFromBackend?.pair?.token_being_reviewed?.website_url}
           className={s.card_link}
         >
           <div className={s.card_link__img}>
@@ -152,47 +147,55 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId }) => {
           </div>
         </a>
       )}
-      <div>
-        <div
-          className={s.card_link}
-          role="button"
-          tabIndex={0}
-          onClick={handleOpenAdditional}
-          onKeyDown={() => {}}
-        >
-          <div className={s.card_link__img}>{openAdditional ? <MinusIcon /> : <PlusIcon />}</div>
-        </div>
-        {openAdditional && (
-          <div className={s.additionalMenu}>
-            <div className={s.additionalMenuInner}>
-              <a
-                className={s.additionalMenuItem}
-                href={unicryptLink}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className={s.additionalMenuItemText}>Lock</div>
-                <UniswapIcon className={s.additionalMenuItemIcon} />
-                <LockIcon className={s.additionalMenuItemIcon} />
-              </a>
-              <a
-                className={s.additionalMenuItem}
-                href={coingeckoLink}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className={s.additionalMenuItemText}>Token</div>
-                <CoingeckoIcon className={s.additionalMenuItemIcon} />
-              </a>
-              {/* on coingecko, cmc, cryptocompare doesnt exist. only on etherscan with PRO plan. */}
-              <a className={s.additionalMenuItem} href="mailto:contact@less.xyz">
-                <div className={s.additionalMenuItemText}>Info</div>
-                <EmailIcon className={s.additionalMenuItemIcon} />
-              </a>
-            </div>
+      {!!isAdditionalNeeded && (
+        <div>
+          <div
+            className={s.card_link}
+            role="button"
+            tabIndex={0}
+            onClick={handleOpenAdditional}
+            onKeyDown={() => {}}
+          >
+            <div className={s.card_link__img}>{openAdditional ? <MinusIcon /> : <PlusIcon />}</div>
           </div>
-        )}
-      </div>
+          {openAdditional && (
+            <div className={s.additionalMenu}>
+              <div className={s.additionalMenuInner}>
+                {!!unicryptLink && (
+                  <a
+                    className={s.additionalMenuItem}
+                    href={unicryptLink}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <div className={s.additionalMenuItemText}>Lock</div>
+                    <UniswapIcon className={s.additionalMenuItemIcon} />
+                    <LockIcon className={s.additionalMenuItemIcon} />
+                  </a>
+                )}
+                {!!coingeckoLink && (
+                  <a
+                    className={s.additionalMenuItem}
+                    href={coingeckoLink}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <div className={s.additionalMenuItemText}>Token</div>
+                    <CoingeckoIcon className={s.additionalMenuItemIcon} />
+                  </a>
+                )}
+                {/* on coingecko, cmc, cryptocompare doesnt exist. only on etherscan with PRO plan. */}
+                {!!email && (
+                  <a className={s.additionalMenuItem} href="mailto:contact@less.xyz">
+                    <div className={s.additionalMenuItemText}>Info</div>
+                    <EmailIcon className={s.additionalMenuItemIcon} />
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

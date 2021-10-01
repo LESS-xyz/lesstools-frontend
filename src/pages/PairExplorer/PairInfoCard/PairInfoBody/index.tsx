@@ -56,10 +56,11 @@ interface IPairInfoBodyProps {
   loading: boolean;
   pairInfo: IPairInfo;
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
+  exchange?: string;
 }
 
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
-  ({ pairInfo, pairId, tokenInfoFromBackend }) => {
+  ({ pairInfo, pairId, tokenInfoFromBackend, exchange }) => {
     // tbr = token being reviewed
     const [tbr, setTbr] = useState(pairInfo?.base_info?.token1);
     const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
@@ -195,7 +196,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
             >
               View more info
             </button>
-            <Links tokenInfoFromBackend={tokenInfoFromBackend} tokenId={tbr.id} />
+            <Links tokenInfoFromBackend={tokenInfoFromBackend} tokenId={tbr.id} exchange={exchange} />
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"
@@ -222,23 +223,23 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 ).toFormat(2)}`}
               />
               <TokenInfoItem
-                title={`Pooled ${pairInfo.base_info.token0.symbol}`}
-                value={`${new BigNumber(pairInfo.base_info.reserve0).toFormat(2)}`}
+                title={`Pooled ${pairInfo?.base_info?.token0?.symbol}`}
+                value={`${new BigNumber(pairInfo?.base_info?.reserve0).toFormat(2)}`}
               />
               <TokenInfoItem
-                title={`Pooled ${pairInfo.base_info.token1.symbol}`}
-                value={`${new BigNumber(pairInfo.base_info.reserve1).toFormat(2)}`}
+                title={`Pooled ${pairInfo?.base_info?.token1?.symbol}`}
+                value={`${new BigNumber(pairInfo?.base_info?.reserve1).toFormat(2)}`}
               />
               <TokenInfoItem
                 title="Total tx"
-                value={`${new BigNumber(pairInfo.base_info.txCount).toFormat(0)}`}
+                value={`${new BigNumber(pairInfo?.base_info?.txCount).toFormat(0)}`}
               />
               <TokenInfoItem
                 title="Holders"
                 value={`${
                   tokenInfoFromBackend
                     ? new BigNumber(
-                        tokenInfoFromBackend.pair.token_being_reviewed.holders_count,
+                        tokenInfoFromBackend?.pair?.token_being_reviewed?.holders_count,
                       ).toFormat(0)
                     : 'Loading...'
                 }`}
@@ -248,7 +249,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 value={`$${
                   tokenInfoFromBackend
                     ? new BigNumber(
-                        +tokenInfoFromBackend.pair.token_being_reviewed.circulating_supply *
+                        +tokenInfoFromBackend?.pair?.token_being_reviewed?.circulating_supply *
                           +tbr.derivedUSD,
                       ).toFormat(2)
                     : 'Loading...'
@@ -259,7 +260,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 value={`$${
                   tokenInfoFromBackend
                     ? new BigNumber(
-                        +tokenInfoFromBackend.pair.token_being_reviewed.total_supply *
+                        +tokenInfoFromBackend?.pair?.token_being_reviewed?.total_supply *
                           +tbr.derivedUSD,
                       ).toFormat(2)
                     : 'Loading...'
@@ -268,17 +269,17 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
             </div>
             <div className={s.card_section}>
               <LessScore
-                txCount={pairInfo.base_info.txCount}
-                holdersCount={tokenInfoFromBackend?.pair.token_being_reviewed.holders_count || 0}
+                txCount={pairInfo?.base_info?.txCount}
+                holdersCount={tokenInfoFromBackend?.pair?.token_being_reviewed?.holders_count || 0}
                 cost24H={tokenPrice24HoursChange}
-                links={tokenInfoFromBackend?.pair.token_being_reviewed.chat_urls || ['']}
-                totalLiquidity={pairInfo.base_info.reserveUSD}
+                links={tokenInfoFromBackend?.pair?.token_being_reviewed?.chat_urls || ['']}
+                totalLiquidity={pairInfo?.base_info?.reserveUSD}
               />
             </div>
             <div className={s.card_section}>
               <CommunityTrust
-                likes={tokenInfoFromBackend?.pair.likes || 0}
-                dislikes={tokenInfoFromBackend?.pair.dislikes || 0}
+                likes={tokenInfoFromBackend?.pair?.likes || 0}
+                dislikes={tokenInfoFromBackend?.pair?.dislikes || 0}
                 currentVote={tokenInfoFromBackend?.vote || 0}
                 pairId={pairId}
               />

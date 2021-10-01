@@ -43,7 +43,7 @@ const PairExplorer: React.FC = () => {
   );
 
   const client: any = ApolloClientsForExchanges[uppercaseFirstLetter(exchange.toLowerCase())];
-  // console.log('PairExplorer:', { client, exchange });
+  // console.log('PairExplorer:', { exchange });
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
@@ -51,7 +51,7 @@ const PairExplorer: React.FC = () => {
   const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
-      timestamp: isExchange(Exchanges.Uniswap) ? 1599000000 : timestamp24hAgo,
+      timestamp: isExchange(Exchanges.Sushiswap) ? timestamp24hAgo : 1599000000,
     },
   });
 
@@ -84,6 +84,8 @@ const PairExplorer: React.FC = () => {
 
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
+    if (!pairInfo) return;
+    console.log('PairExplorer useEffect:', { pairId, pairInfo, blocks });
     if (!loading && pairInfo?.base_info) {
       const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
         ? pairInfo?.base_info.token0
@@ -99,7 +101,7 @@ const PairExplorer: React.FC = () => {
         })
         .then((res) => setTokenInfoFromBackend(res.data));
     }
-  }, [loading, pairInfo, pairId, user.isVerified]);
+  }, [blocks, loading, pairInfo, pairId, user.isVerified]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
 
@@ -163,7 +165,7 @@ Fundraising Capital"
               <PairInfoHeader
                 token0={pairInfo?.base_info?.token0}
                 token1={pairInfo?.base_info?.token1}
-                cmcTokenId={tokenInfoFromBackend?.pair.token_being_reviewed.cmc_id || null}
+                cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || null}
               />
             )}
           </div>
@@ -182,6 +184,7 @@ Fundraising Capital"
                       pairId={pairId}
                       tokenInfoFromBackend={tokenInfoFromBackend}
                       pairInfo={pairInfo}
+                      exchange={exchange}
                     />
                   ) : (
                     <Loader />
