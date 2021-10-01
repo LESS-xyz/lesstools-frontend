@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import OutsideAlerter from '../../../../utils/outsideClickWrapper';
 import backend, { PLATFORM } from '../../../../services/backend/index';
 import { GET_FAVORITES_PAIRS } from '../../../../queries/index';
-import { sushiswapSubgraph, uniswapSubgraph } from '../../../../index';
+import { ApolloClientsForExchanges } from '../../../../index';
 import { useMst } from '../../../../store/store';
 import { WHITELIST } from '../../../../data/whitelist';
 
@@ -15,13 +15,15 @@ import s from './Favorites.module.scss';
 
 import cross from '../../../../assets/img/icons/close.svg';
 import arrowRight from '../../../../assets/img/icons/arrow-right.svg';
+import { Exchange } from "../../../../config/exchanges";
+import { uppercaseFirstLetter } from "../../../../utils/prettifiers";
 
 interface IFavorite {
   symbol: string;
   price: string;
   pairId: string;
   deletePair: () => void;
-  currentExchange: 'uniswap' | 'sushiswap';
+  currentExchange: Exchange;
   closeModal: () => void;
 }
 
@@ -61,9 +63,12 @@ const Favorite: React.FC<IFavorite> = ({
 const Favorites: React.FC = observer(() => {
   const [isModal, setIsModal] = useState(false);
   const { user, currentExchange } = useMst();
+  const { exchange } = currentExchange;
+
+  const client: any = ApolloClientsForExchanges[uppercaseFirstLetter(exchange.toLowerCase())];
 
   const [getPairsFromGraph, { loading, data: favs }] = useLazyQuery(GET_FAVORITES_PAIRS, {
-    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    client,
   });
 
   useEffect(() => {
@@ -74,8 +79,10 @@ const Favorites: React.FC = observer(() => {
 
   // получение избранных пар с графа
   const getFavoritePairs = useCallback(async () => {
-    const ids = await backend.getFavoritesOfUser({ platform: 'ETH' });
-    getPairsFromGraph({ variables: { ids: ids?.data?.map((id: string) => id.toLowerCase()) } });
+    const result = await backend.getFavoritesOfUser({ platform: 'ETH' });
+    const ids = result?.data?.map((id: string) => id.toLowerCase());
+    console.log('Favorites:', { ids });
+    getPairsFromGraph({ variables: { ids: ids || [] } });
   }, [getPairsFromGraph]);
 
   useEffect(() => {

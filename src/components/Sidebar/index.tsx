@@ -119,7 +119,7 @@ const Sidebar: React.FC = observer(() => {
               <img src={arrowWhite} alt="img" />
             </div>
           )}
-          <div className={s.group_title__text}>Binance</div>
+          <div className={s.group_title__text}>BSC</div>
           <div className={s.group_title__icon}>
             <img src={ethereum} alt="img" />
           </div>
@@ -175,19 +175,19 @@ const Sidebar: React.FC = observer(() => {
               imgDark={live}
               imgWhite={liveWhite}
               text="Live New Pairs"
-              to="/sushiswap/live-new-pairs"
+              to="/quickswap/live-new-pairs"
             />
             <LinkSidebar
               imgDark={pair}
               imgWhite={pairWhite}
               text="Pair Explorer"
-              to="/sushiswap/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a"
+              to="/quickswap/pair-explorer/0x0024739eb63fb6697e63698c93c77b9508f15ab2"
             />
             <LinkSidebar
               imgDark={bigSwap}
               imgWhite={bigSwapWhite}
               text="Big Swap Explorer"
-              to="/sushiswap/big-swap-explorer"
+              to="/quickswap/big-swap-explorer"
             />
           </>
         )}

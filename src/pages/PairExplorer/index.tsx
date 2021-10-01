@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
 
@@ -19,21 +19,29 @@ import PairsSearch from '../../components/PairsSearch/index';
 import Loader from '../../components/Loader/index';
 import Favorites from './RightAsideBar/Favorites/index';
 import { WHITELIST } from '../../data/whitelist';
-import { getBlockClient, uniswapSubgraph, sushiswapSubgraph } from '../../index';
+import { getBlockClient, ApolloClientsForExchanges } from '../../index';
 import { useMst } from '../../store/store';
 import backend, { IAdditionalInfoFromBackend } from '../../services/backend/index';
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
+import { Exchanges } from '../../config/exchanges';
 
 const PairExplorer: React.FC = () => {
-  const [
-    tokenInfoFromBackend,
-    setTokenInfoFromBackend,
-  ] = useState<null | IAdditionalInfoFromBackend>(null);
+  const [tokenInfoFromBackend, setTokenInfoFromBackend] =
+    useState<null | IAdditionalInfoFromBackend>(null);
   const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
   const { id: pairId } = useParams<{ id: string }>();
-  const { currentExchange, user } = useMst();
+  const { user } = useMst();
+  const location = useLocation();
+  const exchange = location.pathname.split('/')[1];
+
+  const isExchange = useCallback(
+    (v: string) => exchange.toLowerCase() === v.toLowerCase(),
+    [exchange],
+  );
+  const client: any = ApolloClientsForExchanges[uppercaseFirstLetter(exchange.toLowerCase())];
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
@@ -41,21 +49,22 @@ const PairExplorer: React.FC = () => {
   const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
-      timestamp: currentExchange.exchange === 'uniswap' ? 1599000000 : timestamp24hAgo,
+      timestamp: isExchange(Exchanges.Sushiswap) ? timestamp24hAgo : 1599000000,
     },
   });
 
   // запрос для pair-card info [ГРАФ]
-  const { loading, data: pairInfo, refetch: refetchPairInfo } = useQuery<IPairInfo>(
-    currentExchange.exchange === 'uniswap' ? GET_PAIR_INFO : GET_PAIR_INFO_SUSHIWAP,
-    {
-      variables: {
-        id: pairId,
-        blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
-      },
-      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+  const {
+    loading,
+    data: pairInfo,
+    refetch: refetchPairInfo,
+  } = useQuery<IPairInfo>(isExchange(Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GET_PAIR_INFO, {
+    variables: {
+      id: pairId,
+      blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
     },
-  );
+    client,
+  });
 
   // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАФ]
   useEffect(() => {
@@ -68,11 +77,13 @@ const PairExplorer: React.FC = () => {
     variables: {
       id: pairId,
     },
-    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    client,
   });
 
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
+    if (!pairInfo) return;
+    console.log('PairExplorer useEffect:', { pairId, pairInfo, blocks });
     if (!loading && pairInfo?.base_info) {
       const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
         ? pairInfo?.base_info.token0
@@ -88,7 +99,7 @@ const PairExplorer: React.FC = () => {
         })
         .then((res) => setTokenInfoFromBackend(res.data));
     }
-  }, [loading, pairInfo, pairId, user.isVerified]);
+  }, [blocks, loading, pairInfo, pairId, user.isVerified]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
 
@@ -142,7 +153,7 @@ Fundraising Capital"
       <div className={s.container}>
         <div className={s.main}>
           <div className={s.mobile_block}>
-            <PairsSearch placeholder={`Search ${currentExchange.exchange} pairs`} />
+            <PairsSearch placeholder={`Search ${exchange} pairs`} />
             <div className={s.mobile_block__favs}>
               <Favorites />
             </div>
@@ -152,7 +163,7 @@ Fundraising Capital"
               <PairInfoHeader
                 token0={pairInfo?.base_info?.token0}
                 token1={pairInfo?.base_info?.token1}
-                cmcTokenId={tokenInfoFromBackend?.pair.token_being_reviewed.cmc_id || null}
+                cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || null}
               />
             )}
           </div>
@@ -171,6 +182,7 @@ Fundraising Capital"
                       pairId={pairId}
                       tokenInfoFromBackend={tokenInfoFromBackend}
                       pairInfo={pairInfo}
+                      exchange={exchange}
                     />
                   ) : (
                     <Loader />
@@ -197,10 +209,10 @@ Fundraising Capital"
                   <PairInfoHeader
                     token0={pairInfo?.base_info?.token0}
                     token1={pairInfo?.base_info?.token1}
-                    cmcTokenId={tokenInfoFromBackend?.pair.token_being_reviewed.cmc_id || 0}
+                    cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || 0}
                   />
                 )}
-                <PairsSearch placeholder={`Search ${currentExchange.exchange} pairs`} />
+                <PairsSearch placeholder={`Search ${exchange} pairs`} />
               </div>
               <div className={s.chart}>
                 <TradingViewWidget
@@ -210,9 +222,10 @@ Fundraising Capital"
                   style={BarStyles.CANDLES}
                   symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                      ? pairInfo?.base_info.token0.symbol
-                      : pairInfo?.base_info.token1.symbol
+                      ? pairInfo?.base_info?.token0?.symbol
+                      : pairInfo?.base_info?.token1?.symbol
                   }USD`}
+                  allow_symbol_change={false}
                 />
               </div>
             </div>
