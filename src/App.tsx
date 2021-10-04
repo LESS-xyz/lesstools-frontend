@@ -36,7 +36,11 @@ export const App: React.FC = observer(() => {
         <Route exact path={['/sushiswap/big-swap-explorer', '/uniswap/big-swap-explorer']}>
           <BigSwapExplorer />
         </Route>
-        <Route exact path={['/sushiswap/live-new-pairs', '/uniswap/live-new-pairs']}>
+        <Route exact path={[
+          // '/sushiswap/live-new-pairs',
+          // '/uniswap/live-new-pairs',
+          '/ethereum/live-new-pairs',
+        ]}>
           <LiveNewPairs />
         </Route>
         <Route path={[

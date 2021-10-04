@@ -30,7 +30,7 @@ class TheGraphService {
       });
       // console.log('TheGraph query:', result);
       if (result.data.Response === 'Error') return null;
-      return result.data;
+      return result.data.data;
     } catch (e) {
       console.error('TheGraph query:', e);
       return null;

@@ -26,8 +26,8 @@ export const useGetDataForAllExchanges = (props: any) => {
           variables,
         });
       });
-      const resultsGetPairSwaps = await Promise.all(results);
-      setData(resultsGetPairSwaps);
+      const result = await Promise.all(results);
+      setData(result);
     } catch (e) {
       console.error(e);
     }

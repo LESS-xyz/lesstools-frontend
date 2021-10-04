@@ -25,13 +25,19 @@ import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
-import { Exchanges } from '../../config/exchanges';
+import { Exchanges, ExchangesByNetworks } from '../../config/exchanges';
+import { uppercaseFirstLetter } from "../../utils/prettifiers";
+import TheGraph from "../../services/TheGraph";
+import { SubgraphsByExchangeShort } from "../../config/subgraphs";
+
+const is = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
     useState<null | IAdditionalInfoFromBackend>(null);
   const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
   const [swaps, setSwaps] = useState<any[]>([]);
+  const [pairInfo, setPairInfo] = useState<any>([]);
   const { id: pairId } = useParams<{ id: string }>();
   const { user } = useMst();
   const location = useLocation();
@@ -39,9 +45,9 @@ const PairExplorer: React.FC = () => {
   const network = location.pathname.split('/')[1];
   const exchange = 'uniswap';
 
-  const isExchange = useCallback(
-    (v: string) => exchange.toLowerCase() === v.toLowerCase(),
-    [exchange],
+  const exchanges = useMemo(
+    () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
+    [network],
   );
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
@@ -50,26 +56,33 @@ const PairExplorer: React.FC = () => {
   const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
-      timestamp: isExchange(Exchanges.Sushiswap) ? timestamp24hAgo : 1599000000,
+      timestamp: is(exchange, Exchanges.Sushiswap) ? timestamp24hAgo : 1599000000,
     },
   });
 
   // запрос для pair-card info [ГРАФ]
-  const [pairInfoFromAllExchanges, getPairInfoFromAllExchanges] = useGetDataForAllExchanges({
-    network,
-    defaultData: [],
-    query: isExchange(Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GET_PAIR_INFO,
-    variables: {
-      id: pairId,
-      blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
-    },
-  });
-  console.log('PairExplorer:', { pairInfoFromAllExchanges, network });
-
-  const pairInfo = useMemo(
-    () => pairInfoFromAllExchanges.map((item: any) => item.data)[0] || {},
-    [pairInfoFromAllExchanges],
-  );
+  const getPairInfoFromAllExchanges = useCallback(async () => {
+    try {
+      const exchangesOfNetwork = Object.values(exchanges);
+      if (!exchangesOfNetwork.length) return;
+      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+        return TheGraph.query({
+          subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+          query: is(exchangeOfNetwork, Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GET_PAIR_INFO,
+          variables: {
+            id: pairId,
+            blockNumber: (+blocks?.blocks[0]?.number) || 10684814,
+          },
+        });
+      });
+      const resultsGetPairInfo = await Promise.all(results);
+      const pairInfoNew = resultsGetPairInfo[0] || {};
+      console.log('getPairInfoFromAllExchanges:', { exchangesOfNetwork, pairInfoNew });
+      setPairInfo(pairInfoNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [exchanges, pairId, blocks]);
 
   // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАФ]
   useEffect(() => {
@@ -94,13 +107,12 @@ const PairExplorer: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairId]);
 
-  const filterSwaps = useCallback(async () => {
+  const concatenateSwaps = useCallback(async () => {
     try {
       let swapsNew: any[] = [];
       swapsFromAllExchanges.map((item: any) => {
         if (!item) return null;
-        if (!item.data) return null;
-        const { swaps: swapsOfExchange } = item.data;
+        const { swaps: swapsOfExchange } = item;
         swapsNew = swapsNew.concat(swapsOfExchange);
         return null;
       });
@@ -113,8 +125,8 @@ const PairExplorer: React.FC = () => {
 
   useEffect(() => {
     if (!swapsFromAllExchanges || !swapsFromAllExchanges.length) return;
-    filterSwaps();
-  }, [swapsFromAllExchanges, filterSwaps]);
+    concatenateSwaps();
+  }, [swapsFromAllExchanges, concatenateSwaps]);
 
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
