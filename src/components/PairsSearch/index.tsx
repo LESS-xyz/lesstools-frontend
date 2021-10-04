@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useLazyQuery } from '@apollo/client';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import Suggestion from './Suggestion/index';
@@ -11,13 +10,16 @@ import {
   SEARCH_BY_ID_SUSHISWAP,
   SEARCH_BY_NAME_SUSHISWAP,
 } from '../../queries/index';
-import { ISearchByIdResponse, ISearchBySymbolResponse, IPairsBySymbol } from '../../types/search';
+import { IPairsBySymbol } from '../../types/search';
 import { useMst } from '../../store/store';
-import { ApolloClientsForExchanges } from '../../index';
 import { useElementWidth } from '../../hooks/useElementWidth';
-
 import s from './PairsSearch.module.scss';
-import { uppercaseFirstLetter } from "../../utils/prettifiers";
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
+import { is } from '../../utils/comparers';
+import { useLocation } from 'react-router-dom';
+import { ExchangesByNetworks, Exchanges } from '../../config/exchanges';
+import TheGraph from '../../services/TheGraph';
+import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 
 // при вводе в поиск символы токенов форматирует их
 const formatTokens = (name: string) => {
@@ -47,33 +49,66 @@ function debounce(fn: (...args: any) => void, ms: number) {
 
 const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placeholder }) => {
   const [value, setValue] = useState('');
+  const [searchByIdData, setSearchByIdData] = useState<any>();
+  const [searchByNameData, setSearchByNameData] = useState<any>();
   const { currentExchange } = useMst();
-  const { exchange } = currentExchange;
+  const location = useLocation();
 
-  const isExchange = useCallback(
-    (v: string) => exchange.toLowerCase() === v.toLowerCase(),
-    [exchange],
+  const network = location.pathname.split('/')[1];
+  const exchanges = useMemo(
+    () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
+    [network],
   );
-  const client: any = ApolloClientsForExchanges[uppercaseFirstLetter(exchange.toLowerCase())];
 
   // запросы на граф
-  const [
-    searchById,
-    { loading: searchByIdLoading, data: searchByIdData },
-  ] = useLazyQuery<ISearchByIdResponse>(
-    isExchange('sushiswap') ? SEARCH_BY_ID_SUSHISWAP : SEARCH_BY_ID,
-    {
-      client,
+  const searchById = useCallback(
+    async (variables: any) => {
+      try {
+        const exchangesOfNetwork = Object.values(exchanges);
+        if (!exchangesOfNetwork.length) return;
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+              ? SEARCH_BY_ID_SUSHISWAP
+              : SEARCH_BY_ID,
+            variables,
+          });
+        });
+        const resultsGetPairInfo = await Promise.all(results);
+        const result = resultsGetPairInfo[0] || {};
+        console.log('searchById:', { exchangesOfNetwork, result });
+        setSearchByIdData(result);
+      } catch (e) {
+        console.error(e);
+      }
     },
+    [exchanges],
   );
-  const [
-    searchByName,
-    { loading: searchByNameLoading, data: searchByNameData },
-  ] = useLazyQuery<ISearchBySymbolResponse>(
-    isExchange('sushiswap') ? SEARCH_BY_NAME_SUSHISWAP : SEARCH_BY_NAME,
-    {
-      client,
+
+  const searchByName = useCallback(
+    async (variables: any) => {
+      try {
+        const exchangesOfNetwork = Object.values(exchanges);
+        if (!exchangesOfNetwork.length) return;
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+              ? SEARCH_BY_NAME_SUSHISWAP
+              : SEARCH_BY_NAME,
+            variables,
+          });
+        });
+        const resultsGetPairInfo = await Promise.all(results);
+        const result = resultsGetPairInfo[0] || {};
+        console.log('searchByName:', { exchangesOfNetwork, result });
+        setSearchByNameData(result);
+      } catch (e) {
+        console.error(e);
+      }
     },
+    [exchanges],
   );
 
   // формирование пар по символу (форматирование данных с графа в нужный формат)
@@ -81,7 +116,6 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
 
   useEffect(() => {
     const tokens = formatTokens(value);
-
     if (tokens.length > 1) {
       const data = searchByNameData?.match_by_symbol.map((token: any) => {
         return {
@@ -105,19 +139,16 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   const debouncedSearch = React.useMemo(
     () =>
       debounce((searchValue: string) => {
-        if (searchValue.length > 0) {
-          if (searchValue.startsWith('0x')) {
-            searchById({ variables: { id: searchValue } });
-          } else {
-            searchByName({
-              variables: {
-                name: formatTokens(searchValue)[0] || '',
-                name2: formatTokens(searchValue)[1] || '',
-              },
-            });
-          }
+        if (!searchValue.length) return;
+        if (searchValue.startsWith('0x')) {
+          searchById({ id: searchValue });
+        } else {
+          searchByName({
+            name: formatTokens(searchValue)[0] || '',
+            name2: formatTokens(searchValue)[1] || '',
+          });
         }
-      }, 500),
+      }, 300),
     [searchById, searchByName],
   );
 
@@ -126,7 +157,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   // при нажатии за пределами поиска закрывать предложения
   const [isClickedOutside, setIsClickedOutside] = useState(false);
   const isActive =
-    value.length > 0 && !isClickedOutside && !searchByIdLoading && !searchByNameLoading;
+    value.length > 0 && !isClickedOutside && (searchByIdData || searchByNameData);
 
   const onInputFocus = () => {
     setIsClickedOutside(false);
@@ -146,7 +177,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
           onChange={searchPairs}
           placeholder={placeholder}
           onFocus={onInputFocus}
-          loading={searchByIdLoading || searchByNameLoading}
+          // loading={!searchByIdData || !searchByNameData}
         />
         {isActive && (
           <div className={s.suggestions}>

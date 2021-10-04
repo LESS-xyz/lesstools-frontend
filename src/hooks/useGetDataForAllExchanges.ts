@@ -4,6 +4,8 @@ import { SubgraphsByExchangeShort } from '../config/subgraphs';
 import { ExchangesByNetworks } from "../config/exchanges";
 import { uppercaseFirstLetter } from "../utils/prettifiers";
 
+
+// use when query is the same for all subgraphs
 export const useGetDataForAllExchanges = (props: any) => {
   const { network, defaultData, query, variables } = props;
 

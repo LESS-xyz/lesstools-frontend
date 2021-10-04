@@ -48,7 +48,6 @@ export const GET_PAIR_INFO = `
     }
   }
 `;
-export const GQL_GET_PAIR_INFO = gql(GET_PAIR_INFO);
 
 // get pair-info-card at pair-explorer page SUSHISWAP
 export const GET_PAIR_INFO_SUSHIWAP = `
@@ -98,7 +97,6 @@ export const GET_PAIR_INFO_SUSHIWAP = `
     }
   }
 `;
-export const GQL_GET_PAIR_INFO_SUSHIWAP = gql(GET_PAIR_INFO_SUSHIWAP);
 
 // GET BLOCK NUMBER 24h AGO
 export const GET_BLOCK_24H_AGO = gql`
@@ -145,7 +143,6 @@ export const GET_PAIR_SWAPS = `
     }
   }
 `;
-export const GQL_GET_PAIR_SWAPS = gql(GET_PAIR_SWAPS);
 
 // big swaps table (sushiswap and uniswap)
 export const GET_BIG_SWAPS = gql`
@@ -248,7 +245,7 @@ export const ETH_PRICE_QUERY = gql`
 
 // SEARCHING QUERIES
 // SEARCH BY PAIR ID OR TOKEN ID
-export const SEARCH_BY_ID = gql`
+export const SEARCH_BY_ID = `
   query getPairByPairId($id: ID) {
     match_by_pair: pairs(where: { id_gte: $id }, first: 3) {
       id
@@ -285,7 +282,7 @@ export const SEARCH_BY_ID = gql`
 `;
 
 // search by id SUSHISWAP
-export const SEARCH_BY_ID_SUSHISWAP = gql`
+export const SEARCH_BY_ID_SUSHISWAP = `
   query getPairByPairId($id: ID) {
     match_by_pair: pairs(where: { id_gte: $id }, first: 3) {
       id
@@ -322,7 +319,7 @@ export const SEARCH_BY_ID_SUSHISWAP = gql`
 `;
 
 // SEARCH BY TOKEN NAME
-export const SEARCH_BY_NAME = gql`
+export const SEARCH_BY_NAME = `
   query searchByName($name: String, $name2: String) {
     match_by_symbol: tokens(where: { symbol_contains: $name }) {
       id
@@ -363,7 +360,7 @@ export const SEARCH_BY_NAME = gql`
 `;
 
 // search by symbol SUSHISWAP
-export const SEARCH_BY_NAME_SUSHISWAP = gql`
+export const SEARCH_BY_NAME_SUSHISWAP = `
   query searchByName($name: String, $name2: String) {
     match_by_symbol: tokens(where: { symbol_contains: $name }) {
       id

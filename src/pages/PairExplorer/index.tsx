@@ -26,11 +26,10 @@ import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
 import { Exchanges, ExchangesByNetworks } from '../../config/exchanges';
-import { uppercaseFirstLetter } from "../../utils/prettifiers";
-import TheGraph from "../../services/TheGraph";
-import { SubgraphsByExchangeShort } from "../../config/subgraphs";
-
-const is = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
+import TheGraph from '../../services/TheGraph';
+import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { is } from '../../utils/comparers';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
@@ -43,7 +42,7 @@ const PairExplorer: React.FC = () => {
   const location = useLocation();
 
   const network = location.pathname.split('/')[1];
-  const exchange = 'uniswap';
+  const exchange = 'uniswap'; // todo:
 
   const exchanges = useMemo(
     () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
@@ -68,10 +67,12 @@ const PairExplorer: React.FC = () => {
       const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
         return TheGraph.query({
           subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-          query: is(exchangeOfNetwork, Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GET_PAIR_INFO,
+          query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+            ? GET_PAIR_INFO_SUSHIWAP
+            : GET_PAIR_INFO,
           variables: {
             id: pairId,
-            blockNumber: (+blocks?.blocks[0]?.number) || 10684814,
+            blockNumber: +blocks?.blocks[0]?.number || 10684814,
           },
         });
       });
@@ -113,6 +114,7 @@ const PairExplorer: React.FC = () => {
       swapsFromAllExchanges.map((item: any) => {
         if (!item) return null;
         const { swaps: swapsOfExchange } = item;
+        if (!swapsOfExchange) return null;
         swapsNew = swapsNew.concat(swapsOfExchange);
         return null;
       });
