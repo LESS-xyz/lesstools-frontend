@@ -21,14 +21,11 @@ import { WHITELIST } from '../../data/whitelist';
 import { getBlockClient } from '../../index';
 import { useMst } from '../../store/store';
 import backend, { IAdditionalInfoFromBackend } from '../../services/backend/index';
-import { uppercaseFirstLetter } from '../../utils/prettifiers';
-import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges';
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
-import { Exchanges, ExchangesByNetworks } from '../../config/exchanges';
-import TheGraph from '../../services/TheGraph';
+import { Exchanges } from '../../config/exchanges';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
@@ -40,11 +37,6 @@ const PairExplorer: React.FC = () => {
   const location = useLocation();
 
   const network = location.pathname.split('/')[1];
-  const exchanges = useMemo(
-    () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
-    [network],
-  );
-
   const exchange = 'uniswap';
 
   const isExchange = useCallback(
@@ -63,18 +55,7 @@ const PairExplorer: React.FC = () => {
   });
 
   // запрос для pair-card info [ГРАФ]
-  // const [getPairInfo, { loading: loadingPairInfo, data: pairInfo }] = useLazyQuery<IPairInfo>(
-  //   isExchange(Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GQL_GET_PAIR_INFO,
-  //   {
-  //     variables: {
-  //       id: pairId,
-  //       blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
-  //     },
-  //     client: exchangeClient,
-  //   },
-  // );
-
-  const [pairInfoFromAllExchanges, getPairInfo] = useGetDataForAllExchanges({
+  const [pairInfoFromAllExchanges, getPairInfoFromAllExchanges] = useGetDataForAllExchanges({
     network,
     defaultData: [],
     query: isExchange(Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GET_PAIR_INFO,
@@ -95,27 +76,28 @@ const PairExplorer: React.FC = () => {
     if (!pairId) return;
     if (!blocks) return;
     if (!network) return;
-    getPairInfo();
+    getPairInfoFromAllExchanges();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blocks, pairId, network]);
 
   // запрос на получения всех свапов данной пары [ГРАФ]
-  const getPairSwapsFromAllExchangesOfNetwork = useCallback(async () => {
+  const [swapsFromAllExchanges, getSwapsFromAllExchanges] = useGetDataForAllExchanges({
+    network,
+    defaultData: [],
+    query: GET_PAIR_SWAPS,
+    variables: { id: pairId },
+  });
+
+  useEffect(() => {
+    if (!pairId) return;
+    getSwapsFromAllExchanges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairId]);
+
+  const filterSwaps = useCallback(async () => {
     try {
-      const exchangesOfNetwork = Object.values(exchanges);
-      if (!exchangesOfNetwork.length) return;
-      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
-        const exchangeName = exchangeOfNetwork;
-        return TheGraph.query({
-          subgraph: SubgraphsByExchangeShort[exchangeName],
-          query: GET_PAIR_SWAPS,
-          variables: { id: pairId },
-        });
-      });
-      const resultsGetPairSwaps = await Promise.all(results);
-      console.log('PairExplorer getPairSwaps:', { resultsGetPairSwaps });
       let swapsNew: any[] = [];
-      resultsGetPairSwaps.map((item: any) => {
+      swapsFromAllExchanges.map((item: any) => {
         if (!item) return null;
         if (!item.data) return null;
         const { swaps: swapsOfExchange } = item.data;
@@ -127,12 +109,12 @@ const PairExplorer: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [exchanges, pairId]);
+  }, [swapsFromAllExchanges]);
 
   useEffect(() => {
-    if (!pairId) return;
-    getPairSwapsFromAllExchangesOfNetwork();
-  }, [pairId, getPairSwapsFromAllExchangesOfNetwork]);
+    if (!swapsFromAllExchanges || !swapsFromAllExchanges.length) return;
+    filterSwaps();
+  }, [swapsFromAllExchanges, filterSwaps]);
 
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
