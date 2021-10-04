@@ -22,6 +22,26 @@ export enum Subgraphs {
   Quickswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-quickswap',
 }
 
+export enum SubgraphsShort {
+  Uniswap = '/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
+  Sushiswap = '/name/rock-n-block/lesstools-sushiswap',
+  SushiswapXdai = '/name/rock-n-block/lesstools-sushiswap-xdai',
+  SushiswapFantom = '/name/rock-n-block/lesstools-sushiswap-fantom',
+  SushiswapPolygon = '/name/rock-n-block/lesstools-sushiswap-matic',
+  SushiswapBinance = '/name/rock-n-block/lesstools-sushiswap-bsc',
+  Pancake = '/name/rock-n-block/lesstools-pancake',
+  Honeyswap = '/name/rock-n-block/honeyswap-lesstools',
+  Spookyswap = '/name/rock-n-block/spookyswap-lesstools',
+  Mdexbsc = '/name/rock-n-block/mdex-bsc-lesstools',
+  Biswap = '/name/rock-n-block/biswap-lesstools',
+  Babyswap = '/name/rock-n-block/babyswap-lesstools',
+  Apeswap = '/name/rock-n-block/apeswap-lesstools',
+  Spiritswap = '/name/rock-n-block/spiritswap-lesstools',
+  Joetrader = '/name/rock-n-block/joe-trader-lesstools',
+  Pangolin = '/name/rock-n-block/pangolin-lesstools',
+  Quickswap = '/name/rock-n-block/lesstools-quickswap',
+}
+
 export interface ISubgraphsByNetworks {
   [key: string]: string[];
 }
@@ -76,4 +96,24 @@ export const SubgraphsByExchange: ISubgraphsByExchange = {
   Joetrader: Subgraphs.Joetrader,
   Pangolin: Subgraphs.Pangolin,
   Quickswap: Subgraphs.Quickswap,
+};
+
+export interface ISubgraphsByExchangeShort {
+  [key: string]: string;
+}
+
+export const SubgraphsByExchangeShort: ISubgraphsByExchangeShort = {
+  Uniswap: SubgraphsShort.Uniswap,
+  Sushiswap: SubgraphsShort.Sushiswap,
+  Pancake: SubgraphsShort.Pancake,
+  Honeyswap: SubgraphsShort.Honeyswap,
+  Spookyswap: SubgraphsShort.Spookyswap,
+  Mdexbsc: SubgraphsShort.Mdexbsc,
+  Biswap: SubgraphsShort.Biswap,
+  Babyswap: SubgraphsShort.Babyswap,
+  Apeswap: SubgraphsShort.Apeswap,
+  Spiritswap: SubgraphsShort.Spiritswap,
+  Joetrader: SubgraphsShort.Joetrader,
+  Pangolin: SubgraphsShort.Pangolin,
+  Quickswap: SubgraphsShort.Quickswap,
 };

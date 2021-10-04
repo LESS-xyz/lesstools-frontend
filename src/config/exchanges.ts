@@ -1,4 +1,5 @@
 import uniswap from '../assets/img/sections/live-new-pairs/uniswap.svg';
+import { Networks } from "./networks";
 
 export type Exchange = 'uniswap' | 'sushiswap' | 'quickswap';
 
@@ -9,7 +10,7 @@ export enum Exchanges {
   Quickswap = 'Quickswap',
   Honeyswap = 'Honeyswap',
   Spookyswap = 'Spookyswap',
-  Mdex = 'Mdex',
+  Mdexbsc = 'Mdexbsc',
   Biswap = 'Biswap',
   Babyswap = 'Babyswap',
   Apeswap = 'Apeswap',
@@ -29,7 +30,7 @@ export const ExchangesIcons: IExchangesIcons = {
   [Exchanges.Quickswap]: uniswap,
   [Exchanges.Honeyswap]: uniswap,
   [Exchanges.Spookyswap]: uniswap,
-  [Exchanges.Mdex]: uniswap,
+  [Exchanges.Mdexbsc]: uniswap,
   [Exchanges.Biswap]: uniswap,
   [Exchanges.Babyswap]: uniswap,
   [Exchanges.Apeswap]: uniswap,
@@ -49,11 +50,48 @@ export const UnicryptExchangesNames: IUnicryptExchangesNames = {
   [Exchanges.Quickswap]: 'quickswap-v1',
   [Exchanges.Honeyswap]: 'honey-v1',
   [Exchanges.Spookyswap]: '',
-  [Exchanges.Mdex]: '',
+  [Exchanges.Mdexbsc]: '',
   [Exchanges.Biswap]: '',
   [Exchanges.Babyswap]: '',
   [Exchanges.Apeswap]: '',
   [Exchanges.Spiritswap]: '',
   [Exchanges.Joetrader]: '',
   [Exchanges.Pangolin]: '',
+};
+
+
+export interface IExchangesByNetworks {
+  [key: string]: string[];
+}
+
+export const ExchangesByNetworks: IExchangesByNetworks = {
+  [Networks.Ethereum]: [
+    Exchanges.Uniswap,
+  ],
+  [Networks.Binance]: [
+    Exchanges.Sushiswap,
+    Exchanges.Apeswap,
+    Exchanges.Babyswap,
+    Exchanges.Biswap,
+    Exchanges.Mdexbsc,
+    Exchanges.Pancake,
+    Exchanges.Sushiswap,
+  ],
+  [Networks.Polygon]: [
+    Exchanges.Quickswap,
+    Exchanges.Sushiswap,
+  ],
+  [Networks.Xdai]: [
+    Exchanges.Honeyswap,
+    Exchanges.Sushiswap,
+  ],
+  [Networks.Fantom]: [
+    Exchanges.Spiritswap,
+    Exchanges.Spookyswap,
+    Exchanges.Sushiswap,
+  ],
+  [Networks.Avalanche]: [
+    Exchanges.Joetrader,
+    Exchanges.Pangolin,
+  ],
 };

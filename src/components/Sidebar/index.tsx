@@ -94,6 +94,12 @@ const Sidebar: React.FC = observer(() => {
               text="Pair Explorer"
             />
             <LinkSidebar
+              imgDark={pair}
+              imgWhite={pairWhite}
+              to="/ethereum/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
+              text="Pair Explorer With Network"
+            />
+            <LinkSidebar
               imgDark={bigSwap}
               imgWhite={bigSwapWhite}
               to="/uniswap/big-swap-explorer"

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 // get pair-info-card at pair-explorer page UNISWAP
-export const GET_PAIR_INFO = gql`
+export const GET_PAIR_INFO = `
   query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
       reserveUSD
@@ -48,9 +48,10 @@ export const GET_PAIR_INFO = gql`
     }
   }
 `;
+export const GQL_GET_PAIR_INFO = gql(GET_PAIR_INFO);
 
 // get pair-info-card at pair-explorer page SUSHISWAP
-export const GET_PAIR_INFO_SUSHIWAP = gql`
+export const GET_PAIR_INFO_SUSHIWAP = `
   query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
       reserveUSD
@@ -97,6 +98,7 @@ export const GET_PAIR_INFO_SUSHIWAP = gql`
     }
   }
 `;
+export const GQL_GET_PAIR_INFO_SUSHIWAP = gql(GET_PAIR_INFO_SUSHIWAP);
 
 // GET BLOCK NUMBER 24h AGO
 export const GET_BLOCK_24H_AGO = gql`
@@ -114,7 +116,7 @@ export const GET_BLOCK_24H_AGO = gql`
 `;
 
 // GET all pair swaps for table at pair explorer page
-export const GET_PAIR_SWAPS = gql`
+export const GET_PAIR_SWAPS = `
   query getPairSwaps($id: ID!) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { pair: $id }) {
       pair {
@@ -143,6 +145,7 @@ export const GET_PAIR_SWAPS = gql`
     }
   }
 `;
+export const GQL_GET_PAIR_SWAPS = gql(GET_PAIR_SWAPS);
 
 // big swaps table (sushiswap and uniswap)
 export const GET_BIG_SWAPS = gql`
