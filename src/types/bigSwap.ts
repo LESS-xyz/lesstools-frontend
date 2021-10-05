@@ -1,4 +1,5 @@
 export interface IBigSwapInfo {
+  exchange: string;
   amount0In: string;
   amount0Out: string;
   amount1In: string;

@@ -145,7 +145,7 @@ export const GET_PAIR_SWAPS = `
 `;
 
 // big swaps table (sushiswap and uniswap)
-export const GET_BIG_SWAPS = gql`
+export const GET_BIG_SWAPS = `
   query getBigSwaps($lowerThreshold: BigDecimal) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { amountUSD_gt: $lowerThreshold }) {
       timestamp
