@@ -15,7 +15,7 @@ import { useMst } from '../../store/store';
 import { useElementWidth } from '../../hooks/useElementWidth';
 import s from './PairsSearch.module.scss';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
-import { is } from '../../utils/comparers';
+import { is, uniqueArrayOfObjectsByKey } from '../../utils/comparers';
 import { useLocation } from 'react-router-dom';
 import { ExchangesByNetworks, Exchanges } from '../../config/exchanges';
 import TheGraph from '../../services/TheGraph';
@@ -49,6 +49,8 @@ function debounce(fn: (...args: any) => void, ms: number) {
 
 const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placeholder }) => {
   const [value, setValue] = useState('');
+  const [searchByIdDataPlain, setSearchByIdDataPlain] = useState<any[]>([]);
+  const [searchByNameDataPlain, setSearchByNameDataPlain] = useState<any[]>([]);
   const [searchByIdData, setSearchByIdData] = useState<any>();
   const [searchByNameData, setSearchByNameData] = useState<any>();
   const { currentExchange } = useMst();
@@ -75,10 +77,9 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
             variables,
           });
         });
-        const resultsGetPairInfo = await Promise.all(results);
-        const result = resultsGetPairInfo[0] || {};
-        console.log('searchById:', { exchangesOfNetwork, result });
-        setSearchByIdData(result);
+        const result = await Promise.all(results);
+        console.log('PairSearch searchById:', { result });
+        setSearchByIdDataPlain(result || []);
       } catch (e) {
         console.error(e);
       }
@@ -100,10 +101,9 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
             variables,
           });
         });
-        const resultsGetPairInfo = await Promise.all(results);
-        const result = resultsGetPairInfo[0] || {};
-        console.log('searchByName:', { exchangesOfNetwork, result });
-        setSearchByNameData(result);
+        const result = await Promise.all(results);
+        console.log('PairSearch searchByName:', { result });
+        setSearchByNameDataPlain(result || []);
       } catch (e) {
         console.error(e);
       }
@@ -148,16 +148,69 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
             name2: formatTokens(searchValue)[1] || '',
           });
         }
-      }, 300),
+      }, 500),
     [searchById, searchByName],
   );
+
+  const concatenateSearchByIdData = useCallback(async () => {
+    try {
+      let matchBySymbolNew: any[] = [];
+      let matchBySymbol1New: any[] = [];
+      searchByIdDataPlain.map((item: any) => {
+        if (!item) return null;
+        const { match_by_symbol, match_by_symbol1 } = item;
+        matchBySymbolNew = matchBySymbolNew.concat(match_by_symbol || []);
+        matchBySymbol1New = matchBySymbol1New.concat(match_by_symbol1 || []);
+        return null;
+      });
+      const dataNew = {
+        match_by_symbol: uniqueArrayOfObjectsByKey(matchBySymbolNew, 'id'),
+        match_by_symbol1: uniqueArrayOfObjectsByKey(matchBySymbol1New, 'id'),
+      };
+      console.log('PairSearch concatenateSearchByIdData:', dataNew);
+      setSearchByIdData(dataNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [searchByIdDataPlain]);
+
+  useEffect(() => {
+    if (!searchByIdDataPlain || !searchByIdDataPlain.length) return;
+    concatenateSearchByIdData();
+  }, [searchByIdDataPlain, concatenateSearchByIdData]);
+
+  const concatenateSearchByNameData = useCallback(async () => {
+    try {
+      let matchBySymbolNew: any[] = [];
+      let matchBySymbol1New: any[] = [];
+      searchByNameDataPlain.map((item: any) => {
+        if (!item) return null;
+        const { match_by_symbol, match_by_symbol1 } = item;
+        matchBySymbolNew = matchBySymbolNew.concat(match_by_symbol || []);
+        matchBySymbol1New = matchBySymbol1New.concat(match_by_symbol1 || []);
+        return null;
+      });
+      const dataNew = {
+        match_by_symbol: uniqueArrayOfObjectsByKey(matchBySymbolNew, 'id'),
+        match_by_symbol1: uniqueArrayOfObjectsByKey(matchBySymbol1New, 'id'),
+      };
+      console.log('PairSearch concatenateSearchByIdData:', dataNew);
+      setSearchByNameData(dataNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [searchByNameDataPlain]);
+
+  useEffect(() => {
+    if (!searchByNameDataPlain || !searchByNameDataPlain.length) return;
+    concatenateSearchByNameData();
+  }, [searchByNameDataPlain, concatenateSearchByNameData]);
 
   const searchPairs = useCallback((str) => debouncedSearch(str), [debouncedSearch]);
 
   // при нажатии за пределами поиска закрывать предложения
   const [isClickedOutside, setIsClickedOutside] = useState(false);
-  const isActive =
-    value.length > 0 && !isClickedOutside && (searchByIdData || searchByNameData);
+  const isActive = value.length > 0 && !isClickedOutside && (searchByIdData || searchByNameData);
 
   const onInputFocus = () => {
     setIsClickedOutside(false);
