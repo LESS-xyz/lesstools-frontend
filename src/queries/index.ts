@@ -179,7 +179,7 @@ export const GET_BIG_SWAPS = gql`
 `;
 
 // live new pairs table
-export const GET_LIVE_SWAPS = gql`
+export const GET_LIVE_SWAPS = `
   query getLiveSwaps {
     pairs(first: 100, orderBy: createdAtTimestamp, orderDirection: desc) {
       id
@@ -207,7 +207,7 @@ export const GET_LIVE_SWAPS = gql`
 `;
 
 // live new pairs table SUSHISWAP
-export const GET_LIVE_SWAPS_SUSHISWAP = gql`
+export const GET_LIVE_SWAPS_SUSHISWAP = `
   query getLiveSwaps {
     pairs(first: 100, orderBy: timestamp, orderDirection: desc) {
       id

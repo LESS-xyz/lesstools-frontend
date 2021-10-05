@@ -1,4 +1,5 @@
 export interface INewPair {
+  exchange: string;
   createdAtTimestamp: string;
   creationTxnHash: string;
   id: string;

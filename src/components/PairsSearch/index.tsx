@@ -210,7 +210,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
 
   // при нажатии за пределами поиска закрывать предложения
   const [isClickedOutside, setIsClickedOutside] = useState(false);
-  const isActive = value.length > 0 && !isClickedOutside && (searchByIdData || searchByNameData);
+  const isActive = value.length && !isClickedOutside && (searchByIdData || searchByNameData);
 
   const onInputFocus = () => {
     setIsClickedOutside(false);
@@ -232,7 +232,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
           onFocus={onInputFocus}
           // loading={!searchByIdData || !searchByNameData}
         />
-        {isActive && (
+        {!!isActive && (
           <div className={s.suggestions}>
             <div className={s.suggestions_title}>
               Search results in <span>{currentExchange.exchange}</span>
