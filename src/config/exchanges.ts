@@ -1,7 +1,9 @@
 import uniswap from '../assets/img/sections/live-new-pairs/uniswap.svg';
+import ethereum from '../assets/img/icons/eth-logo.svg';
 import { Networks } from "./networks";
 
-export type Exchange = 'uniswap' | 'sushiswap' | 'quickswap';
+// todo: remove (used in mobx)
+export type Exchange = 'uniswap' | 'sushiswap' | 'quickswap' | 'ethereum';
 
 export enum Exchanges {
   Uniswap = 'Uniswap',
@@ -23,9 +25,10 @@ export interface IExchangesIcons {
   [key: string]: string
 }
 
+// todo
 export const ExchangesIcons: IExchangesIcons = {
   [Exchanges.Uniswap]: uniswap,
-  [Exchanges.Sushiswap]: uniswap,
+  [Exchanges.Sushiswap]: ethereum,
   [Exchanges.Pancake]: uniswap,
   [Exchanges.Quickswap]: uniswap,
   [Exchanges.Honeyswap]: uniswap,

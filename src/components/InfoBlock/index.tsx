@@ -17,7 +17,7 @@ import hotIcon from '../../assets/img/icons/hot.svg';
 import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.svg';
 
 const InfoBlock: React.FC = observer(() => {
-  const { hotPairs, currentExchange, user } = useMst();
+  const { hotPairs, currentExchange, user }: { hotPairs: any, currentExchange: any, user: any } = useMst();
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
@@ -75,7 +75,7 @@ const InfoBlock: React.FC = observer(() => {
         <div className={s.right}>
           <div className={s.marquee}>
             <div className={s.table}>
-              {hotPairs[currentExchange.exchange].map((pair, index) => (
+              {hotPairs[currentExchange.exchange].map((pair: any, index: number) => (
                 <div key={`${pair.pair.id}`} className={s.table_cell}>
                   <Link to={`/${currentExchange.exchange}/pair-explorer/${pair.pair.id}`}>
                     <span>#{index + 1}</span>{' '}

@@ -52,7 +52,6 @@ const LiveNewPairs: React.FC = observer(() => {
   const [tableData, setTableData] = useState<IRowLiveNewPairs[]>([]);
 
   // query new pairs from all exchanges
-  // todo: add 'exchange' field to pair
   const getLiveSwaps = useCallback(
     async (variables: any) => {
       try {
