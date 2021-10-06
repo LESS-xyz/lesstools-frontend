@@ -199,7 +199,7 @@ Fundraising Capital"
       <div className={s.container}>
         <div className={s.main}>
           <div className={s.mobile_block}>
-            <PairsSearch placeholder={`Search ${exchange} pairs`} />
+            <PairsSearch placeholder="Search pairs by token symbol / token id / pair contract id" />
             <div className={s.mobile_block__favs}>
               <Favorites />
             </div>

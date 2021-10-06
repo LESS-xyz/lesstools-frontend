@@ -17,9 +17,10 @@ import s from './PairsSearch.module.scss';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import { is, uniqueArrayOfObjectsByKey } from '../../utils/comparers';
 import { useLocation } from 'react-router-dom';
-import { ExchangesByNetworks, Exchanges } from '../../config/exchanges';
+import { ExchangesByNetworks, Exchanges, SushiswapLikeExchanges } from '../../config/exchanges';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { Networks } from "../../config/networks";
 
 // при вводе в поиск символы токенов форматирует их
 const formatTokens = (name: string) => {
@@ -60,6 +61,34 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   const exchanges = useMemo(
     () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
     [network],
+  );
+
+  const getDataForAllExchangesOfNetwork = useCallback(
+    async (net: string, variables: any) => {
+      try {
+        const exchangesObject = ExchangesByNetworks[net] || [];
+        const exchangesOfNetwork = Object.values(exchangesObject);
+        if (!exchangesOfNetwork.length) return;
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: SushiswapLikeExchanges.includes(exchangeOfNetwork)
+              ? SEARCH_BY_NAME_SUSHISWAP
+              : SEARCH_BY_NAME,
+            variables,
+          });
+        });
+        // todo
+        const result = await Promise.all(results);
+        console.log('PairsSearch getDataForAllExchangesOfNetwork:', {
+          net,
+          result,
+        });
+      } catch (e) {
+        console.error('App getDataForAllExchangesOfNetwork:', e);
+      }
+    },
+    [],
   );
 
   // запросы на граф
@@ -139,17 +168,22 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   const debouncedSearch = React.useMemo(
     () =>
       debounce((searchValue: string) => {
-        if (!searchValue.length) return;
+        if (searchValue.length < 3) return;
         if (searchValue.startsWith('0x')) {
           searchById({ id: searchValue });
         } else {
+          // todo: loop through all networks and concat all results
+          getDataForAllExchangesOfNetwork(Networks.Ethereum, {
+            name: formatTokens(searchValue)[0] || '',
+            name2: formatTokens(searchValue)[1] || '',
+          });
           searchByName({
             name: formatTokens(searchValue)[0] || '',
             name2: formatTokens(searchValue)[1] || '',
           });
         }
       }, 500),
-    [searchById, searchByName],
+    [searchById, searchByName, getDataForAllExchangesOfNetwork],
   );
 
   const concatenateSearchByIdData = useCallback(async () => {

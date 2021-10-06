@@ -19,9 +19,7 @@ import { is } from './utils/comparers';
 import { WHITELIST } from './data/whitelist';
 import { useStoreContext } from './contexts/MobxConnector';
 import { newObject } from './utils/formatDataTypes';
-
-// get timestamp code of the start of current hour
-const getStartOfHour = () => Math.floor(Math.floor(Date.now() / 1000) / 3600) * 3600;
+import { getStartOfHour } from "./utils/time";
 
 interface IToken {
   id: string;

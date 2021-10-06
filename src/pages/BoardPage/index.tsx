@@ -38,7 +38,7 @@ Fundraising Capital"
           <div className={s.containerForSearch}>
             <PairsSearch
               big
-              placeholder="Search pairs by token symbol / token id / pair contract id."
+              placeholder="Search pairs by token symbol / token id / pair contract id"
             />
           </div>
 

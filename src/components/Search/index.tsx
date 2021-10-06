@@ -28,9 +28,7 @@ const Search: React.FC<IInputProps> = ({
   const handleOnChange = (str: string) => {
     setInputValue(str);
     onChange(str);
-    if (setValue) {
-      setValue(str);
-    }
+    if (setValue) setValue(str);
   };
   return (
     <div className={`${s.input} ${big && s.big}`}>

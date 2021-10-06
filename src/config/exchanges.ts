@@ -74,7 +74,6 @@ export const UnicryptExchangesNames: IUnicryptExchangesNames = {
   [Exchanges.Pangolin]: '',
 };
 
-
 export interface IExchangesByNetworks {
   [key: string]: string[];
 }
@@ -110,3 +109,11 @@ export const ExchangesByNetworks: IExchangesByNetworks = {
     Exchanges.Pangolin,
   ],
 };
+
+export const SushiswapLikeExchanges: string[] = [
+  Exchanges.Sushiswap,
+  Exchanges.SushiswapBinance,
+  Exchanges.SushiswapFantom,
+  Exchanges.SushiswapPolygon,
+  Exchanges.SushiswapXdai,
+];
