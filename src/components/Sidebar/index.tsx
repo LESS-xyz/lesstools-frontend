@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
-import { Networks } from '../../config/networks';
+import { Networks, NetworksForSidebar, NetworksIcons } from '../../config/networks';
 import LinkSidebar from './LinkSidebar/index';
 import { useMst } from '../../store/store';
 
@@ -22,7 +22,6 @@ import bigSwap from '../../assets/img/sections/sidebar/big-swap.svg';
 import bigSwapWhite from '../../assets/img/sections/sidebar/big-swap-white.svg';
 // import uniswap from '../../assets/img/sections/sidebar/uniswap.svg';
 // import sushiswap from '../../assets/img/sections/sidebar/suchiswap.svg';
-import ethereum from '../../assets/img/sections/sidebar/ethereum.svg';
 import { useState, useCallback } from 'react';
 
 const Sidebar: React.FC = observer(() => {
@@ -55,143 +54,60 @@ const Sidebar: React.FC = observer(() => {
           less<span>tools</span>
         </div>
       </NavLink>
+
       <div className={s.subtitle}>LESSBOARD</div>
       <LinkSidebar imgDark={board} imgWhite={board} to="/" text="LessBoard" />
-      <div className={s.group}>
-        <div
-          className={s.group_title}
-          role="button"
-          tabIndex={0}
-          onClick={() => handleChangeActiveNetwork(Networks.Ethereum)}
-          onKeyDown={() => {}}
-        >
-          {!mobileMenu.isActive && (
+
+      {Object.entries(NetworksForSidebar).map((item: any) => {
+        const [network, networkName] = item;
+        const src = NetworksIcons[network];
+        return (
+          <div className={s.group}>
             <div
-              className={`${s.group_title_arrow} ${
-                isActiveNetwork(Networks.Ethereum) && s.group_title_arrow_rotated
-              }`}
+              className={s.group_title}
+              role="button"
+              tabIndex={0}
+              onClick={() => handleChangeActiveNetwork(network)}
+              onKeyDown={() => {}}
             >
-              <img src={arrowWhite} alt="img" />
+              {!mobileMenu.isActive && (
+                <div
+                  className={`${s.group_title_arrow} ${
+                    isActiveNetwork(network) && s.group_title_arrow_rotated
+                  }`}
+                >
+                  <img src={arrowWhite} alt="img" />
+                </div>
+              )}
+              <div className={s.group_title__text}>{networkName}</div>
+              <div className={s.group_title__icon}>{!!src && <img src={src} alt="img" />}</div>
             </div>
-          )}
-          <div className={s.group_title__text}>Ethereum</div>
-          <div className={s.group_title__icon}>
-            <img src={ethereum} alt="img" />
+            {isActiveNetwork(network) && (
+              <>
+                <LinkSidebar
+                  imgDark={live}
+                  imgWhite={liveWhite}
+                  to={`/${network.toLowerCase()}/live-new-pairs`}
+                  text="Live New Pairs"
+                />
+                <LinkSidebar
+                  imgDark={pair}
+                  imgWhite={pairWhite}
+                  to={`/${network.toLowerCase()}/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974`}
+                  text="Pair Explorer"
+                />
+                <LinkSidebar
+                  imgDark={bigSwap}
+                  imgWhite={bigSwapWhite}
+                  to={`/${network.toLowerCase()}/big-swap-explorer`}
+                  text="Big Swap Explorer"
+                />
+              </>
+            )}
           </div>
-        </div>
-        {isActiveNetwork(Networks.Ethereum) && (
-          <>
-            <LinkSidebar
-              imgDark={live}
-              imgWhite={liveWhite}
-              to="/ethereum/live-new-pairs"
-              text="Live New Pairs"
-            />
-            <LinkSidebar
-              imgDark={pair}
-              imgWhite={pairWhite}
-              to="/ethereum/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974"
-              text="Pair Explorer"
-            />
-            <LinkSidebar
-              imgDark={bigSwap}
-              imgWhite={bigSwapWhite}
-              to="/ethereum/big-swap-explorer"
-              text="Big Swap Explorer"
-            />
-          </>
-        )}
-      </div>
-      <div className={s.group}>
-        <div
-          className={s.group_title}
-          role="button"
-          tabIndex={0}
-          onClick={() => handleChangeActiveNetwork(Networks.Binance)}
-          onKeyDown={() => {}}
-        >
-          {!mobileMenu.isActive && (
-            <div
-              className={`${s.group_title_arrow} ${
-                isActiveNetwork(Networks.Binance) && s.group_title_arrow_rotated
-              }`}
-            >
-              <img src={arrowWhite} alt="img" />
-            </div>
-          )}
-          <div className={s.group_title__text}>BSC</div>
-          <div className={s.group_title__icon}>
-            <img src={ethereum} alt="img" />
-          </div>
-        </div>
-        {isActiveNetwork(Networks.Binance) && (
-          <>
-            <LinkSidebar
-              imgDark={live}
-              imgWhite={liveWhite}
-              text="Live New Pairs"
-              to="/binance/live-new-pairs"
-            />
-            <LinkSidebar
-              imgDark={pair}
-              imgWhite={pairWhite}
-              text="Pair Explorer"
-              to="/binance/pair-explorer/0xe06f8d30ac334c857fc8c380c85969c150f38a6a"
-            />
-            <LinkSidebar
-              imgDark={bigSwap}
-              imgWhite={bigSwapWhite}
-              text="Big Swap Explorer"
-              to="/binance/big-swap-explorer"
-            />
-          </>
-        )}
-      </div>
-      <div className={s.group}>
-        <div
-          className={s.group_title}
-          role="button"
-          tabIndex={0}
-          onClick={() => handleChangeActiveNetwork(Networks.Polygon)}
-          onKeyDown={() => {}}
-        >
-          {!mobileMenu.isActive && (
-            <div
-              className={`${s.group_title_arrow} ${
-                isActiveNetwork(Networks.Polygon) && s.group_title_arrow_rotated
-              }`}
-            >
-              <img src={arrowWhite} alt="img" />
-            </div>
-          )}
-          <div className={s.group_title__text}>Polygon</div>
-          <div className={s.group_title__icon}>
-            <img src={ethereum} alt="img" />
-          </div>
-        </div>
-        {isActiveNetwork(Networks.Polygon) && (
-          <>
-            <LinkSidebar
-              imgDark={live}
-              imgWhite={liveWhite}
-              text="Live New Pairs"
-              to="/polygon/live-new-pairs"
-            />
-            <LinkSidebar
-              imgDark={pair}
-              imgWhite={pairWhite}
-              text="Pair Explorer"
-              to="/polygon/pair-explorer/0x0024739eb63fb6697e63698c93c77b9508f15ab2"
-            />
-            <LinkSidebar
-              imgDark={bigSwap}
-              imgWhite={bigSwapWhite}
-              text="Big Swap Explorer"
-              to="/polygon/big-swap-explorer"
-            />
-          </>
-        )}
-      </div>
+        );
+      })}
+
       {/* <div className={s.group}>
         <div className={s.subtitle}>common</div>
         <LinkSidebar imgDark={bot} imgWhite={botWhite} text="New Pairs Bot" />

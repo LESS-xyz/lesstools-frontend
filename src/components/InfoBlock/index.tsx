@@ -91,7 +91,7 @@ const InfoBlock: React.FC<any> = observer(() => {
             <div className={s.table}>
               {hotPairs && hotPairs[network]?.map((pair: any, index: number) => (
                 <div key={`${pair.pair.id}`} className={s.table_cell}>
-                  <Link to={`/${network}/pair-explorer/${pair.pair.id}`}>
+                  <Link to={`/${network.toLowerCase()}/pair-explorer/${pair.pair.id}`}>
                     <span>#{index + 1}</span>{' '}
                     {WHITELIST.includes(pair.pair.token0.id)
                       ? pair.pair.token1.symbol

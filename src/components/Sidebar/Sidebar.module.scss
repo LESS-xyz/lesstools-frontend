@@ -70,6 +70,9 @@
         transform: scale(1);
         width: 22px;
         transition: transform 0.2s ease 0.2s, width 0.2s ease 0.2s;
+        img {
+          width: 22px;
+        }
       }
     }
   }
@@ -94,6 +97,9 @@
       padding-left: 12px;
       &__icon {
         display: block;
+        img {
+          width: 22px;
+        }
       }
     }
   }
