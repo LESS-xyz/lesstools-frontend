@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js/bignumber';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import { getGasPrice, IGasPrice } from '../../api/getGasPrice';
@@ -9,22 +9,32 @@ import { useMst } from '../../store/store';
 import { WHITELIST } from '../../data/whitelist';
 import { ETH_PRICE_QUERY } from '../../queries/index';
 import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
+import { useStoreContext } from "../../contexts/MobxConnector";
 
 import s from './InfoBlock.module.scss';
 
 import gasIcon from '../../assets/img/icons/gas.svg';
 import hotIcon from '../../assets/img/icons/hot.svg';
 import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.svg';
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
+import { Networks } from '../../config/networks';
+import { is } from '../../utils/comparers';
 
-const InfoBlock: React.FC = observer(() => {
-  const { hotPairs, currentExchange, user }: { hotPairs: any, currentExchange: any, user: any } = useMst();
+const InfoBlock: React.FC<any> = observer(() => {
+  const { user }: { user: any } = useMst();
+  const { store } = useStoreContext();
+  const { hotPairs } = store;
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
+
+  const location = useLocation();
+
+  const network = uppercaseFirstLetter(location.pathname.split('/')[1] || Networks.Ethereum);
 
   type response = { bundle: { ethPrice: string } };
   const { data: ethPrice } = useQuery<response>(ETH_PRICE_QUERY, {
     pollInterval: 30000,
-    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+    client: is(network, Networks.Ethereum) ? uniswapSubgraph : sushiswapSubgraph,
   });
 
   // get gas price every 10 sec
@@ -39,6 +49,10 @@ const InfoBlock: React.FC = observer(() => {
       clearInterval(timer);
     };
   }, []);
+
+  useEffect(() => {
+    console.log('InfoBlock:', { hotPairs });
+  }, [hotPairs]);
 
   return (
     <section className={s.info}>
@@ -75,9 +89,9 @@ const InfoBlock: React.FC = observer(() => {
         <div className={s.right}>
           <div className={s.marquee}>
             <div className={s.table}>
-              {hotPairs[currentExchange.exchange].map((pair: any, index: number) => (
+              {hotPairs && hotPairs[network]?.map((pair: any, index: number) => (
                 <div key={`${pair.pair.id}`} className={s.table_cell}>
-                  <Link to={`/${currentExchange.exchange}/pair-explorer/${pair.pair.id}`}>
+                  <Link to={`/${network}/pair-explorer/${pair.pair.id}`}>
                     <span>#{index + 1}</span>{' '}
                     {WHITELIST.includes(pair.pair.token0.id)
                       ? pair.pair.token1.symbol
@@ -91,14 +105,14 @@ const InfoBlock: React.FC = observer(() => {
         <Link to="/user-account" className={s.metamask_link}>
           <div className={s.metamask_link__inner}>
             <MetaMaskIcon className={s.metamask_link__inner_img} />
-            <span>
+             <span>
               {/* eslint-disable-next-line */}
               {!user.walletId
                 ? 'Connect'
                 : !user.isVerified
                 ? 'Verify'
                 : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
-            </span>
+             </span>
           </div>
         </Link>
       </div>

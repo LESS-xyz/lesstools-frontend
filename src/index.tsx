@@ -8,6 +8,7 @@ import ScrollToTop from './utils/scrollToTop';
 import CurrentExchange from './utils/currentExchange';
 import { App } from './App';
 import { Web3Connector } from './contexts/Web3Connector';
+import { StoreConnector } from './contexts/MobxConnector';
 
 import './styles/index.scss';
 import { Subgraphs } from './config/subgraphs';
@@ -75,11 +76,13 @@ ReactDOM.render(
     <Router>
       <StoreProvider value={rootStore}>
         <Web3Connector>
-          <CurrentExchange>
-            <ScrollToTop>
-              <App />
-            </ScrollToTop>
-          </CurrentExchange>
+          <StoreConnector>
+            <CurrentExchange>
+              <ScrollToTop>
+                <App />
+              </ScrollToTop>
+            </CurrentExchange>
+          </StoreConnector>
         </Web3Connector>
       </StoreProvider>
     </Router>

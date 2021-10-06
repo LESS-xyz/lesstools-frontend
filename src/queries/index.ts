@@ -401,7 +401,7 @@ export const SEARCH_BY_NAME_SUSHISWAP = `
 `;
 
 // hot pairs UNISWAP
-const PAIR_FRAGMENT = gql`
+const PAIR_FRAGMENT = `
   fragment PairToken on Pair {
     id
     token0 {
@@ -417,7 +417,7 @@ const PAIR_FRAGMENT = gql`
   }
 `;
 
-export const GET_HOT_PAIRS = gql`
+export const GET_HOT_PAIRS = `
   ${PAIR_FRAGMENT}
   query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
     currentHour: pairHourDatas(
@@ -454,8 +454,10 @@ export const GET_HOT_PAIRS = gql`
     }
   }
 `;
+export const GQL_GET_HOT_PAIRS = gql(GET_HOT_PAIRS);
+
 // hot pairs SUSHISWAP
-export const GET_HOT_PAIRS_SUSHISWAP = gql`
+export const GET_HOT_PAIRS_SUSHISWAP = `
   ${PAIR_FRAGMENT}
   query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
     currentHour: pairHourDatas(
@@ -484,6 +486,7 @@ export const GET_HOT_PAIRS_SUSHISWAP = gql`
     }
   }
 `;
+export const GQL_GET_HOT_PAIRS_SUSHISWAP = gql(GET_HOT_PAIRS_SUSHISWAP);
 
 // get favs pairs
 export const GET_FAVORITES_PAIRS = gql`
