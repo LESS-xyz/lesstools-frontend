@@ -8,6 +8,10 @@ export type Exchange = 'uniswap' | 'sushiswap' | 'quickswap' | 'ethereum';
 export enum Exchanges {
   Uniswap = 'Uniswap',
   Sushiswap = 'Sushiswap',
+  SushiswapXdai = 'SushiswapXdai',
+  SushiswapFantom = 'SushiswapFantom',
+  SushiswapPolygon = 'SushiswapPolygon',
+  SushiswapBinance = 'SushiswapBinance',
   Pancake = 'Pancake',
   Quickswap = 'Quickswap',
   Honeyswap = 'Honeyswap',
@@ -29,6 +33,10 @@ export interface IExchangesIcons {
 export const ExchangesIcons: IExchangesIcons = {
   [Exchanges.Uniswap]: uniswap,
   [Exchanges.Sushiswap]: ethereum,
+  [Exchanges.SushiswapXdai]: ethereum,
+  [Exchanges.SushiswapFantom]: ethereum,
+  [Exchanges.SushiswapPolygon]: ethereum,
+  [Exchanges.SushiswapBinance]: ethereum,
   [Exchanges.Pancake]: uniswap,
   [Exchanges.Quickswap]: uniswap,
   [Exchanges.Honeyswap]: uniswap,
@@ -49,6 +57,10 @@ export interface IUnicryptExchangesNames {
 export const UnicryptExchangesNames: IUnicryptExchangesNames = {
   [Exchanges.Uniswap]: 'uni-v2',
   [Exchanges.Sushiswap]: 'sushi-v1',
+  [Exchanges.SushiswapXdai]: 'sushi-v1',
+  [Exchanges.SushiswapFantom]: 'sushi-v1',
+  [Exchanges.SushiswapPolygon]: 'sushi-v1',
+  [Exchanges.SushiswapBinance]: 'sushi-v1',
   [Exchanges.Pancake]: 'pancake-v2',
   [Exchanges.Quickswap]: 'quickswap-v1',
   [Exchanges.Honeyswap]: 'honey-v1',
@@ -78,20 +90,20 @@ export const ExchangesByNetworks: IExchangesByNetworks = {
     Exchanges.Biswap,
     Exchanges.Mdexbsc,
     Exchanges.Pancake,
-    Exchanges.Sushiswap,
+    Exchanges.SushiswapBinance,
   ],
   [Networks.Polygon]: [
     Exchanges.Quickswap,
-    Exchanges.Sushiswap,
+    Exchanges.SushiswapPolygon,
   ],
   [Networks.Xdai]: [
     Exchanges.Honeyswap,
-    Exchanges.Sushiswap,
+    Exchanges.SushiswapXdai,
   ],
   [Networks.Fantom]: [
     Exchanges.Spiritswap,
     Exchanges.Spookyswap,
-    Exchanges.Sushiswap,
+    Exchanges.SushiswapFantom,
   ],
   [Networks.Avalanche]: [
     Exchanges.Joetrader,

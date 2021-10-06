@@ -23,6 +23,15 @@ export const NetworksForSidebar = {
   [Networks.Fantom]: 'Fantom',
 }
 
+export const NetworksForHotTable = {
+  [Networks.Ethereum]: 'ETH',
+  [Networks.Binance]: 'BSC',
+  [Networks.Polygon]: 'Polygon',
+  [Networks.Xdai]: 'Xdai',
+  [Networks.Avalanche]: 'Avalanche',
+  [Networks.Fantom]: 'Fantom',
+}
+
 export interface INetworksIcons {
   [key: string]: string
 }

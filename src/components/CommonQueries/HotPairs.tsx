@@ -18,6 +18,7 @@ interface IToken {
 }
 
 export interface IPairFromGraph {
+  exchange?: string;
   hourlyTxns: string;
   pair: {
     id: string;

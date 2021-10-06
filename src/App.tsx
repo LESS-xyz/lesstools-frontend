@@ -83,8 +83,7 @@ export const App: React.FC = observer((props: any) => {
         .sort((a: IPairFromGraph, b: IPairFromGraph) => +b.hourlyTxns - +a.hourlyTxns)
         .filter(
           (el) => !(WHITELIST.includes(el.pair.token0.id) && WHITELIST.includes(el.pair.token1.id)),
-        )
-        .slice(0, 10);
+        );
       return finalData;
     } catch (e) {
       console.error(e);
@@ -92,45 +91,57 @@ export const App: React.FC = observer((props: any) => {
     }
   }
 
-  const getDataForAllExchangesOfNetwork = useCallback(async (network: string) => {
-    try {
-      const exchanges = ExchangesByNetworks[network] || [];
-      const exchangesOfNetwork = Object.values(exchanges);
-      if (!exchangesOfNetwork.length) return;
-      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
-        return TheGraph.query({
-          subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-          query: is(exchangeOfNetwork, Exchanges.Sushiswap)
-            ? GET_HOT_PAIRS_SUSHISWAP
-            : GET_HOT_PAIRS,
-          variables: is(exchangeOfNetwork, Exchanges.Sushiswap)
-            ? {
-                timestamp1: getStartOfHour(),
-                timestamp2: getStartOfHour() - 3600,
-                timestamp3: getStartOfHour() - 7200,
-              }
-            : {
-                timestamp1: 1598338800,
-                timestamp2: 1598338800 - 3600,
-                timestamp3: 1598338800 - 7200,
-              },
+  const getDataForAllExchangesOfNetwork = useCallback(
+    async (network: string) => {
+      try {
+        const exchanges = ExchangesByNetworks[network] || [];
+        const exchangesOfNetwork = Object.values(exchanges);
+        if (!exchangesOfNetwork.length) return;
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+              ? GET_HOT_PAIRS_SUSHISWAP
+              : GET_HOT_PAIRS,
+            variables: is(exchangeOfNetwork, Exchanges.Sushiswap)
+              ? {
+                  timestamp1: getStartOfHour(),
+                  timestamp2: getStartOfHour() - 3600,
+                  timestamp3: getStartOfHour() - 7200,
+                }
+              : {
+                  timestamp1: 1598338800,
+                  timestamp2: 1598338800 - 3600,
+                  timestamp3: 1598338800 - 7200,
+                },
+          });
         });
-      });
-      const result = await Promise.all(results);
-      console.log('App getDataForAllExchangesOfNetwork:', { network, result });
-      const resultsFormatted: any[] = result.map((pair: any) => formatData(pair));
-      const resultsContatenated = [].concat(...resultsFormatted);
-      // setHotPairs({ [network]: resultsContatenated });
-      setHotPairs({ [network]: resultsContatenated });
-    } catch (e) {
-      console.error('App getDataForAllExchangesOfNetwork:', e);
-    }
-  }, [setHotPairs]);
+        const result = await Promise.all(results);
+        const resultsFormatted: any[] = result.map((pair: any) => formatData(pair));
+        const resultsContatenated = [].concat(...resultsFormatted);
+        const resultsSorted = resultsContatenated.sort((a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns);
+        console.log('App getDataForAllExchangesOfNetwork:', {
+          network,
+          result,
+          resultsFormatted,
+          resultsContatenated,
+        });
+        // setHotPairs({ [network]: resultsContatenated });
+        setHotPairs({ [network]: resultsSorted });
+      } catch (e) {
+        console.error('App getDataForAllExchangesOfNetwork:', e);
+      }
+    },
+    [setHotPairs],
+  );
 
   useEffect(() => {
     getDataForAllExchangesOfNetwork(Networks.Binance);
     getDataForAllExchangesOfNetwork(Networks.Ethereum);
     getDataForAllExchangesOfNetwork(Networks.Polygon);
+    getDataForAllExchangesOfNetwork(Networks.Avalanche);
+    getDataForAllExchangesOfNetwork(Networks.Xdai);
+    getDataForAllExchangesOfNetwork(Networks.Fantom);
   }, [getDataForAllExchangesOfNetwork]);
 
   useEffect(() => {

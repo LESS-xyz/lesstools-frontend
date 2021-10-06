@@ -1,7 +1,5 @@
 import { Networks } from './networks';
 
-// https://api.thegraph.com/subgraphs/name/rock-n-block/honeyswap-lesstools
-
 export enum Subgraphs {
   Uniswap = 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
   Sushiswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
@@ -85,6 +83,10 @@ export interface ISubgraphsByExchange {
 export const SubgraphsByExchange: ISubgraphsByExchange = {
   Uniswap: Subgraphs.Uniswap,
   Sushiswap: Subgraphs.Sushiswap,
+  SushiswapXdai: Subgraphs.SushiswapXdai,
+  SushiswapFantom: Subgraphs.SushiswapFantom,
+  SushiswapPolygon: Subgraphs.SushiswapPolygon,
+  SushiswapBinance: Subgraphs.SushiswapBinance,
   Pancake: Subgraphs.Pancake,
   Honeyswap: Subgraphs.Honeyswap,
   Spookyswap: Subgraphs.Spookyswap,
@@ -105,6 +107,10 @@ export interface ISubgraphsByExchangeShort {
 export const SubgraphsByExchangeShort: ISubgraphsByExchangeShort = {
   Uniswap: SubgraphsShort.Uniswap,
   Sushiswap: SubgraphsShort.Sushiswap,
+  SushiswapXdai: SubgraphsShort.SushiswapXdai,
+  SushiswapFantom: SubgraphsShort.SushiswapFantom,
+  SushiswapPolygon: SubgraphsShort.SushiswapPolygon,
+  SushiswapBinance: SubgraphsShort.SushiswapBinance,
   Pancake: SubgraphsShort.Pancake,
   Honeyswap: SubgraphsShort.Honeyswap,
   Spookyswap: SubgraphsShort.Spookyswap,
