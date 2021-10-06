@@ -16,13 +16,13 @@ interface ITableCellProps {
   tokenSymbol: string;
   tokenPrice: string;
   pairId: string;
-  exchange?: string;
+  network?: string;
 }
 
-const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice, pairId, exchange }) => {
+const TableCell: React.FC<ITableCellProps> = ({ tokenSymbol, tokenPrice, pairId, network }) => {
   return (
     <div className={s.table_body__item}>
-      <Link to={`/${exchange}/pair-explorer/${pairId}`}>
+      <Link to={`/${network?.toLowerCase()}/pair-explorer/${pairId}`}>
         <div className={s.table_body__item_left}>
           <div className={s.table_body__item_left__token}>{tokenSymbol}</div>
           <p>${tokenPrice}</p>
@@ -95,7 +95,6 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
         {!tableData.length &&
           new Array(10).fill(1).map(() => <div key={uuid()} className={s.empty_cell} />)}
         {tableData.map((pair: IPairFromGraph) => {
-          const { exchange } = pair;
           return (
             <TableCell
               key={uuid()}
@@ -110,7 +109,7 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
                   : pair.pair.token1.symbol
               }
               pairId={pair.pair.id}
-              exchange={exchange}
+              network={network}
             />
           );
         })}

@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
+import { useState, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
+import { v4 as uuid } from 'uuid';
 
 import { Networks, NetworksForSidebar, NetworksIcons } from '../../config/networks';
 import LinkSidebar from './LinkSidebar/index';
 import { useMst } from '../../store/store';
-
 import s from './Sidebar.module.scss';
-
 import arrowWhite from '../../assets/img/sections/sidebar/arrow-white.svg';
 import logo from '../../assets/img/sections/sidebar/logo.svg';
 import board from '../../assets/img/sections/sidebar/board.svg';
@@ -22,7 +22,6 @@ import bigSwap from '../../assets/img/sections/sidebar/big-swap.svg';
 import bigSwapWhite from '../../assets/img/sections/sidebar/big-swap-white.svg';
 // import uniswap from '../../assets/img/sections/sidebar/uniswap.svg';
 // import sushiswap from '../../assets/img/sections/sidebar/suchiswap.svg';
-import { useState, useCallback } from 'react';
 
 const Sidebar: React.FC = observer(() => {
   const { mobileMenu } = useMst();
@@ -62,7 +61,7 @@ const Sidebar: React.FC = observer(() => {
         const [network, networkName] = item;
         const src = NetworksIcons[network];
         return (
-          <div className={s.group}>
+          <div className={s.group} key={uuid()}>
             <div
               className={s.group_title}
               role="button"
