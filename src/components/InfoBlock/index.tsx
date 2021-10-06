@@ -19,11 +19,12 @@ import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import { Networks } from '../../config/networks';
 import { is } from '../../utils/comparers';
+import { newObject } from "../../utils/formatDataTypes";
 
 const InfoBlock: React.FC<any> = observer(() => {
   const { user }: { user: any } = useMst();
   const { store } = useStoreContext();
-  const { hotPairs } = store;
+  const { hotPairs } = newObject(store);
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
@@ -51,8 +52,8 @@ const InfoBlock: React.FC<any> = observer(() => {
   }, []);
 
   useEffect(() => {
-    console.log('InfoBlock:', { hotPairs });
-  }, [hotPairs]);
+    console.log('InfoBlock useEffect:', { network, hotPairs });
+  }, [hotPairs, network]);
 
   return (
     <section className={s.info}>
