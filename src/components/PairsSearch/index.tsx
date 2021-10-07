@@ -57,39 +57,45 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   const { currentExchange } = useMst();
   const location = useLocation();
 
-  const network = location.pathname.split('/')[1];
+  const network = location.pathname.split('/')[1] || Networks.Ethereum;
   const exchanges = useMemo(
     () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
     [network],
   );
 
-  const getDataForAllExchangesOfNetwork = useCallback(
-    async (net: string, variables: any) => {
-      try {
-        const exchangesObject = ExchangesByNetworks[net] || [];
-        const exchangesOfNetwork = Object.values(exchangesObject);
-        if (!exchangesOfNetwork.length) return;
-        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
-          return TheGraph.query({
-            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: isExchangeLikeSushiswap(exchangeOfNetwork)
-              ? SEARCH_BY_NAME_SUSHISWAP
-              : SEARCH_BY_NAME,
-            variables,
-          });
-        });
-        // todo
-        const result = await Promise.all(results);
-        console.log('PairsSearch getDataForAllExchangesOfNetwork:', {
-          net,
-          result,
-        });
-      } catch (e) {
-        console.error('App getDataForAllExchangesOfNetwork:', e);
-      }
-    },
-    [],
-  );
+  // const getDataFromAllExchangesOfAllNetworks = useCallback(
+  //   async (variables: any) => {
+  //     try {
+  //       const results: Promise<any>[] = [];
+  //       const networks = Object.keys(Networks);
+  //       networks.map((net: string) => {
+  //         const exchangesObject = ExchangesByNetworks[net] || [];
+  //         const exchangesOfNetwork = Object.values(exchangesObject);
+  //         exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+  //           const resultFromExchange = TheGraph.query({
+  //             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+  //             query: isExchangeLikeSushiswap(exchangeOfNetwork)
+  //               ? SEARCH_BY_NAME_SUSHISWAP
+  //               : SEARCH_BY_NAME,
+  //             variables,
+  //           });
+  //           results.push(resultFromExchange);
+  //           return null;
+  //         });
+  //         return null;
+  //       })
+  //       const result = await Promise.all(results);
+  //       console.log('PairsSearch getDataFromAllExchangesOfAllNetworks:', {
+  //         result,
+  //       });
+  //       return result;
+  //     } catch (e) {
+  //       console.error('PairsSearch getDataFromAllExchangesOfAllNetworks:', e);
+  //       return null;
+  //     }
+  //   },
+  //   [],
+  // );
 
   // запросы на граф
   const searchById = useCallback(
@@ -173,17 +179,17 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
           searchById({ id: searchValue });
         } else {
           // todo: loop through all networks and concat all results
-          getDataForAllExchangesOfNetwork(Networks.Ethereum, {
-            name: formatTokens(searchValue)[0] || '',
-            name2: formatTokens(searchValue)[1] || '',
-          });
+          // getDataFromAllExchangesOfAllNetworks({
+          //   name: formatTokens(searchValue)[0] || '',
+          //   name2: formatTokens(searchValue)[1] || '',
+          // });
           searchByName({
             name: formatTokens(searchValue)[0] || '',
             name2: formatTokens(searchValue)[1] || '',
           });
         }
       }, 500),
-    [searchById, searchByName, getDataForAllExchangesOfNetwork],
+    [searchById, searchByName],
   );
 
   const concatenateSearchByIdData = useCallback(async () => {
