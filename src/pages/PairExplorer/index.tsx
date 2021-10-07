@@ -25,11 +25,10 @@ import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
-import { Exchanges, ExchangesByNetworks } from '../../config/exchanges';
+import { Exchanges, ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
-import { is } from '../../utils/comparers';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
@@ -42,7 +41,7 @@ const PairExplorer: React.FC = () => {
   const location = useLocation();
 
   const network = location.pathname.split('/')[1];
-  const exchange = 'uniswap'; // todo:
+  const exchange = Exchanges.Uniswap; // todo:
 
   const exchanges = useMemo(
     () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
@@ -55,7 +54,7 @@ const PairExplorer: React.FC = () => {
   const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
     client: getBlockClient,
     variables: {
-      timestamp: is(exchange, Exchanges.Sushiswap) ? timestamp24hAgo : 1599000000,
+      timestamp: isExchangeLikeSushiswap(exchange) ? timestamp24hAgo : 1599000000,
     },
   });
 
@@ -67,7 +66,7 @@ const PairExplorer: React.FC = () => {
       const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
         return TheGraph.query({
           subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-          query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+          query: isExchangeLikeSushiswap(exchangeOfNetwork)
             ? GET_PAIR_INFO_SUSHIWAP
             : GET_PAIR_INFO,
           variables: {

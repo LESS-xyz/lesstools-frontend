@@ -15,9 +15,9 @@ import { useMst } from '../../store/store';
 import { useElementWidth } from '../../hooks/useElementWidth';
 import s from './PairsSearch.module.scss';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
-import { is, uniqueArrayOfObjectsByKey } from '../../utils/comparers';
+import { uniqueArrayOfObjectsByKey } from '../../utils/comparers';
 import { useLocation } from 'react-router-dom';
-import { ExchangesByNetworks, Exchanges, SushiswapLikeExchanges } from '../../config/exchanges';
+import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 import { Networks } from "../../config/networks";
@@ -72,7 +72,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: SushiswapLikeExchanges.includes(exchangeOfNetwork)
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
               ? SEARCH_BY_NAME_SUSHISWAP
               : SEARCH_BY_NAME,
             variables,
@@ -100,7 +100,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
               ? SEARCH_BY_ID_SUSHISWAP
               : SEARCH_BY_ID,
             variables,
@@ -124,7 +124,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
               ? SEARCH_BY_NAME_SUSHISWAP
               : SEARCH_BY_NAME,
             variables,

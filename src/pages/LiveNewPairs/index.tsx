@@ -11,13 +11,13 @@ import { IRowLiveNewPairs } from '../../types/table';
 import { WHITELIST } from '../../data/whitelist';
 
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
-import { Exchanges, ExchangesByNetworks } from '../../config/exchanges';
+import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 
 // import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
-import { is, uniqueArrayOfObjectsByKey } from '../../utils/comparers';
+import { uniqueArrayOfObjectsByKey } from '../../utils/comparers';
 import { useLocation } from 'react-router-dom';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 
@@ -60,7 +60,7 @@ const LiveNewPairs: React.FC = observer(() => {
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
               ? GET_LIVE_SWAPS_SUSHISWAP
               : GET_LIVE_SWAPS,
             variables,

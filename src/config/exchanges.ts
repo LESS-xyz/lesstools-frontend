@@ -110,10 +110,12 @@ export const ExchangesByNetworks: IExchangesByNetworks = {
   ],
 };
 
-export const SushiswapLikeExchanges: string[] = [
+export const SushiswapLikeExchanges: Exchanges[] = [
   Exchanges.Sushiswap,
   Exchanges.SushiswapBinance,
   Exchanges.SushiswapFantom,
   Exchanges.SushiswapPolygon,
   Exchanges.SushiswapXdai,
 ];
+
+export const isExchangeLikeSushiswap = (exchange: Exchanges) => SushiswapLikeExchanges.includes(exchange);

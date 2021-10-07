@@ -13,9 +13,8 @@ import MobileHeader from './components/MobileHeader';
 import { GET_HOT_PAIRS, GET_HOT_PAIRS_SUSHISWAP } from './queries';
 import TheGraph from './services/TheGraph';
 import { SubgraphsByExchangeShort } from './config/subgraphs';
-import { Exchanges, ExchangesByNetworks } from './config/exchanges';
+import { ExchangesByNetworks, isExchangeLikeSushiswap } from './config/exchanges';
 import { Networks } from './config/networks';
-import { is } from './utils/comparers';
 import { WHITELIST } from './data/whitelist';
 import { useStoreContext } from './contexts/MobxConnector';
 import { newObject } from './utils/formatDataTypes';
@@ -98,10 +97,10 @@ export const App: React.FC = observer((props: any) => {
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: is(exchangeOfNetwork, Exchanges.Sushiswap)
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
               ? GET_HOT_PAIRS_SUSHISWAP
               : GET_HOT_PAIRS,
-            variables: is(exchangeOfNetwork, Exchanges.Sushiswap)
+            variables: isExchangeLikeSushiswap(exchangeOfNetwork)
               ? {
                   timestamp1: getStartOfHour(),
                   timestamp2: getStartOfHour() - 3600,
