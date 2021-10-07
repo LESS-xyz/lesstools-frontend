@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { v4 as uuid } from 'uuid';
 
-import { Networks, NetworksForSidebar, NetworksIcons } from '../../config/networks';
+import { DefaultPairsByNetwork, Networks, NetworksForSidebar, NetworksIcons } from '../../config/networks';
 import LinkSidebar from './LinkSidebar/index';
 import { useMst } from '../../store/store';
 import s from './Sidebar.module.scss';
@@ -60,6 +60,7 @@ const Sidebar: React.FC = observer(() => {
       {Object.entries(NetworksForSidebar).map((item: any) => {
         const [network, networkName] = item;
         const src = NetworksIcons[network];
+        const defaultPair = DefaultPairsByNetwork[network];
         return (
           <div className={s.group} key={uuid()}>
             <div
@@ -92,7 +93,7 @@ const Sidebar: React.FC = observer(() => {
                 <LinkSidebar
                   imgDark={pair}
                   imgWhite={pairWhite}
-                  to={`/${network.toLowerCase()}/pair-explorer/0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974`}
+                  to={`/${network.toLowerCase()}/pair-explorer/${defaultPair}`}
                   text="Pair Explorer"
                 />
                 <LinkSidebar
