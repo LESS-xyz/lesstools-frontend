@@ -97,7 +97,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
           <Transaction
             key={`${trade.maker}-${trade.data}-${trade.totalEth}-${trade.amountEth}`}
             ethPrice={trade.totalEth}
-            priceUsd={isModeTokenTokenValue ? trade.priceUsd * 2 : trade.priceUsd}
+            priceUsd={isModeTokenTokenValue ? trade.priceUsd * trade.amountEth : trade.priceUsd}
             amountEth={trade.amountEth}
             type={trade.type}
             etherscan={trade.others.etherscan}
