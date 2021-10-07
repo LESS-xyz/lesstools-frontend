@@ -20,7 +20,8 @@ import { useLocation } from 'react-router-dom';
 import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
-import { Networks } from "../../config/networks";
+import { Networks, NetworksForSidebar } from '../../config/networks';
+import Popup from '../Popup';
 
 // при вводе в поиск символы токенов форматирует их
 const formatTokens = (name: string) => {
@@ -54,10 +55,13 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   const [searchByNameDataPlain, setSearchByNameDataPlain] = useState<any[]>([]);
   const [searchByIdData, setSearchByIdData] = useState<any>();
   const [searchByNameData, setSearchByNameData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const { currentExchange } = useMst();
-  const location = useLocation();
 
-  const network = location.pathname.split('/')[1] || Networks.Ethereum;
+  const location = useLocation();
+  const defaultNetwork = location.pathname.split('/')[1] || Networks.Ethereum;
+  const [network, setNetwork] = useState<string>(uppercaseFirstLetter(defaultNetwork.toLowerCase()));
+
   const exchanges = useMemo(
     () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
     [network],
@@ -236,6 +240,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
       };
       console.log('PairSearch concatenateSearchByIdData:', dataNew);
       setSearchByNameData(dataNew);
+      setLoading(false);
     } catch (e) {
       console.error(e);
     }
@@ -246,7 +251,10 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
     concatenateSearchByNameData();
   }, [searchByNameDataPlain, concatenateSearchByNameData]);
 
-  const searchPairs = useCallback((str) => debouncedSearch(str), [debouncedSearch]);
+  const searchPairs = useCallback((str: string) => {
+    if (str.length >= 3) setLoading(true);
+    debouncedSearch(str)
+  }, [debouncedSearch]);
 
   // при нажатии за пределами поиска закрывать предложения
   const [isClickedOutside, setIsClickedOutside] = useState(false);
@@ -260,8 +268,16 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
 
   const width = useElementWidth(searchBlock);
 
+  useEffect(()=>{
+    if (value.length >= 3) searchPairs(value);
+  },[network, searchPairs, value])
+
   return (
-    <OutsideAlerter fn={() => setIsClickedOutside(true)}>
+    <OutsideAlerter fn={() => {
+      setLoading(false);
+      setIsClickedOutside(true)
+    }}
+    >
       <div className={s.search} ref={searchBlock}>
         <Search
           big={big}
@@ -270,12 +286,18 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
           onChange={searchPairs}
           placeholder={placeholder}
           onFocus={onInputFocus}
-          // loading={!searchByIdData || !searchByNameData}
-        />
+          loading={loading}
+        >
+          <Popup
+            defaultValue={Networks.Ethereum}
+            items={Object.values(NetworksForSidebar)}
+            onChange={setNetwork}
+          />
+        </Search>
         {!!isActive && (
           <div className={s.suggestions}>
             <div className={s.suggestions_title}>
-              Search results in <span>{currentExchange.exchange}</span>
+              Search results in <span>{network}</span>
             </div>
             <div className={s.suggestions_body}>
               <div className={s.suggestions_body__inner}>
