@@ -23,7 +23,7 @@ import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
-import { Exchanges, ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
+import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
@@ -40,9 +40,9 @@ const PairExplorer: React.FC = () => {
   const location = useLocation();
 
   const network = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
-  const exchange = Exchanges.Uniswap; // todo:
 
   const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
+  const exchange = exchanges[0]; // first exchange for Links data
   const exchangesOfNetwork = Object.values(exchanges);
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
