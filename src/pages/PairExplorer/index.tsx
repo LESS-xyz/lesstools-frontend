@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
 import { useParams, useLocation } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
 
 import {
@@ -18,7 +17,6 @@ import PairsSearch from '../../components/PairsSearch/index';
 import Loader from '../../components/Loader/index';
 import Favorites from './RightAsideBar/Favorites/index';
 import { WHITELIST } from '../../data/whitelist';
-import { getBlockClient } from '../../index';
 import { useMst } from '../../store/store';
 import backend, { IAdditionalInfoFromBackend } from '../../services/backend/index';
 import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges';
@@ -34,6 +32,7 @@ const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
     useState<null | IAdditionalInfoFromBackend>(null);
   const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
+  const [blocks, setBlocks] = useState<any[]>([]);
   const [swaps, setSwaps] = useState<any[]>([]);
   const [pairInfo, setPairInfo] = useState<any>([]);
   const { id: pairId } = useParams<{ id: string }>();
@@ -43,51 +42,78 @@ const PairExplorer: React.FC = () => {
   const network = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
   const exchange = Exchanges.Uniswap; // todo:
 
-  const exchanges = useMemo(
-    () => ExchangesByNetworks[network] || [],
-    [network],
-  );
+  const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
+  const exchangesOfNetwork = Object.values(exchanges);
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
   // запрос на граф для получения номера блока 24 часа назад
-  const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
-    client: getBlockClient,
-    variables: {
-      timestamp: isExchangeLikeSushiswap(exchange) ? timestamp24hAgo : 1599000000,
-    },
-  });
+  // const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
+  //   client: getBlockClient,
+  //   variables: {
+  //     timestamp: isExchangeLikeSushiswap(exchange) ? timestamp24hAgo : 1599000000,
+  //   },
+  // });
+
+  // запрос для pair-card info [ГРАФ]
+  // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
+  const getBlocksFromAllExchanges = useCallback(async () => {
+    try {
+      if (!exchangesOfNetwork.length) return;
+      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+        const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
+        return TheGraph.query({
+          subgraph,
+          query: GET_BLOCK_24H_AGO,
+          variables: {
+            timestamp: isExchangeLikeSushiswap(exchangeOfNetwork) ? timestamp24hAgo : 1599000000,
+          },
+        });
+      });
+      const result = await Promise.all(results);
+      console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
+      setBlocks(results);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [exchangesOfNetwork, timestamp24hAgo]);
 
   // запрос для pair-card info [ГРАФ]
   const getPairInfoFromAllExchanges = useCallback(async () => {
     try {
-      const exchangesOfNetwork = Object.values(exchanges);
       if (!exchangesOfNetwork.length) return;
-      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+      const results = exchangesOfNetwork.map((exchangeOfNetwork: any, i: number) => {
+        const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
+        const blockNumber = +blocks[i]?.blocks[0]?.number || 10684814;
         return TheGraph.query({
-          subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+          subgraph,
           query: isExchangeLikeSushiswap(exchangeOfNetwork)
             ? GET_PAIR_INFO_SUSHIWAP
             : GET_PAIR_INFO,
           variables: {
             id: pairId,
-            blockNumber: +blocks?.blocks[0]?.number || 10684814,
+            blockNumber,
           },
         });
       });
       const resultsGetPairInfo = await Promise.all(results);
-      const pairInfoNew = resultsGetPairInfo[0] || {};
-      console.log('getPairInfoFromAllExchanges:', { exchangesOfNetwork, pairInfoNew });
+      const pairInfoNew = resultsGetPairInfo[0] || {}; // first exchange
+      console.log('PairExplorer getPairInfoFromAllExchanges:', { exchangesOfNetwork, pairInfoNew });
       setPairInfo(pairInfoNew);
     } catch (e) {
       console.error(e);
     }
-  }, [exchanges, pairId, blocks]);
+  }, [pairId, blocks, exchangesOfNetwork]);
+
+  useEffect(() => {
+    if (!network) return;
+    getBlocksFromAllExchanges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [network]);
 
   // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАФ]
   useEffect(() => {
     if (!pairId) return;
-    if (!blocks) return;
     if (!network) return;
     getPairInfoFromAllExchanges();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -198,9 +224,7 @@ Fundraising Capital"
       <div className={s.container}>
         <div className={s.main}>
           <div className={s.mobile_block}>
-            <PairsSearch
-              placeholder="Search pairs by token symbol / token id / pair contract id"
-            />
+            <PairsSearch placeholder="Search pairs by token symbol / token id / pair contract id" />
             <div className={s.mobile_block__favs}>
               <Favorites />
             </div>
@@ -259,7 +283,7 @@ Fundraising Capital"
                     cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || 0}
                   />
                 )}
-                <PairsSearch placeholder={`Search ${exchange} pairs`} />
+                <PairsSearch placeholder={`Search ${network} pairs`} />
               </div>
               <div className={s.chart}>
                 <TradingViewWidget

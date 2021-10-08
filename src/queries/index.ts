@@ -99,7 +99,7 @@ export const GET_PAIR_INFO_SUSHIWAP = `
 `;
 
 // GET BLOCK NUMBER 24h AGO
-export const GET_BLOCK_24H_AGO = gql`
+export const GET_BLOCK_24H_AGO = `
   query blocks($timestamp: BigInt!) {
     blocks(
       first: 1
