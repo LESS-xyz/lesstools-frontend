@@ -37,6 +37,7 @@ const formatTokens = (name: string) => {
 interface IPairSearchProps {
   placeholder: string;
   big?: boolean;
+  defaultNetwork?: string;
 }
 
 function debounce(fn: (...args: any) => void, ms: number) {
@@ -49,7 +50,9 @@ function debounce(fn: (...args: any) => void, ms: number) {
   };
 }
 
-const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placeholder }) => {
+const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
+  const { big = false, placeholder } = props;
+  let { defaultNetwork } = props;
   const [value, setValue] = useState('');
   const [searchByIdDataPlain, setSearchByIdDataPlain] = useState<any[]>([]);
   const [searchByNameDataPlain, setSearchByNameDataPlain] = useState<any[]>([]);
@@ -59,7 +62,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
   const { currentExchange } = useMst();
 
   const location = useLocation();
-  const defaultNetwork = location.pathname.split('/')[1] || Networks.Ethereum;
+  if (!defaultNetwork) defaultNetwork = location.pathname.split('/')[1] || Networks.Ethereum;
   const [network, setNetwork] = useState<string>(uppercaseFirstLetter(defaultNetwork.toLowerCase()));
 
   const exchanges = useMemo(
@@ -288,11 +291,13 @@ const PairSearch: React.FC<IPairSearchProps> = observer(({ big = false, placehol
           onFocus={onInputFocus}
           loading={loading}
         >
+          {!defaultNetwork &&
           <Popup
             defaultValue={Networks.Ethereum}
             items={Object.values(NetworksForSidebar)}
             onChange={setNetwork}
           />
+          }
         </Search>
         {!!isActive && (
           <div className={s.suggestions}>

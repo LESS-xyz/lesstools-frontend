@@ -40,11 +40,11 @@ const PairExplorer: React.FC = () => {
   const { user } = useMst();
   const location = useLocation();
 
-  const network = location.pathname.split('/')[1];
+  const network = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
   const exchange = Exchanges.Uniswap; // todo:
 
   const exchanges = useMemo(
-    () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
+    () => ExchangesByNetworks[network] || [],
     [network],
   );
 
@@ -198,7 +198,10 @@ Fundraising Capital"
       <div className={s.container}>
         <div className={s.main}>
           <div className={s.mobile_block}>
-            <PairsSearch placeholder="Search pairs by token symbol / token id / pair contract id" />
+            <PairsSearch
+              defaultNetwork={network}
+              placeholder="Search pairs by token symbol / token id / pair contract id"
+            />
             <div className={s.mobile_block__favs}>
               <Favorites />
             </div>
