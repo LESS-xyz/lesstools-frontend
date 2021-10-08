@@ -199,7 +199,6 @@ Fundraising Capital"
         <div className={s.main}>
           <div className={s.mobile_block}>
             <PairsSearch
-              defaultNetwork={network}
               placeholder="Search pairs by token symbol / token id / pair contract id"
             />
             <div className={s.mobile_block__favs}>

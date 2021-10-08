@@ -52,18 +52,20 @@ function debounce(fn: (...args: any) => void, ms: number) {
 
 const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
   const { big = false, placeholder } = props;
-  let { defaultNetwork } = props;
+
   const [value, setValue] = useState('');
   const [searchByIdDataPlain, setSearchByIdDataPlain] = useState<any[]>([]);
   const [searchByNameDataPlain, setSearchByNameDataPlain] = useState<any[]>([]);
   const [searchByIdData, setSearchByIdData] = useState<any>();
   const [searchByNameData, setSearchByNameData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
+
   const { currentExchange } = useMst();
 
   const location = useLocation();
-  if (!defaultNetwork) defaultNetwork = location.pathname.split('/')[1] || Networks.Ethereum;
-  const [network, setNetwork] = useState<string>(uppercaseFirstLetter(defaultNetwork.toLowerCase()));
+  const defaultNetwork = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
+
+  const [network, setNetwork] = useState<string>(defaultNetwork || Networks.Ethereum);
 
   const exchanges = useMemo(
     () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
@@ -254,10 +256,13 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
     concatenateSearchByNameData();
   }, [searchByNameDataPlain, concatenateSearchByNameData]);
 
-  const searchPairs = useCallback((str: string) => {
-    if (str.length >= 3) setLoading(true);
-    debouncedSearch(str)
-  }, [debouncedSearch]);
+  const searchPairs = useCallback(
+    (str: string) => {
+      if (str.length >= 3) setLoading(true);
+      debouncedSearch(str);
+    },
+    [debouncedSearch],
+  );
 
   // при нажатии за пределами поиска закрывать предложения
   const [isClickedOutside, setIsClickedOutside] = useState(false);
@@ -271,15 +276,16 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
 
   const width = useElementWidth(searchBlock);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (value.length >= 3) searchPairs(value);
-  },[network, searchPairs, value])
+  }, [network, searchPairs, value]);
 
   return (
-    <OutsideAlerter fn={() => {
-      setLoading(false);
-      setIsClickedOutside(true)
-    }}
+    <OutsideAlerter
+      fn={() => {
+        setLoading(false);
+        setIsClickedOutside(true);
+      }}
     >
       <div className={s.search} ref={searchBlock}>
         <Search
@@ -291,13 +297,13 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
           onFocus={onInputFocus}
           loading={loading}
         >
-          {!defaultNetwork &&
-          <Popup
-            defaultValue={Networks.Ethereum}
-            items={Object.values(NetworksForSidebar)}
-            onChange={setNetwork}
-          />
-          }
+          {!defaultNetwork && (
+            <Popup
+              defaultValue={Networks.Ethereum}
+              items={Object.values(NetworksForSidebar)}
+              onChange={setNetwork}
+            />
+          )}
         </Search>
         {!!isActive && (
           <div className={s.suggestions}>
