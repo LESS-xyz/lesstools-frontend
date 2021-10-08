@@ -64,6 +64,7 @@
   gap: 20px;
   width: 100%;
   background: linear-gradient(90deg, #161126 0%, #1c0e40 100%);
+  height: max-content;
 
   @include b(tablet) {
     grid-template-columns: 1fr;
@@ -92,6 +93,7 @@
   width: 100%;
   background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
   padding: 0 0 20px 0;
+  height: max-content;
 
   @include b(tablet) {
     grid-column: 1 / 3;

@@ -52,7 +52,7 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
   const showHotPairs = useCallback(() => {
     try {
       const hotPairsNew = newObject(hotPairs);
-      const newTableData = hotPairsNew[network].slice(0, 10);
+      const newTableData = hotPairsNew[network].slice(0, 20);
       if (newTableData) setTableData(newTableData);
       console.log('HotTable showHotPairs:', { hotPairs: hotPairsNew , newTableData });
     } catch (e) {
@@ -93,7 +93,7 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
       </div>
       <div className={s.table_body}>
         {!tableData.length &&
-          new Array(10).fill(1).map(() => <div key={uuid()} className={s.empty_cell} />)}
+          new Array(20).fill(1).map(() => <div key={uuid()} className={s.empty_cell} />)}
         {tableData.map((pair: IPairFromGraph) => {
           return (
             <TableCell
