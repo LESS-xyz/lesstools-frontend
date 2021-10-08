@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import {
   GET_PAIR_INFO,
   GET_PAIR_SWAPS,
-  GET_BLOCK_24H_AGO,
+  GET_LAST_BLOCK,
   GET_PAIR_INFO_SUSHIWAP,
 } from '../../queries/index';
 import RightAsideBar from './RightAsideBar/index';
@@ -31,7 +31,7 @@ import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
     useState<null | IAdditionalInfoFromBackend>(null);
-  const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
+  // const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
   const [blocks, setBlocks] = useState<any[]>([]);
   const [swaps, setSwaps] = useState<any[]>([]);
   const [pairInfo, setPairInfo] = useState<any>([]);
@@ -55,7 +55,28 @@ const PairExplorer: React.FC = () => {
   //   },
   // });
 
-  // запрос для pair-card info [ГРАФ]
+  // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
+  // const getBlocksFromAllExchanges = useCallback(async () => {
+  //   try {
+  //     if (!exchangesOfNetwork.length) return;
+  //     const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+  //       const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
+  //       return TheGraph.query({
+  //         subgraph,
+  //         query: GET_BLOCK_24H_AGO,
+  //         variables: {
+  //           timestamp: isExchangeLikeSushiswap(exchangeOfNetwork) ? timestamp24hAgo : 1599000000,
+  //         },
+  //       });
+  //     });
+  //     const result = await Promise.all(results);
+  //     console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
+  //     setBlocks(results);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [exchangesOfNetwork, timestamp24hAgo]);
+
   // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
   const getBlocksFromAllExchanges = useCallback(async () => {
     try {
@@ -64,10 +85,7 @@ const PairExplorer: React.FC = () => {
         const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
         return TheGraph.query({
           subgraph,
-          query: GET_BLOCK_24H_AGO,
-          variables: {
-            timestamp: isExchangeLikeSushiswap(exchangeOfNetwork) ? timestamp24hAgo : 1599000000,
-          },
+          query: GET_LAST_BLOCK,
         });
       });
       const result = await Promise.all(results);
@@ -76,7 +94,7 @@ const PairExplorer: React.FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [exchangesOfNetwork, timestamp24hAgo]);
+  }, [exchangesOfNetwork]);
 
   // запрос для pair-card info [ГРАФ]
   const getPairInfoFromAllExchanges = useCallback(async () => {
@@ -84,7 +102,8 @@ const PairExplorer: React.FC = () => {
       if (!exchangesOfNetwork.length) return;
       const results = exchangesOfNetwork.map((exchangeOfNetwork: any, i: number) => {
         const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
-        const blockNumber = +blocks[i]?.blocks[0]?.number || 10684814;
+        // eslint-disable-next-line no-underscore-dangle
+        const blockNumber = +blocks[i]?._meta?.block?.number || 10684814;
         return TheGraph.query({
           subgraph,
           query: isExchangeLikeSushiswap(exchangeOfNetwork)

@@ -113,6 +113,18 @@ export const GET_BLOCK_24H_AGO = `
   }
 `;
 
+// GET BLOCK NUMBER NOW
+export const GET_LAST_BLOCK = `
+  query _meta {
+    _meta {
+      block {
+        hash
+        number
+      }
+    }
+  }
+`;
+
 // GET all pair swaps for table at pair explorer page
 export const GET_PAIR_SWAPS = `
   query getPairSwaps($id: ID!) {
