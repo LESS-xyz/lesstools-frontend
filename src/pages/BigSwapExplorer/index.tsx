@@ -72,8 +72,10 @@ const BigSwapExplorer: React.FC = observer(() => {
   );
 
   useEffect(() => {
-    if (!exchanges) return;
+    if (!exchanges) return () => {};
     getSwapsData({ lowerThreshold: 10000 });
+    const interval = setInterval(() => getSwapsData({ lowerThreshold: 10000 }), 15000);
+    return () => clearInterval(interval);
   }, [exchanges, getSwapsData]);
 
   // concatenate data from all exchanges to 'pairs' field

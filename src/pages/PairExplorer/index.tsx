@@ -147,8 +147,10 @@ const PairExplorer: React.FC = () => {
   });
 
   useEffect(() => {
-    if (!pairId) return;
+    if (!pairId) return () => {};
     getSwapsFromAllExchanges();
+    const interval = setInterval(getSwapsFromAllExchanges, 15000);
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairId]);
 

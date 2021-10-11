@@ -77,8 +77,10 @@ const LiveNewPairs: React.FC = observer(() => {
   );
 
   useEffect(() => {
-    if (!exchanges) return;
+    if (!exchanges) return () => {};
     getLiveSwaps({});
+    const interval = setInterval(() => getLiveSwaps({}), 15000);
+    return () => clearInterval(interval);
   }, [exchanges, getLiveSwaps]);
 
   // concatenate data from all exchanges to 'pairs' field

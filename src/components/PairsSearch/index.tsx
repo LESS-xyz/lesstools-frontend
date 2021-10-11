@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useLocation } from 'react-router-dom';
 
 import Suggestion from './Suggestion/index';
 import OutsideAlerter from '../../utils/outsideClickWrapper';
@@ -16,7 +17,6 @@ import { useElementWidth } from '../../hooks/useElementWidth';
 import s from './PairsSearch.module.scss';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import { uniqueArrayOfObjectsByKey } from '../../utils/comparers';
-import { useLocation } from 'react-router-dom';
 import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';

@@ -132,14 +132,24 @@ export const App: React.FC = observer((props: any) => {
     [setHotPairs],
   );
 
+  const getAllData = useCallback(() => {
+    try {
+      getDataForAllExchangesOfNetwork(Networks.Binance);
+      getDataForAllExchangesOfNetwork(Networks.Ethereum);
+      getDataForAllExchangesOfNetwork(Networks.Polygon);
+      getDataForAllExchangesOfNetwork(Networks.Avalanche);
+      getDataForAllExchangesOfNetwork(Networks.Xdai);
+      getDataForAllExchangesOfNetwork(Networks.Fantom);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [getDataForAllExchangesOfNetwork])
+
   useEffect(() => {
-    getDataForAllExchangesOfNetwork(Networks.Binance);
-    getDataForAllExchangesOfNetwork(Networks.Ethereum);
-    getDataForAllExchangesOfNetwork(Networks.Polygon);
-    getDataForAllExchangesOfNetwork(Networks.Avalanche);
-    getDataForAllExchangesOfNetwork(Networks.Xdai);
-    getDataForAllExchangesOfNetwork(Networks.Fantom);
-  }, [getDataForAllExchangesOfNetwork]);
+    getAllData();
+    const interval = setInterval(getAllData, 30000);
+    return () => clearInterval(interval);
+  }, [getAllData]);
 
   useEffect(() => {
     console.log('App store:', newObject(store.hotPairs));
