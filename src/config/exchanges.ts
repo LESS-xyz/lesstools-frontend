@@ -1,5 +1,16 @@
 import uniswap from '../assets/img/sections/live-new-pairs/uniswap.svg';
-import ethereum from '../assets/img/icons/eth-logo.svg';
+import apeswap from '../assets/img/sections/live-new-pairs/apeswap.svg';
+import babyswap from '../assets/img/sections/live-new-pairs/babyswap.svg';
+import biswap from '../assets/img/sections/live-new-pairs/biswap.svg';
+import honeyswap from '../assets/img/sections/live-new-pairs/honeyswap.svg';
+import joetrader from '../assets/img/sections/live-new-pairs/joetrader.svg';
+import mdex from '../assets/img/sections/live-new-pairs/mdex.svg';
+import pancake from '../assets/img/sections/live-new-pairs/pancake.svg';
+import pangolin from '../assets/img/sections/live-new-pairs/pangolin.svg';
+import quickswap from '../assets/img/sections/live-new-pairs/quickswap.svg';
+import spiritswap from '../assets/img/sections/live-new-pairs/spiritswap.svg';
+import spookyswap from '../assets/img/sections/live-new-pairs/spookyswap.svg';
+import sushiswap from '../assets/img/sections/live-new-pairs/sushiswap.svg';
 import { Networks } from "./networks";
 
 // todo: remove (used in mobx)
@@ -29,25 +40,24 @@ export interface IExchangesIcons {
   [key: string]: string
 }
 
-// todo
 export const ExchangesIcons: IExchangesIcons = {
   [Exchanges.Uniswap]: uniswap,
-  [Exchanges.Sushiswap]: ethereum,
-  [Exchanges.SushiswapXdai]: ethereum,
-  [Exchanges.SushiswapFantom]: ethereum,
-  [Exchanges.SushiswapPolygon]: ethereum,
-  [Exchanges.SushiswapBinance]: ethereum,
-  [Exchanges.Pancake]: uniswap,
-  [Exchanges.Quickswap]: uniswap,
-  [Exchanges.Honeyswap]: uniswap,
-  [Exchanges.Spookyswap]: uniswap,
-  [Exchanges.Mdexbsc]: uniswap,
-  [Exchanges.Biswap]: uniswap,
-  [Exchanges.Babyswap]: uniswap,
-  [Exchanges.Apeswap]: uniswap,
-  [Exchanges.Spiritswap]: uniswap,
-  [Exchanges.Joetrader]: uniswap,
-  [Exchanges.Pangolin]: uniswap,
+  [Exchanges.Sushiswap]: sushiswap,
+  [Exchanges.SushiswapXdai]: sushiswap,
+  [Exchanges.SushiswapFantom]: sushiswap,
+  [Exchanges.SushiswapPolygon]: sushiswap,
+  [Exchanges.SushiswapBinance]: sushiswap,
+  [Exchanges.Pancake]: pancake,
+  [Exchanges.Quickswap]: quickswap,
+  [Exchanges.Honeyswap]: honeyswap,
+  [Exchanges.Spookyswap]: spookyswap,
+  [Exchanges.Mdexbsc]: mdex,
+  [Exchanges.Biswap]: biswap,
+  [Exchanges.Babyswap]: babyswap,
+  [Exchanges.Apeswap]: apeswap,
+  [Exchanges.Spiritswap]: spiritswap,
+  [Exchanges.Joetrader]: joetrader,
+  [Exchanges.Pangolin]: pangolin,
 }
 
 export interface IUnicryptExchangesNames {
