@@ -37,8 +37,8 @@ const PairExplorer: React.FC = () => {
   const [pairInfo, setPairInfo] = useState<any>([]);
   const { id: pairId } = useParams<{ id: string }>();
   const { user } = useMst();
-  const location = useLocation();
 
+  const location = useLocation();
   const network = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
 
   const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
