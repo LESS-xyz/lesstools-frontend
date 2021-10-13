@@ -44,6 +44,7 @@ const PairExplorer: React.FC = () => {
   const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
   const exchange = exchanges[0]; // first exchange for Links data
   const exchangesOfNetwork = Object.values(exchanges);
+  // const tradingviewExchange = TradingviewExchangesNames[exchangesOfNetwork[0]];
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
@@ -307,6 +308,7 @@ Fundraising Capital"
                 <PairsSearch placeholder={`Search ${network} pairs`} />
               </div>
               <div className={s.chart}>
+                {/* https://github.com/rafaelklaessen/react-tradingview-widget/blob/master/src/index.js */}
                 <TradingViewWidget
                   theme={Themes.DARK}
                   autosize
@@ -319,6 +321,8 @@ Fundraising Capital"
                   }USD`}
                   allow_symbol_change={false}
                 />
+                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
+                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
               </div>
             </div>
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>

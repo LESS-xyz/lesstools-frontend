@@ -36,11 +36,7 @@ export enum Exchanges {
   Pangolin = 'Pangolin',
 }
 
-export interface IExchangesIcons {
-  [key: string]: string
-}
-
-export const ExchangesIcons: IExchangesIcons = {
+export const ExchangesIcons: { [key: string]: string } = {
   [Exchanges.Uniswap]: uniswap,
   [Exchanges.Sushiswap]: sushiswap,
   [Exchanges.SushiswapXdai]: sushiswap,
@@ -60,11 +56,7 @@ export const ExchangesIcons: IExchangesIcons = {
   [Exchanges.Pangolin]: pangolin,
 }
 
-export interface IUnicryptExchangesNames {
-  [key: string]: string
-}
-
-export const UnicryptExchangesNames: IUnicryptExchangesNames = {
+export const UnicryptExchangesNames: { [key: string]: string } = {
   [Exchanges.Uniswap]: 'uni-v2',
   [Exchanges.Sushiswap]: 'sushi-v1',
   [Exchanges.SushiswapXdai]: 'sushi-v1',
@@ -84,11 +76,27 @@ export const UnicryptExchangesNames: IUnicryptExchangesNames = {
   [Exchanges.Pangolin]: '',
 };
 
-export interface IExchangesByNetworks {
-  [key: string]: string[];
-}
+export const TradingviewExchangesNames: { [key: string]: string } = {
+  [Exchanges.Uniswap]: 'UNI',
+  [Exchanges.Sushiswap]: 'SUSHISWAP',
+  [Exchanges.SushiswapXdai]: 'SUSHISWAP',
+  [Exchanges.SushiswapFantom]: 'SUSHISWAP',
+  [Exchanges.SushiswapPolygon]: 'SUSHISWAP',
+  [Exchanges.SushiswapBinance]: 'SUSHISWAP',
+  [Exchanges.Pancake]: 'PANCAKE',
+  [Exchanges.Quickswap]: 'QUICKSWAP',
+  [Exchanges.Honeyswap]: 'HONEYSWAP',
+  [Exchanges.Spookyswap]: 'SPOOKYSWAP',
+  [Exchanges.Mdexbsc]: 'MDEX',
+  [Exchanges.Biswap]: 'BISWAP',
+  [Exchanges.Babyswap]: 'BABYSWAP',
+  [Exchanges.Apeswap]: 'APESWAP',
+  [Exchanges.Spiritswap]: 'SPIRITSWAP',
+  [Exchanges.Joetrader]: 'JOETRADER',
+  [Exchanges.Pangolin]: 'PANGOLIN',
+};
 
-export const ExchangesByNetworks: IExchangesByNetworks = {
+export const ExchangesByNetworks: { [key: string]: string[] } = {
   [Networks.Ethereum]: [
     Exchanges.Uniswap,
   ],
