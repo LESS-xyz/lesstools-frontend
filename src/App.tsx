@@ -28,6 +28,7 @@ interface IToken {
 
 export interface IPairFromGraph {
   hourlyTxns: string;
+  exchange?: string;
   pair: {
     id: string;
     token0: IToken;
@@ -62,16 +63,21 @@ export const App: React.FC = observer((props: any) => {
   //   }
   // };
 
-  function formatData(pair: any) {
+  function formatData(pair: any, exchange: string) {
     try {
       const pairsSumma: { [key: string]: IPairFromGraph } = {};
       const addPairToSumm = (info: IPairFromGraph) => {
         const tbr = WHITELIST.includes(info.pair.token0.id) ? info.pair.token1 : info.pair.token0;
         if (tbr.symbol in pairsSumma) {
           const newInfo = { ...info };
+          newInfo.exchange = exchange;
           newInfo.hourlyTxns = (+info.hourlyTxns + +pairsSumma[tbr.symbol].hourlyTxns).toString();
           pairsSumma[tbr.symbol] = newInfo;
-        } else pairsSumma[tbr.symbol] = info;
+        } else {
+          const newInfo = { ...info };
+          newInfo.exchange = exchange;
+          pairsSumma[tbr.symbol] = newInfo;
+        }
       };
       pair.currentHour.forEach((info: IPairFromGraph) => addPairToSumm(info));
       pair.oneHour.forEach((info: IPairFromGraph) => addPairToSumm(info));
@@ -114,14 +120,18 @@ export const App: React.FC = observer((props: any) => {
           });
         });
         const result = await Promise.all(results);
-        const resultsFormatted: any[] = result.map((pair: any) => formatData(pair));
-        const resultsContatenated = [].concat(...resultsFormatted);
-        const resultsSorted = resultsContatenated.sort((a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns);
+        const resultsFormatted: any[] = result.map((pair: any, i: number) => {
+          return formatData(pair, exchangesOfNetwork[i]);
+        });
+        const resultsConсatenated = [].concat(...resultsFormatted);
+        const resultsSorted = resultsConсatenated.sort((a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns);
         console.log('App getDataForAllExchangesOfNetwork:', {
           network,
+          exchangesOfNetwork,
           result,
           resultsFormatted,
-          resultsContatenated,
+          resultsConсatenated,
+          resultsSorted,
         });
         // setHotPairs({ [network]: resultsContatenated });
         setHotPairs({ [network]: resultsSorted });

@@ -61,6 +61,11 @@
     color: var(--orange);
   }
   margin-right: 20px;
+  > a {
+    @include flex(row, center, center, nowrap);
+    gap: 3px;
+    width: max-content;
+  }
 }
 
 .right {

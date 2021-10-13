@@ -9,7 +9,7 @@ import { useMst } from '../../store/store';
 import { WHITELIST } from '../../data/whitelist';
 import { ETH_PRICE_QUERY } from '../../queries/index';
 import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
-import { useStoreContext } from "../../contexts/MobxConnector";
+import { useStoreContext } from '../../contexts/MobxConnector';
 
 import s from './InfoBlock.module.scss';
 
@@ -18,8 +18,9 @@ import hotIcon from '../../assets/img/icons/hot.svg';
 import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.svg';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import { Networks } from '../../config/networks';
+import { ExchangesIcons } from '../../config/exchanges';
 import { is } from '../../utils/comparers';
-import { newObject } from "../../utils/formatDataTypes";
+import { newObject } from '../../utils/formatDataTypes';
 
 const InfoBlock: React.FC<any> = observer(() => {
   const { user }: { user: any } = useMst();
@@ -90,30 +91,34 @@ const InfoBlock: React.FC<any> = observer(() => {
         <div className={s.right}>
           <div className={s.marquee}>
             <div className={s.table}>
-              {hotPairs && hotPairs[network]?.map((pair: any, index: number) => (
-                <div key={`${pair.pair.id}`} className={s.table_cell}>
-                  <Link to={`/${network.toLowerCase()}/pair-explorer/${pair.pair.id}`}>
-                    <span>#{index + 1}</span>{' '}
-                    {WHITELIST.includes(pair.pair.token0.id)
-                      ? pair.pair.token1.symbol
-                      : pair.pair.token0.symbol}
-                  </Link>
-                </div>
-              ))}
+              {hotPairs &&
+                hotPairs[network]?.map((pair: any, index: number) => (
+                  <div key={`${pair.pair.id}`} className={s.table_cell}>
+                    <Link to={`/${network.toLowerCase()}/pair-explorer/${pair.pair.id}`}>
+                      <span>#{index + 1}</span>{' '}
+                      <div>
+                        {WHITELIST.includes(pair.pair.token0.id)
+                          ? pair.pair.token1.symbol
+                          : pair.pair.token0.symbol}
+                      </div>
+                      {pair.exchange && <img src={ExchangesIcons[pair.exchange]} alt="" />}
+                    </Link>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
         <Link to="/user-account" className={s.metamask_link}>
           <div className={s.metamask_link__inner}>
             <MetaMaskIcon className={s.metamask_link__inner_img} />
-             <span>
+            <span>
               {/* eslint-disable-next-line */}
               {!user.walletId
                 ? 'Connect'
                 : !user.isVerified
                 ? 'Verify'
                 : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
-             </span>
+            </span>
           </div>
         </Link>
       </div>
