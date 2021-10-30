@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js/bignumber';
 import { Link, useLocation } from 'react-router-dom';
@@ -7,9 +7,8 @@ import { observer } from 'mobx-react-lite';
 import { getGasPrice, IGasPrice } from '../../api/getGasPrice';
 import { useMst } from '../../store/store';
 import { WHITELIST } from '../../data/whitelist';
-import { ETH_PRICE_QUERY } from '../../queries/index';
+import { ETH_PRICE_QUERY, GET_HOT_PAIRS, GET_HOT_PAIRS_SUSHISWAP } from '../../queries/index';
 import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
-import { useStoreContext } from '../../contexts/MobxConnector';
 
 import s from './InfoBlock.module.scss';
 
@@ -18,14 +17,15 @@ import hotIcon from '../../assets/img/icons/hot.svg';
 import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.svg';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import { Networks } from '../../config/networks';
-import { ExchangesIcons } from '../../config/exchanges';
+import { ExchangesByNetworks, ExchangesIcons, isExchangeLikeSushiswap } from '../../config/exchanges';
 import { is } from '../../utils/comparers';
-import { newObject } from '../../utils/formatDataTypes';
+import TheGraph from "../../services/TheGraph";
+import { SubgraphsByExchangeShort } from "../../config/subgraphs";
+import { getStartOfHour } from "../../utils/time";
+import { IPairFromGraph } from "../../pages/BoardPage/HotTable";
 
 const InfoBlock: React.FC<any> = observer(() => {
   const { user }: { user: any } = useMst();
-  const { store } = useStoreContext();
-  const { hotPairs } = newObject(store);
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
 
@@ -52,9 +52,115 @@ const InfoBlock: React.FC<any> = observer(() => {
     };
   }, []);
 
+  // Hot pairs
+  const [hotPairs, setHotPairs] = useState<any>({});
+
+  function formatData(pair: any, exchange: string) {
+    try {
+      const pairsSumma: { [key: string]: IPairFromGraph } = {};
+      const addPairToSumm = (info: IPairFromGraph) => {
+        const tbr = WHITELIST.includes(info.pair.token0.id) ? info.pair.token1 : info.pair.token0;
+        if (tbr.symbol in pairsSumma) {
+          const newInfo = { ...info };
+          newInfo.exchange = exchange;
+          newInfo.hourlyTxns = (+info.hourlyTxns + +pairsSumma[tbr.symbol].hourlyTxns).toString();
+          pairsSumma[tbr.symbol] = newInfo;
+        } else {
+          const newInfo = { ...info };
+          newInfo.exchange = exchange;
+          pairsSumma[tbr.symbol] = newInfo;
+        }
+      };
+      pair.currentHour.forEach((info: IPairFromGraph) => addPairToSumm(info));
+      pair.oneHour.forEach((info: IPairFromGraph) => addPairToSumm(info));
+      pair.twoHours.forEach((info: IPairFromGraph) => addPairToSumm(info));
+      const finalData = Object.values(pairsSumma)
+        .sort((a: IPairFromGraph, b: IPairFromGraph) => +b.hourlyTxns - +a.hourlyTxns)
+        .filter(
+          (el) => !(WHITELIST.includes(el.pair.token0.id) && WHITELIST.includes(el.pair.token1.id)),
+        );
+      return finalData;
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  }
+
+  const getDataForAllExchangesOfNetwork = useCallback(
+    async (net: string) => {
+      try {
+        const exchanges = ExchangesByNetworks[net] || [];
+        const exchangesOfNetwork = Object.values(exchanges);
+        if (!exchangesOfNetwork.length) return {};
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
+              ? GET_HOT_PAIRS_SUSHISWAP
+              : GET_HOT_PAIRS,
+            variables: isExchangeLikeSushiswap(exchangeOfNetwork)
+              ? {
+                timestamp1: getStartOfHour(),
+                timestamp2: getStartOfHour() - 3600,
+                timestamp3: getStartOfHour() - 7200,
+              }
+              : {
+                timestamp1: 1598338800,
+                timestamp2: 1598338800 - 3600,
+                timestamp3: 1598338800 - 7200,
+              },
+          });
+        });
+        const result = await Promise.all(results);
+        const resultsFormatted: any[] = result.map((pair: any, i: number) => {
+          return formatData(pair, exchangesOfNetwork[i]);
+        });
+        const resultsConсatenated = [].concat(...resultsFormatted);
+        const resultsSorted = resultsConсatenated.sort((a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns);
+        console.log('HotTable getDataForAllExchangesOfNetwork:', {
+          net,
+          exchangesOfNetwork,
+          result,
+          resultsFormatted,
+          resultsConсatenated,
+          resultsSorted,
+        });
+        // setHotPairs({ [network]: resultsContatenated });
+        return { [net]: resultsSorted };
+      } catch (e) {
+        console.error('HotTable getDataForAllExchangesOfNetwork:', e);
+        return {};
+      }
+    },
+    [],
+  );
+
+  const getAllData = useCallback(async () => {
+    try {
+      const newHotPairBinance = await getDataForAllExchangesOfNetwork(Networks.Binance);
+      const newHotPairEthereum = await getDataForAllExchangesOfNetwork(Networks.Ethereum);
+      const newHotPairPolygon = await getDataForAllExchangesOfNetwork(Networks.Polygon);
+      const newHotPairAvalanche = await getDataForAllExchangesOfNetwork(Networks.Avalanche);
+      const newHotPairXdai = await getDataForAllExchangesOfNetwork(Networks.Xdai);
+      const newHotPairFantom = await getDataForAllExchangesOfNetwork(Networks.Fantom);
+      setHotPairs({
+        ...newHotPairBinance,
+        ...newHotPairEthereum,
+        ...newHotPairPolygon,
+        ...newHotPairAvalanche,
+        ...newHotPairXdai,
+        ...newHotPairFantom,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [setHotPairs, getDataForAllExchangesOfNetwork])
+
   useEffect(() => {
-    console.log('InfoBlock useEffect:', { network, hotPairs });
-  }, [hotPairs, network]);
+    getAllData();
+    const interval = setInterval(getAllData, 60000);
+    return () => clearInterval(interval);
+  }, [getAllData]);
 
   return (
     <section className={s.info}>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
+// import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
 import { useParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -27,6 +27,7 @@ import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/excha
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import TradingviewWidget from '../../components/TradingviewWidget';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
@@ -43,6 +44,7 @@ const PairExplorer: React.FC = () => {
 
   const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
   const exchange = exchanges[0]; // first exchange for Links data
+  // const exchangeWithUppercasedFirstLetter = uppercaseFirstLetter(exchange);
   const exchangesOfNetwork = Object.values(exchanges);
   // const tradingviewExchange = TradingviewExchangesNames[exchangesOfNetwork[0]];
 
@@ -150,8 +152,10 @@ const PairExplorer: React.FC = () => {
   useEffect(() => {
     if (!pairId) return () => {};
     getSwapsFromAllExchanges();
-    const interval = setInterval(getSwapsFromAllExchanges, 15000);
-    return () => clearInterval(interval);
+    // todo: cancelled because it rerenders chart
+    // const interval = setInterval(getSwapsFromAllExchanges, 15000);
+    // return () => clearInterval(interval);
+    return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairId]);
 
@@ -309,20 +313,27 @@ Fundraising Capital"
               </div>
               <div className={s.chart}>
                 {/* https://github.com/rafaelklaessen/react-tradingview-widget/blob/master/src/index.js */}
-                <TradingViewWidget
-                  theme={Themes.DARK}
-                  autosize
-                  hide_side_toolbar={false}
-                  style={BarStyles.CANDLES}
-                  symbol={`${
+                {/* <TradingViewWidget */}
+                {/*  theme={Themes.DARK} */}
+                {/*  autosize */}
+                {/*  hide_side_toolbar={false} */}
+                {/*  style={BarStyles.CANDLES} */}
+                {/*  symbol={`${ */}
+                {/*    WHITELIST.includes(pairInfo?.base_info?.token1.id || '') */}
+                {/*      ? pairInfo?.base_info?.token0?.symbol */}
+                {/*      : pairInfo?.base_info?.token1?.symbol */}
+                {/*  }USD`} */}
+                {/*  allow_symbol_change={false} */}
+                {/* /> */}
+                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
+                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
+                <TradingviewWidget
+                  symbol={`UNI:${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                       ? pairInfo?.base_info?.token0?.symbol
                       : pairInfo?.base_info?.token1?.symbol
-                  }USD`}
-                  allow_symbol_change={false}
+                  }/USD`}
                 />
-                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
-                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
               </div>
             </div>
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
