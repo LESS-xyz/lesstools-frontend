@@ -1,33 +1,7 @@
 import historyProvider from './historyProvider';
 
 const config = {
-  supported_resolutions: ['1', '3', '5', '15', '30', '60', '120', '240', 'D'],
-  // exchanges: [
-  //   {
-  //     value: 'Bitfinex',
-  //     name: 'Bitfinex',
-  //     desc: 'Bitfinex',
-  //   },
-  //   {
-  //     // `exchange` argument for the `searchSymbols` method, if a user selects this exchange
-  //     value: 'Kraken',
-  //
-  //     // filter name
-  //     name: 'Kraken',
-  //
-  //     // full exchange name displayed in the filter popup
-  //     desc: 'Kraken bitcoin exchange',
-  //   },
-  // ],
-  // symbols_types: [
-  //   {
-  //     name: 'crypto',
-  //
-  //     // `symbolType` argument for the `searchSymbols` method, if a user selects this symbol type
-  //     value: 'crypto',
-  //   },
-  //   // ...
-  // ],
+  supported_resolutions: ['60', 'D'],
 };
 
 export default {
@@ -53,9 +27,9 @@ export default {
         onSymbolResolvedCallback,
         onResolveErrorCallback,
       });
-      console.log('Tradingview Datafeed resolveSymbol:',{symbolName})
+      console.log('Tradingview Datafeed resolveSymbol:', { symbolName });
       const split_data = symbolName.split(/[:/]/);
-      console.log('Tradingview Datafeed resolveSymbol:', {split_data})
+      console.log('Tradingview Datafeed resolveSymbol:', { split_data });
       const symbolInfo = {
         name: symbolName,
         full_name: symbolName,
@@ -77,7 +51,7 @@ export default {
         data_status: 'streaming',
       };
 
-      if (split_data[2].match(/USD|EUR|JPY|AUD|GBP|KRW|CNY/)) {
+      if (split_data[1].match(/USD|EUR|JPY|AUD|GBP|KRW|CNY/)) {
         symbolInfo.pricescale = 100;
       }
       setTimeout(function () {

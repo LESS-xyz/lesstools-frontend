@@ -17,15 +17,11 @@ export default {
           ? '/data/histoday'
           : resolution >= 60
           ? '/data/histohour'
-          : '/data/histominute';
+          : '/data/histoday';
       const params = {
-        e: split_symbol[0],
-        fsym: split_symbol[1],
-        tsym: split_symbol[2],
-        toTs: to || '',
-        // toTs: to() || undefined,
+        fsym: split_symbol[0],
+        tsym: split_symbol[1],
         limit: limit || 2000,
-        // aggregate: 1//resolution
       };
       console.log('TradingviewWidget historyprovider:', { params });
 
@@ -38,9 +34,9 @@ export default {
       }
       if (data.Data.length) {
         console.log(
-          `TradingviewWidget historyprovider actually returned: ${new Date(data.TimeFrom * 1000).toISOString()} - ${new Date(
-            data.TimeTo * 1000,
-          ).toISOString()}`,
+          `TradingviewWidget historyprovider actually returned: ${new Date(
+            data.TimeFrom * 1000,
+          ).toISOString()} - ${new Date(data.TimeTo * 1000).toISOString()}`,
         );
         const bars = data.Data.map((el: any) => {
           return {

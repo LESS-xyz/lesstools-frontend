@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import s from './TradingviewWidget.module.scss';
-import Datafeed from './datafeed'
-import { useEffect } from "react";
+import Datafeed from './datafeed';
+import { useEffect } from 'react';
 
 export interface InterfaceTradingviewWidgetProps {
   containerId?: string;
@@ -27,7 +27,7 @@ function getLanguageFromURL() {
 const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = (props) => {
   const {
     symbol = 'Coinbase:BTC/USD',
-    interval = '15',
+    interval = '60',
     containerId = 'tv_chart_container',
     libraryPath = '/charting_library/',
     chartsStorageUrl = 'https://saveload.tradingview.com',
@@ -50,9 +50,7 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = (props) => 
       container_id: containerId,
       library_path: libraryPath,
       locale: getLanguageFromURL() || 'en',
-      disabled_features: [
-        'use_localstorage_for_settings',
-      ],
+      disabled_features: ['use_localstorage_for_settings'],
       enabled_features: [
         // 'study_templates',
       ],
@@ -66,36 +64,38 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = (props) => 
       studies_overrides: studiesOverrides,
       overrides: {
         // "mainSeriesProperties.showCountdown": true,
-        "paneProperties.background": "#222222",
-        "paneProperties.vertGridProperties.color": "#454545",
-        "paneProperties.horzGridProperties.color": "#454545",
-        "scalesProperties.textColor" : "#AAA",
+        'paneProperties.background': '#222222',
+        'paneProperties.vertGridProperties.color': '#454545',
+        'paneProperties.horzGridProperties.color': '#454545',
+        'scalesProperties.textColor': '#AAA',
         //
         // "paneProperties.background": "#131722",
         // "paneProperties.vertGridProperties.color": "#363c4e",
         // "paneProperties.horzGridProperties.color": "#363c4e",
-        "symbolWatermarkProperties.transparency": 90,
+        'symbolWatermarkProperties.transparency': 90,
         // "scalesProperties.textColor" : "#AAA",
-        "mainSeriesProperties.candleStyle.wickUpColor": '#336854',
-        "mainSeriesProperties.candleStyle.wickDownColor": '#7f323f',
-      }
+        'mainSeriesProperties.candleStyle.wickUpColor': '#336854',
+        'mainSeriesProperties.candleStyle.wickDownColor': '#7f323f',
+      },
     };
 
     // (window as any).TradingView.onready(() => {
-      // eslint-disable-next-line no-multi-assign,new-cap
-      const widget = (window as any).tvWidget = new (window as any).TradingView.widget(widgetOptions);
+    // eslint-disable-next-line no-multi-assign,new-cap
+    const widget = ((window as any).tvWidget = new (window as any).TradingView.widget(
+      widgetOptions,
+    ));
 
-      // var tvChart= new TradingView.widget(option);
-      // tvChart.onChartReady(function() {
-      //   tvChart.addCustomCSSFile('css/my-custom-css.css')
-      // })
+    // var tvChart= new TradingView.widget(option);
+    // tvChart.onChartReady(function() {
+    //   tvChart.addCustomCSSFile('css/my-custom-css.css')
+    // })
 
-      // eslint-disable-next-line no-underscore-dangle
-      // console.log('TradingviewWidget:', (window as any).TradingView.widget);
+    // eslint-disable-next-line no-underscore-dangle
+    // console.log('TradingviewWidget:', (window as any).TradingView.widget);
 
-      widget.onChartReady(() => {
-        console.log('Chart has loaded!')
-      });
+    widget.onChartReady(() => {
+      console.log('Chart has loaded!');
+    });
     // });
     return () => (window as any).tvWidget.remove();
   }, [
@@ -112,12 +112,7 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = (props) => 
     studiesOverrides,
   ]);
 
-  return (
-    <div
-      id={containerId}
-      className={s.container}
-    />
-  );
-}
+  return <div id={containerId} className={s.container} />;
+};
 
 export default TradingviewWidget;

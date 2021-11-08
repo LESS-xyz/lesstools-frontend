@@ -312,28 +312,16 @@ Fundraising Capital"
                 <PairsSearch placeholder={`Search ${network} pairs`} />
               </div>
               <div className={s.chart}>
-                {/* https://github.com/rafaelklaessen/react-tradingview-widget/blob/master/src/index.js */}
-                {/* <TradingViewWidget */}
-                {/*  theme={Themes.DARK} */}
-                {/*  autosize */}
-                {/*  hide_side_toolbar={false} */}
-                {/*  style={BarStyles.CANDLES} */}
-                {/*  symbol={`${ */}
-                {/*    WHITELIST.includes(pairInfo?.base_info?.token1.id || '') */}
-                {/*      ? pairInfo?.base_info?.token0?.symbol */}
-                {/*      : pairInfo?.base_info?.token1?.symbol */}
-                {/*  }USD`} */}
-                {/*  allow_symbol_change={false} */}
-                {/* /> */}
-                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
-                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
                 <TradingviewWidget
-                  symbol={`UNI:${
+                  autosize
+                  symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                       ? pairInfo?.base_info?.token0?.symbol
                       : pairInfo?.base_info?.token1?.symbol
                   }/USD`}
                 />
+                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
+                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
               </div>
             </div>
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
