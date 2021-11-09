@@ -94,26 +94,16 @@ class BackendService {
 
   // TOKEN PAIR INFO
   getTokenPairAdditionalData = async (data: IGetTokenAdditionalInfoProps) => {
-    const token = localStorage.getItem('lesstools_token');
-    const headers = token
-      ? {
-          Authorization: `Token ${token}`,
-        }
-      : {};
     try {
       const res: {
         data: IAdditionalInfoFromBackend;
-      } = await this.axios.post(
-        '/analytics/pair_info',
-        {
-          pair_address: data.pair_address,
-          token_address: data.token_address,
-          token_name: data.token_name,
-          token_symbol: data.token_symbol,
-          platform: data.platform,
-        },
-        { headers },
-      );
+      } = await this.axios.post('/analytics/pair_info', {
+        pair_address: data.pair_address,
+        token_address: data.token_address,
+        token_name: data.token_name,
+        token_symbol: data.token_symbol,
+        platform: data.platform,
+      });
       return { data: res.data };
     } catch (error) {
       return { data: null, error };
