@@ -64,6 +64,8 @@
     "stylelint-prettier": "^1.1.2",
     "swiper": "^6.7.1",
     "typescript": "^4.1.2",
+    "use-http": "^1.0.24",
+    "uuid": "^8.3.2",
     "web3": "^1.5.2"
   },
   "devDependencies": {
@@ -71,6 +73,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.20",
+    "@types/uuid": "^8.3.1",
     "jest-html-reporter": "^3.3.0",
     "jest-junit": "^12.0.0",
     "lint-staged": "^10.5.4",

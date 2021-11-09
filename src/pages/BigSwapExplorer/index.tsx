@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet';
-import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
 import { observer } from 'mobx-react-lite';
 
@@ -11,13 +10,16 @@ import { IRowBigSwap } from '../../types/table';
 import { GET_BIG_SWAPS } from '../../queries/index';
 import { IBigSwapInfo } from '../../types/bigSwap';
 import { WHITELIST } from '../../data/whitelist';
-import { useMst } from '../../store/store';
-import { sushiswapSubgraph, uniswapSubgraph } from '../../index';
 
 import s from './BigSwapExplorer.module.scss';
 // import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
-import { Exchanges } from "../../config/exchanges";
+import { ExchangesByNetworks } from '../../config/exchanges';
+import TheGraph from '../../services/TheGraph';
+import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { uniqueArrayOfObjectsByKeyOfChild } from '../../utils/comparers';
+import { useLocation } from 'react-router-dom';
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
 
 // headers for table
 const headerData: ITableHeader = [
@@ -33,24 +35,82 @@ const headerData: ITableHeader = [
 ];
 
 const BigSwapExplorer: React.FC = observer(() => {
-  const { currentExchange } = useMst();
   const [searchValue, setSearchValue] = useState('');
+  const [swapsDataPlain, setSwapsDataPlain] = useState<any[]>([]);
+  const [swapsData, setSwapsData] = useState<any>();
+  const [tableData, setTableData] = useState<IRowBigSwap[]>([]);
 
-  // table Data
-  const [tableData, setTableData] = useState<Array<IRowBigSwap>>([]);
+  const location = useLocation();
+
+  const network = location.pathname.split('/')[1];
+  const exchanges = useMemo(
+    () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
+    [network],
+  );
 
   // query big swaps
-  type response = { swaps: Array<IBigSwapInfo> };
-  const { loading, data: swapsData } = useQuery<response>(GET_BIG_SWAPS, {
-    variables: { lowerThreshold: 10000 },
-    pollInterval: 15000,
-    client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
-  });
+  const getSwapsData = useCallback(
+    async (variables: any) => {
+      try {
+        const exchangesOfNetwork = Object.values(exchanges);
+        if (!exchangesOfNetwork.length) return;
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: GET_BIG_SWAPS,
+            variables,
+          });
+        });
+        const result = await Promise.all(results);
+        console.log('BigSwapExplorer getSwapsData:', { result });
+        setSwapsDataPlain(result || []);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [exchanges],
+  );
+
+  useEffect(() => {
+    if (!exchanges) return () => {};
+    getSwapsData({ lowerThreshold: 10000 });
+    const interval = setInterval(() => getSwapsData({ lowerThreshold: 10000 }), 15000);
+    return () => clearInterval(interval);
+  }, [exchanges, getSwapsData]);
+
+  // concatenate data from all exchanges to 'pairs' field
+  const concatenateSwapsData = useCallback(async () => {
+    try {
+      const exchangesOfNetwork = Object.values(exchanges);
+      let resultData: any[] = [];
+      swapsDataPlain.map((item: any, i: number) => {
+        if (!item) return null;
+        let { swaps } = item;
+        const exchange = exchangesOfNetwork[i];
+        swaps = swaps.map((swap: any) => {
+          return { ...swap, exchange };
+        });
+        resultData = resultData.concat(swaps || []);
+        return null;
+      });
+      const swaps = uniqueArrayOfObjectsByKeyOfChild(resultData, 'transaction', 'id');
+      const dataNew = { swaps };
+      console.log('BigSwapExplorer concatenateSwapsData:', dataNew);
+      setSwapsData(dataNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [swapsDataPlain, exchanges]);
+
+  useEffect(() => {
+    if (!swapsDataPlain || !swapsDataPlain.length) return;
+    concatenateSwapsData();
+  }, [swapsDataPlain, concatenateSwapsData]);
 
   // для фильтрации
   // сначала приходит ответ с бэка, это сетается в setSwapsToTable,
   // после обработка и сетается в setTableData
-  const [swapsFromBackend, setSwapsFromBackend] = useState<response>({ swaps: [] });
+  const [swapsFromBackend, setSwapsFromBackend] = useState<any>({ swaps: [] });
   useEffect(() => {
     if (swapsData) setSwapsFromBackend(swapsData);
   }, [swapsData]);
@@ -58,7 +118,7 @@ const BigSwapExplorer: React.FC = observer(() => {
   // фильтрация
   useEffect(() => {
     if (searchValue) {
-      const newSwaps = swapsData?.swaps.filter((data) => {
+      const newSwaps = swapsData?.swaps.filter((data: any) => {
         if (
           data.pair.token0.symbol.includes(searchValue.toUpperCase()) ||
           data.pair.token1.symbol.includes(searchValue.toUpperCase())
@@ -66,49 +126,52 @@ const BigSwapExplorer: React.FC = observer(() => {
           return true;
         return false;
       });
-      setSwapsFromBackend({ swaps: newSwaps || [] });
+      const newSwapsfromBackend = { swaps: newSwaps || [] };
+      console.log(newSwapsfromBackend);
+      setSwapsFromBackend(newSwapsfromBackend);
     } else setSwapsFromBackend(swapsData || { swaps: [] });
   }, [searchValue, swapsData]);
 
   useEffect(() => {
-    if (!loading && swapsFromBackend.swaps.length) {
-      const newData: Array<IRowBigSwap> = swapsFromBackend?.swaps.map((swap: IBigSwapInfo) => {
-        // TBR = Token Being Reviewd
-        const TBRSymbol = WHITELIST.includes(swap.pair.token1.id)
-          ? swap.pair.token0.symbol
-          : swap.pair.token1.symbol;
-        const TBRindex = WHITELIST.includes(swap.pair.token1.symbol) ? '0' : '1';
-
-        const TBRamountOut = swap[`amount${TBRindex}Out` as const];
-        const TBRamountIn = swap[`amount${TBRindex}In` as const];
-        const TBRreserve = `reserve${TBRindex}` as const;
-
-        const TBRtype = +TBRamountOut === 0 ? 'sell' : 'buy';
-        const TBRquantity = TBRtype === 'sell' ? +TBRamountIn : +TBRamountOut;
-
-        const otherTokenIndex = TBRindex === '1' ? '0' : '1';
-
-        return {
-          pair: TBRSymbol,
-          exchange: Exchanges.Uniswap, // todo
-          time: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
-          type: TBRtype,
-          quantity: TBRquantity,
-          totalEth:
-            TBRtype === 'buy'
-              ? +swap[`amount${otherTokenIndex}In` as const]
-              : +swap[`amount${otherTokenIndex}Out` as const],
-          totalUsd: +swap.amountUSD,
-          change: (TBRquantity / +swap.pair[TBRreserve]) * 100,
-          others: {
-            liveData: swap.pair.id,
-            etherscan: swap.transaction.id,
-          },
-        };
-      });
-      setTableData(newData);
+    console.log({ swapsFromBackend });
+    if (!swapsFromBackend?.swaps?.length) {
+      setTableData([]);
+      return;
     }
-  }, [loading, swapsFromBackend]);
+    const newData: any[] = swapsFromBackend?.swaps.map((swap: IBigSwapInfo) => {
+      const { exchange } = swap;
+      // TBR = Token Being Reviewd
+      const TBRSymbol = WHITELIST.includes(swap.pair.token1.id)
+        ? swap.pair.token0.symbol
+        : swap.pair.token1.symbol;
+      const TBRindex = WHITELIST.includes(swap.pair.token1.symbol) ? '0' : '1';
+      const TBRamountOut = swap[`amount${TBRindex}Out` as const];
+      const TBRamountIn = swap[`amount${TBRindex}In` as const];
+      const TBRreserve = `reserve${TBRindex}` as const;
+      const TBRtype = +TBRamountOut === 0 ? 'sell' : 'buy';
+      const TBRquantity = TBRtype === 'sell' ? +TBRamountIn : +TBRamountOut;
+      const otherTokenIndex = TBRindex === '1' ? '0' : '1';
+      return {
+        pair: TBRSymbol,
+        exchange,
+        time: moment(+swap.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss'),
+        type: TBRtype,
+        quantity: TBRquantity,
+        totalEth:
+          TBRtype === 'buy'
+            ? +swap[`amount${otherTokenIndex}In` as const]
+            : +swap[`amount${otherTokenIndex}Out` as const],
+        totalUsd: +swap.amountUSD,
+        change: (TBRquantity / +swap.pair[TBRreserve]) * 100,
+        others: {
+          liveData: swap.pair.id,
+          etherscan: swap.transaction.id,
+        },
+      };
+    });
+    console.log({ newData });
+    setTableData(newData);
+  }, [swapsFromBackend]);
 
   return (
     <main className={s.section}>
@@ -127,14 +190,14 @@ Fundraising Capital"
           <div className={s.info_left}>
             <div className={s.info_title}>Big Swap Explorer</div>
             <div className={s.info_subtitle}>
-              Shows latest big swaps in {currentExchange.exchange} with useful information
+              Shows latest big swaps in {network} with useful information
             </div>
           </div>
           <div className={s.info_right}>
             <Search value={searchValue} onChange={setSearchValue} placeholder="Search" />
           </div>
         </div>
-        {loading && !swapsData ? (
+        {!swapsData ? (
           <img src={loader} alt="loader" />
         ) : (
           <Table data={tableData} header={headerData} tableType="bigSwap" />

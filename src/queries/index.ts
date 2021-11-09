@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 // get pair-info-card at pair-explorer page UNISWAP
-export const GET_PAIR_INFO = gql`
+export const GET_PAIR_INFO = `
   query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
       reserveUSD
@@ -50,7 +50,7 @@ export const GET_PAIR_INFO = gql`
 `;
 
 // get pair-info-card at pair-explorer page SUSHISWAP
-export const GET_PAIR_INFO_SUSHIWAP = gql`
+export const GET_PAIR_INFO_SUSHIWAP = `
   query Pair($id: ID!, $blockNumber: Int) {
     base_info: pair(id: $id) {
       reserveUSD
@@ -99,7 +99,7 @@ export const GET_PAIR_INFO_SUSHIWAP = gql`
 `;
 
 // GET BLOCK NUMBER 24h AGO
-export const GET_BLOCK_24H_AGO = gql`
+export const GET_BLOCK_24H_AGO = `
   query blocks($timestamp: BigInt!) {
     blocks(
       first: 1
@@ -113,8 +113,20 @@ export const GET_BLOCK_24H_AGO = gql`
   }
 `;
 
+// GET BLOCK NUMBER NOW
+export const GET_LAST_BLOCK = `
+  query _meta {
+    _meta {
+      block {
+        hash
+        number
+      }
+    }
+  }
+`;
+
 // GET all pair swaps for table at pair explorer page
-export const GET_PAIR_SWAPS = gql`
+export const GET_PAIR_SWAPS = `
   query getPairSwaps($id: ID!) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { pair: $id }) {
       pair {
@@ -145,7 +157,7 @@ export const GET_PAIR_SWAPS = gql`
 `;
 
 // big swaps table (sushiswap and uniswap)
-export const GET_BIG_SWAPS = gql`
+export const GET_BIG_SWAPS = `
   query getBigSwaps($lowerThreshold: BigDecimal) {
     swaps(orderBy: timestamp, orderDirection: desc, where: { amountUSD_gt: $lowerThreshold }) {
       timestamp
@@ -179,7 +191,7 @@ export const GET_BIG_SWAPS = gql`
 `;
 
 // live new pairs table
-export const GET_LIVE_SWAPS = gql`
+export const GET_LIVE_SWAPS = `
   query getLiveSwaps {
     pairs(first: 100, orderBy: createdAtTimestamp, orderDirection: desc) {
       id
@@ -207,7 +219,7 @@ export const GET_LIVE_SWAPS = gql`
 `;
 
 // live new pairs table SUSHISWAP
-export const GET_LIVE_SWAPS_SUSHISWAP = gql`
+export const GET_LIVE_SWAPS_SUSHISWAP = `
   query getLiveSwaps {
     pairs(first: 100, orderBy: timestamp, orderDirection: desc) {
       id
@@ -245,7 +257,7 @@ export const ETH_PRICE_QUERY = gql`
 
 // SEARCHING QUERIES
 // SEARCH BY PAIR ID OR TOKEN ID
-export const SEARCH_BY_ID = gql`
+export const SEARCH_BY_ID = `
   query getPairByPairId($id: ID) {
     match_by_pair: pairs(where: { id_gte: $id }, first: 3) {
       id
@@ -282,7 +294,7 @@ export const SEARCH_BY_ID = gql`
 `;
 
 // search by id SUSHISWAP
-export const SEARCH_BY_ID_SUSHISWAP = gql`
+export const SEARCH_BY_ID_SUSHISWAP = `
   query getPairByPairId($id: ID) {
     match_by_pair: pairs(where: { id_gte: $id }, first: 3) {
       id
@@ -319,7 +331,7 @@ export const SEARCH_BY_ID_SUSHISWAP = gql`
 `;
 
 // SEARCH BY TOKEN NAME
-export const SEARCH_BY_NAME = gql`
+export const SEARCH_BY_NAME = `
   query searchByName($name: String, $name2: String) {
     match_by_symbol: tokens(where: { symbol_contains: $name }) {
       id
@@ -360,7 +372,7 @@ export const SEARCH_BY_NAME = gql`
 `;
 
 // search by symbol SUSHISWAP
-export const SEARCH_BY_NAME_SUSHISWAP = gql`
+export const SEARCH_BY_NAME_SUSHISWAP = `
   query searchByName($name: String, $name2: String) {
     match_by_symbol: tokens(where: { symbol_contains: $name }) {
       id
@@ -401,7 +413,7 @@ export const SEARCH_BY_NAME_SUSHISWAP = gql`
 `;
 
 // hot pairs UNISWAP
-const PAIR_FRAGMENT = gql`
+const PAIR_FRAGMENT = `
   fragment PairToken on Pair {
     id
     token0 {
@@ -417,7 +429,7 @@ const PAIR_FRAGMENT = gql`
   }
 `;
 
-export const GET_HOT_PAIRS = gql`
+export const GET_HOT_PAIRS = `
   ${PAIR_FRAGMENT}
   query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
     currentHour: pairHourDatas(
@@ -454,8 +466,10 @@ export const GET_HOT_PAIRS = gql`
     }
   }
 `;
+export const GQL_GET_HOT_PAIRS = gql(GET_HOT_PAIRS);
+
 // hot pairs SUSHISWAP
-export const GET_HOT_PAIRS_SUSHISWAP = gql`
+export const GET_HOT_PAIRS_SUSHISWAP = `
   ${PAIR_FRAGMENT}
   query getHotPairs($timestamp1: Int, $timestamp2: Int, $timestamp3: Int) {
     currentHour: pairHourDatas(
@@ -484,6 +498,7 @@ export const GET_HOT_PAIRS_SUSHISWAP = gql`
     }
   }
 `;
+export const GQL_GET_HOT_PAIRS_SUSHISWAP = gql(GET_HOT_PAIRS_SUSHISWAP);
 
 // get favs pairs
 export const GET_FAVORITES_PAIRS = gql`

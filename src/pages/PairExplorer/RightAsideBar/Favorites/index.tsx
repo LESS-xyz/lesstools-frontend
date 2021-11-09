@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js/bignumber';
 import { observer } from 'mobx-react-lite';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import OutsideAlerter from '../../../../utils/outsideClickWrapper';
 import backend, { PLATFORM } from '../../../../services/backend/index';
@@ -23,7 +23,7 @@ interface IFavorite {
   price: string;
   pairId: string;
   deletePair: () => void;
-  currentExchange: Exchange;
+  currentExchange?: Exchange;
   closeModal: () => void;
 }
 
@@ -32,14 +32,16 @@ const Favorite: React.FC<IFavorite> = ({
   price,
   deletePair,
   pairId,
-  currentExchange,
   closeModal,
 }) => {
+  const location = useLocation();
+  const network = location.pathname.split('/')[1].toLowerCase();
+
   return (
     <div className={s.favorites_item}>
       <div className={s.favorites_item__left}>
         <Link
-          to={`/${currentExchange}/pair-explorer/${pairId}`}
+          to={`/${network}/pair-explorer/${pairId}`}
           className={s.favorites_item__left__symbol}
           onClick={() => closeModal()}
         >
@@ -156,7 +158,6 @@ const Favorites: React.FC = observer(() => {
                     }
                     pairId={pair.id}
                     deletePair={() => deletePair(pair.id, 'ETH')}
-                    currentExchange={currentExchange.exchange}
                     closeModal={() => setIsModal(false)}
                   />
                 ))}

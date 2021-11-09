@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useMst } from '../../../store/store';
 
@@ -23,6 +23,8 @@ interface IActionsProps {
 
 const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
   const { currentExchange } = useMst();
+  const location = useLocation();
+  const network = location.pathname.split('/')[1].toLowerCase();
 
   return (
     <div className={s.block}>
@@ -68,7 +70,7 @@ const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
       )}
       {actions.liveData && (
         <Link
-          to={`/${currentExchange.exchange}/pair-explorer/${actions.liveData}`}
+          to={`/${network}/pair-explorer/${actions.liveData}`}
           data-tip={`Pair Explorer: ${actions.liveData}`}
           data-place="left"
           data-effect="solid"

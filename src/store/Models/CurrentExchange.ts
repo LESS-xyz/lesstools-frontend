@@ -3,7 +3,12 @@ import { Exchange } from "../../config/exchanges";
 
 const CurrentExchangeModel = types
   .model({
-    exchange: types.union(types.literal('uniswap'), types.literal('sushiswap'), types.literal('quickswap')),
+    exchange: types.union(
+      types.literal('uniswap'),
+      types.literal('sushiswap'),
+      types.literal('quickswap'),
+      types.literal('ethereum'),
+    ),
   })
   .actions((self) => ({
     setCurrentExchange(exchange: Exchange) {

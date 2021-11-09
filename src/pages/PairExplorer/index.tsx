@@ -1,135 +1,229 @@
-import { useEffect, useState, useCallback } from 'react';
-import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+// import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
 import { useParams, useLocation } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
 import { Helmet } from 'react-helmet';
 
 import {
   GET_PAIR_INFO,
   GET_PAIR_SWAPS,
-  GET_BLOCK_24H_AGO,
+  GET_LAST_BLOCK,
   GET_PAIR_INFO_SUSHIWAP,
 } from '../../queries/index';
 import RightAsideBar from './RightAsideBar/index';
 import { IRowPairExplorer } from '../../types/table';
-import { IPairSwapsInfo } from '../../types/pairExplorer';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
-import PairInfoBody, { IPairInfo } from './PairInfoCard/PairInfoBody/index';
+import PairInfoBody from './PairInfoCard/PairInfoBody/index';
 import PairsSearch from '../../components/PairsSearch/index';
 import Loader from '../../components/Loader/index';
 import Favorites from './RightAsideBar/Favorites/index';
 import { WHITELIST } from '../../data/whitelist';
-import { getBlockClient, ApolloClientsForExchanges } from '../../index';
 import { useMst } from '../../store/store';
 import backend, { IAdditionalInfoFromBackend } from '../../services/backend/index';
-import { uppercaseFirstLetter } from '../../utils/prettifiers';
+import { useGetDataForAllExchanges } from '../../hooks/useGetDataForAllExchanges';
 
 import s from './PairExplorer.module.scss';
 import arrowRight from '../../assets/img/icons/arrow-right.svg';
-import { Exchanges } from '../../config/exchanges';
+import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
+import TheGraph from '../../services/TheGraph';
+import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import TradingviewWidget from '../../components/TradingviewWidget';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
     useState<null | IAdditionalInfoFromBackend>(null);
-  const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
+  // const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
+  const [blocks, setBlocks] = useState<any[]>([]);
+  const [swaps, setSwaps] = useState<any[]>([]);
+  const [pairInfo, setPairInfo] = useState<any>([]);
   const { id: pairId } = useParams<{ id: string }>();
   const { user } = useMst();
-  const location = useLocation();
-  const exchange = location.pathname.split('/')[1];
 
-  const isExchange = useCallback(
-    (v: string) => exchange.toLowerCase() === v.toLowerCase(),
-    [exchange],
-  );
-  const client: any = ApolloClientsForExchanges[uppercaseFirstLetter(exchange.toLowerCase())];
+  const location = useLocation();
+  const network = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
+
+  const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
+  const exchange = exchanges[0]; // first exchange for Links data
+  // const exchangeWithUppercasedFirstLetter = uppercaseFirstLetter(exchange);
+  const exchangesOfNetwork = Object.values(exchanges);
+  // const tradingviewExchange = TradingviewExchangesNames[exchangesOfNetwork[0]];
 
   // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
   // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
   // запрос на граф для получения номера блока 24 часа назад
-  const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
-    client: getBlockClient,
-    variables: {
-      timestamp: isExchange(Exchanges.Sushiswap) ? timestamp24hAgo : 1599000000,
-    },
-  });
+  // const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
+  //   client: getBlockClient,
+  //   variables: {
+  //     timestamp: isExchangeLikeSushiswap(exchange) ? timestamp24hAgo : 1599000000,
+  //   },
+  // });
+
+  // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
+  // const getBlocksFromAllExchanges = useCallback(async () => {
+  //   try {
+  //     if (!exchangesOfNetwork.length) return;
+  //     const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+  //       const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
+  //       return TheGraph.query({
+  //         subgraph,
+  //         query: GET_BLOCK_24H_AGO,
+  //         variables: {
+  //           timestamp: isExchangeLikeSushiswap(exchangeOfNetwork) ? timestamp24hAgo : 1599000000,
+  //         },
+  //       });
+  //     });
+  //     const result = await Promise.all(results);
+  //     console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
+  //     setBlocks(results);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [exchangesOfNetwork, timestamp24hAgo]);
+
+  // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
+  const getBlocksFromAllExchanges = useCallback(async () => {
+    try {
+      if (!exchangesOfNetwork.length) return;
+      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+        const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
+        return TheGraph.query({
+          subgraph,
+          query: GET_LAST_BLOCK,
+        });
+      });
+      const result = await Promise.all(results);
+      console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
+      setBlocks(result);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [exchangesOfNetwork]);
 
   // запрос для pair-card info [ГРАФ]
-  const {
-    loading,
-    data: pairInfo,
-    refetch: refetchPairInfo,
-  } = useQuery<IPairInfo>(isExchange(Exchanges.Sushiswap) ? GET_PAIR_INFO_SUSHIWAP : GET_PAIR_INFO, {
-    variables: {
-      id: pairId,
-      blockNumber: (blocks && +blocks?.blocks[0]?.number) || 10684814,
-    },
-    client,
-  });
+  const getPairInfoFromAllExchanges = useCallback(async () => {
+    try {
+      if (!exchangesOfNetwork.length) return;
+      const results = exchangesOfNetwork.map((exchangeOfNetwork: any, i: number) => {
+        const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
+        // eslint-disable-next-line no-underscore-dangle
+        const blockNumber = +blocks[i]?._meta?.block?.number || 10684814;
+        return TheGraph.query({
+          subgraph,
+          query: isExchangeLikeSushiswap(exchangeOfNetwork)
+            ? GET_PAIR_INFO_SUSHIWAP
+            : GET_PAIR_INFO,
+          variables: {
+            id: pairId,
+            blockNumber,
+          },
+        });
+      });
+      const resultsGetPairInfo = await Promise.all(results);
+      const pairInfoNew = resultsGetPairInfo[0] || {}; // first exchange
+      setPairInfo(pairInfoNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [pairId, blocks, exchangesOfNetwork]);
+
+  useEffect(() => {
+    if (!network) return;
+    getBlocksFromAllExchanges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [network]);
 
   // рефетч при изменение id пары или номер блока (24 часа назад) [ГРАФ]
   useEffect(() => {
-    refetchPairInfo();
-  }, [blocks, refetchPairInfo, pairId]);
+    if (!pairId) return;
+    if (!network) return;
+    getPairInfoFromAllExchanges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blocks, pairId, network]);
 
   // запрос на получения всех свапов данной пары [ГРАФ]
-  type response = { swaps: Array<IPairSwapsInfo> };
-  const { loading: loadingSwaps, data: swaps } = useQuery<response>(GET_PAIR_SWAPS, {
-    variables: {
-      id: pairId,
-    },
-    client,
+  const [swapsFromAllExchanges, getSwapsFromAllExchanges] = useGetDataForAllExchanges({
+    network,
+    defaultData: [],
+    query: GET_PAIR_SWAPS,
+    variables: { id: pairId },
   });
+
+  useEffect(() => {
+    if (!pairId) return () => {};
+    getSwapsFromAllExchanges();
+    // todo: cancelled because it rerenders chart
+    // const interval = setInterval(getSwapsFromAllExchanges, 15000);
+    // return () => clearInterval(interval);
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairId]);
+
+  const concatenateSwaps = useCallback(async () => {
+    try {
+      let swapsNew: any[] = [];
+      swapsFromAllExchanges.map((item: any) => {
+        if (!item) return null;
+        const { swaps: swapsOfExchange } = item;
+        if (!swapsOfExchange) return null;
+        swapsNew = swapsNew.concat(swapsOfExchange);
+        return null;
+      });
+      setSwaps(swapsNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [swapsFromAllExchanges]);
+
+  useEffect(() => {
+    if (!swapsFromAllExchanges || !swapsFromAllExchanges.length) return;
+    concatenateSwaps();
+  }, [swapsFromAllExchanges, concatenateSwaps]);
 
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
-    if (!pairInfo) return;
-    console.log('PairExplorer useEffect:', { pairId, pairInfo, blocks });
-    if (!loading && pairInfo?.base_info) {
-      const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
-        ? pairInfo?.base_info.token0
-        : pairInfo?.base_info.token1;
-
-      backend
-        .getTokenPairAdditionalData({
-          pair_address: pairId,
-          token_address: tbr.id,
-          token_symbol: tbr.symbol,
-          token_name: tbr.name,
-          platform: 'ETH',
-        })
-        .then((res) => setTokenInfoFromBackend(res.data));
-    }
-  }, [blocks, loading, pairInfo, pairId, user.isVerified]);
+    if (!pairInfo.base_info) return;
+    const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
+      ? pairInfo?.base_info.token0
+      : pairInfo?.base_info.token1;
+    backend
+      .getTokenPairAdditionalData({
+        pair_address: pairId,
+        token_address: tbr.id,
+        token_symbol: tbr.symbol,
+        token_name: tbr.name,
+        platform: 'ETH',
+      })
+      .then((res) => setTokenInfoFromBackend(res.data));
+  }, [blocks, pairInfo, pairId, user.isVerified]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
 
   // формирования данных для таблицы
   useEffect(() => {
-    if (!loadingSwaps && swaps !== undefined) {
-      const data: Array<IRowPairExplorer> = swaps?.swaps.map((swap) => {
-        const TBRindex = WHITELIST.includes(swap.pair.token1.id) ? '0' : '1';
-        const OtherIndex = TBRindex === '1' ? '0' : '1';
+    if (!swaps.length) return;
+    const data: Array<IRowPairExplorer> = swaps.map((swap: any) => {
+      const TBRindex = WHITELIST.includes(swap.pair.token1.id) ? '0' : '1';
+      const OtherIndex = TBRindex === '1' ? '0' : '1';
 
-        return {
-          data: +swap.timestamp * 1000,
-          tbr: swap.pair[`token${TBRindex}` as const],
-          otherToken: swap.pair[`token${OtherIndex}` as const],
-          type: +swap[`amount${TBRindex}Out` as const] === 0 ? 'sell' : 'buy',
-          priceUsd: +swap[`token${TBRindex}PriceUSD` as const],
-          priceEth: +swap[`token${TBRindex}PriceETH` as const],
-          amountEth:
-            +swap[`amount${TBRindex}Out` as const] === 0
-              ? +swap[`amount${TBRindex}In` as const]
-              : +swap[`amount${TBRindex}Out` as const],
-          totalEth:
-            +swap[`amount${OtherIndex}Out` as const] || +swap[`amount${OtherIndex}In` as const],
-          maker: swap.from,
-          others: { etherscan: swap.transaction.id },
-        };
-      });
-      setSwapsData(data);
-    }
-  }, [loadingSwaps, swaps]);
+      return {
+        data: +swap.timestamp * 1000,
+        tbr: swap.pair[`token${TBRindex}` as const],
+        otherToken: swap.pair[`token${OtherIndex}` as const],
+        type: +swap[`amount${TBRindex}Out` as const] === 0 ? 'sell' : 'buy',
+        priceUsd: +swap[`token${TBRindex}PriceUSD` as const],
+        priceEth: +swap[`token${TBRindex}PriceETH` as const],
+        amountEth:
+          +swap[`amount${TBRindex}Out` as const] === 0
+            ? +swap[`amount${TBRindex}In` as const]
+            : +swap[`amount${TBRindex}Out` as const],
+        totalEth:
+          +swap[`amount${OtherIndex}Out` as const] || +swap[`amount${OtherIndex}In` as const],
+        maker: swap.from,
+        others: { etherscan: swap.transaction.id },
+      };
+    });
+    setSwapsData(data);
+  }, [swaps]);
 
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);
@@ -153,7 +247,7 @@ Fundraising Capital"
       <div className={s.container}>
         <div className={s.main}>
           <div className={s.mobile_block}>
-            <PairsSearch placeholder={`Search ${exchange} pairs`} />
+            <PairsSearch placeholder="Search pairs by token symbol / token id / pair contract id" />
             <div className={s.mobile_block__favs}>
               <Favorites />
             </div>
@@ -178,7 +272,7 @@ Fundraising Capital"
                 <div className={`${s.left_inner} grey-scroll`}>
                   {pairInfo ? (
                     <PairInfoBody
-                      loading={loading}
+                      loading={!pairInfo}
                       pairId={pairId}
                       tokenInfoFromBackend={tokenInfoFromBackend}
                       pairInfo={pairInfo}
@@ -212,20 +306,16 @@ Fundraising Capital"
                     cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || 0}
                   />
                 )}
-                <PairsSearch placeholder={`Search ${exchange} pairs`} />
+                <PairsSearch placeholder={`Search ${network} pairs`} />
               </div>
               <div className={s.chart}>
-                <TradingViewWidget
-                  theme={Themes.DARK}
+                <TradingviewWidget
                   autosize
-                  hide_side_toolbar={false}
-                  style={BarStyles.CANDLES}
                   symbol={`${
                     WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
                       ? pairInfo?.base_info?.token0?.symbol
                       : pairInfo?.base_info?.token1?.symbol
-                  }USD`}
-                  allow_symbol_change={false}
+                  }/USD`}
                 />
               </div>
             </div>

@@ -11,21 +11,29 @@ import Sidebar from './components/Sidebar/index';
 import InfoBlock from './components/InfoBlock';
 import MobileHeader from './components/MobileHeader';
 
-export const App: React.FC = observer(() => {
+export const App: React.FC = observer((props: any) => {
   const { mobileMenu } = useMst();
 
   useEffect(() => {
     const body = document.querySelector('body');
     if (mobileMenu.isActive) body?.classList.add('fixed');
     else body?.classList.remove('fixed');
-  }, [mobileMenu.isActive]);
+  }, [mobileMenu.isActive, props]);
 
   return (
     <div className="App">
       <HotPairs />
       <MobileHeader />
       <Sidebar />
-      <Route path={['/sushiswap', '/uniswap']}>
+      <Route
+        path={[
+          // '/sushiswap',
+          // '/uniswap',
+          '/ethereum',
+          '/binance',
+          '/polygon',
+        ]}
+      >
         <InfoBlock />
       </Route>
 
@@ -33,17 +41,40 @@ export const App: React.FC = observer(() => {
         <Route exact path="/">
           <BoardPage />
         </Route>
-        <Route exact path={['/sushiswap/big-swap-explorer', '/uniswap/big-swap-explorer']}>
+        <Route
+          exact
+          path={[
+            // '/sushiswap/big-swap-explorer',
+            // '/uniswap/big-swap-explorer',
+            '/ethereum/big-swap-explorer',
+            '/binance/big-swap-explorer',
+            '/polygon/big-swap-explorer',
+          ]}
+        >
           <BigSwapExplorer />
         </Route>
-        <Route exact path={['/sushiswap/live-new-pairs', '/uniswap/live-new-pairs']}>
+        <Route
+          exact
+          path={[
+            // '/sushiswap/live-new-pairs',
+            // '/uniswap/live-new-pairs',
+            '/ethereum/live-new-pairs',
+            '/binance/live-new-pairs',
+            '/polygon/live-new-pairs',
+          ]}
+        >
           <LiveNewPairs />
         </Route>
-        <Route path={[
-          '/sushiswap/pair-explorer/:id',
-          '/uniswap/pair-explorer/:id',
-          '/quickswap/pair-explorer/:id',
-        ]}>
+        <Route
+          path={[
+            // '/sushiswap/pair-explorer/:id',
+            // '/uniswap/pair-explorer/:id',
+            // '/quickswap/pair-explorer/:id',
+            '/ethereum/pair-explorer/:id',
+            '/binance/pair-explorer/:id',
+            '/polygon/pair-explorer/:id',
+          ]}
+        >
           <PairExplorer />
         </Route>
         <Route path="/user-account">

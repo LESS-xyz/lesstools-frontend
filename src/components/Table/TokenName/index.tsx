@@ -1,14 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-import { useMst } from '../../../store/store';
+import { Link, useLocation } from 'react-router-dom';
 
 import s from '../Table.module.scss';
 
 const TokenName: React.FC<{ token: string; pairId: string }> = React.memo(({ token, pairId }) => {
-  const { currentExchange } = useMst();
+  const location = useLocation();
+  const network = location.pathname.split('/')[1].toLowerCase();
+
   return (
-    <Link to={`/${currentExchange.exchange}/pair-explorer/${pairId}`} className={s.token}>
+    <Link to={`/${network}/pair-explorer/${pairId}`} className={s.token}>
       <span>{token}</span>
     </Link>
   );

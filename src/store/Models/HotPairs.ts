@@ -22,17 +22,25 @@ const HotPairsModel = types
     uniswap: types.array(InfoModel),
     sushiswap: types.array(InfoModel),
     quickswap: types.array(InfoModel),
+    ethereum: types.array(InfoModel),
   })
   .actions((self) => ({
-    // TODO: fix any
+    // todo: remove
     setUniPairs(pairs: any) {
       self.uniswap = pairs;
     },
+    // todo: remove
     setSushiPairs(pairs: any) {
       self.sushiswap = pairs;
     },
+    // todo: remove
     setQuickswapPairs(pairs: any) {
       self.quickswap = pairs;
+    },
+    //
+    setHotPairs(pairs: any) {
+      // eslint-disable-next-line no-param-reassign
+      self = { ...self, ...pairs };
     },
   }));
 

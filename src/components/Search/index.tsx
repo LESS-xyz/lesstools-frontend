@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import s from './Search.module.scss';
-
 import searcgImg from '../../assets/img/icons/search.svg';
 import loaderImg from '../../assets/loader.svg';
 
@@ -13,6 +12,7 @@ interface IInputProps {
   big?: boolean;
   loading?: boolean;
   setValue?: (str: string) => void;
+  children?: any;
 }
 
 const Search: React.FC<IInputProps> = ({
@@ -23,15 +23,16 @@ const Search: React.FC<IInputProps> = ({
   onFocus,
   loading = false,
   setValue,
+  children,
 }) => {
   const [inputValue, setInputValue] = useState(value);
+
   const handleOnChange = (str: string) => {
     setInputValue(str);
     onChange(str);
-    if (setValue) {
-      setValue(str);
-    }
+    if (setValue) setValue(str);
   };
+
   return (
     <div className={`${s.input} ${big && s.big}`}>
       <div className={s.input_img}>
@@ -54,6 +55,9 @@ const Search: React.FC<IInputProps> = ({
         type="text"
         placeholder={placeholder}
       />
+      <div className={s.children}>
+        {children}
+      </div>
     </div>
   );
 };

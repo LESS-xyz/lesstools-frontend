@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { getSecondsFromDate } from '../../../utils/getSecondsFromDate';
-import { formatTime } from '../../../utils/formatTime';
+import { formatTime } from '../../../utils/time';
 
 import s from './ListedSince.module.scss';
 

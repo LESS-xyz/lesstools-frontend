@@ -1,23 +1,25 @@
 import { Helmet } from 'react-helmet';
-import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import Table, { ITableHeader } from '../../components/Table/index';
 import Search from '../../components/Search/index';
 // import AdBlock from '../../components/AdBlock/index';
 import { GET_LIVE_SWAPS, GET_LIVE_SWAPS_SUSHISWAP } from '../../queries/index';
-import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { INewPair } from '../../types/newPairs';
 import { IRowLiveNewPairs } from '../../types/table';
 import { WHITELIST } from '../../data/whitelist';
-import { useMst } from '../../store/store';
 
 import s from '../BigSwapExplorer/BigSwapExplorer.module.scss';
-import { Exchanges } from '../../config/exchanges';
+import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/exchanges';
 
 // import ad from '../../assets/img/sections/ad/ad1.png';
 import loader from '../../assets/loader.svg';
+import TheGraph from '../../services/TheGraph';
+import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { uniqueArrayOfObjectsByKey } from '../../utils/comparers';
+import { useLocation } from 'react-router-dom';
+import { uppercaseFirstLetter } from '../../utils/prettifiers';
 
 // headers for table
 const headerData: ITableHeader = [
@@ -34,25 +36,86 @@ const headerData: ITableHeader = [
 
 const LiveNewPairs: React.FC = observer(() => {
   const [searchValue, setSearchValue] = useState('');
-  const { currentExchange } = useMst();
+  const [liveSwapsPlain, setLiveSwapsPlain] = useState<any[]>([]);
+  const [liveSwaps, setLiveSwaps] = useState<any>();
+  const [swapsFromBackend, setSwapsFromBackend] = useState<any>({ pairs: [] });
+
+  const location = useLocation();
+
+  const network = location.pathname.split('/')[1];
+  const exchanges = useMemo(
+    () => ExchangesByNetworks[uppercaseFirstLetter(network.toLowerCase())] || [],
+    [network],
+  );
 
   // final data for table
-  const [tableData, setTableData] = useState<Array<IRowLiveNewPairs>>([]);
+  const [tableData, setTableData] = useState<IRowLiveNewPairs[]>([]);
 
-  // query new pairs
-  type response = { pairs: Array<INewPair> };
-  const { loading, data: liveSwaps } = useQuery<response>(
-    currentExchange.exchange === 'uniswap' ? GET_LIVE_SWAPS : GET_LIVE_SWAPS_SUSHISWAP,
-    {
-      pollInterval: 15000,
-      client: currentExchange.exchange === 'uniswap' ? uniswapSubgraph : sushiswapSubgraph,
+  // query new pairs from all exchanges
+  const getLiveSwaps = useCallback(
+    async (variables: any) => {
+      try {
+        const exchangesOfNetwork = Object.values(exchanges);
+        if (!exchangesOfNetwork.length) return;
+        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+          return TheGraph.query({
+            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            query: isExchangeLikeSushiswap(exchangeOfNetwork)
+              ? GET_LIVE_SWAPS_SUSHISWAP
+              : GET_LIVE_SWAPS,
+            variables,
+          });
+        });
+        const result = await Promise.all(results);
+        console.log('LiveNewPairs getLiveSwaps:', { result });
+        setLiveSwapsPlain(result || []);
+      } catch (e) {
+        console.error(e);
+      }
     },
+    [exchanges],
   );
+
+  useEffect(() => {
+    if (!exchanges) return () => {};
+    getLiveSwaps({});
+    const interval = setInterval(() => getLiveSwaps({}), 15000);
+    return () => clearInterval(interval);
+  }, [exchanges, getLiveSwaps]);
+
+  // concatenate data from all exchanges to 'pairs' field
+  const concatenateLiveSwaps = useCallback(async () => {
+    try {
+      const exchangesOfNetwork = Object.values(exchanges);
+      let pairsNew: any[] = [];
+      liveSwapsPlain.map((item: any, i: number) => {
+        if (!item) return null;
+        let { pairs } = item;
+        const exchange = exchangesOfNetwork[i];
+        pairs = pairs.map((pair: any) => {
+          return { ...pair, exchange };
+        });
+        pairsNew = pairsNew.concat(pairs || []);
+        return null;
+      });
+      const dataNew = {
+        pairs: uniqueArrayOfObjectsByKey(pairsNew, 'id'),
+      };
+      console.log('PairSearch concatenateSearchByIdData:', dataNew);
+      setLiveSwaps(dataNew);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [liveSwapsPlain, exchanges]);
+
+  useEffect(() => {
+    if (!liveSwapsPlain || !liveSwapsPlain.length) return;
+    concatenateLiveSwaps();
+  }, [liveSwapsPlain, concatenateLiveSwaps]);
 
   // для фильтрации
   // сначала приходит ответ с бэка, это сетается в setSwapsFromBackend,
   // после обработка и сетается в setTableData
-  const [swapsFromBackend, setSwapsFromBackend] = useState<response>({ pairs: [] });
   useEffect(() => {
     if (liveSwaps) setSwapsFromBackend(liveSwaps);
   }, [liveSwaps]);
@@ -60,7 +123,7 @@ const LiveNewPairs: React.FC = observer(() => {
   // фильтрация
   useEffect(() => {
     if (searchValue) {
-      const newSwaps = liveSwaps?.pairs.filter((data) => {
+      const newSwaps = liveSwaps?.pairs.filter((data: any) => {
         if (
           data.token0.symbol.includes(searchValue.toUpperCase()) ||
           data.token1.symbol.includes(searchValue.toUpperCase())
@@ -73,8 +136,9 @@ const LiveNewPairs: React.FC = observer(() => {
   }, [searchValue, liveSwaps]);
 
   useEffect(() => {
-    if (!loading && swapsFromBackend.pairs.length) {
+    if (swapsFromBackend?.pairs?.length) {
       const newData: Array<IRowLiveNewPairs> = swapsFromBackend?.pairs.map((swap: INewPair) => {
+        const { exchange } = swap;
         // TBR = Token Being Reviewd
         const TBRSymbol = WHITELIST.includes(swap.token1.id)
           ? swap.token0.symbol
@@ -94,7 +158,7 @@ const LiveNewPairs: React.FC = observer(() => {
 
         return {
           token: TBRSymbol,
-          exchange: Exchanges.Uniswap, // todo
+          exchange,
           listedSince: swap.createdAtTimestamp,
           actions: {
             uniswap: TBRaddress,
@@ -113,20 +177,17 @@ const LiveNewPairs: React.FC = observer(() => {
           otherTokenSymbol: swap[`token${otherTokenIndex}` as const].symbol,
         };
       });
+      console.log('LiveNewPairs:', { tableData: newData });
       setTableData(newData);
     }
-  }, [loading, swapsFromBackend]);
+  }, [swapsFromBackend]);
 
   return (
     <main className={s.section}>
       <Helmet>
         <meta charSet="utf-8" />
         <title>LiveNewPairs - LessTools</title>
-        <meta
-          name="description"
-          content="Multi-Chain Decentralized
-Fundraising Capital"
-        />
+        <meta name="description" content="Multi-Chain Decentralized Fundraising Capital" />
       </Helmet>
       <div className={s.container}>
         {/* <AdBlock adImg={ad} /> */}
@@ -139,7 +200,7 @@ Fundraising Capital"
             <Search value={searchValue} onChange={setSearchValue} placeholder="Search" />
           </div>
         </div>
-        {loading && liveSwaps === undefined ? (
+        {liveSwaps === undefined ? (
           <img src={loader} alt="loader" />
         ) : (
           <Table data={tableData} header={headerData} tableType="liveNewPairs" />

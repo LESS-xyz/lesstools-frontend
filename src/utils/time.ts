@@ -14,3 +14,6 @@ export function formatTime(seconds: number) {
     second > 0 ? `${second} s` : ''
   }`;
 }
+
+// get timestamp code of the start of current hour
+export const getStartOfHour = () => Math.floor(Math.floor(Date.now() / 1000) / 3600) * 3600;

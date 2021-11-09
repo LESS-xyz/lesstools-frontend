@@ -62,7 +62,7 @@ interface IPairInfoBodyProps {
 const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
   ({ pairInfo, pairId, tokenInfoFromBackend, exchange }) => {
     // tbr = token being reviewed
-    const [tbr, setTbr] = useState(pairInfo?.base_info?.token1);
+    const [tbr, setTbr] = useState(pairInfo?.base_info?.token1 || {});
     const [tbrIndex, setTbrIndex] = useState<'0' | '1'>('1');
     const [otherToken, setOtherToken] = useState(pairInfo?.base_info?.token0);
 
@@ -121,17 +121,17 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
     return (
       <section className={s.card}>
         <MoreInfoModal
-          TBRprice={tbr.derivedUSD}
-          TBRsymbol={tbr.symbol}
-          otherTokenPrice={otherToken.derivedUSD}
-          otherTokenSymbol={otherToken.symbol}
-          poolCreated={pairInfo.base_info.createdAtTimestamp}
+          TBRprice={tbr?.derivedUSD}
+          TBRsymbol={tbr?.symbol}
+          otherTokenPrice={otherToken?.derivedUSD}
+          otherTokenSymbol={otherToken?.symbol}
+          poolCreated={pairInfo?.base_info.createdAtTimestamp}
           totalSupply={tokenInfoFromBackend?.pair.token_being_reviewed?.total_supply || '0'}
           pooledTbr={pairInfo.base_info[`reserve${tbrIndex}` as const]}
         />
         <ShareModal
           url={window.location.href}
-          text={`Check ${tbr.symbol} at LESSTools! Price: $${(+tbr.derivedUSD).toFixed(
+          text={`Check ${tbr?.symbol} at LESSTools! Price: $${(+tbr?.derivedUSD).toFixed(
             2,
           )} - Shared from tools.less.xyz`}
         />
@@ -200,7 +200,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"
-                value={`${tbr.id.slice(0, 5)}...${tbr.id.slice(-4)}`}
+                value={`${tbr?.id?.slice(0, 5)}...${tbr?.id?.slice(-4)}`}
                 copy
                 copyValue={tbr.id}
               />

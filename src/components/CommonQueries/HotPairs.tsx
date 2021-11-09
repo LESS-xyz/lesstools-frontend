@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
 
 import { useMst } from '../../store/store';
-import { GET_HOT_PAIRS, GET_HOT_PAIRS_SUSHISWAP } from '../../queries/index';
+import { GQL_GET_HOT_PAIRS, GQL_GET_HOT_PAIRS_SUSHISWAP } from '../../queries/index';
 import { uniswapSubgraph, sushiswapSubgraph } from '../../index';
 import { WHITELIST } from '../../data/whitelist';
 
@@ -18,6 +18,7 @@ interface IToken {
 }
 
 export interface IPairFromGraph {
+  exchange?: string;
   hourlyTxns: string;
   pair: {
     id: string;
@@ -35,7 +36,7 @@ type response = {
 const HotPairs: React.FC = () => {
   const { hotPairs } = useMst();
 
-  const { data } = useQuery<response>(GET_HOT_PAIRS, {
+  const { data } = useQuery<response>(GQL_GET_HOT_PAIRS, {
     client: uniswapSubgraph,
     // HARDCODE
     variables: {
@@ -45,7 +46,7 @@ const HotPairs: React.FC = () => {
     },
   });
 
-  const { data: sushiPairs } = useQuery<response>(GET_HOT_PAIRS_SUSHISWAP, {
+  const { data: sushiPairs } = useQuery<response>(GQL_GET_HOT_PAIRS_SUSHISWAP, {
     client: sushiswapSubgraph,
     variables: {
       timestamp1: getStartOfHour(),
@@ -83,6 +84,7 @@ const HotPairs: React.FC = () => {
   useEffect(() => {
     if (data) {
       hotPairs.setUniPairs(formatData(data));
+      console.log('HotPairs:', formatData(data));
     }
     // eslint-disable-next-line
   }, [data]);
