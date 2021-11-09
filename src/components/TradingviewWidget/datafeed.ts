@@ -22,14 +22,7 @@ export default {
   resolveSymbol: (symbolName: any, onSymbolResolvedCallback: any, onResolveErrorCallback: any) => {
     try {
       // expects a symbolInfo object in response
-      console.log('Tradingview Datafeed resolveSymbol:', {
-        symbolName,
-        onSymbolResolvedCallback,
-        onResolveErrorCallback,
-      });
-      console.log('Tradingview Datafeed resolveSymbol:', { symbolName });
       const split_data = symbolName.split(/[:/]/);
-      console.log('Tradingview Datafeed resolveSymbol:', { split_data });
       const symbolInfo = {
         name: symbolName,
         full_name: symbolName,
@@ -37,7 +30,7 @@ export default {
         description: '',
         type: 'crypto',
         session: '24x7',
-        timezone: 'Etc/UTC',
+        timezone: '(UTC+3)',
         ticker: symbolName,
         exchange: split_data[0],
         minmov: 1,
@@ -51,12 +44,8 @@ export default {
         data_status: 'streaming',
       };
 
-      if (split_data[1].match(/USD|EUR|JPY|AUD|GBP|KRW|CNY/)) {
-        symbolInfo.pricescale = 100;
-      }
       setTimeout(function () {
         onSymbolResolvedCallback(symbolInfo);
-        console.log('Tradingview Datafeed resolveSymbol:', { symbolInfo });
       }, 0);
     } catch (e) {
       console.error('Tradingview Datafeed resolveSymbol:', e);
@@ -72,10 +61,6 @@ export default {
     onErrorCallback: any = () => {},
   ) {
     const { from, to, firstDataRequest } = periodParams;
-    // eslint-disable-next-line prefer-rest-params
-    console.log('Tradingview Datafeed getBars:', { arguments });
-    // console.log('function args',arguments)
-    // console.log(`Requesting bars between ${new Date(from * 1000).toISOString()} and ${new Date(to * 1000).toISOString()}`)
     historyProvider
       .getBars(symbolInfo, resolution, from, to, firstDataRequest, null)
       .then((bars) => {

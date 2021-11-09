@@ -93,7 +93,7 @@ const PairExplorer: React.FC = () => {
       });
       const result = await Promise.all(results);
       console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
-      setBlocks(results);
+      setBlocks(result);
     } catch (e) {
       console.error(e);
     }
@@ -120,7 +120,6 @@ const PairExplorer: React.FC = () => {
       });
       const resultsGetPairInfo = await Promise.all(results);
       const pairInfoNew = resultsGetPairInfo[0] || {}; // first exchange
-      console.log('PairExplorer getPairInfoFromAllExchanges:', { exchangesOfNetwork, pairInfoNew });
       setPairInfo(pairInfoNew);
     } catch (e) {
       console.error(e);
@@ -169,7 +168,6 @@ const PairExplorer: React.FC = () => {
         swapsNew = swapsNew.concat(swapsOfExchange);
         return null;
       });
-      console.log('PairExplorer getPairSwaps:', swapsNew);
       setSwaps(swapsNew);
     } catch (e) {
       console.error(e);
@@ -184,7 +182,6 @@ const PairExplorer: React.FC = () => {
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
     if (!pairInfo.base_info) return;
-    console.log('PairExplorer useEffect:', { pairId, blocks, pairInfo });
     const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
       ? pairInfo?.base_info.token0
       : pairInfo?.base_info.token1;
@@ -320,8 +317,6 @@ Fundraising Capital"
                       : pairInfo?.base_info?.token1?.symbol
                   }/USD`}
                 />
-                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
-                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
               </div>
             </div>
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
