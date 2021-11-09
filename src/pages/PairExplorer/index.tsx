@@ -185,6 +185,7 @@ const PairExplorer: React.FC = () => {
     const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
       ? pairInfo?.base_info.token0
       : pairInfo?.base_info.token1;
+
     backend
       .getTokenPairAdditionalData({
         pair_address: pairId,
