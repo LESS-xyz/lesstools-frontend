@@ -10,15 +10,6 @@ export default {
     setTimeout(() => callback(config), 0);
   },
 
-  searchSymbols: (userInput: any, exchange: any, symbolType: any, onResultReadyCallback: any) => {
-    console.log('Tradingview Datafeed searchSymbols:', {
-      userInput,
-      exchange,
-      symbolType,
-      onResultReadyCallback,
-    });
-  },
-
   resolveSymbol: (symbolName: any, onSymbolResolvedCallback: any, onResolveErrorCallback: any) => {
     try {
       // expects a symbolInfo object in response
@@ -66,6 +57,7 @@ export default {
       .then((bars) => {
         if (bars.length) {
           onHistoryCallback(bars, { noData: false });
+          
         } else {
           onHistoryCallback(bars, { noData: true });
         }
@@ -74,26 +66,6 @@ export default {
         console.error('Tradingview Datafeed getBars:', { err });
         onErrorCallback(err);
       });
-  },
-
-  subscribeBars: (
-    symbolInfo: any,
-    resolution: any,
-    onRealtimeCallback: any,
-    subscribeUID: any,
-    onResetCacheNeededCallback: any,
-  ) => {
-    console.log('Tradingview Datafeed subscribeBars:', {
-      symbolInfo,
-      resolution,
-      onRealtimeCallback,
-      subscribeUID,
-      onResetCacheNeededCallback,
-    });
-  },
-
-  unsubscribeBars: (subscriberUID: any) => {
-    console.log('Tradingview Datafeed unsubscribeBars:', { subscriberUID });
   },
 
   calculateHistoryDepth: (resolution: any, resolutionBack: any, intervalBack: any) => {

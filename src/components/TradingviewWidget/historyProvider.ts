@@ -3,8 +3,6 @@ import axios from 'axios';
 const api_root = 'https://min-api.cryptocompare.com';
 const history: any = {};
 const api_key = process.env.REACT_APP_CRYPTOCOMPARE_API_KEY;
-// TODO: не читается API ключ
-console.log(api_key);
 
 interface IExchange {
   [key: string]: {
@@ -44,6 +42,7 @@ export default {
   history,
 
   getBars: async (symbolInfo: any, resolution: any, from: any, to: any, first: any, limit: any) => {
+    if (!first) return [];
     try {
       const split_symbol = symbolInfo.name.split(/[:/]/);
       const url = resolution >= 60 ? '/data/histohour' : '/data/histoday';
@@ -55,6 +54,10 @@ export default {
       };
 
       const result = await axios.get(`${api_root}${url}`, { params });
+      const olderData = await axios.get(`${api_root}${url}`, {
+        params: { ...params, toTs: result.data.TimeFrom },
+      });
+
       const { data } = result;
 
       if (data.Response && data.Response === 'Error') {
@@ -87,7 +90,7 @@ export default {
       }
 
       if (data.Data.length) {
-        const bars = data.Data.map((el: any) => {
+        const bars = [...olderData.data.Data, ...data.Data].map((el: any) => {
           return {
             time: el.time * 1000, // TradingView requires bar time in ms
             low: el.low,
