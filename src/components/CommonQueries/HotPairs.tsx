@@ -84,7 +84,6 @@ const HotPairs: React.FC = () => {
   useEffect(() => {
     if (data) {
       hotPairs.setUniPairs(formatData(data));
-      console.log('HotPairs:', formatData(data));
     }
     // eslint-disable-next-line
   }, [data]);
