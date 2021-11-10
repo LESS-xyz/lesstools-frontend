@@ -19,4 +19,6 @@ export const WHITELIST: string[] = [
   '0xa47c8bf37f92abed4a126bda807a7b7498661acd', // WUST
   '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984', // UNI
   '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599', // WBTC
+  '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // WAVAX
+  '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d', // WXDAI
 ];

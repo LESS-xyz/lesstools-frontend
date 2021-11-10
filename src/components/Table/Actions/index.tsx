@@ -21,6 +21,15 @@ interface IActionsProps {
   };
 }
 
+const explorersLinks: { [key: string]: string } = {
+  binance: 'https://bscscan.com/address/',
+  ethereum: 'https://etherscan.io/address/',
+  polygon: 'https://polygonscan.com/address/',
+  xdai: 'https://blockscout.com/xdai/mainnet/address/',
+  avalanche: 'https://avascan.info/blockchain/c/address/',
+  fantom: 'https://explorer.fantom.network/address/',
+};
+
 const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
   const { currentExchange } = useMst();
   const location = useLocation();
@@ -49,7 +58,7 @@ const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
           data-tip={`Tx: ${actions.etherscan}`}
           data-place="left"
           data-effect="solid"
-          href={`https://etherscan.io/tx/${actions.etherscan}`}
+          href={`${explorersLinks[network]}${actions.liveData}`}
           target="_blank"
           rel="noreferrer"
         >
