@@ -29,6 +29,9 @@ const PairInfoHeader: React.FC<IPairInfoHeaderProps> = ({ token0, token1, cmcTok
     if (token1 && WHITELIST.includes(token1.id)) {
       setTbr(token0);
       setOtherToken(token1);
+    } else {
+      setTbr(token1);
+      setOtherToken(token0);
     }
   }, [token1, token0]);
 

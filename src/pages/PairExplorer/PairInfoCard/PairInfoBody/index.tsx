@@ -67,10 +67,16 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
     const [otherToken, setOtherToken] = useState(pairInfo?.base_info?.token0);
 
     useEffect(() => {
-      if (WHITELIST.includes(pairInfo?.base_info?.token1?.id)) {
-        setTbr(pairInfo.base_info.token0);
-        setTbrIndex('0');
-        setOtherToken(pairInfo.base_info.token1);
+      if (pairInfo.base_info) {
+        if (WHITELIST.includes(pairInfo?.base_info?.token1?.id)) {
+          setTbr(pairInfo.base_info.token0);
+          setTbrIndex('0');
+          setOtherToken(pairInfo.base_info.token1);
+        } else {
+          setTbr(pairInfo.base_info.token1);
+          setTbrIndex('1');
+          setOtherToken(pairInfo.base_info.token0);
+        }
       }
     }, [pairInfo]);
 
@@ -196,7 +202,11 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
             >
               View more info
             </button>
-            <Links tokenInfoFromBackend={tokenInfoFromBackend} tokenId={tbr.id} exchange={exchange} />
+            <Links
+              tokenInfoFromBackend={tokenInfoFromBackend}
+              tokenId={tbr.id}
+              exchange={exchange}
+            />
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"
