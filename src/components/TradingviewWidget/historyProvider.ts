@@ -74,32 +74,41 @@ export default {
             },
           });
 
-          return newBars.data.Data.map((el: any) => {
-            return {
-              time: el.time * 1000, // TradingView requires bar time in ms
-              low: el.low,
-              high: el.high,
-              open: el.open,
-              close: el.close,
-              volume: el.volumefrom,
-            };
-          });
+          return newBars.data.Data.reduce((res: Array<any>, el: any) => {
+            if (el.open !== 0) {
+              res.push({
+                time: el.time * 1000, // TradingView requires bar time in ms
+                low: el.low,
+                high: el.high,
+                open: el.open,
+                close: el.close,
+                volume: el.volumefrom,
+              });
+            }
+
+            return res;
+          }, []);
         }
 
         return [];
       }
 
       if (data.Data.length) {
-        const bars = [...olderData.data.Data, ...data.Data].map((el: any) => {
-          return {
-            time: el.time * 1000, // TradingView requires bar time in ms
-            low: el.low,
-            high: el.high,
-            open: el.open,
-            close: el.close,
-            volume: el.volumefrom,
-          };
-        });
+        const bars = [...olderData.data.Data, ...data.Data].reduce((res: Array<any>, el: any) => {
+          if (el.open !== 0) {
+            res.push({
+              time: el.time * 1000, // TradingView requires bar time in ms
+              low: el.low,
+              high: el.high,
+              open: el.open,
+              close: el.close,
+              volume: el.volumefrom,
+            });
+          }
+
+          return res;
+        }, []);
+
         if (first) {
           const lastBar = bars[bars.length - 1];
           history[symbolInfo.name] = { lastBar };

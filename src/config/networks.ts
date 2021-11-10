@@ -55,6 +55,6 @@ export const DefaultPairsByNetwork: { [key: string]: string } = {
   [Networks.Binance]: '0xe06f8d30ac334c857fc8c380c85969c150f38a6a',
   [Networks.Polygon]: '0x0024739eb63fb6697e63698c93c77b9508f15ab2',
   [Networks.Xdai]: '0x0024739eb63fb6697e63698c93c77b9508f15ab2',
-  [Networks.Avalanche]: '0x0024739eb63fb6697e63698c93c77b9508f15ab2',
-  [Networks.Fantom]: '0x0024739eb63fb6697e63698c93c77b9508f15ab2',
+  [Networks.Avalanche]: '0xf64e1c5b6e17031f5504481ac8145f4c3eab4917',
+  [Networks.Fantom]: '0x31c0385dde956f95d43dac80bd74fee149961f4c',
 }
