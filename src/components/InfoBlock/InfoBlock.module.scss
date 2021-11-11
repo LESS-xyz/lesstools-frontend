@@ -1,5 +1,6 @@
 @import '../../styles/mixins/flex.scss';
 @import '../../styles/mixins/media.scss';
+@import '../../styles/mixins/container.scss';
 
 .info_inner,
 .left,
@@ -9,9 +10,10 @@
 }
 
 .info {
-  background-color: rgba(103, 77, 246, 0.4);
+  background-color: var(--black);
   padding: 6px 10px 6px 55px;
   overflow: hidden;
+  @include container(1390px);
   &:hover {
     .info_inner {
       animation-play-state: paused;
@@ -58,7 +60,7 @@
   letter-spacing: -0.531474px;
   color: var(--grey);
   span {
-    color: var(--orange);
+    color: var(--purple);
   }
   margin-right: 20px;
   > a {
@@ -101,20 +103,18 @@
 }
 
 .metamask_link {
-  border-radius: 12px;
-  background: var(--gradient);
+  border-radius: 10px;
+  background: var(--purple);
   padding: 2px;
   cursor: pointer;
 
-  &__inner {
+  // &__inner {
     @include flex(row, center, space-between, nowrap);
     font-size: 16px;
     font-weight: 700;
-    border-radius: 12px;
-    background-color: #312374;
     padding: 6px 17px;
     &_img {
       margin-right: 10px;
     }
-  }
+  // }
 }

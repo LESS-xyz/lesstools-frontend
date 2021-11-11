@@ -22,7 +22,7 @@
 }
 
 .bg {
-  background: var(--gradient-background);
+  background: var(--body-background-color);
   padding-top: 30px;
   flex-grow: 1;
   @include b(extramobile) {
@@ -63,8 +63,9 @@
   @include flex(column, center, normal, nowrap);
   gap: 20px;
   width: 100%;
-  background: linear-gradient(90deg, #161126 0%, #1c0e40 100%);
+  background: var(--dark-soft);
   height: max-content;
+  border-radius: 10px;
 
   @include b(tablet) {
     grid-template-columns: 1fr;
@@ -91,7 +92,6 @@
 
 .sponsors {
   width: 100%;
-  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
   padding: 0 0 20px 0;
   height: max-content;
 
@@ -106,7 +106,6 @@
 
   &_title {
     span {
-      @include gradient-text;
       font-size: 20px;
       text-transform: uppercase;
     }
@@ -122,7 +121,9 @@
   &_body {
     @include flex(column, center, normal, nowrap);
     gap: 20px;
-    background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+    background: var(--dark-soft);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 
     @include b(tablet) {
       grid-template-columns: 1fr 1fr;
@@ -161,19 +162,22 @@
 
 .sponsors_header {
   height: 60px;
-  background-color: #2b1b64;
   text-transform: uppercase;
 
   &__bg {
     width: 100%;
     height: 100%;
-    @include flex(row, center, center);
-    background: url('../../assets/img/sections/board-page/bg-vector-1.svg');
-    background-size: cover;
+    @include flex(row, center, flex-start);
+    background-color: var(--grey-light-soft);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 16px 22px;
 
     &.sushi {
-      background: url('../../assets/img/sections/board-page/bg-vector-2.svg');
-      background-size: cover;
+      background-color: var(--grey-light-soft);
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      padding: 16px 22px;
     }
   }
 
@@ -192,7 +196,7 @@
         font-size: 20px;
         line-height: 26px;
         font-weight: 700;
-        @include gradient-text;
+        color: var(--white);
       }
     }
   }

@@ -1,18 +1,33 @@
 @import '../../styles/mixins/flex.scss';
 @import '../../styles/mixins/media.scss';
+@import '../../styles/theme.scss';
 
 .sidebar {
   position: fixed;
   top: 0;
   z-index: 1000;
   height: 100vh;
-  background: #2f226f;
+  background: var(--black);
   width: 60px;
   text-overflow: ellipsis;
 
+  .group_title__text {
+    display: none;
+  }
+  .group_title__icon_wrapped {
+    display: block;
+    margin: 0 auto;
+  }
+
   &:hover {
     transition: 0.3s ease 0.1s;
+    .group_title__text {
+      display: block;
+    }
 
+    .group_title__icon_wrapped {
+      display: none;
+    }
     .group_title_arrow {
       @include flex(row, center, center, nowrap);
       opacity: 1;
@@ -125,7 +140,6 @@
 
 .subtitle {
   transition: 0.4s ease;
-  background-color: #21194e;
   padding: 4px 5px;
   text-overflow: ellipsis;
   font-size: 10px;
@@ -144,7 +158,6 @@
     transition: 0.4s ease;
     overflow: hidden;
     padding: 12px 5px;
-    background: var(--gradient-transparent);
     cursor: pointer;
 
     &_arrow {
@@ -185,7 +198,6 @@
   padding: 11px 12px;
   padding-left: 20px;
   cursor: pointer;
-  background: #21194e;
   transition: 0.4s ease;
 
   &_text {

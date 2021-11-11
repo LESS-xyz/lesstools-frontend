@@ -1,80 +1,80 @@
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import BigNumber from 'bignumber.js/bignumber';
-// import backend from '../../../services/backend';
+import backend from '../../../services/backend';
 
 import { useWeb3Context } from '../../../contexts/Web3Connector';
 import { useMst } from '../../../store/store';
-// import config from '../../../config/index';
+import config from '../../../config/index';
 
 import s from '../UserAccount.module.scss';
 
-// import checkMark from '../../../assets/img/icons/checkmark.svg';
+import checkMark from '../../../assets/img/icons/checkmark.svg';
 
-// const SECONDS_FOR_UPDATE = 60000;
+const SECONDS_FOR_UPDATE = 60000;
 
 const VerifiedPage: React.FC = observer(() => {
   const { disconect } = useWeb3Context();
-  // const [isCheckMark, setIsCheckMark] = useState(false);
+  const [isCheckMark, setIsCheckMark] = useState(false);
   const { user } = useMst();
 
-  // const [prices, setPrices] = useState<{ holding: number; payment: number }>({
-  //   holding: 50000,
-  //   payment: 100,
-  // });
+  const [prices, setPrices] = useState<{ holding: number; payment: number }>({
+    holding: 50000,
+    payment: 100,
+  });
 
-  // const getPlanPrices = async () => {
-  //   const res = await backend.getPlanPrices();
-  //   setPrices({ holding: res.data.holding_amount_in_less, payment: res.data.monthly_price_in_usd });
-  // };
+  const getPlanPrices = async () => {
+    const res = await backend.getPlanPrices();
+    setPrices({ holding: res.data.holding_amount_in_less, payment: res.data.monthly_price_in_usd });
+  };
 
-  // useEffect(() => {
-  //   getPlanPrices();
-  // }, []);
+  useEffect(() => {
+    getPlanPrices();
+  }, []);
 
   // pooling subscription data
-  // const [timer, setTimer] = useState(SECONDS_FOR_UPDATE / 1000);
-  // const [timersIds, setTimersIds] = useState<Array<NodeJS.Timeout>>([]);
+  const [timer, setTimer] = useState(SECONDS_FOR_UPDATE / 1000);
+  const [timersIds, setTimersIds] = useState<Array<NodeJS.Timeout>>([]);
 
-  // const updateUserPlan = async () => {
-  //   const res = await backend.getUserPlan();
+  const updateUserPlan = async () => {
+    const res = await backend.getUserPlan();
 
-  //   if (res.data) {
-  //     user.setLessBalance(res.data.holdings['bsc testnet']);
-  //     user.setUserPlan({
-  //       planByHolding: res.data.plan_by_holding,
-  //       planByPayments: res.data.plan_by_payments,
-  //     });
-  //   }
-  //   return res.data;
-  // };
+    if (res.data) {
+      user.setLessBalance(res.data.holdings['bsc testnet']);
+      user.setUserPlan({
+        planByHolding: res.data.plan_by_holding,
+        planByPayments: res.data.plan_by_payments,
+      });
+    }
+    return res.data;
+  };
 
-  // const checkingUserPlan = async () => {
-  //   updateUserPlan();
+  const checkingUserPlan = async () => {
+    updateUserPlan();
 
-  //   const timerSecondsId = setInterval(() => {
-  //     setTimer((prevState) => prevState - 1);
-  //   }, 1000);
-  //   setTimersIds((prev) => [...prev, timerSecondsId]);
+    const timerSecondsId = setInterval(() => {
+      setTimer((prevState) => prevState - 1);
+    }, 1000);
+    setTimersIds((prev) => [...prev, timerSecondsId]);
 
-  //   const timerId = setInterval(async () => {
-  //     const data = await updateUserPlan();
+    const timerId = setInterval(async () => {
+      const data = await updateUserPlan();
 
-  //     if (data.plan_by_holding === 'Free' && data.plan_by_payments === 'Free') {
-  //       setTimer(SECONDS_FOR_UPDATE / 1000);
-  //     } else {
-  //       clearInterval(timerSecondsId);
-  //       clearInterval(timerId);
-  //     }
-  //   }, SECONDS_FOR_UPDATE);
-  //   setTimersIds((prev) => [...prev, timerId]);
-  // };
+      if (data.plan_by_holding === 'Free' && data.plan_by_payments === 'Free') {
+        setTimer(SECONDS_FOR_UPDATE / 1000);
+      } else {
+        clearInterval(timerSecondsId);
+        clearInterval(timerId);
+      }
+    }, SECONDS_FOR_UPDATE);
+    setTimersIds((prev) => [...prev, timerId]);
+  };
 
-  // useEffect(() => {
-  //   return () => {
-  //     timersIds.forEach((timerId) => clearInterval(timerId));
-  //   };
-  // }, [timersIds]);
+  useEffect(() => {
+    return () => {
+      timersIds.forEach((timerId) => clearInterval(timerId));
+    };
+  }, [timersIds]);
 
   return (
     <>
@@ -96,7 +96,7 @@ const VerifiedPage: React.FC = observer(() => {
           </button>
         </div>
       </div>
-      {/* {[user.planByHolding, user.planByPayments].some((plan) => plan !== 'Free') ? (
+      {[user.planByHolding, user.planByPayments].some((plan) => plan !== 'Free') ? (
         <div className={s.block}>
           <div className={s.block_inner}>
             <div className={s.block_title}>Your wallet have an active subscription</div>
@@ -158,7 +158,7 @@ const VerifiedPage: React.FC = observer(() => {
             {isCheckMark && <div className={s.block_subtitle}>Time to next check: {timer}</div>}
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 });

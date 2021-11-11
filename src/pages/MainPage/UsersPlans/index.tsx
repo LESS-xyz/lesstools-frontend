@@ -1,11 +1,12 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Pagination } from 'swiper';
 
 import s from './UsersPlans.module.scss';
 import 'swiper/swiper.scss';
 
 import featureIcon from '../../../assets/img/icons/feature.svg';
-import { ReactComponent as ArrowBlue } from '../../../assets/img/icons/arrow-blue.svg';
+// import { ReactComponent as ArrowBlue } from '../../../assets/img/icons/arrow-blue.svg';
 
 const FreeUserPlanData = [
   'Real-time data & chart',
@@ -65,6 +66,8 @@ interface IUserPlanProps {
 }
 
 const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle, itemKey, userPlan }) => {
+  // install Swiper modules
+  SwiperCore.use([Pagination]);
   return (
     <div className={s.card}>
       <div className={s.card_inner}>
@@ -94,10 +97,10 @@ interface ICardsSlider {
 }
 
 export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
-  const [sliderInstance, setSliderInstance] = useState<any>(null);
+  // const [sliderInstance, setSliderInstance] = useState<any>(null);
   return (
     <>
-      <div className={s.custom_nav}>
+      {/* <div className={s.custom_nav}>
         <button
           type="button"
           onClick={() => sliderInstance.slidePrev()}
@@ -112,14 +115,19 @@ export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
         >
           <ArrowBlue />
         </button>
-      </div>
+      </div> */}
       <Swiper
         slidesPerView={1}
         autoHeight
         breakpoints={{ 900: { slidesPerView: 3 } }}
         spaceBetween={20}
-        onSwiper={(slider) => setSliderInstance(slider)}
+        // onSwiper={(slider) => setSliderInstance(slider)}
         loop
+        pagination={{
+          type: 'bullets',
+          bulletClass: `${s.bulletClass}`,
+          bulletActiveClass: `${s.bulletActiveClass}`,
+        }}
       >
         <SwiperSlide>
           <UserPlan

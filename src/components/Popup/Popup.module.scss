@@ -9,10 +9,12 @@
   height: 100%;
   width: 100%;
   width: 150px;
-  color: var(--blue);
-  background: var(--gradient-card-background);
+  color: var(--grey);
+  background: var(--dark-soft);
   cursor: pointer;
-  border-left: 1px solid var(--blue);
+  border-left: 1px solid var(--grey);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   &:hover {
     background: var(--gradient);
@@ -31,7 +33,7 @@
   @include flex(column, center, normal, nowrap);
   position: absolute;
   top: 100%;
-  background: var(--footer-background);
+  background: var(--dark-soft);
   min-width: 100%;
   z-index: 2000000;
 
