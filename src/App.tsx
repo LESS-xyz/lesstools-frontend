@@ -25,15 +25,7 @@ export const App: React.FC = observer((props: any) => {
       <HotPairs />
       <MobileHeader />
       <Sidebar />
-      <Route
-        path={[
-          // '/sushiswap',
-          // '/uniswap',
-          '/ethereum',
-          '/binance',
-          '/polygon',
-        ]}
-      >
+      <Route path={['/ethereum', '/binance', '/polygon', '/fantom', '/avalanche', '/xdai']}>
         <InfoBlock />
       </Route>
 
@@ -44,11 +36,12 @@ export const App: React.FC = observer((props: any) => {
         <Route
           exact
           path={[
-            // '/sushiswap/big-swap-explorer',
-            // '/uniswap/big-swap-explorer',
             '/ethereum/big-swap-explorer',
             '/binance/big-swap-explorer',
             '/polygon/big-swap-explorer',
+            '/fantom/big-swap-explorer',
+            '/avalanche/big-swap-explorer',
+            '/xdai/big-swap-explorer',
           ]}
         >
           <BigSwapExplorer />
@@ -56,23 +49,24 @@ export const App: React.FC = observer((props: any) => {
         <Route
           exact
           path={[
-            // '/sushiswap/live-new-pairs',
-            // '/uniswap/live-new-pairs',
             '/ethereum/live-new-pairs',
             '/binance/live-new-pairs',
             '/polygon/live-new-pairs',
+            '/fantom/live-new-pairs',
+            '/avalanche/live-new-pairs',
+            '/xdai/live-new-pairs',
           ]}
         >
           <LiveNewPairs />
         </Route>
         <Route
           path={[
-            // '/sushiswap/pair-explorer/:id',
-            // '/uniswap/pair-explorer/:id',
-            // '/quickswap/pair-explorer/:id',
             '/ethereum/pair-explorer/:id',
             '/binance/pair-explorer/:id',
             '/polygon/pair-explorer/:id',
+            '/fantom/pair-explorer/:id',
+            '/avalanche/pair-explorer/:id',
+            '/xdai/pair-explorer/:id',
           ]}
         >
           <PairExplorer />

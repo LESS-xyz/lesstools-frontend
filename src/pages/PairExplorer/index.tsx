@@ -44,43 +44,8 @@ const PairExplorer: React.FC = () => {
 
   const exchanges = useMemo(() => ExchangesByNetworks[network] || [], [network]);
   const exchange = exchanges[0]; // first exchange for Links data
-  // const exchangeWithUppercasedFirstLetter = uppercaseFirstLetter(exchange);
   const exchangesOfNetwork = Object.values(exchanges);
-  // const tradingviewExchange = TradingviewExchangesNames[exchangesOfNetwork[0]];
 
-  // TODO: перенести запрос на номер блока в общий компонент и хранить в сторе?
-  // ⚠️ ATTENTION timestap hardcode due our subgraph is still indexing the blockchain
-  // запрос на граф для получения номера блока 24 часа назад
-  // const { data: blocks } = useQuery(GET_BLOCK_24H_AGO, {
-  //   client: getBlockClient,
-  //   variables: {
-  //     timestamp: isExchangeLikeSushiswap(exchange) ? timestamp24hAgo : 1599000000,
-  //   },
-  // });
-
-  // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
-  // const getBlocksFromAllExchanges = useCallback(async () => {
-  //   try {
-  //     if (!exchangesOfNetwork.length) return;
-  //     const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
-  //       const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
-  //       return TheGraph.query({
-  //         subgraph,
-  //         query: GET_BLOCK_24H_AGO,
-  //         variables: {
-  //           timestamp: isExchangeLikeSushiswap(exchangeOfNetwork) ? timestamp24hAgo : 1599000000,
-  //         },
-  //       });
-  //     });
-  //     const result = await Promise.all(results);
-  //     console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
-  //     setBlocks(results);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }, [exchangesOfNetwork, timestamp24hAgo]);
-
-  // 1599000000 is a timestamp, different for each subgraph. it is one of indexed timestamps.
   const getBlocksFromAllExchanges = useCallback(async () => {
     try {
       if (!exchangesOfNetwork.length) return;
@@ -92,8 +57,7 @@ const PairExplorer: React.FC = () => {
         });
       });
       const result = await Promise.all(results);
-      console.log('PairExplorer getBlocksFromAllExchanges:', { blocks: result });
-      setBlocks(results);
+      setBlocks(result);
     } catch (e) {
       console.error(e);
     }
@@ -119,8 +83,7 @@ const PairExplorer: React.FC = () => {
         });
       });
       const resultsGetPairInfo = await Promise.all(results);
-      const pairInfoNew = resultsGetPairInfo[0] || {}; // first exchange
-      console.log('PairExplorer getPairInfoFromAllExchanges:', { exchangesOfNetwork, pairInfoNew });
+      const pairInfoNew = resultsGetPairInfo.filter((el) => el.base_info !== null)[0] || {}; // first exchange
       setPairInfo(pairInfoNew);
     } catch (e) {
       console.error(e);
@@ -169,7 +132,6 @@ const PairExplorer: React.FC = () => {
         swapsNew = swapsNew.concat(swapsOfExchange);
         return null;
       });
-      console.log('PairExplorer getPairSwaps:', swapsNew);
       setSwaps(swapsNew);
     } catch (e) {
       console.error(e);
@@ -184,10 +146,10 @@ const PairExplorer: React.FC = () => {
   // запрос на бэк для доп.инфы по паре
   useEffect(() => {
     if (!pairInfo.base_info) return;
-    console.log('PairExplorer useEffect:', { pairId, blocks, pairInfo });
     const tbr = WHITELIST.includes(pairInfo.base_info.token1.id)
       ? pairInfo?.base_info.token0
       : pairInfo?.base_info.token1;
+
     backend
       .getTokenPairAdditionalData({
         pair_address: pairId,
@@ -312,28 +274,18 @@ Fundraising Capital"
                 <PairsSearch placeholder={`Search ${network} pairs`} />
               </div>
               <div className={s.chart}>
-                {/* https://github.com/rafaelklaessen/react-tradingview-widget/blob/master/src/index.js */}
-                {/* <TradingViewWidget */}
-                {/*  theme={Themes.DARK} */}
-                {/*  autosize */}
-                {/*  hide_side_toolbar={false} */}
-                {/*  style={BarStyles.CANDLES} */}
-                {/*  symbol={`${ */}
-                {/*    WHITELIST.includes(pairInfo?.base_info?.token1.id || '') */}
-                {/*      ? pairInfo?.base_info?.token0?.symbol */}
-                {/*      : pairInfo?.base_info?.token1?.symbol */}
-                {/*  }USD`} */}
-                {/*  allow_symbol_change={false} */}
-                {/* /> */}
-                {/* инструкция по замене на либу, где можно подставить данные. сначала нужно зарегаться для получения либы */}
-                {/* https://github.com/jonchurch/tradingview-js-api-tutorial */}
-                <TradingviewWidget
-                  symbol={`UNI:${
-                    WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                      ? pairInfo?.base_info?.token0?.symbol
-                      : pairInfo?.base_info?.token1?.symbol
-                  }/USD`}
-                />
+                {!pairInfo?.base_info ? (
+                  <Loader />
+                ) : (
+                  <TradingviewWidget
+                    autosize
+                    symbol={`${
+                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                        ? pairInfo?.base_info?.token0?.symbol
+                        : pairInfo?.base_info?.token1?.symbol
+                    }/USD`}
+                  />
+                )}
               </div>
             </div>
             <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>

@@ -11,7 +11,7 @@ import quickswap from '../assets/img/sections/live-new-pairs/quickswap.svg';
 import spiritswap from '../assets/img/sections/live-new-pairs/spiritswap.svg';
 import spookyswap from '../assets/img/sections/live-new-pairs/spookyswap.svg';
 import sushiswap from '../assets/img/sections/live-new-pairs/sushiswap.svg';
-import { Networks } from "./networks";
+import { Networks } from './networks';
 
 // todo: remove (used in mobx)
 export type Exchange = 'uniswap' | 'sushiswap' | 'quickswap' | 'ethereum';
@@ -54,7 +54,7 @@ export const ExchangesIcons: { [key: string]: string } = {
   [Exchanges.Spiritswap]: spiritswap,
   [Exchanges.Joetrader]: joetrader,
   [Exchanges.Pangolin]: pangolin,
-}
+};
 
 export const UnicryptExchangesNames: { [key: string]: string } = {
   [Exchanges.Uniswap]: 'uni-v2',
@@ -97,9 +97,7 @@ export const TradingviewExchangesNames: { [key: string]: string } = {
 };
 
 export const ExchangesByNetworks: { [key: string]: string[] } = {
-  [Networks.Ethereum]: [
-    Exchanges.Uniswap,
-  ],
+  [Networks.Ethereum]: [Exchanges.Uniswap],
   [Networks.Binance]: [
     Exchanges.Sushiswap,
     Exchanges.Apeswap,
@@ -109,23 +107,10 @@ export const ExchangesByNetworks: { [key: string]: string[] } = {
     Exchanges.Pancake,
     Exchanges.SushiswapBinance,
   ],
-  [Networks.Polygon]: [
-    Exchanges.Quickswap,
-    Exchanges.SushiswapPolygon,
-  ],
-  [Networks.Xdai]: [
-    Exchanges.Honeyswap,
-    Exchanges.SushiswapXdai,
-  ],
-  [Networks.Fantom]: [
-    Exchanges.Spiritswap,
-    Exchanges.Spookyswap,
-    Exchanges.SushiswapFantom,
-  ],
-  [Networks.Avalanche]: [
-    Exchanges.Joetrader,
-    Exchanges.Pangolin,
-  ],
+  [Networks.Polygon]: [Exchanges.Quickswap, Exchanges.SushiswapPolygon],
+  [Networks.Xdai]: [Exchanges.Honeyswap, Exchanges.SushiswapXdai],
+  [Networks.Fantom]: [Exchanges.Spiritswap, Exchanges.Spookyswap, Exchanges.SushiswapFantom],
+  [Networks.Avalanche]: [Exchanges.Joetrader, Exchanges.Pangolin],
 };
 
 export const SushiswapLikeExchanges: Exchanges[] = [
@@ -136,4 +121,5 @@ export const SushiswapLikeExchanges: Exchanges[] = [
   Exchanges.SushiswapXdai,
 ];
 
-export const isExchangeLikeSushiswap = (exchange: Exchanges) => SushiswapLikeExchanges.includes(exchange);
+export const isExchangeLikeSushiswap = (exchange: Exchanges) =>
+  SushiswapLikeExchanges.includes(exchange);

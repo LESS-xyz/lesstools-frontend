@@ -2,66 +2,121 @@ import axios from 'axios';
 
 const api_root = 'https://min-api.cryptocompare.com';
 const history: any = {};
+const api_key = process.env.REACT_APP_CRYPTOCOMPARE_API_KEY;
 
-// const lastBarsCache = new Map();
+interface IExchange {
+  [key: string]: {
+    markets: Array<string>;
+  };
+}
+
+interface IExchanges {
+  [key: string]: IExchange;
+}
+
+const findExchangeForPair = (exchanges: IExchanges, firstSymbolInPair: string) => {
+  if (exchanges[firstSymbolInPair]) {
+    const secondSymbolsInPair = exchanges[firstSymbolInPair];
+    const symbolWithUsd = Object.keys(secondSymbolsInPair).find(
+      (symbol) => symbol.startsWith('USD') || symbol.endsWith('USD'),
+    );
+
+    if (symbolWithUsd) {
+      return {
+        symbols: [firstSymbolInPair, symbolWithUsd],
+        exchange: secondSymbolsInPair[symbolWithUsd].markets[0],
+      };
+    }
+
+    const secondSymbol = Object.keys(secondSymbolsInPair)[0];
+    return {
+      symbols: [firstSymbolInPair, secondSymbol],
+      exchange: secondSymbolsInPair[secondSymbol].markets[0],
+    };
+  }
+
+  return null;
+};
 
 export default {
   history,
 
   getBars: async (symbolInfo: any, resolution: any, from: any, to: any, first: any, limit: any) => {
+    if (!first) return [];
     try {
       const split_symbol = symbolInfo.name.split(/[:/]/);
-      const url =
-        // eslint-disable-next-line no-nested-ternary
-        resolution === 'D'
-          ? '/data/histoday'
-          : resolution >= 60
-          ? '/data/histohour'
-          : '/data/histominute';
+      const url = resolution >= 60 ? '/data/histohour' : '/data/histoday';
       const params = {
-        e: split_symbol[0],
-        fsym: split_symbol[1],
-        tsym: split_symbol[2],
-        toTs: to || '',
-        // toTs: to() || undefined,
+        fsym: split_symbol[0],
+        tsym: split_symbol[1],
         limit: limit || 2000,
-        // aggregate: 1//resolution
+        api_key,
       };
-      console.log('TradingviewWidget historyprovider:', { params });
 
       const result = await axios.get(`${api_root}${url}`, { params });
+      const olderData = await axios.get(`${api_root}${url}`, {
+        params: { ...params, toTs: result.data.TimeFrom },
+      });
+
       const { data } = result;
-      console.log('TradingviewWidget historyprovider:', { data });
+
       if (data.Response && data.Response === 'Error') {
-        console.log('TradingviewWidget historyprovider CryptoCompare API error:', data.Message);
+        const exchanges = await axios.get(`${api_root}/data/cccagg/pairs/excluded`);
+        const newRequestData = findExchangeForPair(exchanges.data.Data, split_symbol[0]);
+        if (newRequestData) {
+          const newBars = await axios.get(`${api_root}${url}`, {
+            params: {
+              fsym: newRequestData.symbols[0],
+              tsym: newRequestData.symbols[1],
+              limit: limit || 2000,
+              api_key,
+              e: newRequestData.exchange,
+            },
+          });
+
+          return newBars.data.Data.reduce((res: Array<any>, el: any) => {
+            if (el.open !== 0) {
+              res.push({
+                time: el.time * 1000, // TradingView requires bar time in ms
+                low: el.low,
+                high: el.high,
+                open: el.open,
+                close: el.close,
+                volume: el.volumefrom,
+              });
+            }
+
+            return res;
+          }, []);
+        }
+
         return [];
       }
+
       if (data.Data.length) {
-        console.log(
-          `TradingviewWidget historyprovider actually returned: ${new Date(data.TimeFrom * 1000).toISOString()} - ${new Date(
-            data.TimeTo * 1000,
-          ).toISOString()}`,
-        );
-        const bars = data.Data.map((el: any) => {
-          return {
-            time: el.time * 1000, // TradingView requires bar time in ms
-            low: el.low,
-            high: el.high,
-            open: el.open,
-            close: el.close,
-            volume: el.volumefrom,
-          };
-        });
+        const bars = [...olderData.data.Data, ...data.Data].reduce((res: Array<any>, el: any) => {
+          if (el.open !== 0) {
+            res.push({
+              time: el.time * 1000, // TradingView requires bar time in ms
+              low: el.low,
+              high: el.high,
+              open: el.open,
+              close: el.close,
+              volume: el.volumefrom,
+            });
+          }
+
+          return res;
+        }, []);
+
         if (first) {
           const lastBar = bars[bars.length - 1];
           history[symbolInfo.name] = { lastBar };
         }
-        console.log('TradingviewWidget historyprovider:', { bars });
         return bars;
       }
       return [];
     } catch (e) {
-      console.error('TradingviewWidget historyprovider:', e);
       return [];
     }
   },

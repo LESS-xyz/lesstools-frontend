@@ -67,7 +67,6 @@ const LiveNewPairs: React.FC = observer(() => {
           });
         });
         const result = await Promise.all(results);
-        console.log('LiveNewPairs getLiveSwaps:', { result });
         setLiveSwapsPlain(result || []);
       } catch (e) {
         console.error(e);
@@ -101,7 +100,6 @@ const LiveNewPairs: React.FC = observer(() => {
       const dataNew = {
         pairs: uniqueArrayOfObjectsByKey(pairsNew, 'id'),
       };
-      console.log('PairSearch concatenateSearchByIdData:', dataNew);
       setLiveSwaps(dataNew);
     } catch (e) {
       console.error(e);
@@ -177,7 +175,6 @@ const LiveNewPairs: React.FC = observer(() => {
           otherTokenSymbol: swap[`token${otherTokenIndex}` as const].symbol,
         };
       });
-      console.log('LiveNewPairs:', { tableData: newData });
       setTableData(newData);
     }
   }, [swapsFromBackend]);
@@ -190,7 +187,6 @@ const LiveNewPairs: React.FC = observer(() => {
         <meta name="description" content="Multi-Chain Decentralized Fundraising Capital" />
       </Helmet>
       <div className={s.container}>
-        {/* <AdBlock adImg={ad} /> */}
         <div className={s.info}>
           <div className={s.info_left}>
             <div className={s.info_title}>Live New Pairs</div>

@@ -1,33 +1,7 @@
 import historyProvider from './historyProvider';
 
 const config = {
-  supported_resolutions: ['1', '3', '5', '15', '30', '60', '120', '240', 'D'],
-  // exchanges: [
-  //   {
-  //     value: 'Bitfinex',
-  //     name: 'Bitfinex',
-  //     desc: 'Bitfinex',
-  //   },
-  //   {
-  //     // `exchange` argument for the `searchSymbols` method, if a user selects this exchange
-  //     value: 'Kraken',
-  //
-  //     // filter name
-  //     name: 'Kraken',
-  //
-  //     // full exchange name displayed in the filter popup
-  //     desc: 'Kraken bitcoin exchange',
-  //   },
-  // ],
-  // symbols_types: [
-  //   {
-  //     name: 'crypto',
-  //
-  //     // `symbolType` argument for the `searchSymbols` method, if a user selects this symbol type
-  //     value: 'crypto',
-  //   },
-  //   // ...
-  // ],
+  supported_resolutions: ['60', 'D'],
 };
 
 export default {
@@ -36,26 +10,10 @@ export default {
     setTimeout(() => callback(config), 0);
   },
 
-  searchSymbols: (userInput: any, exchange: any, symbolType: any, onResultReadyCallback: any) => {
-    console.log('Tradingview Datafeed searchSymbols:', {
-      userInput,
-      exchange,
-      symbolType,
-      onResultReadyCallback,
-    });
-  },
-
   resolveSymbol: (symbolName: any, onSymbolResolvedCallback: any, onResolveErrorCallback: any) => {
     try {
       // expects a symbolInfo object in response
-      console.log('Tradingview Datafeed resolveSymbol:', {
-        symbolName,
-        onSymbolResolvedCallback,
-        onResolveErrorCallback,
-      });
-      console.log('Tradingview Datafeed resolveSymbol:',{symbolName})
       const split_data = symbolName.split(/[:/]/);
-      console.log('Tradingview Datafeed resolveSymbol:', {split_data})
       const symbolInfo = {
         name: symbolName,
         full_name: symbolName,
@@ -63,7 +21,7 @@ export default {
         description: '',
         type: 'crypto',
         session: '24x7',
-        timezone: 'Etc/UTC',
+        timezone: '(UTC+3)',
         ticker: symbolName,
         exchange: split_data[0],
         minmov: 1,
@@ -77,12 +35,8 @@ export default {
         data_status: 'streaming',
       };
 
-      if (split_data[2].match(/USD|EUR|JPY|AUD|GBP|KRW|CNY/)) {
-        symbolInfo.pricescale = 100;
-      }
       setTimeout(function () {
         onSymbolResolvedCallback(symbolInfo);
-        console.log('Tradingview Datafeed resolveSymbol:', { symbolInfo });
       }, 0);
     } catch (e) {
       console.error('Tradingview Datafeed resolveSymbol:', e);
@@ -98,15 +52,12 @@ export default {
     onErrorCallback: any = () => {},
   ) {
     const { from, to, firstDataRequest } = periodParams;
-    // eslint-disable-next-line prefer-rest-params
-    console.log('Tradingview Datafeed getBars:', { arguments });
-    // console.log('function args',arguments)
-    // console.log(`Requesting bars between ${new Date(from * 1000).toISOString()} and ${new Date(to * 1000).toISOString()}`)
     historyProvider
       .getBars(symbolInfo, resolution, from, to, firstDataRequest, null)
       .then((bars) => {
         if (bars.length) {
           onHistoryCallback(bars, { noData: false });
+          
         } else {
           onHistoryCallback(bars, { noData: true });
         }
@@ -115,26 +66,6 @@ export default {
         console.error('Tradingview Datafeed getBars:', { err });
         onErrorCallback(err);
       });
-  },
-
-  subscribeBars: (
-    symbolInfo: any,
-    resolution: any,
-    onRealtimeCallback: any,
-    subscribeUID: any,
-    onResetCacheNeededCallback: any,
-  ) => {
-    console.log('Tradingview Datafeed subscribeBars:', {
-      symbolInfo,
-      resolution,
-      onRealtimeCallback,
-      subscribeUID,
-      onResetCacheNeededCallback,
-    });
-  },
-
-  unsubscribeBars: (subscriberUID: any) => {
-    console.log('Tradingview Datafeed unsubscribeBars:', { subscriberUID });
   },
 
   calculateHistoryDepth: (resolution: any, resolutionBack: any, intervalBack: any) => {
