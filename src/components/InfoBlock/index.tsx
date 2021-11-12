@@ -215,8 +215,7 @@ const InfoBlock: React.FC<any> = observer(() => {
           </div>
         </div>
         <Link to="/user-account" className={s.metamask_link}>
-          <div className={s.metamask_link__inner}>
-            <MetaMaskIcon className={s.metamask_link__inner_img} />
+            <MetaMaskIcon className={s.metamask_link_img} />
             <span>
               {/* eslint-disable-next-line */}
               {!user.walletId
@@ -225,7 +224,6 @@ const InfoBlock: React.FC<any> = observer(() => {
                 ? 'Verify'
                 : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
             </span>
-          </div>
         </Link>
       </div>
     </section>

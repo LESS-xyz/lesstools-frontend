@@ -226,12 +226,68 @@ Fundraising Capital"
               />
             )}
           </div>
+        </div>
+        <div
+          className={`${s.main_inner} ${isLeftSideBar && s.withLeft} ${
+            isRightSideBar && s.withRight
+          } ${isLeftSideBar && isRightSideBar && s.both}`}
+        >
+          {/* <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
+            <div className={s.left}>
+              <div className={`${s.left_inner} grey-scroll`}>
+                {pairInfo ? (
+                  <PairInfoBody
+                    loading={!pairInfo}
+                    pairId={pairId}
+                    tokenInfoFromBackend={tokenInfoFromBackend}
+                    pairInfo={pairInfo}
+                    exchange={exchange}
+                  />
+                ) : (
+                  <Loader />
+                )}
+              </div>
+              <div
+                className={s.left_aside__button}
+                tabIndex={0}
+                role="button"
+                onKeyDown={() => {}}
+                onClick={() => setIsLeftSideBar(!isLeftSideBar)}
+              >
+                <div className={s.left_aside__button_inner}>
+                  <img src={arrowRight} alt=">" />
+                </div>
+              </div>
+            </div>
+          </aside> */}
+          <div className={s.center}>
+            <div className={s.info}>
+              {!pairInfo ? (
+                <Loader />
+              ) : (
+                <PairInfoHeader
+                  token0={pairInfo?.base_info?.token0}
+                  token1={pairInfo?.base_info?.token1}
+                  cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || 0}
+                />
+              )}
+              <PairsSearch placeholder={`Search ${network} pairs`} />
+            </div>
+            <div className={s.chart}>
+              {!pairInfo?.base_info ? (
+                <Loader />
+              ) : (
+                <TradingviewWidget
+                  autosize
+                  symbol={`${
+                    WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                      ? pairInfo?.base_info?.token0?.symbol
+                      : pairInfo?.base_info?.token1?.symbol
+                  }/USD`}
+                />
+              )}
+            </div>
 
-          <div
-            className={`${s.main_inner} ${isLeftSideBar && s.withLeft} ${
-              isRightSideBar && s.withRight
-            } ${isLeftSideBar && isRightSideBar && s.both}`}
-          >
             <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
               <div className={s.left}>
                 <div className={`${s.left_inner} grey-scroll`}>
@@ -260,53 +316,25 @@ Fundraising Capital"
                 </div>
               </div>
             </aside>
-            <div className={s.center}>
-              <div className={s.info}>
-                {!pairInfo ? (
-                  <Loader />
-                ) : (
-                  <PairInfoHeader
-                    token0={pairInfo?.base_info?.token0}
-                    token1={pairInfo?.base_info?.token1}
-                    cmcTokenId={tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_id || 0}
-                  />
-                )}
-                <PairsSearch placeholder={`Search ${network} pairs`} />
+          </div>
+          <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
+            <div className={s.right}>
+              <div className={s.right_inner}>
+                <RightAsideBar trades={swapsData} />
               </div>
-              <div className={s.chart}>
-                {!pairInfo?.base_info ? (
-                  <Loader />
-                ) : (
-                  <TradingviewWidget
-                    autosize
-                    symbol={`${
-                      WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                        ? pairInfo?.base_info?.token0?.symbol
-                        : pairInfo?.base_info?.token1?.symbol
-                    }/USD`}
-                  />
-                )}
+              <div
+                className={s.right_aside__button}
+                tabIndex={0}
+                role="button"
+                onKeyDown={() => {}}
+                onClick={() => setIsRightSideBar(!isRightSideBar)}
+              >
+                <div className={s.right_aside__button_inner}>
+                  <img src={arrowRight} alt=">" />
+                </div>
               </div>
             </div>
-            <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
-              <div className={s.right}>
-                <div className={s.right_inner}>
-                  <RightAsideBar trades={swapsData} />
-                </div>
-                <div
-                  className={s.right_aside__button}
-                  tabIndex={0}
-                  role="button"
-                  onKeyDown={() => {}}
-                  onClick={() => setIsRightSideBar(!isRightSideBar)}
-                >
-                  <div className={s.right_aside__button_inner}>
-                    <img src={arrowRight} alt=">" />
-                  </div>
-                </div>
-              </div>
-            </aside>
-          </div>
+          </aside>
         </div>
       </div>
     </main>

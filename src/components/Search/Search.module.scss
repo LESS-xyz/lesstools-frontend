@@ -20,31 +20,30 @@
     font-size: 15px;
     padding: 9px 20px 9px 55px;
     width: 100%;
-    border: 1px solid var(--blue);
-    border-radius: 1px;
-    background-color: transparent;
+    border-radius: 10px;
+    background-color: var(--dark-soft);
+    border: none;
     letter-spacing: 0.035em;
     &::placeholder {
-      color: var(--blue);
+      color: var(--grey);
     }
   }
 
   &.big {
-    @include flex(row, center, center, nowrap);
+    @include flex(row, center, flex-start, nowrap);
     gap: 10px;
     box-sizing: border-box;
     color: var(--input-color);
     font-size: 15px;
     padding: 20px 20px 20px 20px;
     width: 100%;
-    border: 1px solid var(--blue);
-    border-radius: 1px;
-    background-color: #000;
+    border-radius: 10px;
+    background-color: var(--dark-soft);
     letter-spacing: 0.035em;
 
     input {
       border: none;
-      background-color: #000;
+      background-color: var(--dark-soft);
       max-width: 500px;
       padding: 0;
     }

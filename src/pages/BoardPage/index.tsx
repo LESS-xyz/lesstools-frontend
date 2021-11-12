@@ -6,12 +6,12 @@ import PairsSearch from '../../components/PairsSearch/index';
 // import AdBlock from '../../components/AdBlock/index';
 import HotTable from './HotTable/index';
 import Tool from './Tool/index';
-// import Partner from './Partner/index';
+import Partner from './Partner/index';
 import { useMst } from '../../store/store';
 import s from './BoardPage.module.scss';
 // import AdImg from '../../assets/img/sections/ad/ad1.png';
 // import BetYou from '../../assets/img/sections/board-page/bet-you.png';
-import bg from '../../assets/img/sections/board-page/background.svg';
+// import bg from '../../assets/img/sections/board-page/background.svg';
 // import uniLogo from '../../assets/img/sections/board-page/uni-logo.svg';
 // import sushiLogo from '../../assets/img/sections/board-page/sushi-logo.svg';
 import React from 'react';
@@ -81,8 +81,8 @@ Fundraising Capital"
                 </div>
               </div>
               <div className={s.sponsors_body}>
-                {/* <Partner /> */}
-                {/* <Partner /> */}
+                <Partner />
+                <Partner />
                 {/* <Partner /> */}
               </div>
             </div>
@@ -102,9 +102,9 @@ Fundraising Capital"
         </div>
       </div>
 
-      <div className={s.board_bg}>
+      {/* <div className={s.board_bg}>
         <img src={bg} alt="bg" />
-      </div>
+      </div> */}
     </main>
   );
 });

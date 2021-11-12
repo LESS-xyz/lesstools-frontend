@@ -6,19 +6,19 @@
 
 .tool_header {
   height: 60px;
-  background-color: #2b1b64;
   text-transform: uppercase;
 
   &__bg {
     width: 100%;
     height: 100%;
-    @include flex(row, center, center);
-    background: url('../../../assets/img/sections/board-page/bg-vector-1.svg');
-    background-size: cover;
+    @include flex(row, center, flex-start);
+    background-color: var(--grey-light-soft);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 16px 22px;
 
     &.sushi {
-      background: url('../../../assets/img/sections/board-page/bg-vector-2.svg');
-      background-size: cover;
+      background-color: var(--grey-light-soft);
     }
   }
 
@@ -37,7 +37,7 @@
         font-size: 20px;
         line-height: 26px;
         font-weight: 700;
-        @include gradient-text;
+        color: var(--white);
       }
     }
   }
@@ -45,11 +45,17 @@
 
 .tool_body {
   padding: 30px 20px 20px;
-  background: linear-gradient(90deg, #040404 0%, #1c0e40 100%);
+  background-color: var(--dark-soft);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   &__buttons a {
     width: 100%;
     margin-bottom: 15px;
+    background-color: var(--black);
+    color: var(--white);
+    border-radius: 10px;
+    border: none;
     &:last-child {
       margin-bottom: 0;
     }

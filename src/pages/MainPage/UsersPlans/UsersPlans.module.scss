@@ -57,15 +57,16 @@
 // card
 .card {
   width: 100%;
+  background: var(--dark-soft);
+  border-radius: 10px;
 
   &_inner {
-    background: #160e33;
     padding: 10px;
   }
 
   &_header {
-    background-color: rgba(111, 69, 255, 0.2);
-    border-radius: 2px;
+    background: var(--grey-light-soft);
+    border-radius: 10px;
     padding: 20px;
     min-height: 124px;
     margin-bottom: 20px;
@@ -84,9 +85,6 @@
     }
 
     &__title {
-      span {
-        @include gradient-text;
-      }
       font-size: 24px;
       text-transform: uppercase;
       margin-bottom: 10px;
@@ -138,4 +136,10 @@
   &:last-child {
     margin-left: 25px;
   }
+}
+
+.bulletClass {
+  background: #848494;
+  width: 8px;
+  height: 8px;
 }

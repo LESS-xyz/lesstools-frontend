@@ -3,7 +3,12 @@ import { useState, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { v4 as uuid } from 'uuid';
 
-import { DefaultPairsByNetwork, Networks, NetworksForSidebar, NetworksIcons } from '../../config/networks';
+import {
+  DefaultPairsByNetwork,
+  Networks,
+  NetworksForSidebar,
+  NetworksIcons,
+} from '../../config/networks';
 import LinkSidebar from './LinkSidebar/index';
 import { useMst } from '../../store/store';
 import s from './Sidebar.module.scss';
@@ -80,6 +85,9 @@ const Sidebar: React.FC = observer(() => {
                 </div>
               )}
               <div className={s.group_title__text}>{networkName}</div>
+              <div className={s.group_title__icon_wrapped}>
+                {!!src && <img src={src} alt="img" />}
+              </div>
               <div className={s.group_title__icon}>{!!src && <img src={src} alt="img" />}</div>
             </div>
             {isActiveNetwork(network) && (

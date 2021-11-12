@@ -150,63 +150,40 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           </div>
         ) : (
           <div className={s.card_inner}>
-            <div className={s.header}>
-              <div className={s.card_buttons}>
+            <div className={s.first_block}>
+              <div className={s.header}>
                 <div
-                  onClick={handleOpenShareModal}
                   tabIndex={0}
-                  onKeyDown={handleOpenShareModal}
                   role="button"
-                  className={s.card_button}
-                >
-                  <ShareImg />
-                </div>
-                <button
-                  onClick={() => addOrRemovePairToFavs(pairId, 'ETH')}
                   onKeyDown={() => {}}
-                  type="button"
-                  disabled={!user.isVerified}
-                  className={`${s.card_button} ${
-                    user.favoritePairs.some((pair) => pair.id === pairId) && s.active
-                  }`}
+                  onClick={() => handleOpenTradeModal()}
+                  className={s.card_trade}
                 >
-                  <FavImg />
-                </button>
+                  Trade
+                </div>
               </div>
-              <div
+              <div className={s.price}>
+                <div className={s.card_body__price}>
+                  ${new BigNumber(tbr.derivedUSD).toFormat(5)}
+                </div>
+                <div className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}>
+                  <span>
+                    (24h:{' '}
+                    {tokenPrice24HoursChange === 'NaN' ? 'No data' : `${tokenPrice24HoursChange}%`})
+                  </span>{' '}
+                  {new BigNumber(tbr.derivedETH).toFormat(7)} ETH
+                </div>
+              </div>
+              <button
                 tabIndex={0}
-                role="button"
-                onKeyDown={() => {}}
-                onClick={() => handleOpenTradeModal()}
-                className={s.card_trade}
+                type="button"
+                onKeyDown={handleOpenMoreInfoModal}
+                onClick={handleOpenMoreInfoModal}
+                className={s.market_cap_button}
               >
-                Trade
-              </div>
+                View more info
+              </button>
             </div>
-            <div className={s.price}>
-              <div className={s.card_body__price}>${new BigNumber(tbr.derivedUSD).toFormat(5)}</div>
-              <div className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}>
-                <span>
-                  (24h:{' '}
-                  {tokenPrice24HoursChange === 'NaN' ? 'No data' : `${tokenPrice24HoursChange}%`})
-                </span>{' '}
-                {new BigNumber(tbr.derivedETH).toFormat(7)} ETH
-              </div>
-            </div>
-            <button
-              tabIndex={0}
-              type="button"
-              onKeyDown={handleOpenMoreInfoModal}
-              onClick={handleOpenMoreInfoModal}
-              className={s.market_cap_button}
-            >
-              View more info
-            </button>
-            <Links
-              tokenInfoFromBackend={tokenInfoFromBackend}
-              tokenId={tbr.id}
-              exchange={exchange}
-            />
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"
@@ -286,12 +263,40 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 totalLiquidity={pairInfo?.base_info?.reserveUSD}
               />
             </div>
-            <div className={s.card_section}>
+            <div className={`${s.card_section} ${s.card_section__last}`}>
+              <div className={s.card_buttons}>
+                <div
+                  onClick={handleOpenShareModal}
+                  tabIndex={0}
+                  onKeyDown={handleOpenShareModal}
+                  role="button"
+                  className={s.card_button}
+                >
+                  <ShareImg />
+                </div>
+                <button
+                  onClick={() => addOrRemovePairToFavs(pairId, 'ETH')}
+                  onKeyDown={() => {}}
+                  type="button"
+                  disabled={!user.isVerified}
+                  className={`${s.card_button} ${
+                    user.favoritePairs.some((pair) => pair.id === pairId) && s.active
+                  }`}
+                >
+                  <FavImg />
+                </button>
+              </div>
               <CommunityTrust
                 likes={tokenInfoFromBackend?.pair?.likes || 0}
                 dislikes={tokenInfoFromBackend?.pair?.dislikes || 0}
                 currentVote={tokenInfoFromBackend?.vote || 0}
                 pairId={pairId}
+              />
+
+              <Links
+                tokenInfoFromBackend={tokenInfoFromBackend}
+                tokenId={tbr.id}
+                exchange={exchange}
               />
             </div>
           </div>
