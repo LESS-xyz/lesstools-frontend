@@ -1,6 +1,9 @@
 @import '../../../../styles/mixins/gradient-text.scss';
 
 .block {
+  background: var(--grey-light-soft);
+  border-radius: 10px;
+  padding: 15px;
   &_inner {
     text-align: center;
   }
@@ -45,23 +48,25 @@
 
 .info {
   &_count {
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 10px;
+    line-height: 13px;
+    margin-bottom: 20px;
     span {
-      @include gradient-text();
+      color: var(--grey2);
     }
   }
 
   &_bar {
     height: 17px;
     width: 100%;
-    background-color: #312d3a;
+    background-color: var(--grey);
     position: relative;
     z-index: 2;
+    border-radius: 40px;
     &__bg {
       transition: 0.4s ease;
       position: absolute;
+      border-radius: 40px;
       height: 100%;
       background: var(--gradient);
     }

@@ -13,13 +13,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #382984;
+  background: #2f2f37;
+  border-radius: 10px;
   padding: 7px 10px;
-  border-radius: 8px;
 
   &__left {
     &__title {
-      color: #867dba;
+      color: var(--white);
       font-size: 12px;
       font-weight: bold;
       margin-bottom: 5px;

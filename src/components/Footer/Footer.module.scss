@@ -3,11 +3,12 @@
 @import '../../styles/mixins/media.scss';
 
 .container {
-  @include container(1300px);
+  max-width: 2500px;
+  padding: 0 15px;
 }
 
 .footer {
-  background-color: var(--footer-background);
+  background-color: var(--dark-soft);
   text-align: center;
   padding: 14px 0;
   position: relative;
@@ -47,6 +48,7 @@
 
 .info_text {
   font-size: 14px;
+  line-height: 24px;
   color: var(--grey);
   opacity: 0.5;
 }

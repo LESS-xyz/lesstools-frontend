@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import s from '../PairInfoBody.module.scss';
 
-import scoreBg from '../../../../../assets/img/icons/less-score-bg.svg';
+// import scoreBg from '../../../../../assets/img/icons/less-score-bg.svg';
 
 interface ILessScoreProps {
   txCount: string;
@@ -50,15 +50,12 @@ const LessScore: React.FC<ILessScoreProps> = ({
   }, [txCount, holdersCount, cost24H, links, totalLiquidity]);
 
   return (
-    <div className={s.score}>
+    <div className={s.score} style={{ background : `conic-gradient(#674DF6 ${score}%, #F9626C)`}}>
       <div className={s.score_info}>
-        <div className={s.score_title}>LessScore</div>
         <div className={s.score_number}>
           <span>{score}%</span>
         </div>
-      </div>
-      <div className={s.score_img}>
-        <img src={scoreBg} alt="scoreBg" />
+        <div className={s.score_title}>LessScore</div>
       </div>
     </div>
   );
