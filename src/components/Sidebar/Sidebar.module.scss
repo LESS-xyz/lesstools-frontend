@@ -49,7 +49,7 @@
 
   @include b(tablet) {
     top: -110%;
-    z-index: 999;
+    z-index: 3000000;
     width: 100% !important;
     height: calc(100% - 56px);
     &.active {

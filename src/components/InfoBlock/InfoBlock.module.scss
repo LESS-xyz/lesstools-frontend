@@ -11,9 +11,10 @@
 
 .info {
   background-color: var(--black);
-  padding: 6px 10px 6px 55px;
   overflow: hidden;
   @include container(1390px);
+  padding: 6px 10px 6px 55px;
+  width: 100%;
   &:hover {
     .info_inner {
       animation-play-state: paused;
