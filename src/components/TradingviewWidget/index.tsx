@@ -66,18 +66,24 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       studies_overrides: studiesOverrides,
       overrides: {
         // "mainSeriesProperties.showCountdown": true,
-        'paneProperties.background': '#222222',
+        'paneProperties.background': '#000000',
         'paneProperties.vertGridProperties.color': '#454545',
         'paneProperties.horzGridProperties.color': '#454545',
         'scalesProperties.textColor': '#AAA',
+        "paneProperties.bottomMargin": 5,
+        "paneProperties.vertGridProperties.style": 0,
+
         //
         // "paneProperties.background": "#131722",
         // "paneProperties.vertGridProperties.color": "#363c4e",
         // "paneProperties.horzGridProperties.color": "#363c4e",
         'symbolWatermarkProperties.transparency': 90,
         // "scalesProperties.textColor" : "#AAA",
-        'mainSeriesProperties.candleStyle.wickUpColor': '#336854',
-        'mainSeriesProperties.candleStyle.wickDownColor': '#7f323f',
+
+        'mainSeriesProperties.candleStyle.upColor': '#2FA59A',
+        'mainSeriesProperties.candleStyle.downColor': '#EC5454',
+        'mainSeriesProperties.candleStyle.wickUpColor': '#2FA59A;',
+        'mainSeriesProperties.candleStyle.wickDownColor': '#EC5454',
       },
     };
 
