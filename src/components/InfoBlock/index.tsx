@@ -17,12 +17,16 @@ import hotIcon from '../../assets/img/icons/hot.svg';
 import { ReactComponent as MetaMaskIcon } from '../../assets/img/icons/metamask.svg';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import { Networks } from '../../config/networks';
-import { ExchangesByNetworks, ExchangesIcons, isExchangeLikeSushiswap } from '../../config/exchanges';
+import {
+  ExchangesByNetworks,
+  ExchangesIcons,
+  isExchangeLikeSushiswap,
+} from '../../config/exchanges';
 import { is } from '../../utils/comparers';
-import TheGraph from "../../services/TheGraph";
-import { SubgraphsByExchangeShort } from "../../config/subgraphs";
-import { getStartOfHour } from "../../utils/time";
-import { IPairFromGraph } from "../../pages/BoardPage/HotTable";
+import TheGraph from '../../services/TheGraph';
+import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { getStartOfHour } from '../../utils/time';
+import { IPairFromGraph } from '../../pages/BoardPage/HotTable';
 
 const InfoBlock: React.FC<any> = observer(() => {
   const { user }: { user: any } = useMst();
@@ -86,54 +90,53 @@ const InfoBlock: React.FC<any> = observer(() => {
     }
   }
 
-  const getDataForAllExchangesOfNetwork = useCallback(
-    async (net: string) => {
-      try {
-        const exchanges = ExchangesByNetworks[net] || [];
-        const exchangesOfNetwork = Object.values(exchanges);
-        if (!exchangesOfNetwork.length) return {};
-        const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
-          return TheGraph.query({
-            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: isExchangeLikeSushiswap(exchangeOfNetwork)
-              ? GET_HOT_PAIRS_SUSHISWAP
-              : GET_HOT_PAIRS,
-            variables: isExchangeLikeSushiswap(exchangeOfNetwork)
-              ? {
+  const getDataForAllExchangesOfNetwork = useCallback(async (net: string) => {
+    try {
+      const exchanges = ExchangesByNetworks[net] || [];
+      const exchangesOfNetwork = Object.values(exchanges);
+      if (!exchangesOfNetwork.length) return {};
+      const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
+        return TheGraph.query({
+          subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+          query: isExchangeLikeSushiswap(exchangeOfNetwork)
+            ? GET_HOT_PAIRS_SUSHISWAP
+            : GET_HOT_PAIRS,
+          variables: isExchangeLikeSushiswap(exchangeOfNetwork)
+            ? {
                 timestamp1: getStartOfHour(),
                 timestamp2: getStartOfHour() - 3600,
                 timestamp3: getStartOfHour() - 7200,
               }
-              : {
+            : {
                 timestamp1: 1598338800,
                 timestamp2: 1598338800 - 3600,
                 timestamp3: 1598338800 - 7200,
               },
-          });
         });
-        const result = await Promise.all(results);
-        const resultsFormatted: any[] = result.map((pair: any, i: number) => {
-          return formatData(pair, exchangesOfNetwork[i]);
-        });
-        const resultsConсatenated = [].concat(...resultsFormatted);
-        const resultsSorted = resultsConсatenated.sort((a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns);
-        console.log('HotTable getDataForAllExchangesOfNetwork:', {
-          net,
-          exchangesOfNetwork,
-          result,
-          resultsFormatted,
-          resultsConсatenated,
-          resultsSorted,
-        });
-        // setHotPairs({ [network]: resultsContatenated });
-        return { [net]: resultsSorted };
-      } catch (e) {
-        console.error('HotTable getDataForAllExchangesOfNetwork:', e);
-        return {};
-      }
-    },
-    [],
-  );
+      });
+      const result = await Promise.all(results);
+      const resultsFormatted: any[] = result.map((pair: any, i: number) => {
+        return formatData(pair, exchangesOfNetwork[i]);
+      });
+      const resultsConсatenated = [].concat(...resultsFormatted);
+      const resultsSorted = resultsConсatenated.sort(
+        (a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns,
+      );
+      console.log('HotTable getDataForAllExchangesOfNetwork:', {
+        net,
+        exchangesOfNetwork,
+        result,
+        resultsFormatted,
+        resultsConсatenated,
+        resultsSorted,
+      });
+      // setHotPairs({ [network]: resultsContatenated });
+      return { [net]: resultsSorted };
+    } catch (e) {
+      console.error('HotTable getDataForAllExchangesOfNetwork:', e);
+      return {};
+    }
+  }, []);
 
   const getAllData = useCallback(async () => {
     try {
@@ -154,7 +157,7 @@ const InfoBlock: React.FC<any> = observer(() => {
     } catch (e) {
       console.error(e);
     }
-  }, [setHotPairs, getDataForAllExchangesOfNetwork])
+  }, [setHotPairs, getDataForAllExchangesOfNetwork]);
 
   useEffect(() => {
     getAllData();
@@ -166,6 +169,20 @@ const InfoBlock: React.FC<any> = observer(() => {
     <section className={s.info}>
       <div className={s.info_inner}>
         <div className={s.left}>
+          <div className={s.cell}>
+            <Link to="/user-account" className={`${s.metamask_link} ${s.mobile}`}>
+              <MetaMaskIcon className={s.metamask_link_img} />
+              <span>
+                {/* eslint-disable-next-line */}
+                {!user.walletId
+                  ? 'Connect'
+                  : !user.isVerified
+                  ? 'Verify'
+                  : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
+              </span>
+            </Link>
+          </div>
+
           <div className={s.cell}>
             <div className={s.cell_text}>
               ETH: ${new BigNumber(ethPrice?.bundle?.ethPrice || 0).toFormat(2)}
@@ -214,16 +231,16 @@ const InfoBlock: React.FC<any> = observer(() => {
             </div>
           </div>
         </div>
-        <Link to="/user-account" className={s.metamask_link}>
-            <MetaMaskIcon className={s.metamask_link_img} />
-            <span>
-              {/* eslint-disable-next-line */}
-              {!user.walletId
-                ? 'Connect'
-                : !user.isVerified
-                ? 'Verify'
-                : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
-            </span>
+        <Link to="/user-account" className={`${s.metamask_link} ${s.desktop}`}>
+          <MetaMaskIcon className={s.metamask_link_img} />
+          <span>
+            {/* eslint-disable-next-line */}
+            {!user.walletId
+              ? 'Connect'
+              : !user.isVerified
+              ? 'Verify'
+              : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
+          </span>
         </Link>
       </div>
     </section>

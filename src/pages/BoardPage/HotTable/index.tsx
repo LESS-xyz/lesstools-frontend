@@ -211,7 +211,7 @@ const HotTable: React.FC<IHotTableProps> = observer((props) => {
               onClick={() => setNetwork(net)}
               checked={network === net}
             >
-              Hot {networkName}
+              {networkName}
             </Checkbox>
           );
         })}

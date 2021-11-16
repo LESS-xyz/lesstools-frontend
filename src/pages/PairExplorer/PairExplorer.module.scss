@@ -44,16 +44,16 @@
   transition: 0.4s ease;
 
   &.withLeft {
-    grid-template-columns: 10fr 30px;
+    grid-template-columns: 300px 10fr 30px;
   }
   &.withRight {
-    grid-template-columns: 10fr 300px;
+    grid-template-columns: 10fr 300px 30px;
   }
   &.both {
-    grid-template-columns: 10fr 330px;
+    grid-template-columns: 300px 10fr 330px;
   }
   @include b(1250) {
-    grid-template-columns: 1fr 2fr !important;
+    grid-template-columns: 1fr !important;
     grid-template-areas: 'left chart' 'right right';
     grid-auto-rows: auto;
   }
@@ -65,12 +65,13 @@
 
 // обертка для скрывания
 .left_aside {
+  width: 300px;
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -250px;
+  left: -307px;
   transition: 0.4s ease;
   z-index: 10;
+  max-height: 90vh;
+  height: 100%;
   border-radius: 15px;
   @include b(850) {
     max-height: 100%;
@@ -79,9 +80,15 @@
     position: relative;
     left: 0;
     bottom: 0;
-    .left_aside__button_inner {
-      img {
-        transform: rotate(90deg);
+    .left_aside__button {
+      bottom: 121px;
+      left: -20px;
+      right: unset;
+      transform: rotate(-90deg);
+      &_inner {
+        img {
+          transform: rotate(-90deg);
+        }
       }
     }
   }
@@ -99,17 +106,17 @@
     cursor: pointer;
 
     position: absolute;
-    top: -17px;
-    left: 40px;
+    bottom: 121px;
+    right: -44px;
     z-index: 1;
-    // transform: rotate(90deg);
+    transform: rotate(90deg);
     &::before {
       content: '';
       position: absolute;
       height: 36px;
       left: -2px;
       width: 5px;
-      // background: var(--dark-soft);
+      left: 10px;
     }
     &_inner {
       img {
@@ -117,9 +124,9 @@
       }
       background: url('../../assets/img/sections/pair-explorer/arrow-bg.png') center center
         no-repeat;
+        width: 73px;
+        height: 29px;
       // transform: rotate(-180deg);
-      width: 73px;
-      height: 29px;
       background-size: contain;
       @include flex(row, center, center);
     }
@@ -144,8 +151,7 @@
     .right_aside__button {
       right: 17px;
       &_inner {
-        
-      transform: rotate(90deg);
+        transform: rotate(90deg);
         img {
           transform: rotate(-90deg);
         }
@@ -228,6 +234,7 @@
   overflow-y: auto;
   direction: rtl;
   border-radius: 10px;
+  margin-left: 20px;
   @include b(1251) {
     border-radius: 13px;
   }

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import s from './TradingviewWidget.module.scss';
 import Datafeed from './datafeed';
 
+import './styles.css';
+
 import Loader from '../Loader';
 
 export interface InterfaceTradingviewWidgetProps {
@@ -64,26 +66,26 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       fullscreen,
       autosize,
       studies_overrides: studiesOverrides,
+      custom_css_url: './styles.css',
       overrides: {
         // "mainSeriesProperties.showCountdown": true,
-        'paneProperties.background': '#000000',
-        'paneProperties.vertGridProperties.color': '#454545',
-        'paneProperties.horzGridProperties.color': '#454545',
+        'paneProperties.backgroundType': 'solid',
+        'paneProperties.background': '#111111',
+        'paneProperties.vertGridProperties.color': '#111111',
+        'paneProperties.horzGridProperties.color': '#111111',
         'scalesProperties.textColor': '#AAA',
-        "paneProperties.bottomMargin": 5,
-        "paneProperties.vertGridProperties.style": 0,
-
+        'scalesProperties.lineColor': '#ffffff',
+        'scalesProperties.backgroundColor' : "#111111"
         //
         // "paneProperties.background": "#131722",
         // "paneProperties.vertGridProperties.color": "#363c4e",
         // "paneProperties.horzGridProperties.color": "#363c4e",
-        'symbolWatermarkProperties.transparency': 90,
         // "scalesProperties.textColor" : "#AAA",
 
-        'mainSeriesProperties.candleStyle.upColor': '#2FA59A',
-        'mainSeriesProperties.candleStyle.downColor': '#EC5454',
-        'mainSeriesProperties.candleStyle.wickUpColor': '#2FA59A;',
-        'mainSeriesProperties.candleStyle.wickDownColor': '#EC5454',
+        // 'mainSeriesProperties.candleStyle.upColor': '#2FA59A',
+        // 'mainSeriesProperties.candleStyle.downColor': '#EC5454',
+        // 'mainSeriesProperties.candleStyle.wickUpColor': '#2FA59A;',
+        // 'mainSeriesProperties.candleStyle.wickDownColor': '#EC5454',
       },
     };
 

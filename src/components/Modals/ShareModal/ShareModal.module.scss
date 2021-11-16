@@ -26,7 +26,7 @@
   @include flex(row, center);
   font-size: 16px;
   position: relative;
-  border-radius: 2px;
+  border-radius: 10px;
   color: #fff;
   width: 70%;
 
@@ -39,6 +39,8 @@
   &__img {
     height: 38px;
     width: 38px;
+    border-radius: 50%;
+    background: var(--gradient);
     img {
       height: 38px;
       width: 38px;
@@ -53,9 +55,9 @@
     left: 1px;
     width: calc(100% - 2px);
     height: calc(100% - 2px);
-    background: #130a28;
-    border-radius: 2px;
+    background: #1B1B1F;
     transition: 0.4s ease;
+    border-radius: 10px;
   }
 
   &:hover::after {
