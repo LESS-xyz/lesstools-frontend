@@ -12,8 +12,7 @@
 .info {
   background-color: var(--black);
   overflow: hidden;
-  @include container(1390px);
-  padding: 6px 10px 6px 55px;
+  padding: 6px 30px 6px 35px;
   width: 100%;
   &:hover {
     .info_inner {
@@ -39,8 +38,18 @@
   font-weight: bold;
   font-size: 15px;
   color: var(--grey);
+  @include b(850) {
+    &:first-child {
+      color: #fff;
+      border-right: 2px solid #fff;
+    }
 
-  &:first-child {
+    &:nth-child(2) {
+      border-right: none;
+    }
+  }
+
+  &:nth-child(2) {
     border-right: 2px solid #fff;
   }
 
@@ -120,12 +129,12 @@
   // }
   &.mobile {
     display: none;
-    @include b(mobile) {
+    @include b(850) {
       display: flex;
     }
   }
   &.desktop {
-    @include b(mobile) {
+    @include b(850) {
       display: none;
     }
   }

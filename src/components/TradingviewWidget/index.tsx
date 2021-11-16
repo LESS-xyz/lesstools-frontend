@@ -70,12 +70,12 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       overrides: {
         // "mainSeriesProperties.showCountdown": true,
         'paneProperties.backgroundType': 'solid',
-        'paneProperties.background': '#111111',
-        'paneProperties.vertGridProperties.color': '#111111',
-        'paneProperties.horzGridProperties.color': '#111111',
+        'paneProperties.background': '#000000',
+        'paneProperties.vertGridProperties.color': '#000000',
+        'paneProperties.horzGridProperties.color': '#000000',
         'scalesProperties.textColor': '#AAA',
         'scalesProperties.lineColor': '#ffffff',
-        'scalesProperties.backgroundColor' : "#111111"
+        'scalesProperties.backgroundColor' : "#000000"
         //
         // "paneProperties.background": "#131722",
         // "paneProperties.vertGridProperties.color": "#363c4e",

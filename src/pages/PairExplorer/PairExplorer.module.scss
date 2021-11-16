@@ -44,7 +44,7 @@
   transition: 0.4s ease;
 
   &.withLeft {
-    grid-template-columns: 300px 10fr 30px;
+    grid-template-columns: 300px 10fr;
   }
   &.withRight {
     grid-template-columns: 10fr 300px 30px;
@@ -137,7 +137,7 @@
   position: absolute;
   width: 330px;
   height: 100%;
-  right: -337px;
+  right: -388px;
   transition: 0.4s ease;
   z-index: 10;
   max-height: 90vh;
@@ -174,7 +174,7 @@
     position: absolute;
     bottom: 121px;
     // left:0;
-    right: 340px;
+    right: 348px;
     height: 40px;
     width: 25px;
     &::before {
