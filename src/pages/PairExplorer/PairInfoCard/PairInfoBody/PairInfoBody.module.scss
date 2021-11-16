@@ -96,7 +96,7 @@
   }
 
   .links {
-    @include flex(column, flex-start, flex-start, nowrap);
+    @include flex(row, center, center, nowrap);
     padding: 20px 0;
     position: relative;
   }
@@ -110,10 +110,6 @@
     position: relative;
     border-radius: 2px;
     transition: 0.4s ease;
-
-    & + & {
-      margin-top: 20px;
-    }
 
     &.etherscan {
       margin-bottom: 10px;

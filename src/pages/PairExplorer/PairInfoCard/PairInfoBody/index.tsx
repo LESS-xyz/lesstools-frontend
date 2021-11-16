@@ -206,6 +206,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 View more info
               </button>
             </div>
+            
+            <Links
+                tokenInfoFromBackend={tokenInfoFromBackend}
+                tokenId={tbr.id}
+                exchange={exchange}
+              />
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"
@@ -314,12 +320,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 currentVote={tokenInfoFromBackend?.vote || 0}
                 pairId={pairId}
               />
-
+{/* 
               <Links
                 tokenInfoFromBackend={tokenInfoFromBackend}
                 tokenId={tbr.id}
                 exchange={exchange}
-              />
+              /> */}
             </div>
           </div>
         )}

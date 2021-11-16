@@ -20,9 +20,9 @@
 }
 
 .theme-dark:root {
-  --tv-color-platform-background: #111111 !important;
-  --tv-color-pane-background: #111111 !important;
-  --tv-color-pane-background-secondary: #111111 !important;
+  --tv-color-platform-background: #000000 !important;
+  --tv-color-pane-background: #000000 !important;
+  --tv-color-pane-background-secondary: #000000 !important;
   --tv-color-toolbar-button-background-hover: #000000 !important;
   --tv-color-toolbar-button-background-secondary-hover: red !important;
   --tv-color-toolbar-button-background-expanded: #ffffff !important;
