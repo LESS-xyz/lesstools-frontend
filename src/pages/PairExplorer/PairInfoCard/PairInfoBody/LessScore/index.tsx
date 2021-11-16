@@ -50,12 +50,12 @@ const LessScore: React.FC<ILessScoreProps> = ({
   }, [txCount, holdersCount, cost24H, links, totalLiquidity]);
 
   return (
-    <div className={s.score} style={{ background : `conic-gradient(#674DF6 ${score}%, #F9626C)`}}>
+    <div className={s.score}>
       <div className={s.score_info}>
+        <div className={s.score_title}>LessScore</div>
         <div className={s.score_number}>
           <span>{score}%</span>
         </div>
-        <div className={s.score_title}>LessScore</div>
       </div>
     </div>
   );

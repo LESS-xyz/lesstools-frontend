@@ -5,6 +5,7 @@
 .section {
   padding: 30px 0;
   background: var(--black);
+  position: relative;
   @include b(extramobile) {
     background: none;
   }

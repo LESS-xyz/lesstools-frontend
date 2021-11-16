@@ -7,9 +7,9 @@ import s from '../PairInfoBody.module.scss';
 
 import marketcap from '../../../../../assets/img/icons/marketcap.svg';
 import etherscan from '../../../../../assets/img/icons/table/actions-etherscan.svg';
-import { ReactComponent as TwitterIcon } from '../../../../../assets/img/icons/twitter-blue.svg';
-import { ReactComponent as TelegramIcon } from '../../../../../assets/img/icons/telegram-blue.svg';
-import { ReactComponent as DesktopIcon } from '../../../../../assets/img/icons/desktop-blue.svg';
+import { ReactComponent as TwitterIcon } from '../../../../../assets/img/icons/twitter-grey.svg';
+import { ReactComponent as TelegramIcon } from '../../../../../assets/img/icons/telegram-grey.svg';
+import { ReactComponent as DesktopIcon } from '../../../../../assets/img/icons/desktop-grey.svg';
 import { ReactComponent as DiscordIcon } from '../../../../../assets/img/icons/discord-blue.svg';
 import { ReactComponent as ChatIcon } from '../../../../../assets/img/icons/chat-blue.svg';
 import { ReactComponent as PlusIcon } from '../../../../../assets/img/icons/plus.svg';
@@ -93,30 +93,33 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
         <div className={s.card_link__img}>
           <img src={etherscan} alt="etherscan" />
         </div>
+        <span className={s.card_link__title}>View EtherScan</span>
       </a>
       {tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_slug && (
-        <a
-          href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_slug}`}
-          target="_blank"
-          rel="noreferrer noopener"
-          className={s.card_link}
-        >
-          <div className={s.card_link__img}>
-            <img src={marketcap} alt="marketcap" />
-          </div>
-        </a>
+      <a
+        href={`https://coinmarketcap.com/currencies/${tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_slug}`}
+        target="_blank"
+        rel="noreferrer noopener"
+        className={s.card_link}
+      >
+        <div className={s.card_link__img}>
+          <img src={marketcap} alt="marketcap" />
+        </div>
+        <span className={s.card_link__title}>View CoinMarket Cap</span>
+      </a>
       )}
       {tokenInfoFromBackend?.pair?.token_being_reviewed?.twitter_url && (
-        <a
-          target="_blank"
-          rel="noreferrer noopener"
-          href={tokenInfoFromBackend?.pair?.token_being_reviewed?.twitter_url}
-          className={s.card_link}
-        >
-          <div className={s.card_link__img}>
-            <TwitterIcon />
-          </div>
-        </a>
+      <a
+        target="_blank"
+        rel="noreferrer noopener"
+        href={tokenInfoFromBackend?.pair?.token_being_reviewed?.twitter_url}
+        className={s.card_link}
+      >
+        <div className={s.card_link__img}>
+          <TwitterIcon />
+        </div>
+        <span className={s.card_link__title}>Twitter</span>
+      </a>
       )}
 
       {tokenInfoFromBackend?.pair?.token_being_reviewed?.chat_urls &&
@@ -133,6 +136,11 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
               {link.includes('discord') && <DiscordIcon />}
               {!link.includes('t.me/') && !link.includes('discord') && <ChatIcon />}
             </div>
+            {link.includes('t.me/') && <span className={s.card_link__title}>Telegram</span>}
+            {link.includes('discord') && <span className={s.card_link__title}>Discord</span>}
+            {!link.includes('t.me/') && !link.includes('discord') && (
+              <span className={s.card_link__title}>Chat</span>
+            )}
           </a>
         ))}
       {tokenInfoFromBackend?.pair?.token_being_reviewed?.website_url && (
@@ -145,10 +153,12 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
           <div className={s.card_link__img}>
             <DesktopIcon className={s.desktop_icon} />
           </div>
+          <span className={s.card_link__title}>Website</span>
         </a>
       )}
+      {console.log(isAdditionalNeeded)}
       {!!isAdditionalNeeded && (
-        <div>
+        <div className={s.card_bottom}>
           <div
             className={s.card_link}
             role="button"

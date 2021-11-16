@@ -41,6 +41,9 @@
   position: relative;
   z-index: 11;
   padding: 0 20px;
+  input {
+    padding-left: 2px !important;
+  }
 }
 
 .containerForTables {

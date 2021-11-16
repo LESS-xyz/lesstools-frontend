@@ -152,6 +152,28 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
           <div className={s.card_inner}>
             <div className={s.first_block}>
               <div className={s.header}>
+                <div className={s.card_buttons}>
+                  <div
+                    onClick={handleOpenShareModal}
+                    tabIndex={0}
+                    onKeyDown={handleOpenShareModal}
+                    role="button"
+                    className={s.card_button}
+                  >
+                    <ShareImg />
+                  </div>
+                  <button
+                    onClick={() => addOrRemovePairToFavs(pairId, 'ETH')}
+                    onKeyDown={() => {}}
+                    type="button"
+                    disabled={!user.isVerified}
+                    className={`${s.card_button} ${
+                      user.favoritePairs.some((pair) => pair.id === pairId) && s.active
+                    }`}
+                  >
+                    <FavImg />
+                  </button>
+                </div>
                 <div
                   tabIndex={0}
                   role="button"
@@ -264,7 +286,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               />
             </div>
             <div className={`${s.card_section} ${s.card_section__last}`}>
-              <div className={s.card_buttons}>
+              {/* <div className={s.card_buttons}>
                 <div
                   onClick={handleOpenShareModal}
                   tabIndex={0}
@@ -285,7 +307,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 >
                   <FavImg />
                 </button>
-              </div>
+              </div> */}
               <CommunityTrust
                 likes={tokenInfoFromBackend?.pair?.likes || 0}
                 dislikes={tokenInfoFromBackend?.pair?.dislikes || 0}

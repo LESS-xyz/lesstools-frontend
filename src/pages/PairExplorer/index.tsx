@@ -232,7 +232,7 @@ Fundraising Capital"
             isRightSideBar && s.withRight
           } ${isLeftSideBar && isRightSideBar && s.both}`}
         >
-          {/* <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
+          <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
             <div className={s.left}>
               <div className={`${s.left_inner} grey-scroll`}>
                 {pairInfo ? (
@@ -259,7 +259,7 @@ Fundraising Capital"
                 </div>
               </div>
             </div>
-          </aside> */}
+          </aside>
           <div className={s.center}>
             <div className={s.info}>
               {!pairInfo ? (
@@ -288,7 +288,7 @@ Fundraising Capital"
               )}
             </div>
 
-            <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
+            {/* <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
               <div className={s.left}>
                 <div className={`${s.left_inner} grey-scroll`}>
                   {pairInfo ? (
@@ -315,7 +315,7 @@ Fundraising Capital"
                   </div>
                 </div>
               </div>
-            </aside>
+            </aside> */}
           </div>
           <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
             <div className={s.right}>

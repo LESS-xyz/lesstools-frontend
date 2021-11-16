@@ -110,12 +110,23 @@
   cursor: pointer;
 
   // &__inner {
-    @include flex(row, center, space-between, nowrap);
-    font-size: 16px;
-    font-weight: 700;
-    padding: 6px 17px;
-    &_img {
-      margin-right: 10px;
-    }
+  @include flex(row, center, space-between, nowrap);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 17px;
+  &_img {
+    margin-right: 10px;
+  }
   // }
+  &.mobile {
+    display: none;
+    @include b(mobile) {
+      display: flex;
+    }
+  }
+  &.desktop {
+    @include b(mobile) {
+      display: none;
+    }
+  }
 }
