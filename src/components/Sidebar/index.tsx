@@ -85,9 +85,11 @@ const Sidebar: React.FC = observer(() => {
                 </div>
               )}
               <div className={s.group_title__text}>{networkName}</div>
-              <div className={s.group_title__icon_wrapped}>
-                {!!src && <img src={src} alt="img" />}
-              </div>
+              {!mobileMenu.isActive && (
+                <div className={s.group_title__icon_wrapped}>
+                  {!!src && <img src={src} alt="img" />}
+                </div>
+              )}
               <div className={s.group_title__icon}>{!!src && <img src={src} alt="img" />}</div>
             </div>
             {isActiveNetwork(network) && (

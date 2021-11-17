@@ -52,6 +52,13 @@
     z-index: 3000000;
     width: 100% !important;
     height: calc(100% - 56px);
+
+    .group_title__text,.group_title__icon {
+      display: block;
+    }
+    .group_title__icon_wrapped {
+      display: none;
+    }
     &.active {
       transition: 0.8s ease;
       top: 56px;

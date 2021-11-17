@@ -27,13 +27,13 @@ const StandartUserPlanData = [
   'Bigswap explorer',
   'Multiswap windows',
   'No limit favourite pairs',
+  'Desktop/Mail/Telegram price alerts',
+  'Stable coin pairs',
+  'Token / token pairs',
   'My positions (P&L tracker)',
   'Trade analysis',
   'Wallet info & tracker',
-  'Desktop/Mail/Telegram price alerts',
   'No advertisement',
-  'Stable coin pairs',
-  'Token / token pairs',
   'Limit order & trading bot (soon)',
 ];
 
@@ -44,17 +44,17 @@ const PremiumUserPlanData = [
   'Bigswap explorer',
   'Multiswap windows',
   'No limit favourite pairs',
+  'Desktop/Mail/Telegram price alerts',
+  'Stable coin pairs',
+  'Token / token pairs',
   'My positions (P&L tracker)',
   'Trade analysis',
   'Wallet info & tracker',
-  'Desktop/Mail/Telegram price alerts',
   'No advertisement',
-  'Stable coin pairs',
-  'Token / token pairs',
+  'Limit order & trading bot (soon)',
   'Dextshare',
   'Dextforce & Dextforce Ventures',
   'More exclusive upcoming features',
-  'Limit order & trading bot (soon)',
 ];
 
 interface IUserPlanProps {
@@ -72,10 +72,13 @@ const UserPlan: React.FC<IUserPlanProps> = ({ features, title, subtitle, itemKey
     <div className={s.card}>
       <div className={s.card_inner}>
         <div className={`${s.card_header} ${itemKey === userPlan && s.active}`}>
-          <div className={s.card_header__title}>
-            <span>{title}</span>
+          <div>
+            <div className={s.card_header__title}>
+              <span>{title}</span>
+            </div>
+            <div className={s.card_header__subtitle}>{subtitle}</div>
           </div>
-          <div className={s.card_header__subtitle}>{subtitle}</div>
+          <div className={s.card_header__your}>Your Tier</div>
         </div>
         <div className={s.card_body}>
           {features.map((feature, index) => (

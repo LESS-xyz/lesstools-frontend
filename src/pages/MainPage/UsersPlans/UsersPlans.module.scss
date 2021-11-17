@@ -70,6 +70,10 @@
     padding: 20px;
     min-height: 124px;
     margin-bottom: 20px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     &.active {
       background: var(--gradient);
@@ -81,6 +85,16 @@
           color: #fff;
           -webkit-text-fill-color: #fff;
         }
+      }
+      .card_header__your {
+        display: block;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 10px 22px;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 18px;
+        color: #160e33;
       }
     }
 
@@ -95,6 +109,10 @@
       font-size: 16px;
       line-height: 1.4;
       color: var(--grey);
+    }
+
+    &__your {
+      display: none;
     }
   }
 
