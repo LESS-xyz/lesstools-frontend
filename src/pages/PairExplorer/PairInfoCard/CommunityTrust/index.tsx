@@ -34,6 +34,7 @@ const VoteItem: React.FC<IVoteItem> = ({
   return (
     <div
       data-tip="To vote u should verify your wallet"
+      data-place={voteType === 1 ? 'right' : 'top'}
       data-effect="solid"
       data-tip-disable={!isDisabled}
       className={`${s.vote} ${currentUserVote === voteType && s.active}`}

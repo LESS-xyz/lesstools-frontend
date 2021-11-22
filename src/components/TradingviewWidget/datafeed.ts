@@ -1,7 +1,11 @@
 import historyProvider from './historyProvider';
 
 const config = {
-  supported_resolutions: ['60', 'D'],
+  supported_resolutions: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
+  favorites: {
+    intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
+    chartTypes: ['Candles'],
+  },
 };
 
 export default {
@@ -57,7 +61,6 @@ export default {
       .then((bars) => {
         if (bars.length) {
           onHistoryCallback(bars, { noData: false });
-          
         } else {
           onHistoryCallback(bars, { noData: true });
         }

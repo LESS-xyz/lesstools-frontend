@@ -32,7 +32,7 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
 
   const {
     symbol = 'Coinbase:BTC/USD',
-    interval = '60',
+    interval = '1D',
     containerId = 'tv_chart_container',
     libraryPath = '/charting_library/',
     chartsStorageUrl = 'https://saveload.tradingview.com',
@@ -48,8 +48,9 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
     const widgetOptions = {
       debug: false,
       symbol,
-      datafeed: Datafeed,
       interval,
+      datafeed: Datafeed,
+      // interval,
       // toolbar_bg: "#1a103d",
       container_id: containerId,
       library_path: libraryPath,
@@ -58,6 +59,13 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       enabled_features: [
         // 'study_templates',
       ],
+      use_localstorage_for_settings: 'off',
+      items_favoriting: 'off',
+      save_chart_properties_to_local_storage: 'off',
+      favorites: {
+        intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
+        chartTypes: ['Candles'],
+      },
       charts_storage_url: chartsStorageUrl,
       charts_storage_api_version: chartsStorageApiVersion,
       theme: 'dark',
@@ -69,13 +77,14 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       custom_css_url: './styles.css',
       overrides: {
         // "mainSeriesProperties.showCountdown": true,
+        'mainSeriesProperties.style': 1,
         'paneProperties.backgroundType': 'solid',
         'paneProperties.background': '#000000',
         'paneProperties.vertGridProperties.color': '#000000',
         'paneProperties.horzGridProperties.color': '#000000',
         'scalesProperties.textColor': '#AAA',
         'scalesProperties.lineColor': '#ffffff',
-        'scalesProperties.backgroundColor' : "#000000"
+        'scalesProperties.backgroundColor': '#000000',
         //
         // "paneProperties.background": "#131722",
         // "paneProperties.vertGridProperties.color": "#363c4e",
