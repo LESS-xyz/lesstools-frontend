@@ -1,4 +1,3 @@
-
 :root:not(.theme-dark) {
   --tv-color-platform-background: #f1f1f1 !important;
   --tv-color-pane-background: #f1f1f1 !important;
@@ -13,6 +12,14 @@
   --tv-color-item-active-text: #7fd0b3 !important;
   --tv-color-toolbar-toggle-button-background-active: #7fd0b3 !important;
   --tv-color-toolbar-toggle-button-background-active-hover: #7fd0b3 !important;
+}
+
+.theme-dark:root .button-1SoiPS-f.isOpened-1SoiPS-f.hover-1SoiPS-f:before, .button-1SoiPS-f.isOpened-1SoiPS-f:active:before, .button-1SoiPS-f.isOpened-1SoiPS-f:before {
+  background: #000000 !important;
+}
+
+.theme-dark:root .button-5-QHyx-s.isActive-5-QHyx-s .bg-5-QHyx-s {
+  background: #848494 !important;
 }
 
 :root:not(.theme-dark) .pane-separator {
