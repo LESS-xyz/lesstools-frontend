@@ -38,6 +38,8 @@ export type IAdditionalInfoFromBackend = {
     platform: PLATFORM;
     token_being_reviewed: {
       bsc_address: null | string;
+      fantom_address: null | string;
+      xdai_address: null | string;
       chat_urls: Array<string>;
       circulating_supply: string;
       cmc_id: number;

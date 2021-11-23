@@ -21,6 +21,8 @@ import { ReactComponent as CoingeckoIcon } from '../../../../../assets/img/icons
 import { UnicryptExchangesNames } from '../../../../../config/exchanges';
 import { uppercaseFirstLetter } from '../../../../../utils/prettifiers';
 
+import { useLocation } from 'react-router';
+
 interface ILinksProps {
   tokenInfoFromBackend: IAdditionalInfoFromBackend | null;
   tokenId: string;
@@ -28,9 +30,11 @@ interface ILinksProps {
 }
 
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange }) => {
-  console.log('tokenInfoFromBackend', tokenInfoFromBackend)
+  const location = useLocation();
+  const network = location.pathname.split('/')[1].toLowerCase();
   const [openAdditional, setOpenAdditional] = useState(false);
   // links
+  const [teamFinanceLink, setTeamFinanceLink] = useState<string>('');
   const [coingeckoLink, setCoingeckoLink] = useState<string>('');
   const [unicryptLink, setUnicryptLink] = useState<string>('');
   const [email] = useState<string>('');
@@ -38,6 +42,36 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
   const isAdditionalNeeded = coingeckoLink || unicryptLink || email;
 
   const handleOpenAdditional = () => setOpenAdditional(!openAdditional);
+
+  const getTeamFinanceLink = useCallback(async () => {
+    try {
+      if (!tokenInfoFromBackend) return;
+      const token = tokenInfoFromBackend.pair.token_being_reviewed;
+      switch (network) {
+        case 'ethereum':
+          setTeamFinanceLink(`https://www.team.finance/view-coin/${token.eth_address}`);
+          break;
+        case 'binance':
+          setTeamFinanceLink(`https://www.team.finance/view-coin/${token.bsc_address || ''}`);
+          break;
+        case 'polygon':
+          setTeamFinanceLink(`https://www.team.finance/view-coin/${token.polygon_address || ''}`);
+          break;
+        case 'fantom':
+          setTeamFinanceLink(`https://www.team.finance/view-coin/${token.fantom_address || ''}`);
+          break;
+        case 'xdai':
+          setTeamFinanceLink(`https://www.team.finance/view-coin/${token.xdai_address || ''}`);
+          break;
+
+        default:
+          break;
+      }
+      console.log('Links getTeamFinanceLink:', { tokenInfoFromBackend, token });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [network, tokenInfoFromBackend]);
 
   const getCoingeckoLink = useCallback(async () => {
     try {
@@ -74,6 +108,10 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
       console.error(e);
     }
   }, [tokenInfoFromBackend, exchange]);
+
+  useEffect(() => {
+    getTeamFinanceLink();
+  }, [getTeamFinanceLink]);
 
   useEffect(() => {
     getCoingeckoLink();
@@ -180,6 +218,15 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
                   >
                     <div className={s.additionalMenuItemText}>Lock</div>
                     <UniswapIcon className={s.additionalMenuItemIcon} />
+                  </a>
+                )}
+                {!!teamFinanceLink && (
+                  <a
+                    className={s.additionalMenuItem}
+                    href={teamFinanceLink}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <LockIcon className={s.additionalMenuItemIcon} />
                   </a>
                 )}

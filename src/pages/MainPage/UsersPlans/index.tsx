@@ -126,12 +126,12 @@ export const CardsSlider: React.FC<ICardsSlider> = ({ userPlan }) => {
         spaceBetween={20}
         // onSwiper={(slider) => setSliderInstance(slider)}
         loop
-        pagination={{
-          bulletElement: 'div',
-          type: 'bullets',
-          bulletClass: `${s.bulletClass}`,
-          bulletActiveClass: `${s.bulletActiveClass}`,
-        }}
+        // pagination={{
+        //   bulletElement: 'div',
+        //   type: 'bullets',
+        //   bulletClass: `${s.bulletClass}`,
+        //   bulletActiveClass: `${s.bulletActiveClass}`,
+        // }}
       >
         <SwiperSlide>
           <UserPlan
