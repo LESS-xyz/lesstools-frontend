@@ -28,6 +28,7 @@ interface ILinksProps {
 }
 
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange }) => {
+  console.log('tokenInfoFromBackend', tokenInfoFromBackend)
   const [openAdditional, setOpenAdditional] = useState(false);
   // links
   const [coingeckoLink, setCoingeckoLink] = useState<string>('');
