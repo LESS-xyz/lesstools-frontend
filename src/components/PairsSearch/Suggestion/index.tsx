@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import BigNumber from 'bignumber.js/bignumber';
 import { Exchange } from "../../../config/exchanges";
 
@@ -25,12 +25,14 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   pairId,
   txCount,
   onClick,
-  exchange,
+  // exchange,
   small,
 }) => {
+  const location = useLocation();
+  const network = location.pathname.split('/')[1].toLowerCase();
   return (
     <Link
-      to={`/${exchange}/pair-explorer/${pairId}`}
+      to={`/${network}/pair-explorer/${pairId}`}
       className={s.suggestion}
       onClick={() => onClick()}
     >
