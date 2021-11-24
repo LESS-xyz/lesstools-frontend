@@ -277,8 +277,11 @@
     grid-area: chart;
   }
   @include b(850) {
-    height: 90vh;
+    height: 650px;
     margin-bottom: 25px;
+  }
+  @include b(450) {
+    height: 450px;
   }
 }
 

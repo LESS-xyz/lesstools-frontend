@@ -14,7 +14,12 @@
   --tv-color-toolbar-toggle-button-background-active-hover: #7fd0b3 !important;
 }
 
-.theme-dark:root .button-1SoiPS-f.isOpened-1SoiPS-f.hover-1SoiPS-f:before, .button-1SoiPS-f.isOpened-1SoiPS-f:active:before, .button-1SoiPS-f.isOpened-1SoiPS-f:before {
+.theme-dark:root .button-1SoiPS-f.isOpened-1SoiPS-f.hover-1SoiPS-f:before,
+.button-1SoiPS-f.isOpened-1SoiPS-f:active:before,
+.button-1SoiPS-f.isOpened-1SoiPS-f:before {
+  background: #000000 !important;
+}
+.theme-dark:root .button-2Vpz_LXc.isInteractive-2Vpz_LXc.isOpened-2Vpz_LXc:before {
   background: #000000 !important;
 }
 
