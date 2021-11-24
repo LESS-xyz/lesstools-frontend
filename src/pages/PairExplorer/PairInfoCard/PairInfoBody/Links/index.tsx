@@ -30,6 +30,7 @@ interface ILinksProps {
 }
 
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange }) => {
+  console.log('tokenInfoFromBackend',tokenInfoFromBackend)
   const location = useLocation();
   const network = location.pathname.split('/')[1].toLowerCase();
   const [openAdditional, setOpenAdditional] = useState(false);

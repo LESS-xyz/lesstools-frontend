@@ -19,6 +19,9 @@
   @include b(tablet) {
     z-index: 998;
   }
+  @include b(extramobile) {
+    display: none;
+  }
 }
 
 // links

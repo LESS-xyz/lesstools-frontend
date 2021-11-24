@@ -1,9 +1,9 @@
 import historyProvider from './historyProvider';
 
 const config = {
-  supported_resolutions: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
+  supported_resolutions: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', '7D'],
   favorites: {
-    intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
+    intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', '7D'],
     chartTypes: ['Candles'],
   },
 };
