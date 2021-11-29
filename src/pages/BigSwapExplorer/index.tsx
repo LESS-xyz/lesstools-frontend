@@ -165,13 +165,13 @@ const BigSwapExplorer: React.FC = observer(() => {
         change: (TBRquantity / +swap.pair[TBRreserve]) * 100,
         others: {
           liveData: swap.pair.id,
-          etherscan: swap.transaction.id,
+          [network]: swap.transaction.id,
         },
       };
     });
     console.log({ newData });
     setTableData(newData);
-  }, [swapsFromBackend]);
+  }, [network, swapsFromBackend]);
 
   return (
     <main className={s.section}>

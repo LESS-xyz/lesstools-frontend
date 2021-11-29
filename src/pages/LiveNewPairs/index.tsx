@@ -160,7 +160,7 @@ const LiveNewPairs: React.FC = observer(() => {
           listedSince: swap.createdAtTimestamp,
           actions: {
             uniswap: TBRaddress,
-            etherscan: swap.creationTxnHash,
+            [network]: swap.creationTxnHash,
             unicrypt: swap.id,
             liveData: swap.id,
           },
@@ -177,7 +177,7 @@ const LiveNewPairs: React.FC = observer(() => {
       });
       setTableData(newData);
     }
-  }, [swapsFromBackend]);
+  }, [network, swapsFromBackend]);
 
   return (
     <main className={s.section}>

@@ -7,6 +7,11 @@ import s from '../PairInfoBody.module.scss';
 
 import marketcap from '../../../../../assets/img/icons/marketcap.svg';
 import etherscan from '../../../../../assets/img/icons/table/actions-etherscan.svg';
+import bsc from '../../../../../assets/img/icons/table/actions-bsc.svg';
+import polygon from '../../../../../assets/img/icons/table/actions-polygon.svg';
+import xdai from '../../../../../assets/img/icons/table/actions-xdai.svg';
+import avalanche from '../../../../../assets/img/icons/table/actions-avalanche.svg';
+import fantom from '../../../../../assets/img/icons/table/actions-fantom.svg';
 import { ReactComponent as TwitterIcon } from '../../../../../assets/img/icons/twitter-grey.svg';
 import { ReactComponent as TelegramIcon } from '../../../../../assets/img/icons/telegram-grey.svg';
 import { ReactComponent as DesktopIcon } from '../../../../../assets/img/icons/desktop-grey.svg';
@@ -30,7 +35,7 @@ interface ILinksProps {
 }
 
 const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange }) => {
-  console.log('tokenInfoFromBackend', tokenInfoFromBackend)
+  console.log('tokenInfoFromBackend', tokenInfoFromBackend);
   const location = useLocation();
   const network = location.pathname.split('/')[1].toLowerCase();
   const [openAdditional, setOpenAdditional] = useState(false);
@@ -110,6 +115,42 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
     }
   }, [tokenInfoFromBackend, exchange]);
 
+  const explorersLinks: { [key: string]: string } = {
+    binance: 'https://bscscan.com/token/',
+    ethereum: 'https://etherscan.io/token/',
+    polygon: 'https://polygonscan.com/token/',
+    xdai: 'https://blockscout.com/xdai/mainnet/token/',
+    avalanche: 'https://avascan.info/blockchain/c/token/',
+    fantom: 'https://explorer.fantom.network/token/',
+  };
+
+  const getImage = (actionNetwork: string) => {
+    let src;
+
+    switch (actionNetwork) {
+      case 'binance':
+        src = bsc;
+        break;
+      case 'ethereum':
+        src = etherscan;
+        break;
+      case 'polygon':
+        src = polygon;
+        break;
+      case 'xdai':
+        src = xdai;
+        break;
+      case 'avalanche':
+        src = avalanche;
+        break;
+
+      default:
+        src = fantom;
+        break;
+    }
+    return <img src={src} alt={`${src}`} />;
+  };
+
   useEffect(() => {
     getTeamFinanceLink();
   }, [getTeamFinanceLink]);
@@ -125,14 +166,12 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
   return (
     <div className={s.links}>
       <a
-        href={`https://etherscan.io/token/${tokenId}`}
+        href={`${explorersLinks[network]}${tokenId}`}
         target="_blank"
         rel="noreferrer noopener"
         className={s.card_link}
       >
-        <div className={s.card_link__img}>
-          <img src={etherscan} alt="etherscan" />
-        </div>
+        <div className={s.card_link__img}>{getImage(network)}</div>
         {/* <span className={s.card_link__title}>View EtherScan</span> */}
       </a>
       {tokenInfoFromBackend?.pair?.token_being_reviewed?.cmc_slug && (
