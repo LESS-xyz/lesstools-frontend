@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+import { REACT_APP_CRYPTOCOMPARE_API_KEY } from '../../config/index';
+
 const api_root = 'https://min-api.cryptocompare.com';
 const history: any = {};
-const api_key = process.env.REACT_APP_CRYPTOCOMPARE_API_KEY;
+const api_key = REACT_APP_CRYPTOCOMPARE_API_KEY;
 
 interface IExchange {
   [key: string]: {
