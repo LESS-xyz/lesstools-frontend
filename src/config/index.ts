@@ -1,5 +1,6 @@
 const IS_PRODUCTION = false;
 const IS_PREPRODUCTION = true;
+export const REACT_APP_CRYPTOCOMPARE_API_KEY = '6db91bc6e02689fbf54e97df570d533fd9db38e3da019281b1df292c6d480b0a'
 
 export default {
   APIS: {
