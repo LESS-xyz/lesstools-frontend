@@ -7,19 +7,29 @@ import { useMst } from '../../../store/store';
 import s from './Actions.module.scss';
 
 import etherscan from '../../../assets/img/icons/table/actions-etherscan.svg';
+import bsc from '../../../assets/img/icons/table/actions-bsc.svg';
+import polygon from '../../../assets/img/icons/table/actions-polygon.svg';
+import xdai from '../../../assets/img/icons/table/actions-xdai.svg';
+import avalanche from '../../../assets/img/icons/table/actions-avalanche.svg';
+import fantom from '../../../assets/img/icons/table/actions-fantom.svg';
 import uniswap from '../../../assets/img/icons/table/actions-uniswap.svg';
 import sushiswap from '../../../assets/img/icons/table/actions-sushiswap.svg';
 import unicrypt from '../../../assets/img/icons/table/actions-unicrypt.svg';
 import compass from '../../../assets/img/icons/table/actions-compass.svg';
 
-interface IActionsProps {
-  actions: {
-    uniswap?: string;
-    unicrypt?: string;
-    etherscan?: string;
-    liveData?: string;
-  };
-}
+// interface IActionsProps {
+//   actions: {
+//     uniswap?: string;
+//     unicrypt?: string;
+//     liveData?: string;
+//     binance?: string;
+//     ethereum?: string;
+//     polygon?: string;
+//     xdai?: string;
+//     avalanche?: string;
+//     fantom?: string;
+//   };
+// }
 
 const explorersLinks: { [key: string]: string } = {
   binance: 'https://bscscan.com/address/',
@@ -30,10 +40,37 @@ const explorersLinks: { [key: string]: string } = {
   fantom: 'https://explorer.fantom.network/address/',
 };
 
-const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
+const Actions: React.FC<any> = observer(({ actions }) => {
   const { currentExchange } = useMst();
   const location = useLocation();
   const network = location.pathname.split('/')[1].toLowerCase();
+
+  const getImage = (actionNetwork: string) => {
+    let src;
+
+    switch (actionNetwork) {
+      case 'binance':
+        src = bsc;
+        break;
+      case 'ethereum':
+        src = etherscan;
+        break;
+      case 'polygon':
+        src = polygon;
+        break;
+      case 'xdai':
+        src = xdai;
+        break;
+      case 'avalanche':
+        src = avalanche;
+        break;
+
+      default:
+        src = fantom;
+        break;
+    }
+    return <img src={src} alt={`${src}`} />;
+  };
 
   return (
     <div className={s.block}>
@@ -53,16 +90,16 @@ const Actions: React.FC<IActionsProps> = observer(({ actions }) => {
           <img src={currentExchange.exchange === 'uniswap' ? uniswap : sushiswap} alt="uniswap" />
         </a>
       )}
-      {actions.etherscan && (
+      {actions[network] && (
         <a
-          data-tip={`Tx: ${actions.etherscan}`}
+          data-tip={`Tx: ${actions[network]}`}
           data-place="left"
           data-effect="solid"
           href={`${explorersLinks[network]}${actions.liveData}`}
           target="_blank"
           rel="noreferrer"
         >
-          <img src={etherscan} alt="etherscan" />
+          {getImage(network)}
         </a>
       )}
       {actions.unicrypt && (
