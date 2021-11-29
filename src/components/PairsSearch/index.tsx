@@ -316,6 +316,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
                   <>
                     {/* FIRST PAIR BY PAIR ID */}
                     <Suggestion
+                      networkProps={network.toLowerCase()}
                       otherSymbol={searchByIdData?.match_by_pair[0].token1.symbol}
                       tbrSymbol={searchByIdData?.match_by_pair[0].token0.symbol}
                       tbrName={searchByIdData?.match_by_pair[0].token0.name}
@@ -332,6 +333,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
                     {searchByIdData.match_by_token[0].pairBase?.map((pair: any) => {
                       return (
                         <Suggestion
+                          networkProps={network.toLowerCase()}
                           key={pair.id}
                           otherSymbol={pair.token1.symbol}
                           tbrSymbol={pair.token0.symbol}
@@ -355,6 +357,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
                     {pairsByNameData.map((symbol) =>
                       symbol.pairBase.map((symbolData) => (
                         <Suggestion
+                          networkProps={network.toLowerCase()}
                           key={symbolData.id}
                           otherSymbol={symbolData.token1.symbol}
                           tbrSymbol={symbolData.token0.symbol}
@@ -372,6 +375,7 @@ const PairSearch: React.FC<IPairSearchProps> = observer((props) => {
                     {pairsByNameData.map((symbol) =>
                       symbol.pairQuote.map((symbolData) => (
                         <Suggestion
+                          networkProps={network.toLowerCase()}
                           key={symbolData.id}
                           otherSymbol={symbolData.token0.symbol}
                           tbrSymbol={symbolData.token1.symbol}

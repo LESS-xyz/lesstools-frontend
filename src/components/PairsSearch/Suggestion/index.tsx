@@ -15,6 +15,7 @@ interface ISuggestionProps {
   onClick: () => void;
   exchange: Exchange;
   small: boolean;
+  networkProps?: string
 }
 
 const Suggestion: React.FC<ISuggestionProps> = ({
@@ -27,9 +28,10 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   onClick,
   // exchange,
   small,
+  networkProps
 }) => {
   const location = useLocation();
-  const network = location.pathname.split('/')[1].toLowerCase();
+  const network = networkProps || location.pathname.split('/')[1].toLowerCase();
   return (
     <Link
       to={`/${network}/pair-explorer/${pairId}`}
