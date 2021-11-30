@@ -40,7 +40,7 @@ export const dataConverter = {
           date={moment(+row.listedSince * 1000).format('YYYY-MM-DDTHH:mm:ss')}
         />
       ),
-      actions: <Actions actions={row.actions} />,
+      actions: <Actions actions={row.actions} exchange={row.exchange} />,
       tokenPrice: <TokenPrice {...row.tokenPrice} isUsd={isUsd} />,
       totalLiquidity: <span>${new BigNumber(row.totalLiquidity).toFormat(2)}</span>,
       poolAmount: (

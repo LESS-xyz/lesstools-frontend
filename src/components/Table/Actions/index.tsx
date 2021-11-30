@@ -2,7 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link, useLocation } from 'react-router-dom';
 
-import { useMst } from '../../../store/store';
+// import { useMst } from '../../../store/store';
+import { ExchangesIcons } from '../../../config/exchanges';
 
 import s from './Actions.module.scss';
 
@@ -12,8 +13,6 @@ import polygon from '../../../assets/img/icons/table/actions-polygon.svg';
 import xdai from '../../../assets/img/icons/table/actions-xdai.svg';
 import avalanche from '../../../assets/img/icons/table/actions-avalanche.svg';
 import fantom from '../../../assets/img/icons/table/actions-fantom.svg';
-import uniswap from '../../../assets/img/icons/table/actions-uniswap.svg';
-import sushiswap from '../../../assets/img/icons/table/actions-sushiswap.svg';
 import unicrypt from '../../../assets/img/icons/table/actions-unicrypt.svg';
 import compass from '../../../assets/img/icons/table/actions-compass.svg';
 
@@ -32,16 +31,17 @@ import compass from '../../../assets/img/icons/table/actions-compass.svg';
 // }
 
 const explorersLinks: { [key: string]: string } = {
-  binance: 'https://bscscan.com/address/',
-  ethereum: 'https://etherscan.io/address/',
-  polygon: 'https://polygonscan.com/address/',
-  xdai: 'https://blockscout.com/xdai/mainnet/address/',
-  avalanche: 'https://avascan.info/blockchain/c/address/',
-  fantom: 'https://explorer.fantom.network/address/',
+  binance: 'https://bscscan.com/token/',
+  ethereum: 'https://etherscan.io/token/',
+  polygon: 'https://polygonscan.com/token/',
+  xdai: 'https://blockscout.com/xdai/mainnet/token/',
+  avalanche: 'https://snowtrace.io/token/',
+  fantom: 'https://ftmscan.com/token/',
 };
 
-const Actions: React.FC<any> = observer(({ actions }) => {
-  const { currentExchange } = useMst();
+const Actions: React.FC<any> = observer(({ actions, exchange }) => {
+  console.log('exchange', exchange);
+  // const { currentExchange } = useMst();
   const location = useLocation();
   const network = location.pathname.split('/')[1].toLowerCase();
 
@@ -69,25 +69,68 @@ const Actions: React.FC<any> = observer(({ actions }) => {
         src = fantom;
         break;
     }
-    return <img src={src} alt={`${src}`} />;
+    return <img src={src} alt={`${src}`} className={s.icon} />;
+  };
+
+  const getExchangeLink = (actionExchange: string, uniswapLink: string) => {
+    let link;
+    switch (actionExchange) {
+      case 'Uniswap':
+        link = `https://app.uniswap.org/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Pancake':
+        link = `https://pancakeswap.finance/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Mdexbsc':
+        link = `https://ht.mdex.com/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Babyswap':
+        link = `https://exchange.babyswap.finance/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Apeswap':
+        link = `https://app.apeswap.finance/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Quickswap':
+        link = `https://quickswap.exchange/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Spookyswap':
+        link = `https://spookyswap.finance/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Spiritswap':
+        link = `https://swap.spiritswap.finance/#/exchange/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Joetrader':
+        link = `https://traderjoexyz.com/#/trade?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Honeyswap':
+        link = `https://app.honeyswap.org/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Pangolin':
+        link = `https://app.pangolin.exchange/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+      case 'Biswap':
+        link = `https://exchange.biswap.org/#/swap?outputCurrency=${uniswapLink}`;
+        break;
+
+      default:
+        link = `https://app.sushi.com/swap?outputCurrency=${uniswapLink}`;
+        break;
+    }
+    return link;
   };
 
   return (
     <div className={s.block}>
-      {actions.uniswap && (
+      {actions.uniswap && exchange && (
         <a
           data-tip={`Buy at uniswap: ${actions.uniswap}`}
           data-place="left"
           data-effect="solid"
-          href={
-            currentExchange.exchange === 'uniswap'
-              ? `https://app.uniswap.org/#/swap?outputCurrency=${actions.uniswap}`
-              : `https://app.sushi.com/swap?outputCurrency=${actions.uniswap}`
-          }
+          href={getExchangeLink(exchange, actions.uniswap)}
           target="_blank"
           rel="noreferrer"
         >
-          <img src={currentExchange.exchange === 'uniswap' ? uniswap : sushiswap} alt="uniswap" />
+          <img src={ExchangesIcons[exchange]} alt={`${exchange}`} />
         </a>
       )}
       {actions[network] && (
