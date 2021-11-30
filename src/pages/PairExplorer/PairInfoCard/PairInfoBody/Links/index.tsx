@@ -116,12 +116,12 @@ const Links: React.FC<ILinksProps> = ({ tokenInfoFromBackend, tokenId, exchange 
   }, [tokenInfoFromBackend, exchange]);
 
   const explorersLinks: { [key: string]: string } = {
-    binance: 'https://bscscan.com/address/',
-    ethereum: 'https://etherscan.io/address/',
-    polygon: 'https://polygonscan.com/address/',
-    xdai: 'https://blockscout.com/xdai/mainnet/address/',
-    avalanche: 'https://avascan.info/blockchain/c/address/',
-    fantom: 'https://explorer.fantom.network/address/',
+    binance: 'https://bscscan.com/token/',
+    ethereum: 'https://etherscan.io/token/',
+    polygon: 'https://polygonscan.com/token/',
+    xdai: 'https://blockscout.com/xdai/mainnet/token/',
+    avalanche: 'https://snowtrace.io/token/',
+    fantom: 'https://ftmscan.com/token/',
   };
 
   const getImage = (actionNetwork: string) => {
