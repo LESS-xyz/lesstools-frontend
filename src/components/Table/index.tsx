@@ -65,6 +65,17 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
     setTableData(dataSorter(tableData, [...data], el.key, sortCount + 1, el.sortType, isUsd));
   }
 
+  function handleSortTableDataDefault(el: any) {
+    const table = document.querySelector<HTMLElement>('.table_wrap');
+    if (table) {
+      table.scrollTo(0, 0);
+    }
+    setScrollKoef(1);
+    setSortCount(1);
+    setCurrentEl(el);
+    setTableData(dataSorter(tableData, [...data], el.key, 1, el.sortType, isUsd));
+  }
+
   useEffect(() => {
     // при обновлении данных (каждые 15 сек) - сортируются данные
     if (currentEl) {
@@ -75,6 +86,11 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
 
     // eslint-disable-next-line
   }, [data]);
+
+  useEffect(() => {
+    handleSortTableDataDefault({ key: 'listedSince', sortType: 'number', title: 'Listed Since' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={`${s.table_wrap} table_wrap`} onScroll={(e) => handleScroll(e)}>
@@ -140,10 +156,10 @@ const Table: React.FC<ITableProps> = React.memo(({ header, data, tableType }) =>
                         return (
                           <>
                             <th key={`${JSON.stringify(tableData[i])}${index * index}`}>
-                              <img src={ExchangesIcons[cell]} alt=""/>
+                              <img src={ExchangesIcons[cell]} alt="" />
                             </th>
                           </>
-                        )
+                        );
                       }
                       return (
                         <>
