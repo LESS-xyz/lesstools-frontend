@@ -59,13 +59,13 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       enabled_features: [
         // 'study_templates',
       ],
-      use_localstorage_for_settings: 'off',
-      items_favoriting: 'off',
-      save_chart_properties_to_local_storage: 'off',
-      favorites: {
-        intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
-        chartTypes: ['Candles'],
-      },
+      // use_localstorage_for_settings: 'off',
+      // items_favoriting: 'off',
+      // save_chart_properties_to_local_storage: 'off',
+      // favorites: {
+      //   intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', 'W'],
+      //   chartTypes: ['Candles'],
+      // },
       charts_storage_url: chartsStorageUrl,
       charts_storage_api_version: chartsStorageApiVersion,
       theme: 'dark',
