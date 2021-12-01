@@ -134,7 +134,7 @@ const VerifiedPage: React.FC = observer(() => {
               <span>{config.WALLET_TO_PAY}</span>
             </div>
             <div className={s.block_subtext}>
-              * if you send funds from another account or an exchange thosee funds will be lost.
+              * if you send funds from another account or an exchange those funds will be lost.
             </div>
             <div className={s.check}>
               <button
@@ -153,7 +153,7 @@ const VerifiedPage: React.FC = observer(() => {
             <div className={s.block_subtitle}>
               {isCheckMark
                 ? 'We are checking your transfer. This may take 5 minutes.'
-                : 'I’ve alredy done the transfer'}
+                : 'I’ve already done the transfer'}
             </div>
             {isCheckMark && <div className={s.block_subtitle}>Time to next check: {timer}</div>}
           </div>
