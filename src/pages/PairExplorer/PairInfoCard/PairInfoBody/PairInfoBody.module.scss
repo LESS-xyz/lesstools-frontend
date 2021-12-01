@@ -13,7 +13,7 @@
   }
 
   &_section {
-    padding: 10px 5px;
+    padding: 10px 0;
     &__right {
       @include flex(column, flex-end);
     }
@@ -145,7 +145,7 @@
       transform: scale(1.2);
       svg.desktop_icon path {
         fill: transparent;
-        stroke: #fff;
+        // stroke: #fff;
       }
     }
   }
