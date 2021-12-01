@@ -53,7 +53,8 @@
     width: 100% !important;
     height: calc(100% - 56px);
 
-    .group_title__text,.group_title__icon {
+    .group_title__text,
+    .group_title__icon {
       display: block;
     }
     .group_title__icon_wrapped {
@@ -119,6 +120,9 @@
       padding-left: 12px;
       &__icon {
         display: block;
+
+        transform: scale(1);
+        width: 22px;
         img {
           width: 22px;
         }
