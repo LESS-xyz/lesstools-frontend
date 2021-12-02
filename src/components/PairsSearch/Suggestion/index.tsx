@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
 import BigNumber from 'bignumber.js/bignumber';
-import { Exchange } from "../../../config/exchanges";
 
 import s from '../PairsSearch.module.scss';
 
@@ -13,9 +12,9 @@ interface ISuggestionProps {
   holders: string;
   txCount: string;
   onClick: () => void;
-  exchange: Exchange;
+  exchange: string;
   small: boolean;
-  networkProps?: string
+  networkProps?: string;
 }
 
 const Suggestion: React.FC<ISuggestionProps> = ({
@@ -28,7 +27,7 @@ const Suggestion: React.FC<ISuggestionProps> = ({
   onClick,
   // exchange,
   small,
-  networkProps
+  networkProps,
 }) => {
   const location = useLocation();
   const network = networkProps || location.pathname.split('/')[1].toLowerCase();
