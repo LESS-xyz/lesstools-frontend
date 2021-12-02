@@ -61,6 +61,13 @@ type IGetFavoritesOfUser = {
   platform: PLATFORM;
 };
 
+type ICandlesDataFromOurBackend = {
+  candles: number;
+  pair_id: string;
+  pool: string;
+  time_interval: 'hour' | 'day';
+};
+
 class BackendService {
   private axios: any;
 
@@ -190,6 +197,17 @@ class BackendService {
     try {
       const res = await this.axios.get('/accounts/price/');
       return { data: res.data };
+    } catch (error) {
+      return { data: null, error };
+    }
+  };
+
+  getCandlesFromOurBackned = async (data: ICandlesDataFromOurBackend) => {
+    try {
+      const res = await this.axios.get(
+        `/analytics/candles/${data.pair_id}&${data.pool}&${data.time_interval}&${data.candles}`,
+      );
+      return res;
     } catch (error) {
       return { data: null, error };
     }

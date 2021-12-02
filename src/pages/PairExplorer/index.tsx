@@ -37,7 +37,7 @@ const PairExplorer: React.FC = () => {
   const [swaps, setSwaps] = useState<any[]>([]);
   const [pairInfo, setPairInfo] = useState<any>([]);
   const { id: pairId } = useParams<{ id: string }>();
-  const { user } = useMst();
+  const { user, currentExchange } = useMst();
 
   const location = useLocation();
   const network = uppercaseFirstLetter(location.pathname.split('/')[1].toLowerCase());
@@ -83,12 +83,16 @@ const PairExplorer: React.FC = () => {
         });
       });
       const resultsGetPairInfo = await Promise.all(results);
-      const pairInfoNew = resultsGetPairInfo.filter((el) => el.base_info !== null)[0] || {}; // first exchange
+      const pairInfoNew = resultsGetPairInfo.filter((el) => el?.base_info !== null)[0] || {}; // first exchange
+      const exchangeIndex = resultsGetPairInfo.findIndex((el) => el.base_info);
+      if (exchangeIndex !== -1) {
+        currentExchange.setCurrentExchange(exchangesOfNetwork[exchangeIndex]);
+      }
       setPairInfo(pairInfoNew);
     } catch (e) {
       console.error(e);
     }
-  }, [pairId, blocks, exchangesOfNetwork]);
+  }, [pairId, blocks, exchangesOfNetwork, currentExchange]);
 
   useEffect(() => {
     if (!network) return;

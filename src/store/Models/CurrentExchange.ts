@@ -1,17 +1,11 @@
 import { types } from 'mobx-state-tree';
-import { Exchange } from "../../config/exchanges";
 
 const CurrentExchangeModel = types
   .model({
-    exchange: types.union(
-      types.literal('uniswap'),
-      types.literal('sushiswap'),
-      types.literal('quickswap'),
-      types.literal('ethereum'),
-    ),
+    exchange: types.string,
   })
   .actions((self) => ({
-    setCurrentExchange(exchange: Exchange) {
+    setCurrentExchange(exchange: string) {
       self.exchange = exchange;
     },
   }));

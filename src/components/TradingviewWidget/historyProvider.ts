@@ -1,6 +1,9 @@
 import axios from 'axios';
 
+import { rootStore } from '../../store/store';
+import backend from '../../services/backend';
 import { REACT_APP_CRYPTOCOMPARE_API_KEY } from '../../config/index';
+import { TradingviewExchangesNames } from '../../config/exchanges';
 
 const api_root = 'https://min-api.cryptocompare.com';
 const history: any = {};
@@ -91,6 +94,33 @@ export default {
             return res;
           }, []);
         }
+
+        const locationPathname = window.location.pathname.split('/');
+        const pair_id = locationPathname[locationPathname.length - 1];
+        const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
+
+        const candlesFromBackend = await backend.getCandlesFromOurBackned({
+          pair_id,
+          pool,
+          time_interval: 'hour',
+          candles: 120,
+        });
+
+        return Object.values(candlesFromBackend.data)
+          .reduce((res: Array<any>, el: any) => {
+            if (el.open) {
+              res.push({
+                time: el.start_time * 1000, // TradingView requires bar time in ms
+                low: el.low,
+                high: el.high,
+                open: el.open,
+                close: el.close,
+              });
+            }
+
+            return res;
+          }, [])
+          .reverse();
 
         return [];
       }
