@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { rootStore } from '../../store/store';
+import  rootStore  from '../../store/store';
 import backend from '../../services/backend';
 import { REACT_APP_CRYPTOCOMPARE_API_KEY } from '../../config/index';
 import { TradingviewExchangesNames } from '../../config/exchanges';
