@@ -51,9 +51,9 @@ export interface ISubgraphsByNetworks {
 export const SubgraphsByNetworks: ISubgraphsByNetworks = {
   [Networks.Ethereum]: [
     Subgraphs.Uniswap,
+    Subgraphs.Sushiswap,
   ],
   [Networks.Binance]: [
-    Subgraphs.Sushiswap,
     Subgraphs.Apeswap,
     Subgraphs.Babyswap,
     Subgraphs.Biswap,
