@@ -1,4 +1,5 @@
 import historyProvider from './historyProvider';
+import { rootStore } from '../../store/store';
 
 const config = {
   supported_resolutions: ['60', 'D'],
@@ -58,6 +59,7 @@ export default {
         if (bars.length) {
           onHistoryCallback(bars, { noData: false });
         } else {
+          rootStore.modals.open('Info', 'No trading data for this pair');
           onHistoryCallback(bars, { noData: true });
         }
       })
