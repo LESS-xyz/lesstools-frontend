@@ -59,7 +59,7 @@ export default {
         if (bars.length) {
           onHistoryCallback(bars, { noData: false });
         } else {
-          rootStore.modals.open('Info', 'No trading data for this pair');
+          rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
           onHistoryCallback(bars, { noData: true });
         }
       })
