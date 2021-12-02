@@ -61,23 +61,10 @@ export const SubgraphsByNetworks: ISubgraphsByNetworks = {
     Subgraphs.Pancake,
     Subgraphs.SushiswapBinance,
   ],
-  [Networks.Polygon]: [
-    Subgraphs.Quickswap,
-    Subgraphs.SushiswapPolygon,
-  ],
-  [Networks.Xdai]: [
-    Subgraphs.Honeyswap,
-    Subgraphs.SushiswapXdai,
-  ],
-  [Networks.Fantom]: [
-    Subgraphs.Spiritswap,
-    Subgraphs.Spookyswap,
-    Subgraphs.SushiswapFantom,
-  ],
-  [Networks.Avalanche]: [
-    Subgraphs.Joetrader,
-    Subgraphs.Pangolin,
-  ],
+  [Networks.Polygon]: [Subgraphs.Quickswap, Subgraphs.SushiswapPolygon],
+  [Networks.Xdai]: [Subgraphs.Honeyswap, Subgraphs.SushiswapXdai],
+  [Networks.Fantom]: [Subgraphs.Spiritswap, Subgraphs.Spookyswap, Subgraphs.SushiswapFantom],
+  [Networks.Avalanche]: [Subgraphs.Joetrader, Subgraphs.Pangolin],
 };
 
 export interface ISubgraphsByExchange {
