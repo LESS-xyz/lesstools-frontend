@@ -206,12 +206,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 View more info
               </button>
             </div>
-            
+
             <Links
-                tokenInfoFromBackend={tokenInfoFromBackend}
-                tokenId={tbr.id}
-                exchange={exchange}
-              />
+              tokenInfoFromBackend={tokenInfoFromBackend}
+              tokenId={tbr.id}
+              exchange={exchange}
+            />
             <div className={s.token_info}>
               <TokenInfoItem
                 title="Token contract:"
@@ -252,34 +252,34 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               <TokenInfoItem
                 title="Holders"
                 value={`${
-                  tokenInfoFromBackend
+                  tokenInfoFromBackend?.pair?.token_being_reviewed?.holders_count
                     ? new BigNumber(
                         tokenInfoFromBackend?.pair?.token_being_reviewed?.holders_count,
                       ).toFormat(0)
-                    : 'Loading...'
+                    : 'No data'
                 }`}
               />
               <TokenInfoItem
                 title="Market cap"
-                value={`$${
-                  tokenInfoFromBackend
-                    ? new BigNumber(
+                value={
+                  tokenInfoFromBackend?.pair?.token_being_reviewed?.circulating_supply
+                    ? `$${new BigNumber(
                         +tokenInfoFromBackend?.pair?.token_being_reviewed?.circulating_supply *
                           +tbr.derivedUSD,
-                      ).toFormat(2)
-                    : 'Loading...'
-                }`}
+                      ).toFormat(2)}`
+                    : 'No data'
+                }
               />
               <TokenInfoItem
                 title="Diluted Market cap"
-                value={`$${
-                  tokenInfoFromBackend
-                    ? new BigNumber(
+                value={
+                  tokenInfoFromBackend?.pair?.token_being_reviewed?.total_supply
+                    ? `$${new BigNumber(
                         +tokenInfoFromBackend?.pair?.token_being_reviewed?.total_supply *
                           +tbr.derivedUSD,
-                      ).toFormat(2)
-                    : 'Loading...'
-                }`}
+                      ).toFormat(2)}`
+                    : 'No data'
+                }
               />
             </div>
             <div className={s.card_section}>
@@ -320,7 +320,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 currentVote={tokenInfoFromBackend?.vote || 0}
                 pairId={pairId}
               />
-{/* 
+              {/* 
               <Links
                 tokenInfoFromBackend={tokenInfoFromBackend}
                 tokenId={tbr.id}

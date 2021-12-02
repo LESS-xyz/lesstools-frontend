@@ -1,7 +1,7 @@
 import historyProvider from './historyProvider';
 
 const config = {
-  // supported_resolutions: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', '7D'],
+  supported_resolutions: ['60', 'D',],
   // favorites: {
   //   intervals: ['1', '3', '5', '15', '30', 'H', '2H', '4H', '12H', 'D', '3D', '7D'],
   //   chartTypes: ['Candles'],
@@ -34,7 +34,7 @@ export default {
         has_no_volume: false,
         has_weekly_and_monthly: true,
         intraday_multipliers: ['1', '60'],
-        // supported_resolution: config.supported_resolutions,
+        supported_resolution: config.supported_resolutions,
         volume_precision: 8,
         data_status: 'streaming',
       };
