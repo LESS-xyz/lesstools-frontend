@@ -1,5 +1,5 @@
 import historyProvider from './historyProvider';
-import { rootStore } from '../../store/store';
+import  rootStore  from '../../store/store';
 
 const config = {
   supported_resolutions: ['60', 'D'],

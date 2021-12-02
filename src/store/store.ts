@@ -42,7 +42,7 @@ export const Store = RootModel.create({
   },
 });
 
-export const rootStore = Store;
+const rootStore = Store;
 
 onSnapshot(rootStore, (snapshot) => {
   console.log('Snapshot: ', snapshot);
