@@ -85,6 +85,7 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
     widget.onChartReady(() => {
       setIsLoaded(true);
     });
+
     // });
     return () => (window as any).tvWidget.remove();
   }, [
