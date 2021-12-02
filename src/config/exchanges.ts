@@ -97,9 +97,8 @@ export const TradingviewExchangesNames: { [key: string]: string } = {
 };
 
 export const ExchangesByNetworks: { [key: string]: string[] } = {
-  [Networks.Ethereum]: [Exchanges.Uniswap],
+  [Networks.Ethereum]: [Exchanges.Uniswap, Exchanges.Sushiswap],
   [Networks.Binance]: [
-    Exchanges.Sushiswap,
     Exchanges.Apeswap,
     Exchanges.Babyswap,
     Exchanges.Biswap,
