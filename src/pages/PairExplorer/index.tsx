@@ -27,6 +27,7 @@ import { ExchangesByNetworks, isExchangeLikeSushiswap } from '../../config/excha
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
 import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { NetworksForQueryFromBackend, Networks } from '../../config/networks';
 import TradingviewWidget from '../../components/TradingviewWidget';
 
 const PairExplorer: React.FC = () => {
@@ -160,10 +161,10 @@ const PairExplorer: React.FC = () => {
         token_address: tbr.id,
         token_symbol: tbr.symbol,
         token_name: tbr.name,
-        platform: 'ETH',
+        platform: NetworksForQueryFromBackend[network as Networks],
       })
       .then((res) => setTokenInfoFromBackend(res.data));
-  }, [blocks, pairInfo, pairId, user.isVerified]);
+  }, [blocks, pairInfo, pairId, user.isVerified, network]);
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
 
@@ -291,35 +292,6 @@ Fundraising Capital"
                 />
               )}
             </div>
-
-            {/* <aside className={`${s.left_aside} ${isLeftSideBar && s.active}`}>
-              <div className={s.left}>
-                <div className={`${s.left_inner} grey-scroll`}>
-                  {pairInfo ? (
-                    <PairInfoBody
-                      loading={!pairInfo}
-                      pairId={pairId}
-                      tokenInfoFromBackend={tokenInfoFromBackend}
-                      pairInfo={pairInfo}
-                      exchange={exchange}
-                    />
-                  ) : (
-                    <Loader />
-                  )}
-                </div>
-                <div
-                  className={s.left_aside__button}
-                  tabIndex={0}
-                  role="button"
-                  onKeyDown={() => {}}
-                  onClick={() => setIsLeftSideBar(!isLeftSideBar)}
-                >
-                  <div className={s.left_aside__button_inner}>
-                    <img src={arrowRight} alt=">" />
-                  </div>
-                </div>
-              </div>
-            </aside> */}
           </div>
           <aside className={`${s.right_aside} ${isRightSideBar && s.active}`}>
             <div className={s.right}>

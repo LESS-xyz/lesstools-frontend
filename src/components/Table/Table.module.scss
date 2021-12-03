@@ -4,20 +4,11 @@
 .table_wrap {
   overflow: auto;
   border-radius: 10px 0px 0px 0;
-  max-width: 1375px;
-  position: absolute;
+  max-width: 3000px;
+  height: 800px;
   top: 100px;
   bottom: 0;
   width: 100%;
-  @include b(desktop){
-    width: calc(100% - 70px)
-  }
-  @include b(tablet){
-    width: calc(100% - 10px)
-  }
-  @include b(mobile){
-    top: 160px;
-  }
 }
 
 table {

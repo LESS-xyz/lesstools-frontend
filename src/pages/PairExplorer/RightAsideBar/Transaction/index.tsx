@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js/bignumber';
 
 import { getSecondsFromDate } from '../../../../utils/getSecondsFromDate';
+import { getNetworkImage } from '../../../../helpers/getNetworkImage';
+import { explorersLinks } from '../../../../config/networks';
 
 import s from './Transaction.module.scss';
-
-import etherscanImg from '../../../../assets/img/icons/table/actions-etherscan.svg';
 
 // TODO: move to utils and rename
 function formatTime(seconds: number) {
@@ -26,6 +26,7 @@ interface ITransactionProps {
   timestamp: number;
   tbrSymbol: string;
   otherSymbol: string;
+  network: string;
 }
 
 const Transaction: React.FC<ITransactionProps> = ({
@@ -37,6 +38,7 @@ const Transaction: React.FC<ITransactionProps> = ({
   timestamp,
   tbrSymbol,
   otherSymbol,
+  network,
 }) => {
   return (
     <div className={s.transaction}>
@@ -65,10 +67,10 @@ const Transaction: React.FC<ITransactionProps> = ({
       <a
         target="_blank"
         rel="noreferrer"
-        href={`https://etherscan.io/tx/${etherscan}`}
+        href={`${explorersLinks[network]}tx/${etherscan}`}
         className={s.transaction_etherscan}
       >
-        <img src={etherscanImg} alt="etherscan" />
+        {getNetworkImage(network)}
       </a>
       <div className={s.transaction_time}>
         {formatTime(getSecondsFromDate(new Date(timestamp)))}

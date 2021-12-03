@@ -193,7 +193,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                     (24h:{' '}
                     {tokenPrice24HoursChange === 'NaN' ? 'No data' : `${tokenPrice24HoursChange}%`})
                   </span>{' '}
-                  {new BigNumber(tbr.derivedETH).toFormat(7)} ETH
+                  {new BigNumber(tbr.derivedETH).toFormat(7)} {otherToken?.symbol}
                 </div>
               </div>
               <button
