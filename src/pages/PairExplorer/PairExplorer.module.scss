@@ -12,7 +12,7 @@
 
 .container {
   max-width: 3500px;
-  padding: 0 30px 0 7px;
+  padding: 0 7px;
   margin: 0 auto;
   overflow-x: hidden;
 }
@@ -124,8 +124,8 @@
       }
       background: url('../../assets/img/sections/pair-explorer/arrow-bg.png') center center
         no-repeat;
-        width: 73px;
-        height: 29px;
+      width: 73px;
+      height: 29px;
       // transform: rotate(-180deg);
       background-size: contain;
       @include flex(row, center, center);
@@ -237,6 +237,7 @@
   margin-left: 20px;
   @include b(1251) {
     border-radius: 13px;
+    margin-left: 0;
   }
   & > * {
     direction: ltr;

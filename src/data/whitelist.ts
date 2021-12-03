@@ -21,4 +21,5 @@ export const WHITELIST: string[] = [
   '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599', // WBTC
   '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // WAVAX
   '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d', // WXDAI
+  '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
 ];

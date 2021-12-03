@@ -8,6 +8,7 @@ import s from './RightAsideBar.module.scss';
 
 import tradesWhite from '../../../assets/img/icons/trades-white.svg';
 import arrowWhite from '../../../assets/img/sections/pair-explorer/arrow-white.svg';
+import { useLocation } from 'react-router-dom';
 
 enum TokenModes {
   TokenValue = 'Token value',
@@ -39,7 +40,7 @@ const Popup: React.FC<IPopupProps> = (props) => {
         onClick={() => setOpenPopup(true)}
       >
         <div>{modeToken}</div>
-        <img src={arrowWhite} alt=""/>
+        <img src={arrowWhite} alt="" />
       </div>
 
       {openPopup && (
@@ -59,7 +60,7 @@ const Popup: React.FC<IPopupProps> = (props) => {
               >
                 {item}
               </div>
-            )
+            );
           })}
         </div>
       )}
@@ -69,6 +70,9 @@ const Popup: React.FC<IPopupProps> = (props) => {
 
 const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
   const { user } = useMst();
+
+  const location = useLocation();
+  const network = location.pathname.split('/')[1].toLowerCase();
 
   const [modeToken, setModeToken] = useState<string>(TokenModes.TokenValue);
   const isModeTokenTokenValue = modeToken === TokenModes.TokenValue;
@@ -82,15 +86,11 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
         <Favorites />
       </div>
       <div className={s.table_header}>
-        <div className={`${s.table_header__title} ${s.amount}`}>
-          Token amount
-        </div>
+        <div className={`${s.table_header__title} ${s.amount}`}>Token amount</div>
         <div className={`${s.table_header__title} ${s.usd}`}>
           <Popup items={[TokenModes.TokenValue, TokenModes.TradePrice]} onChange={setModeToken} />
         </div>
-        <div className={`${s.table_header__title} ${s.time}`}>
-          Age
-        </div>
+        <div className={`${s.table_header__title} ${s.time}`}>Age</div>
       </div>
       <div className={`${s.transactions} grey-scroll`}>
         {trades.map((trade) => (
@@ -104,6 +104,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
             timestamp={trade.data}
             tbrSymbol={trade.tbr.symbol}
             otherSymbol={trade.otherToken.symbol}
+            network={network}
           />
         ))}
       </div>
@@ -128,15 +129,14 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
         </div>
       </div>
       <div className={s.table_header}>
-        <div className={`${s.table_header__title} ${s.amount}`}>
-          Token amount
-        </div>
+        <div className={`${s.table_header__title} ${s.amount}`}>Token amount</div>
         <div className={`${s.table_header__title} ${s.usd}`}>
-          <Popup items={[TokenModes.TokenValue, TokenModes.TradePrice]} onChange={setModeTokenOfMyTrades} />
+          <Popup
+            items={[TokenModes.TokenValue, TokenModes.TradePrice]}
+            onChange={setModeTokenOfMyTrades}
+          />
         </div>
-        <div className={`${s.table_header__title} ${s.time}`}>
-          Age
-        </div>
+        <div className={`${s.table_header__title} ${s.time}`}>Age</div>
       </div>
       <div className={`${s.trades} grey-scroll`}>
         {trades
@@ -152,6 +152,7 @@ const RightAsideBar: React.FC<isRightSideBarProps> = ({ trades }) => {
               timestamp={trade.data}
               tbrSymbol={trade.tbr.symbol}
               otherSymbol={trade.otherToken.symbol}
+              network={network}
             />
           ))}
         {trades.filter((trade) => trade.maker === user.walletId).length < 1 && (

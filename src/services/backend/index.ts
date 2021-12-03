@@ -14,7 +14,7 @@ type IGetTokenAdditionalInfoProps = {
   token_address: string;
   token_name: string;
   token_symbol: string;
-  platform: PLATFORM;
+  platform: string;
 };
 
 type IVoteForPair = {
