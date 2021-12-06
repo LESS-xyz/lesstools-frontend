@@ -128,7 +128,7 @@ export const GET_LAST_BLOCK = `
 // GET all pair swaps for table at pair explorer page
 export const GET_PAIR_SWAPS = `
   query getPairSwaps($id: ID!) {
-    swaps(orderBy: timestamp, orderDirection: desc, where: { pair: $id }) {
+    swaps(orderBy: timestamp, first: 1000, orderDirection: desc, where: { pair: $id }) {
       pair {
         token0 {
           symbol

@@ -2,6 +2,11 @@
 @import '../../styles/mixins/media.scss';
 @import '../../styles/theme.scss';
 
+.scroll {
+  max-height: 70%;
+  overflow: hidden;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -23,6 +28,11 @@
     transition: 0.3s ease 0.1s;
     .group_title__text {
       display: block;
+    }
+
+    .scroll {
+      max-height: 70%;
+      overflow-y: auto;
     }
 
     .group_title__icon_wrapped {

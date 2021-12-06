@@ -62,61 +62,63 @@ const Sidebar: React.FC = observer(() => {
       <div className={s.subtitle}>LESSBOARD</div>
       <LinkSidebar imgDark={board} imgWhite={board} to="/" text="LessBoard" />
 
-      {Object.entries(NetworksForSidebar).map((item: any) => {
-        const [network, networkName] = item;
-        const src = NetworksIcons[network];
-        const defaultPair = DefaultPairsByNetwork[network];
-        return (
-          <div className={s.group} key={uuid()}>
-            <div
-              className={s.group_title}
-              role="button"
-              tabIndex={0}
-              onClick={() => handleChangeActiveNetwork(network)}
-              onKeyDown={() => {}}
-            >
-              {!mobileMenu.isActive && (
-                <div
-                  className={`${s.group_title_arrow} ${
-                    isActiveNetwork(network) && s.group_title_arrow_rotated
-                  }`}
-                >
-                  <img src={arrowWhite} alt="img" />
-                </div>
+      <div className={s.scroll}>
+        {Object.entries(NetworksForSidebar).map((item: any) => {
+          const [network, networkName] = item;
+          const src = NetworksIcons[network];
+          const defaultPair = DefaultPairsByNetwork[network];
+          return (
+            <div className={s.group} key={uuid()}>
+              <div
+                className={s.group_title}
+                role="button"
+                tabIndex={0}
+                onClick={() => handleChangeActiveNetwork(network)}
+                onKeyDown={() => {}}
+              >
+                {!mobileMenu.isActive && (
+                  <div
+                    className={`${s.group_title_arrow} ${
+                      isActiveNetwork(network) && s.group_title_arrow_rotated
+                    }`}
+                  >
+                    <img src={arrowWhite} alt="img" />
+                  </div>
+                )}
+                <div className={s.group_title__text}>{networkName}</div>
+                {!mobileMenu.isActive && (
+                  <div className={s.group_title__icon_wrapped}>
+                    {!!src && <img src={src} alt="img" />}
+                  </div>
+                )}
+                <div className={s.group_title__icon}>{!!src && <img src={src} alt="img" />}</div>
+              </div>
+              {isActiveNetwork(network) && (
+                <>
+                  <LinkSidebar
+                    imgDark={live}
+                    imgWhite={liveWhite}
+                    to={`/${network.toLowerCase()}/live-new-pairs`}
+                    text="Live New Pairs"
+                  />
+                  <LinkSidebar
+                    imgDark={pair}
+                    imgWhite={pairWhite}
+                    to={`/${network.toLowerCase()}/pair-explorer/${defaultPair}`}
+                    text="Pair Explorer"
+                  />
+                  <LinkSidebar
+                    imgDark={bigSwap}
+                    imgWhite={bigSwapWhite}
+                    to={`/${network.toLowerCase()}/big-swap-explorer`}
+                    text="Big Swap Explorer"
+                  />
+                </>
               )}
-              <div className={s.group_title__text}>{networkName}</div>
-              {!mobileMenu.isActive && (
-                <div className={s.group_title__icon_wrapped}>
-                  {!!src && <img src={src} alt="img" />}
-                </div>
-              )}
-              <div className={s.group_title__icon}>{!!src && <img src={src} alt="img" />}</div>
             </div>
-            {isActiveNetwork(network) && (
-              <>
-                <LinkSidebar
-                  imgDark={live}
-                  imgWhite={liveWhite}
-                  to={`/${network.toLowerCase()}/live-new-pairs`}
-                  text="Live New Pairs"
-                />
-                <LinkSidebar
-                  imgDark={pair}
-                  imgWhite={pairWhite}
-                  to={`/${network.toLowerCase()}/pair-explorer/${defaultPair}`}
-                  text="Pair Explorer"
-                />
-                <LinkSidebar
-                  imgDark={bigSwap}
-                  imgWhite={bigSwapWhite}
-                  to={`/${network.toLowerCase()}/big-swap-explorer`}
-                  text="Big Swap Explorer"
-                />
-              </>
-            )}
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
       {/* <div className={s.group}>
         <div className={s.subtitle}>common</div>

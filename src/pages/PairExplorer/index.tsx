@@ -29,6 +29,7 @@ import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 import { NetworksForQueryFromBackend, Networks } from '../../config/networks';
 import TradingviewWidget from '../../components/TradingviewWidget';
+import { formalizePairAsInWhitelist } from '../../utils/formalizePairAsInWhitelist';
 
 const PairExplorer: React.FC = () => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
@@ -284,11 +285,22 @@ Fundraising Capital"
               ) : (
                 <TradingviewWidget
                   autosize
+                  // symbol={`${
+                  //   WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
+                  //     ? pairInfo?.base_info?.token0?.symbol
+                  //     : pairInfo?.base_info?.token1?.symbol
+                  // }/USD`}
                   symbol={`${
-                    WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                      ? pairInfo?.base_info?.token0?.symbol
-                      : pairInfo?.base_info?.token1?.symbol
-                  }/USD`}
+                    formalizePairAsInWhitelist(
+                      pairInfo.base_info.token0,
+                      pairInfo.base_info.token1,
+                    )[1].symbol
+                  }/${
+                    formalizePairAsInWhitelist(
+                      pairInfo.base_info.token0,
+                      pairInfo.base_info.token1,
+                    )[0].symbol
+                  }`}
                 />
               )}
             </div>

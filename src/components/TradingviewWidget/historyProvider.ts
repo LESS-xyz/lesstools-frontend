@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import  rootStore  from '../../store/store';
+import rootStore from '../../store/store';
 import backend from '../../services/backend';
 import { REACT_APP_CRYPTOCOMPARE_API_KEY } from '../../config/index';
 import { TradingviewExchangesNames } from '../../config/exchanges';
@@ -49,7 +49,36 @@ export default {
   getBars: async (symbolInfo: any, resolution: any, from: any, to: any, first: any, limit: any) => {
     if (!first) return [];
     try {
-      const split_symbol = symbolInfo.name.split(/[:/]/);
+      const split_symbol: Array<string> = symbolInfo.name.split(/[:/]/);
+      if (!split_symbol[1].includes('USD')) {
+        const locationPathname = window.location.pathname.split('/');
+        const pair_id = locationPathname[locationPathname.length - 1];
+        const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
+
+        const candlesFromBackend = await backend.getCandlesFromOurBackned({
+          pair_id,
+          pool,
+          time_interval: 'hour',
+          candles: 240,
+        });
+
+        return Object.values(candlesFromBackend.data)
+          .reduce((res: Array<any>, el: any) => {
+            if (el.open) {
+              res.push({
+                time: el.start_time * 1000, // TradingView requires bar time in ms
+                low: el.low,
+                high: el.high,
+                open: el.open,
+                close: el.close,
+              });
+            }
+
+            return res;
+          }, [])
+          .reverse();
+      }
+
       const url = resolution >= 60 ? '/data/histohour' : '/data/histoday';
       const params = {
         fsym: split_symbol[0],
@@ -94,33 +123,6 @@ export default {
             return res;
           }, []);
         }
-
-        const locationPathname = window.location.pathname.split('/');
-        const pair_id = locationPathname[locationPathname.length - 1];
-        const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
-
-        const candlesFromBackend = await backend.getCandlesFromOurBackned({
-          pair_id,
-          pool,
-          time_interval: 'hour',
-          candles: 120,
-        });
-
-        return Object.values(candlesFromBackend.data)
-          .reduce((res: Array<any>, el: any) => {
-            if (el.open) {
-              res.push({
-                time: el.start_time * 1000, // TradingView requires bar time in ms
-                low: el.low,
-                high: el.high,
-                open: el.open,
-                close: el.close,
-              });
-            }
-
-            return res;
-          }, [])
-          .reverse();
 
         return [];
       }

@@ -16,7 +16,7 @@ import s from './BigSwapExplorer.module.scss';
 import loader from '../../assets/loader.svg';
 import { ExchangesByNetworks } from '../../config/exchanges';
 import TheGraph from '../../services/TheGraph';
-import { SubgraphsByExchangeShort } from '../../config/subgraphs';
+import { SubgraphsByExchange } from '../../config/subgraphs';
 import { uniqueArrayOfObjectsByKeyOfChild } from '../../utils/comparers';
 import { useLocation } from 'react-router-dom';
 import { uppercaseFirstLetter } from '../../utils/prettifiers';
@@ -56,13 +56,13 @@ const BigSwapExplorer: React.FC = observer(() => {
         if (!exchangesOfNetwork.length) return;
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
-            subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
+            // TODO: testing this
+            subgraph: SubgraphsByExchange[exchangeOfNetwork],
             query: GET_BIG_SWAPS,
             variables,
           });
         });
         const result = await Promise.all(results);
-        console.log('BigSwapExplorer getSwapsData:', { result });
         setSwapsDataPlain(result || []);
       } catch (e) {
         console.error(e);
