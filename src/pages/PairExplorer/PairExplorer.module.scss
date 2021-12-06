@@ -23,10 +23,6 @@
   grid-template-columns: 1.5fr 1fr;
   // grid-template-columns: 4fr 1fr;
   align-items: center;
-  padding: 0 30px;
-  @include b(1250) {
-    padding: 0;
-  }
 }
 
 // card and chart

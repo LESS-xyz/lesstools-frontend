@@ -10,6 +10,7 @@ export enum Subgraphs {
   SushiswapPolygon = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-matic',
   SushiswapBinance = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-bsc',
   Pancake = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-pancake',
+  // Pancake = 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/',
   Honeyswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/honeyswap-lesstools',
   Spookyswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/spookyswap-lesstools',
   Mdexbsc = 'https://api.thegraph.com/subgraphs/name/rock-n-block/mdex-bsc-lesstools',
@@ -49,10 +50,7 @@ export interface ISubgraphsByNetworks {
 }
 
 export const SubgraphsByNetworks: ISubgraphsByNetworks = {
-  [Networks.Ethereum]: [
-    Subgraphs.Uniswap,
-    Subgraphs.Sushiswap,
-  ],
+  [Networks.Ethereum]: [Subgraphs.Uniswap, Subgraphs.Sushiswap],
   [Networks.Binance]: [
     Subgraphs.Apeswap,
     Subgraphs.Babyswap,

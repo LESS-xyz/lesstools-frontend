@@ -44,6 +44,8 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
     studiesOverrides = {},
   } = props;
 
+  const split_symbol = symbol.split(/[:/]/);
+
   useEffect(() => {
     const widgetOptions = {
       debug: false,
@@ -86,6 +88,25 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       setIsLoaded(true);
     });
 
+    widget.headerReady().then(function () {
+      let isUsd = false;
+
+      const button = widget.createButton();
+      button.setAttribute('title', 'Change pair');
+      button.textContent = `${split_symbol[0]}/USD`;
+      button.addEventListener('click', function () {
+        if (!isUsd) {
+          widget.setSymbol(`${split_symbol[0]}/USD`, '60');
+          button.textContent = symbol;
+          isUsd = true;
+        } else {
+          widget.setSymbol(`${split_symbol[0]}/${split_symbol[1]}`, '60');
+          button.textContent = `${split_symbol[0]}/USD`;
+          isUsd = false;
+        }
+      });
+    });
+
     // });
     return () => (window as any).tvWidget.remove();
   }, [
@@ -100,6 +121,7 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
     fullscreen,
     autosize,
     studiesOverrides,
+    split_symbol,
   ]);
 
   return (

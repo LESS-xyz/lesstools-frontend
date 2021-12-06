@@ -26,7 +26,7 @@ export default {
         ticker: symbolName,
         exchange: split_data[0],
         minmov: 1,
-        pricescale: 100000000,
+        pricescale: 1000000000000000,
         has_intraday: true,
         has_no_volume: false,
         has_weekly_and_monthly: true,
