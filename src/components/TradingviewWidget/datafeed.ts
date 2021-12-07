@@ -1,5 +1,4 @@
 import historyProvider from './historyProvider';
-import  rootStore  from '../../store/store';
 
 const config = {
   supported_resolutions: ['60', 'D'],
@@ -59,7 +58,6 @@ export default {
         if (bars.length) {
           onHistoryCallback(bars, { noData: false });
         } else {
-          rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
           onHistoryCallback(bars, { noData: true });
         }
       })
