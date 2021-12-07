@@ -29,6 +29,12 @@ type IAddPairToFavorite = {
   platform: PLATFORM;
 };
 
+export type IAdminToken = {
+  name: string;
+  address: string;
+  image: string;
+};
+
 export type IAdditionalInfoFromBackend = {
   pair: {
     address: string;
@@ -210,6 +216,20 @@ class BackendService {
       return res;
     } catch (error) {
       return { data: null, error };
+    }
+  };
+
+  getAdminTokens = async () => {
+    try {
+      const res: {
+        data: {
+          main_token: IAdminToken;
+          pairs: Array<IAdminToken>;
+        };
+      } = await this.axios.get('/analytics/admin_tokens');
+      return res.data;
+    } catch (error) {
+      return null;
     }
   };
 }

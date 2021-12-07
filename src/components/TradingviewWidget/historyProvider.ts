@@ -50,6 +50,7 @@ export default {
     if (!first) return [];
     try {
       const split_symbol: Array<string> = symbolInfo.name.split(/[:/]/);
+      // query data from our api
       if (!split_symbol[1].includes('USD')) {
         const locationPathname = window.location.pathname.split('/');
         const pair_id = locationPathname[locationPathname.length - 1];
@@ -62,7 +63,7 @@ export default {
           candles: 240,
         });
 
-        return Object.values(candlesFromBackend.data)
+        const formattedCandles = Object.values(candlesFromBackend.data)
           .reduce((res: Array<any>, el: any) => {
             if (el.open) {
               res.push({
@@ -77,6 +78,8 @@ export default {
             return res;
           }, [])
           .reverse();
+
+        return formattedCandles;
       }
 
       const url = resolution >= 60 ? '/data/histohour' : '/data/histoday';
@@ -124,6 +127,7 @@ export default {
           }, []);
         }
 
+        rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
         return [];
       }
 
@@ -149,8 +153,10 @@ export default {
         }
         return bars;
       }
+      rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
       return [];
     } catch (e) {
+      rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
       return [];
     }
   },

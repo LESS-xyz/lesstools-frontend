@@ -280,16 +280,11 @@ Fundraising Capital"
               <PairsSearch placeholder={`Search ${network} pairs`} />
             </div>
             <div className={s.chart}>
-              {!pairInfo?.base_info ? (
+              {!pairInfo?.base_info?.token0 ? (
                 <Loader />
               ) : (
                 <TradingviewWidget
                   autosize
-                  // symbol={`${
-                  //   WHITELIST.includes(pairInfo?.base_info?.token1.id || '')
-                  //     ? pairInfo?.base_info?.token0?.symbol
-                  //     : pairInfo?.base_info?.token1?.symbol
-                  // }/USD`}
                   symbol={`${
                     formalizePairAsInWhitelist(
                       pairInfo.base_info.token0,
