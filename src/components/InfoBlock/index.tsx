@@ -27,8 +27,21 @@ import TheGraph from '../../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 import { getStartOfHour } from '../../utils/time';
 import { IPairFromGraph } from '../../pages/BoardPage/HotTable';
+import PromotedToken from './PromotedToken';
+import HotTokenAdmin from './HotTokenAdmin';
+import backend, { IAdminToken } from '../../services/backend';
 
 const InfoBlock: React.FC<any> = observer(() => {
+  const [adminTokens, setAdminTokens] = useState<Array<IAdminToken>>([]);
+
+  useEffect(() => {
+    backend.getAdminTokens().then((res) => {
+      if (res) {
+        setAdminTokens(res.pairs);
+      }
+    });
+  }, []);
+
   const { user }: { user: any } = useMst();
 
   const [gasPrice, setGasPrice] = useState<IGasPrice | null>(null);
@@ -122,14 +135,7 @@ const InfoBlock: React.FC<any> = observer(() => {
       const resultsSorted = resultsConсatenated.sort(
         (a: any, b: any) => +b.hourlyTxns - +a.hourlyTxns,
       );
-      console.log('HotTable getDataForAllExchangesOfNetwork:', {
-        net,
-        exchangesOfNetwork,
-        result,
-        resultsFormatted,
-        resultsConсatenated,
-        resultsSorted,
-      });
+
       // setHotPairs({ [network]: resultsContatenated });
       return { [net]: resultsSorted };
     } catch (e) {
@@ -214,34 +220,51 @@ const InfoBlock: React.FC<any> = observer(() => {
         <div className={s.right}>
           <div className={s.marquee}>
             <div className={s.table}>
+              {adminTokens.map((info, index) => (
+                <HotTokenAdmin
+                  index={index + 1}
+                  key={info.address}
+                  name={info.name}
+                  icon={info.image}
+                  href={info.address}
+                />
+              ))}
               {hotPairs &&
-                hotPairs[network]?.map((pair: any, index: number) => (
-                  <div key={`${pair.pair.id}`} className={s.table_cell}>
-                    <Link to={`/${network.toLowerCase()}/pair-explorer/${pair.pair.id}`}>
-                      <span>#{index + 1}</span>{' '}
-                      <div>
-                        {WHITELIST.includes(pair.pair.token0.id)
-                          ? pair.pair.token1.symbol
-                          : pair.pair.token0.symbol}
-                      </div>
-                      {pair.exchange && <img src={ExchangesIcons[pair.exchange]} alt="" />}
-                    </Link>
-                  </div>
-                ))}
+                hotPairs[network]
+                  ?.slice(0, 10 - adminTokens.length)
+                  .map((pair: any, index: number) => (
+                    <div key={`${pair.pair.id}`} className={s.table_cell}>
+                      <Link to={`/${network.toLowerCase()}/pair-explorer/${pair.pair.id}`}>
+                        <span>#{index + adminTokens.length + 1}</span>{' '}
+                        <div>
+                          {WHITELIST.includes(pair.pair.token0.id)
+                            ? pair.pair.token1.symbol
+                            : pair.pair.token0.symbol}
+                        </div>
+                        {pair.exchange && (
+                          <img
+                            style={{ paddingLeft: '10px' }}
+                            src={ExchangesIcons[pair.exchange]}
+                            alt=""
+                          />
+                        )}
+                      </Link>
+                    </div>
+                  ))}
             </div>
           </div>
         </div>
-        <Link to="/user-account" className={`${s.metamask_link} ${s.desktop}`}>
+        <PromotedToken />
+        {/* <Link to="/user-account" className={`${s.metamask_link} ${s.desktop}`}>
           <MetaMaskIcon className={s.metamask_link_img} />
           <span>
-            {/* eslint-disable-next-line */}
             {!user.walletId
               ? 'Connect'
               : !user.isVerified
               ? 'Verify'
               : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
           </span>
-        </Link>
+        </Link> */}
       </div>
     </section>
   );

@@ -6,7 +6,7 @@
 .left,
 .cell,
 .table {
-  @include flex(row, center, space-between, nowrap);
+  @include flex(row, center, normal, nowrap);
 }
 
 .info {
