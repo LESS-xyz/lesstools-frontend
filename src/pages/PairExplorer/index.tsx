@@ -3,12 +3,9 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import {
-  GET_PAIR_INFO,
-  GET_PAIR_SWAPS,
-  GET_LAST_BLOCK,
-  GET_PAIR_INFO_SUSHIWAP,
-} from '../../queries/index';
+import { GET_PAIR_INFO, GET_LAST_BLOCK, GET_PAIR_INFO_SUSHIWAP } from '../../queries/index';
+
+import { GET_PAIR_INFO_UNI_2, GET_PAIR_SWAPS_UNI_2 } from '../../queries/uniswap2';
 import RightAsideBar from './RightAsideBar/index';
 import { IRowPairExplorer } from '../../types/table';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
@@ -30,8 +27,9 @@ import { SubgraphsByExchangeShort } from '../../config/subgraphs';
 import { NetworksForQueryFromBackend, Networks } from '../../config/networks';
 import TradingviewWidget from '../../components/TradingviewWidget';
 import { formalizePairAsInWhitelist } from '../../utils/formalizePairAsInWhitelist';
+import { observer } from 'mobx-react-lite';
 
-const PairExplorer: React.FC = () => {
+const PairExplorer: React.FC = observer(() => {
   const [tokenInfoFromBackend, setTokenInfoFromBackend] =
     useState<null | IAdditionalInfoFromBackend>(null);
   // const [timestamp24hAgo] = useState(Math.round(Date.now() / 1000) - 24 * 3600);
@@ -72,12 +70,19 @@ const PairExplorer: React.FC = () => {
       const results = exchangesOfNetwork.map((exchangeOfNetwork: any, i: number) => {
         const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
         // eslint-disable-next-line no-underscore-dangle
-        const blockNumber = +blocks[i]?._meta?.block?.number || 10684814;
+        const blockNumber = +blocks[i]?._meta?.block?.number - 7200 || 13754250;
+        // TODO: fix hardcode
+        // const blockNumber = 13754250;
         return TheGraph.query({
           subgraph,
-          query: isExchangeLikeSushiswap(exchangeOfNetwork)
-            ? GET_PAIR_INFO_SUSHIWAP
-            : GET_PAIR_INFO,
+          query:
+            // ! crutch
+            // eslint-disable-next-line
+            exchangeOfNetwork === 'Uniswap'
+              ? GET_PAIR_INFO_UNI_2
+              : isExchangeLikeSushiswap(exchangeOfNetwork)
+              ? GET_PAIR_INFO_SUSHIWAP
+              : GET_PAIR_INFO,
           variables: {
             id: pairId,
             blockNumber,
@@ -90,11 +95,29 @@ const PairExplorer: React.FC = () => {
       if (exchangeIndex !== -1) {
         currentExchange.setCurrentExchange(exchangesOfNetwork[exchangeIndex]);
       }
-      setPairInfo(pairInfoNew);
+      // ! crutch ! crutch ! crutch
+      if (exchangesOfNetwork[exchangeIndex] === 'Uniswap') {
+        setPairInfo({
+          ...pairInfoNew,
+          base_info: {
+            ...pairInfoNew.base_info,
+            token0: {
+              ...pairInfoNew.base_info.token0,
+              derivedUSD: pairInfoNew.base_info.token0.derivedETH * pairInfoNew.bundle.ethPrice,
+            },
+            token1: {
+              ...pairInfoNew.base_info.token1,
+              derivedUSD: pairInfoNew.base_info.token1.derivedETH * pairInfoNew.bundle.ethPrice,
+            },
+          },
+        });
+      } else {
+        setPairInfo(pairInfoNew);
+      }
     } catch (e) {
       console.error(e);
     }
-  }, [pairId, blocks, exchangesOfNetwork, currentExchange]);
+  }, [pairId, exchangesOfNetwork, currentExchange, blocks]);
 
   useEffect(() => {
     if (!network) return;
@@ -114,7 +137,7 @@ const PairExplorer: React.FC = () => {
   const [swapsFromAllExchanges, getSwapsFromAllExchanges] = useGetDataForAllExchanges({
     network,
     defaultData: [],
-    query: GET_PAIR_SWAPS,
+    query: GET_PAIR_SWAPS_UNI_2,
     variables: { id: pairId },
   });
 
@@ -172,7 +195,11 @@ const PairExplorer: React.FC = () => {
   // формирования данных для таблицы
   useEffect(() => {
     if (!swaps.length) return;
-    const data: Array<IRowPairExplorer> = swaps.map((swap: any) => {
+    let data: Array<IRowPairExplorer> = [];
+    console.log(currentExchange.exchange);
+    // ! crutch
+
+    data = swaps.map((swap: any) => {
       const TBRindex = WHITELIST.includes(swap.pair.token1.id) ? '0' : '1';
       const OtherIndex = TBRindex === '1' ? '0' : '1';
 
@@ -181,8 +208,8 @@ const PairExplorer: React.FC = () => {
         tbr: swap.pair[`token${TBRindex}` as const],
         otherToken: swap.pair[`token${OtherIndex}` as const],
         type: +swap[`amount${TBRindex}Out` as const] === 0 ? 'sell' : 'buy',
-        priceUsd: +swap[`token${TBRindex}PriceUSD` as const],
-        priceEth: +swap[`token${TBRindex}PriceETH` as const],
+        priceUsd: swap.pair[`token${TBRindex}`].derivedETH * 4300,
+        priceEth: swap.pair[`token${TBRindex}`].derivedETH,
         amountEth:
           +swap[`amount${TBRindex}Out` as const] === 0
             ? +swap[`amount${TBRindex}In` as const]
@@ -193,8 +220,9 @@ const PairExplorer: React.FC = () => {
         others: { etherscan: swap.transaction.id },
       };
     });
+
     setSwapsData(data);
-  }, [swaps]);
+  }, [swaps, currentExchange.exchange]);
 
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);
@@ -322,6 +350,6 @@ Fundraising Capital"
       </div>
     </main>
   );
-};
+});
 
 export default PairExplorer;

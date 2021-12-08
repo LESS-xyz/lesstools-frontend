@@ -1,9 +1,8 @@
 import { Networks } from './networks';
 
 export enum Subgraphs {
-  Uniswap = 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
-  // Uniswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-uniswap-v2',
-  // Uniswap = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  // Uniswap = 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
+  Uniswap = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
   Sushiswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
   SushiswapXdai = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-xdai',
   SushiswapFantom = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-fantom',
@@ -24,9 +23,7 @@ export enum Subgraphs {
 }
 
 export enum SubgraphsShort {
-  Uniswap = '/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
-  // Uniswap = '/name/rock-n-block/lesstools-uniswap-v2',
-  // Uniswap = '/name/uniswap/uniswap-v2',
+  Uniswap = '/name/uniswap/uniswap-v2',
   Sushiswap = '/name/rock-n-block/lesstools-sushiswap',
   SushiswapXdai = '/name/rock-n-block/lesstools-sushiswap-xdai',
   SushiswapFantom = '/name/rock-n-block/lesstools-sushiswap-fantom',
@@ -50,7 +47,7 @@ export interface ISubgraphsByNetworks {
 }
 
 export const SubgraphsByNetworks: ISubgraphsByNetworks = {
-  [Networks.Ethereum]: [Subgraphs.Uniswap, Subgraphs.Sushiswap],
+  [Networks.Ethereum]: [Subgraphs.Sushiswap, Subgraphs.Uniswap],
   [Networks.Binance]: [
     Subgraphs.Apeswap,
     Subgraphs.Babyswap,

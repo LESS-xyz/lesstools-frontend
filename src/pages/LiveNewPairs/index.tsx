@@ -6,6 +6,7 @@ import Table, { ITableHeader } from '../../components/Table/index';
 import Search from '../../components/Search/index';
 // import AdBlock from '../../components/AdBlock/index';
 import { GET_LIVE_SWAPS, GET_LIVE_SWAPS_SUSHISWAP } from '../../queries/index';
+import { GET_LIVE_SWAPS_UNI_2 } from '../../queries/uniswap2';
 import { INewPair } from '../../types/newPairs';
 import { IRowLiveNewPairs } from '../../types/table';
 import { WHITELIST } from '../../data/whitelist';
@@ -60,9 +61,14 @@ const LiveNewPairs: React.FC = observer(() => {
         const results = exchangesOfNetwork.map((exchangeOfNetwork: any) => {
           return TheGraph.query({
             subgraph: SubgraphsByExchangeShort[exchangeOfNetwork],
-            query: isExchangeLikeSushiswap(exchangeOfNetwork)
-              ? GET_LIVE_SWAPS_SUSHISWAP
-              : GET_LIVE_SWAPS,
+            query:
+              // TODO: crutch
+              // eslint-disable-next-line
+              exchangeOfNetwork === 'Uniswap'
+                ? GET_LIVE_SWAPS_UNI_2
+                : isExchangeLikeSushiswap(exchangeOfNetwork)
+                ? GET_LIVE_SWAPS_SUSHISWAP
+                : GET_LIVE_SWAPS,
             variables,
           });
         });
