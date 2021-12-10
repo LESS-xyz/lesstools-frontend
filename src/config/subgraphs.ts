@@ -1,15 +1,13 @@
 import { Networks } from './networks';
 
 export enum Subgraphs {
-  // Uniswap = 'https://api.thegraph.com/subgraphs/id/QmWBu71RoJSf6LNYDTbKvUpXZH7puz9CHfGgyYq65DtMyY',
-  Uniswap = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  Uniswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/reserve',
   Sushiswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap',
   SushiswapXdai = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-xdai',
   SushiswapFantom = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-fantom',
   SushiswapPolygon = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-matic',
   SushiswapBinance = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-sushiswap-bsc',
-  Pancake = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-pancake',
-  // Pancake = 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/',
+  Pancake = 'https://api.thegraph.com/subgraphs/id/QmUvmgfqARpVLv6UU3rhpGuLMhKizXibARGaNNSzFsuJTa',
   Honeyswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/honeyswap-lesstools',
   Spookyswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/spookyswap-lesstools',
   Mdexbsc = 'https://api.thegraph.com/subgraphs/name/rock-n-block/mdex-bsc-lesstools',
@@ -19,17 +17,17 @@ export enum Subgraphs {
   Spiritswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/spiritswap-lesstools',
   Joetrader = 'https://api.thegraph.com/subgraphs/name/rock-n-block/joe-trader-lesstools',
   Pangolin = 'https://api.thegraph.com/subgraphs/name/rock-n-block/pangolin-lesstools',
-  Quickswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-quickswap',
+  Quickswap = 'https://api.thegraph.com/subgraphs/name/rock-n-block/lesstools-quickless',
 }
 
 export enum SubgraphsShort {
-  Uniswap = '/name/uniswap/uniswap-v2',
+  Uniswap = '/name/rock-n-block/reserve',
   Sushiswap = '/name/rock-n-block/lesstools-sushiswap',
   SushiswapXdai = '/name/rock-n-block/lesstools-sushiswap-xdai',
   SushiswapFantom = '/name/rock-n-block/lesstools-sushiswap-fantom',
   SushiswapPolygon = '/name/rock-n-block/lesstools-sushiswap-matic',
   SushiswapBinance = '/name/rock-n-block/lesstools-sushiswap-bsc',
-  Pancake = '/name/rock-n-block/lesstools-pancake',
+  Pancake = '/id/QmUvmgfqARpVLv6UU3rhpGuLMhKizXibARGaNNSzFsuJTa',
   Honeyswap = '/name/rock-n-block/honeyswap-lesstools',
   Spookyswap = '/name/rock-n-block/spookyswap-lesstools',
   Mdexbsc = '/name/rock-n-block/mdex-bsc-lesstools',
@@ -39,7 +37,7 @@ export enum SubgraphsShort {
   Spiritswap = '/name/rock-n-block/spiritswap-lesstools',
   Joetrader = '/name/rock-n-block/joe-trader-lesstools',
   Pangolin = '/name/rock-n-block/pangolin-lesstools',
-  Quickswap = '/name/rock-n-block/lesstools-quickswap',
+  Quickswap = '/name/rock-n-block/lesstools-quickless',
 }
 
 export interface ISubgraphsByNetworks {

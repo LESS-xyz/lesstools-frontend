@@ -3,9 +3,13 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import { GET_PAIR_INFO, GET_LAST_BLOCK, GET_PAIR_INFO_SUSHIWAP } from '../../queries/index';
+import {
+  GET_PAIR_INFO,
+  GET_LAST_BLOCK,
+  GET_PAIR_INFO_SUSHIWAP,
+  GET_PAIR_SWAPS,
+} from '../../queries/index';
 
-import { GET_PAIR_INFO_UNI_2, GET_PAIR_SWAPS_UNI_2 } from '../../queries/uniswap2';
 import RightAsideBar from './RightAsideBar/index';
 import { IRowPairExplorer } from '../../types/table';
 import PairInfoHeader from './PairInfoCard/PairInfoHeader/index';
@@ -75,14 +79,9 @@ const PairExplorer: React.FC = observer(() => {
         // const blockNumber = 13754250;
         return TheGraph.query({
           subgraph,
-          query:
-            // ! crutch
-            // eslint-disable-next-line
-            exchangeOfNetwork === 'Uniswap'
-              ? GET_PAIR_INFO_UNI_2
-              : isExchangeLikeSushiswap(exchangeOfNetwork)
-              ? GET_PAIR_INFO_SUSHIWAP
-              : GET_PAIR_INFO,
+          query: isExchangeLikeSushiswap(exchangeOfNetwork)
+            ? GET_PAIR_INFO_SUSHIWAP
+            : GET_PAIR_INFO,
           variables: {
             id: pairId,
             blockNumber,
@@ -95,25 +94,8 @@ const PairExplorer: React.FC = observer(() => {
       if (exchangeIndex !== -1) {
         currentExchange.setCurrentExchange(exchangesOfNetwork[exchangeIndex]);
       }
-      // ! crutch ! crutch ! crutch
-      if (exchangesOfNetwork[exchangeIndex] === 'Uniswap') {
-        setPairInfo({
-          ...pairInfoNew,
-          base_info: {
-            ...pairInfoNew.base_info,
-            token0: {
-              ...pairInfoNew.base_info.token0,
-              derivedUSD: pairInfoNew.base_info.token0.derivedETH * pairInfoNew.bundle.ethPrice,
-            },
-            token1: {
-              ...pairInfoNew.base_info.token1,
-              derivedUSD: pairInfoNew.base_info.token1.derivedETH * pairInfoNew.bundle.ethPrice,
-            },
-          },
-        });
-      } else {
-        setPairInfo(pairInfoNew);
-      }
+
+      setPairInfo(pairInfoNew);
     } catch (e) {
       console.error(e);
     }
@@ -137,7 +119,7 @@ const PairExplorer: React.FC = observer(() => {
   const [swapsFromAllExchanges, getSwapsFromAllExchanges] = useGetDataForAllExchanges({
     network,
     defaultData: [],
-    query: GET_PAIR_SWAPS_UNI_2,
+    query: GET_PAIR_SWAPS,
     variables: { id: pairId },
   });
 
@@ -196,8 +178,6 @@ const PairExplorer: React.FC = observer(() => {
   useEffect(() => {
     if (!swaps.length) return;
     let data: Array<IRowPairExplorer> = [];
-    console.log(currentExchange.exchange);
-    // ! crutch
 
     data = swaps.map((swap: any) => {
       const TBRindex = WHITELIST.includes(swap.pair.token1.id) ? '0' : '1';
@@ -208,8 +188,8 @@ const PairExplorer: React.FC = observer(() => {
         tbr: swap.pair[`token${TBRindex}` as const],
         otherToken: swap.pair[`token${OtherIndex}` as const],
         type: +swap[`amount${TBRindex}Out` as const] === 0 ? 'sell' : 'buy',
-        priceUsd: swap.pair[`token${TBRindex}`].derivedETH * 4300,
-        priceEth: swap.pair[`token${TBRindex}`].derivedETH,
+        priceUsd: +swap[`token${TBRindex}PriceUSD` as const],
+        priceEth: +swap[`token${TBRindex}PriceETH` as const],
         amountEth:
           +swap[`amount${TBRindex}Out` as const] === 0
             ? +swap[`amount${TBRindex}In` as const]
@@ -222,7 +202,7 @@ const PairExplorer: React.FC = observer(() => {
     });
 
     setSwapsData(data);
-  }, [swaps, currentExchange.exchange]);
+  }, [swaps]);
 
   const [isLeftSideBar, setIsLeftSideBar] = useState(true);
   const [isRightSideBar, setIsRightSideBar] = useState(true);

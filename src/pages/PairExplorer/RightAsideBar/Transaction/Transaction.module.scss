@@ -65,6 +65,7 @@
 .transaction_symbols {
   min-width: 42px;
   color: #6b6777;
+  overflow: hidden;
   &__item:first-child {
     margin-bottom: 6px;
   }
