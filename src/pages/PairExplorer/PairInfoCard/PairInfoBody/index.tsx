@@ -17,6 +17,7 @@ import backend, { IAdditionalInfoFromBackend, PLATFORM } from '../../../../servi
 import TokenInfoItem from './TokenInfoItem/index';
 import Links from './Links/index';
 import LessScore from './LessScore/index';
+import { formatSmallNumbers } from '../../../../utils/formatSmallNumbers';
 
 import s from './PairInfoBody.module.scss';
 
@@ -100,7 +101,6 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
       tbrIndex === '1'
         ? +pairInfo.tokens_prices_24h_ago?.token1.derivedETH
         : +pairInfo.tokens_prices_24h_ago?.token0.derivedETH;
-
     const tokenPrice24HoursChange = new BigNumber(
       (+tbr?.derivedETH / tokenPrice24hAgo) * 100 - 100,
     ).toFormat(2);
@@ -185,15 +185,21 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 </div>
               </div>
               <div className={s.price}>
-                <div className={s.card_body__price}>
-                  ${new BigNumber(tbr.derivedUSD).toFormat(5)}
+                <div
+                  className={s.card_body__price}
+                  data-tip={`$${new BigNumber(tbr.derivedUSD).toFormat(18)}`}
+                >
+                  ${formatSmallNumbers(new BigNumber(tbr.derivedUSD))}
                 </div>
-                <div className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}>
+                <div
+                  data-tip={`${new BigNumber(tbr.derivedETH).toFormat(18)} ${otherToken?.symbol}`}
+                  className={`${s.card_body__info} ${tokenPrice24HoursChange < 0 ? s.red : ''}`}
+                >
                   <span>
                     (24h:{' '}
                     {tokenPrice24HoursChange === 'NaN' ? 'No data' : `${tokenPrice24HoursChange}%`})
                   </span>{' '}
-                  {new BigNumber(tbr.derivedETH).toFormat(7)} {otherToken?.symbol}
+                  {formatSmallNumbers(new BigNumber(tbr.derivedETH))} {otherToken?.symbol}
                 </div>
               </div>
               <button
@@ -227,7 +233,7 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               />
               <TokenInfoItem
                 title="Total liquidity:"
-                value={`${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}`}
+                value={`$${new BigNumber(pairInfo.base_info.reserveUSD).toFormat(2)}`}
               />
               <TokenInfoItem
                 title="Daily volume:"

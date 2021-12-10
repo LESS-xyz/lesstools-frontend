@@ -1,9 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import TheGraph from '../services/TheGraph';
 import { SubgraphsByExchangeShort } from '../config/subgraphs';
-import { ExchangesByNetworks } from "../config/exchanges";
-import { uppercaseFirstLetter } from "../utils/prettifiers";
-
+import { ExchangesByNetworks } from '../config/exchanges';
+import { uppercaseFirstLetter } from '../utils/prettifiers';
 
 // use when query is the same for all subgraphs
 export const useGetDataForAllExchanges = (props: any) => {

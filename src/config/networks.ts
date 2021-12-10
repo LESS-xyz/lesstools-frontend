@@ -61,7 +61,7 @@ export const NetworksIcons: { [key: string]: string } = {
 
 export const DefaultPairsByNetwork: { [key: string]: string } = {
   [Networks.Ethereum]: '0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974',
-  [Networks.Binance]: '0x489c8ff79245f14aeee9520d28209844790cb979',
+  [Networks.Binance]: '0x51f914a192a97408d991fdddafb8f8537c5ffb0a',
   [Networks.Polygon]: '0x0024739eb63fb6697e63698c93c77b9508f15ab2',
   [Networks.Xdai]: '0xc704050a17af0caed763431b80e38e8d8ff15591',
   [Networks.Avalanche]: '0xf64e1c5b6e17031f5504481ac8145f4c3eab4917',
