@@ -146,6 +146,37 @@ export default {
         }
 
         rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
+
+        // TODO: FIX THIS SHIT
+        // query data from our api
+        const locationPathname = window.location.pathname.split('/');
+        const pair_id = locationPathname[locationPathname.length - 1];
+        const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
+
+        const candlesFromBackend = await backend.getCandlesFromOurBackned({
+          pair_id,
+          pool,
+          time_interval: resolutionsForOurBackend[resolution],
+          candles: 240,
+        });
+
+        const formattedCandles = Object.values(candlesFromBackend.data)
+          .reduce((res: Array<any>, el: any) => {
+            if (el.open) {
+              res.push({
+                time: el.start_time * 1000, // TradingView requires bar time in ms
+                low: el.low,
+                high: el.high,
+                open: el.open,
+                close: el.close,
+              });
+            }
+
+            return res;
+          }, [])
+          .reverse();
+
+        return formattedCandles;
         return [];
       }
 
