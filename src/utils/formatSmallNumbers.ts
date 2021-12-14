@@ -5,7 +5,7 @@ export const formatSmallNumbers = (number: string | number, numbersAfterComma = 
   if (!number) return '';
   const checkIfSmall = number
     .toString()
-    .slice(0, 6)
+    .slice(0, 5)
     .split('')
     .filter((el) => el !== '.')
     .every((el) => el === '0');
