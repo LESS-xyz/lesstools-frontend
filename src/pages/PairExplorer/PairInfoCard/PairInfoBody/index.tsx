@@ -281,9 +281,10 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
                 value={
                   tokenInfoFromBackend?.pair?.token_being_reviewed?.total_supply
                     ? `$${new BigNumber(
-                        +tokenInfoFromBackend?.pair?.token_being_reviewed?.total_supply *
-                          +tbr.derivedUSD,
-                      ).toFormat(2)}`
+                        +tokenInfoFromBackend?.pair?.token_being_reviewed?.total_supply,
+                      )
+                        .multipliedBy(+tbr.derivedUSD)
+                        .toFormat(2)}`
                     : 'No data'
                 }
               />

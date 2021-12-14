@@ -71,7 +71,7 @@ type ICandlesDataFromOurBackend = {
   candles: number;
   pair_id: string;
   pool: string;
-  time_interval: 'hour' | 'day';
+  time_interval: string;
 };
 
 class BackendService {

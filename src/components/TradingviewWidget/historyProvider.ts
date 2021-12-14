@@ -15,6 +15,17 @@ interface IExchange {
   };
 }
 
+const resolutions = {
+  '1': '/data/histominute',
+  '60': '/data/histohour',
+  '1D': '/data/histoday',
+};
+
+const resolutionsForOurBackend = {
+  '1': 'minute',
+  '60': 'hour',
+  '1D': 'day',
+};
 interface IExchanges {
   [key: string]: IExchange;
 }
@@ -46,7 +57,14 @@ const findExchangeForPair = (exchanges: IExchanges, firstSymbolInPair: string) =
 export default {
   history,
 
-  getBars: async (symbolInfo: any, resolution: any, from: any, to: any, first: any, limit: any) => {
+  getBars: async (
+    symbolInfo: any,
+    resolution: '1' | '60' | '1D',
+    from: any,
+    to: any,
+    first: any,
+    limit: any,
+  ) => {
     if (!first) return [];
     try {
       const split_symbol: Array<string> = symbolInfo.name.split(/[:/]/);
@@ -59,7 +77,7 @@ export default {
         const candlesFromBackend = await backend.getCandlesFromOurBackned({
           pair_id,
           pool,
-          time_interval: 'hour',
+          time_interval: resolutionsForOurBackend[resolution],
           candles: 240,
         });
 
@@ -82,7 +100,7 @@ export default {
         return formattedCandles;
       }
 
-      const url = resolution >= 60 ? '/data/histohour' : '/data/histoday';
+      const url = resolutions[resolution];
       const params = {
         fsym: split_symbol[0],
         tsym: split_symbol[1],

@@ -1,7 +1,21 @@
 import historyProvider from './historyProvider';
 
 const config = {
-  supported_resolutions: ['60', 'D'],
+  supported_resolutions: [
+    '1',
+    '3',
+    '5',
+    '15',
+    '30',
+    '45',
+    '60',
+    '120',
+    '240',
+    '720',
+    'D',
+    '3D',
+    '7D',
+  ],
 };
 
 export default {
