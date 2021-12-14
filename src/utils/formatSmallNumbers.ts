@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js/bignumber';
 
-export const formatSmallNumbers = (number: string | number, numbersAfterComma = 5) => {
+export const formatSmallNumbers = (number: string | number, numbersAfterComma = 10) => {
   if (number.toString() === '0') return '0';
   if (!number) return '';
   const checkIfSmall = number
     .toString()
-    .slice(0, 5)
+    .slice(0, 10)
     .split('')
     .filter((el) => el !== '.')
     .every((el) => el === '0');
