@@ -78,7 +78,7 @@ export default {
           pair_id,
           pool,
           time_interval: resolutionsForOurBackend[resolution],
-          candles: 240,
+          candles: 1000,
         });
 
         const formattedCandles = Object.values(candlesFromBackend.data)
@@ -157,7 +157,7 @@ export default {
           pair_id,
           pool,
           time_interval: resolutionsForOurBackend[resolution],
-          candles: 240,
+          candles: 1000,
         });
 
         const formattedCandles = Object.values(candlesFromBackend.data)
