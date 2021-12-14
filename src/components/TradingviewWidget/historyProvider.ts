@@ -69,7 +69,7 @@ export default {
     try {
       const split_symbol: Array<string> = symbolInfo.name.split(/[:/]/);
       // query data from our api
-      if (!split_symbol[1].includes('USD')) {
+      if (split_symbol[1] !== 'USD') {
         const locationPathname = window.location.pathname.split('/');
         const pair_id = locationPathname[locationPathname.length - 1];
         const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
