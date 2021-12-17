@@ -73,7 +73,6 @@ export default {
         const locationPathname = window.location.pathname.split('/');
         const pair_id = locationPathname[locationPathname.length - 1];
         const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
-
         const candlesFromBackend = await backend.getCandlesFromOurBackned({
           pair_id,
           pool,
@@ -81,11 +80,11 @@ export default {
           candles: 1000,
         });
 
-        const formattedCandles = Object.values(candlesFromBackend.data)
-          .reduce((res: Array<any>, el: any) => {
+        const formattedCandles = Object.values(candlesFromBackend.data).reduce(
+          (res: Array<any>, el: any) => {
             if (el.open) {
               res.push({
-                time: el.start_time * 1000, // TradingView requires bar time in ms
+                time: el.end_time * 1000, // TradingView requires bar time in ms
                 low: el.low,
                 high: el.high,
                 open: el.open,
@@ -94,8 +93,15 @@ export default {
             }
 
             return res;
-          }, [])
-          .reverse();
+          },
+          [],
+        );
+
+        for (let i = 0; i < Math.floor(formattedCandles.length / 2); i += 1) {
+          const firstTime = formattedCandles[i].time;
+          formattedCandles[i].time = formattedCandles[formattedCandles.length - i - 1].time;
+          formattedCandles[formattedCandles.length - i - 1].time = firstTime;
+        }
 
         return formattedCandles;
       }
@@ -160,11 +166,11 @@ export default {
           candles: 1000,
         });
 
-        const formattedCandles = Object.values(candlesFromBackend.data)
-          .reduce((res: Array<any>, el: any) => {
+        const formattedCandles = Object.values(candlesFromBackend.data).reduce(
+          (res: Array<any>, el: any) => {
             if (el.open) {
               res.push({
-                time: el.start_time * 1000, // TradingView requires bar time in ms
+                time: el.end_time, // TradingView requires bar time in ms
                 low: el.low,
                 high: el.high,
                 open: el.open,
@@ -173,11 +179,17 @@ export default {
             }
 
             return res;
-          }, [])
-          .reverse();
+          },
+          [],
+        );
+
+        for (let i = 0; i < Math.floor(formattedCandles.length / 2); i += 1) {
+          const firstTime = formattedCandles[i].time;
+          formattedCandles[i].time = formattedCandles[formattedCandles.length - i - 1].time;
+          formattedCandles[formattedCandles.length - i - 1].time = firstTime;
+        }
 
         return formattedCandles;
-        return [];
       }
 
       if (data.Data.length) {
