@@ -114,17 +114,11 @@ const InfoBlock: React.FC<any> = observer(() => {
           query: isExchangeLikeSushiswap(exchangeOfNetwork)
             ? GET_HOT_PAIRS_SUSHISWAP
             : GET_HOT_PAIRS,
-          variables: isExchangeLikeSushiswap(exchangeOfNetwork)
-            ? {
-                timestamp1: getStartOfHour(),
-                timestamp2: getStartOfHour() - 3600,
-                timestamp3: getStartOfHour() - 7200,
-              }
-            : {
-                timestamp1: 1598338800,
-                timestamp2: 1598338800 - 3600,
-                timestamp3: 1598338800 - 7200,
-              },
+          variables: {
+            timestamp1: getStartOfHour(),
+            timestamp2: getStartOfHour() - 3600,
+            timestamp3: getStartOfHour() - 7200,
+          },
         });
       });
       const result = await Promise.all(results);
