@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 import rootStore from '../../store/store';
-import backend from '../../services/backend';
 import { REACT_APP_CRYPTOCOMPARE_API_KEY } from '../../config/index';
 import { TradingviewExchangesNames } from '../../config/exchanges';
+import { getCandlesFromOurBackend } from './getCandlesFromOurBackend';
 
 const api_root = 'https://min-api.cryptocompare.com';
 const history: any = {};
@@ -15,17 +15,6 @@ interface IExchange {
   };
 }
 
-const resolutions = {
-  '1': '/data/histominute',
-  '60': '/data/histohour',
-  '1D': '/data/histoday',
-};
-
-const resolutionsForOurBackend = {
-  '1': 'minute',
-  '60': 'hour',
-  '1D': 'day',
-};
 interface IExchanges {
   [key: string]: IExchange;
 }
@@ -54,6 +43,12 @@ const findExchangeForPair = (exchanges: IExchanges, firstSymbolInPair: string) =
   return null;
 };
 
+const resolutions = {
+  '1': '/data/histominute',
+  '60': '/data/histohour',
+  '1D': '/data/histoday',
+};
+
 export default {
   history,
 
@@ -68,44 +63,16 @@ export default {
     if (!first) return [];
     try {
       const split_symbol: Array<string> = symbolInfo.name.split(/[:/]/);
+      const locationPathname = window.location.pathname.split('/');
+      const pair_id = locationPathname[locationPathname.length - 1];
+      const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
+
       // query data from our api
       if (split_symbol[1] !== 'USD') {
-        const locationPathname = window.location.pathname.split('/');
-        const pair_id = locationPathname[locationPathname.length - 1];
-        const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
-        const candlesFromBackend = await backend.getCandlesFromOurBackned({
-          pair_id,
-          pool,
-          time_interval: resolutionsForOurBackend[resolution],
-          candles: 1000,
-        });
-
-        const formattedCandles = Object.values(candlesFromBackend.data).reduce(
-          (res: Array<any>, el: any) => {
-            if (el.open) {
-              res.push({
-                time: el.end_time * 1000, // TradingView requires bar time in ms
-                low: el.low,
-                high: el.high,
-                open: el.open,
-                close: el.close,
-              });
-            }
-
-            return res;
-          },
-          [],
-        );
-
-        for (let i = 0; i < Math.floor(formattedCandles.length / 2); i += 1) {
-          const firstTime = formattedCandles[i].time;
-          formattedCandles[i].time = formattedCandles[formattedCandles.length - i - 1].time;
-          formattedCandles[formattedCandles.length - i - 1].time = firstTime;
-        }
-
-        return formattedCandles;
+        return await getCandlesFromOurBackend({ pair_id, pool, time_interval: resolution });
       }
 
+      // query data from third-party backend
       const url = resolutions[resolution];
       const params = {
         fsym: split_symbol[0],
@@ -152,44 +119,8 @@ export default {
         }
 
         rootStore.modals.open('Info', 'Not enough data to display the graph or very little');
-
-        // TODO: FIX THIS SHIT
         // query data from our api
-        const locationPathname = window.location.pathname.split('/');
-        const pair_id = locationPathname[locationPathname.length - 1];
-        const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
-
-        const candlesFromBackend = await backend.getCandlesFromOurBackned({
-          pair_id,
-          pool,
-          time_interval: resolutionsForOurBackend[resolution],
-          candles: 1000,
-        });
-
-        const formattedCandles = Object.values(candlesFromBackend.data).reduce(
-          (res: Array<any>, el: any) => {
-            if (el.open) {
-              res.push({
-                time: el.end_time, // TradingView requires bar time in ms
-                low: el.low,
-                high: el.high,
-                open: el.open,
-                close: el.close,
-              });
-            }
-
-            return res;
-          },
-          [],
-        );
-
-        for (let i = 0; i < Math.floor(formattedCandles.length / 2); i += 1) {
-          const firstTime = formattedCandles[i].time;
-          formattedCandles[i].time = formattedCandles[formattedCandles.length - i - 1].time;
-          formattedCandles[formattedCandles.length - i - 1].time = firstTime;
-        }
-
-        return formattedCandles;
+        return await getCandlesFromOurBackend({ pair_id, pool, time_interval: resolution });
       }
 
       if (data.Data.length) {

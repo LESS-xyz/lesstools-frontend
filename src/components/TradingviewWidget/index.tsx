@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import s from './TradingviewWidget.module.scss';
 import Datafeed from './datafeed';
+import { formalizePairAsInWhitelistBySymbols } from '../../utils/formalizePairAsInWhitelist';
 
 import './styles.css';
 
@@ -90,18 +91,22 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
 
     widget.headerReady().then(function () {
       let isUsd = false;
+      const [mainToken, shittoken] = formalizePairAsInWhitelistBySymbols(
+        split_symbol[0],
+        split_symbol[1],
+      );
 
       const button = widget.createButton();
       button.setAttribute('title', 'Change pair');
-      button.textContent = `${split_symbol[0]}/USD`;
+      button.textContent = `${shittoken}/USD`;
       button.addEventListener('click', function () {
         if (!isUsd) {
-          widget.setSymbol(`${split_symbol[0]}/USD`, '60');
+          widget.setSymbol(`${shittoken}/USD`, '60');
           button.textContent = symbol;
           isUsd = true;
         } else {
-          widget.setSymbol(`${split_symbol[0]}/${split_symbol[1]}`, '60');
-          button.textContent = `${split_symbol[0]}/USD`;
+          widget.setSymbol(`${shittoken}/${mainToken}`, '60');
+          button.textContent = `${shittoken}/USD`;
           isUsd = false;
         }
       });

@@ -1,4 +1,4 @@
-export const WHITELIST: string[] = [
+export const WHITELIST = [
   '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // WETH
   '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
@@ -23,4 +23,31 @@ export const WHITELIST: string[] = [
   '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d', // WXDAI
   '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
   '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83', // WFTM
+];
+
+export const WHITELIST_SYMBOLS = [
+  'WETH',
+  'DAI',
+  'USDC',
+  'USDT',
+  'TUSD',
+  'cDAI',
+  'cUSDC',
+  'EBASE',
+  'sUSD',
+  'MKR',
+  'COMP',
+  'LINK',
+  'ANT',
+  'SNX',
+  'YFI',
+  'yCurv',
+  'FRAX',
+  'WUST',
+  'UNI',
+  'WBTC',
+  'WAVAX',
+  'WXDAI',
+  'WBNB',
+  'WFTM',
 ];

@@ -1,4 +1,13 @@
 import historyProvider from './historyProvider';
+import { getCandlesFromOurBackendNoReverse } from './getCandlesFromOurBackend';
+import { TradingviewExchangesNames } from '../../config/exchanges';
+import rootStore from '../../store/store';
+
+declare global {
+  interface Window {
+    interval: NodeJS.Timeout;
+  }
+}
 
 const config = {
   supported_resolutions: [
@@ -81,53 +90,32 @@ export default {
       });
   },
 
-  calculateHistoryDepth: (resolution: any, resolutionBack: any, intervalBack: any) => {
-    // optional
-    console.log('Tradingview Datafeed calculateHistoryDepth:', {
-      resolution,
-      resolutionBack,
-      intervalBack,
-    });
+  subscribeBars(symbolInfo: any, resolution: any, onRealtimeCallback: any) {
+    console.log('SUBSCRIBE BARS: ', { symbolInfo, resolution });
+
+    const locationPathname = window.location.pathname.split('/');
+    const pair_id = locationPathname[locationPathname.length - 1];
+    const pool = TradingviewExchangesNames[rootStore.currentExchange.exchange] || 'mainnet';
+
+    if (window.interval) {
+      clearInterval(window.interval);
+    }
+
+    window.interval = setInterval(async function () {
+      const data = await getCandlesFromOurBackendNoReverse({
+        pair_id,
+        pool,
+        candles: 2,
+        time_interval: resolution,
+      });
+      console.log(data);
+      onRealtimeCallback(data[0]);
+    }, 1000 * 60); // 60s update interval
+  },
+
+  calculateHistoryDepth: (resolution: any) => {
     // while optional, this makes sure we request 24 hours of minute data at a time
     // CryptoCompare's minute data endpoint will throw an error if we request data beyond 7 days in the past, and return no data
     return resolution < 60 ? { resolutionBack: 'D', intervalBack: '1' } : undefined;
-  },
-
-  getMarks: (
-    symbolInfo: any,
-    startDate: any,
-    endDate: any,
-    onDataCallback: any,
-    resolution: any,
-  ) => {
-    // optional
-    console.log('Tradingview Datafeed getMarks:', {
-      symbolInfo,
-      startDate,
-      endDate,
-      onDataCallback,
-      resolution,
-    });
-  },
-
-  getTimeScaleMarks: (
-    symbolInfo: any,
-    startDate: any,
-    endDate: any,
-    onDataCallback: any,
-    resolution: any,
-  ) => {
-    // optional
-    console.log('Tradingview Datafeed getTimeScaleMarks:', {
-      symbolInfo,
-      startDate,
-      endDate,
-      onDataCallback,
-      resolution,
-    });
-  },
-
-  getServerTime: (cb: any) => {
-    console.log('Tradingview Datafeed getServerTime:', { cb });
   },
 };

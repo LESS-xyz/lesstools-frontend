@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js/bignumber';
-
 export const formatSmallNumbers = (number: string | number, numbersAfterComma = 10) => {
   if (number.toString() === '0') return '0';
   if (!number) return '';
@@ -14,5 +12,6 @@ export const formatSmallNumbers = (number: string | number, numbersAfterComma = 
     return `${number.toString().slice(0, 4)}...${number.toString().slice(-2)}`;
   }
 
-  return new BigNumber(number).toFormat(numbersAfterComma);
+  // return new BigNumber(number).toFormat(numbersAfterComma);
+  return Number(number).toFixed(numbersAfterComma);
 };
