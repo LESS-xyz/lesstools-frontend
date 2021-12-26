@@ -174,6 +174,24 @@ const PairExplorer: React.FC = observer(() => {
 
   const [swapsData, setSwapsData] = useState<Array<IRowPairExplorer>>([]);
 
+  // add query pair info every minute
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      getPairInfoFromAllExchanges();
+    }, 60 * 1000);
+
+    return () => clearInterval(timerId);
+  }, [getPairInfoFromAllExchanges]);
+
+  // add query pair swaps every minute
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      getSwapsFromAllExchanges();
+    }, 60 * 1000);
+
+    return () => clearInterval(timerId);
+  }, [getSwapsFromAllExchanges]);
+
   // формирования данных для таблицы
   useEffect(() => {
     if (!swaps.length) return;
