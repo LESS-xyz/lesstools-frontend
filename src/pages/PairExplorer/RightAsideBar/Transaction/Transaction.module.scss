@@ -1,6 +1,7 @@
 @import '../../../../styles/mixins/media';
 @import '../../../../styles/mixins/grid';
 @import '../../../../styles/mixins/flex';
+@import '../../../../styles/mixins/ellipsisRows';
 
 .transaction {
   display: flex;
@@ -66,6 +67,9 @@
   min-width: 42px;
   color: #6b6777;
   overflow: hidden;
+  &__item {
+    @include ellipsisRows(2);
+  }
   &__item:first-child {
     margin-bottom: 6px;
   }

@@ -299,40 +299,12 @@ const PairInfoBody: React.FC<IPairInfoBodyProps> = observer(
               />
             </div>
             <div className={`${s.card_section} ${s.card_section__last}`}>
-              {/* <div className={s.card_buttons}>
-                <div
-                  onClick={handleOpenShareModal}
-                  tabIndex={0}
-                  onKeyDown={handleOpenShareModal}
-                  role="button"
-                  className={s.card_button}
-                >
-                  <ShareImg />
-                </div>
-                <button
-                  onClick={() => addOrRemovePairToFavs(pairId, 'ETH')}
-                  onKeyDown={() => {}}
-                  type="button"
-                  disabled={!user.isVerified}
-                  className={`${s.card_button} ${
-                    user.favoritePairs.some((pair) => pair.id === pairId) && s.active
-                  }`}
-                >
-                  <FavImg />
-                </button>
-              </div> */}
               <CommunityTrust
                 likes={tokenInfoFromBackend?.pair?.likes || 0}
                 dislikes={tokenInfoFromBackend?.pair?.dislikes || 0}
                 currentVote={tokenInfoFromBackend?.vote || 0}
                 pairId={pairId}
               />
-              {/* 
-              <Links
-                tokenInfoFromBackend={tokenInfoFromBackend}
-                tokenId={tbr.id}
-                exchange={exchange}
-              /> */}
             </div>
           </div>
         )}

@@ -248,18 +248,8 @@ const InfoBlock: React.FC<any> = observer(() => {
             </div>
           </div>
         </div>
-        <PromotedToken />
-        {/* <Link to="/user-account" className={`${s.metamask_link} ${s.desktop}`}>
-          <MetaMaskIcon className={s.metamask_link_img} />
-          <span>
-            {!user.walletId
-              ? 'Connect'
-              : !user.isVerified
-              ? 'Verify'
-              : `${user.walletId.slice(0, 5)}...${user.walletId.slice(-5)}`}
-          </span>
-        </Link> */}
       </div>
+      <PromotedToken />
     </section>
   );
 });

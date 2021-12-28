@@ -1,3 +1,4 @@
+@import '../../../../styles/mixins/ellipsisRows.scss';
 @import '../../../../styles/mixins/flex.scss';
 
 .pairInfoHeader {
@@ -17,6 +18,8 @@
     @include flex(row, center);
 
     &__pair {
+      max-width: 450px;
+      @include ellipsisRows(2);
       span {
         &:last-child {
           font-weight: 700;

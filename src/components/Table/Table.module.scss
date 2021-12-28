@@ -1,5 +1,6 @@
 @import '../../styles/mixins/flex.scss';
 @import '../../styles/mixins/media.scss';
+@import '../../styles/mixins/ellipsisRows.scss';
 
 .table_wrap {
   overflow: auto;
@@ -103,4 +104,8 @@ span {
 .token {
   color: #09bfb4;
   text-transform: uppercase;
+
+  span {
+    @include ellipsisRows(1);
+  }
 }

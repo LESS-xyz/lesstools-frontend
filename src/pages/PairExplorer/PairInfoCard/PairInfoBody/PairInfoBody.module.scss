@@ -1,6 +1,7 @@
 @import '../../../../styles/mixins/flex.scss';
 @import '../../../../styles/mixins/grid.scss';
 @import '../../../../styles/mixins/gradient-text.scss';
+@import '../../../../styles/mixins/ellipsisRows.scss';
 
 .card {
   height: 100%;
@@ -304,6 +305,7 @@
       color: #8a8695;
       width: 40%;
       line-height: 1.2;
+      @include ellipsisRows(2);
     }
 
     &__value {

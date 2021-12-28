@@ -75,8 +75,6 @@ const PairExplorer: React.FC = observer(() => {
         const subgraph = SubgraphsByExchangeShort[exchangeOfNetwork];
         // eslint-disable-next-line no-underscore-dangle
         const blockNumber = +blocks[i]?._meta?.block?.number - 7200 || 13754250;
-        // TODO: fix hardcode
-        // const blockNumber = 13754250;
         return TheGraph.query({
           subgraph,
           query: isExchangeLikeSushiswap(exchangeOfNetwork)

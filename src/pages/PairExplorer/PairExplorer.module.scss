@@ -141,6 +141,9 @@
   @include b(850) {
     max-height: 100%;
   }
+  .right_aside__button {
+    right: 379px;
+  }
   &.active {
     position: relative;
     right: 0;
