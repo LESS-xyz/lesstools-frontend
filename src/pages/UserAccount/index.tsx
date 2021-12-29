@@ -6,7 +6,7 @@ import { useWeb3Context } from '../../contexts/Web3Connector';
 import { Web3Service } from '../../services/web3/index';
 import backend from '../../services/backend';
 import VerifiedPage from './VerifiedPage/index';
-import { CardsSlider } from '../MainPage/UsersPlans/index';
+// import { CardsSlider } from '../MainPage/UsersPlans/index';
 import InfoModal from '../../components/Modals/InfoModal/index';
 
 import s from './UserAccount.module.scss';
@@ -104,7 +104,7 @@ Fundraising Capital"
         ) : (
           <VerifiedPage />
         )}
-        <CardsSlider userPlan={user.userPlan} />
+        {/* <CardsSlider userPlan={user.userPlan} /> */}
       </div>
     </main>
   );
