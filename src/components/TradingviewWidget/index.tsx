@@ -33,7 +33,7 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
 
   const {
     symbol = 'Coinbase:BTC/USD',
-    interval = '60',
+    interval = '15',
     containerId = 'tv_chart_container',
     libraryPath = '/charting_library/',
     chartsStorageUrl = 'https://saveload.tradingview.com',
@@ -101,11 +101,11 @@ const TradingviewWidget: React.FC<InterfaceTradingviewWidgetProps> = React.memo(
       button.textContent = `${shittoken}/USD`;
       button.addEventListener('click', function () {
         if (!isUsd) {
-          widget.setSymbol(`${shittoken}/USD`, '60');
+          widget.setSymbol(`${shittoken}/USD`, '15');
           button.textContent = symbol;
           isUsd = true;
         } else {
-          widget.setSymbol(`${shittoken}/${mainToken}`, '60');
+          widget.setSymbol(`${shittoken}/${mainToken}`, '15');
           button.textContent = `${shittoken}/USD`;
           isUsd = false;
         }
